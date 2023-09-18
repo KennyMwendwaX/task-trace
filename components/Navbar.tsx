@@ -1,6 +1,5 @@
 "use client";
 
-import { NavigationMenu } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { BsSearch } from "react-icons/bs";
 import {
@@ -14,9 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FaUserCircle } from "react-icons/fa";
-
 import { Button } from "@/components/ui/button";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function Navbar() {
   return (
