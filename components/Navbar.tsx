@@ -34,7 +34,7 @@ export default function Navbar() {
                 Home
               </Link>
               <Link
-                href="/"
+                href="/issues"
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                 Issues
               </Link>
