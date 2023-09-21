@@ -84,21 +84,21 @@ export default function IssuesTable() {
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Invoice</TableHead>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Title</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>Label</TableHead>
+              <TableHead>Prority</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                <TableCell>{invoice.paymentStatus}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell className="text-right">
-                  {invoice.totalAmount}
-                </TableCell>
+            {tasks.map((task) => (
+              <TableRow key={task.id}>
+                <TableCell className="font-medium">{task.id}</TableCell>
+                <TableCell>{task.title}</TableCell>
+                <TableCell>{task.status}</TableCell>
+                <TableCell>{task.label}</TableCell>
+                <TableCell>{task.priority}</TableCell>
               </TableRow>
             ))}
           </TableBody>
