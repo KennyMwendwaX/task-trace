@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { tasks } from "@/data/tasks";
 
 const invoices = [
   {
