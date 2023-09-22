@@ -39,11 +39,11 @@ export default function IssuesTable() {
           <TableCaption>A list of your tasks.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>ID</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Label</TableHead>
-              <TableHead>Prority</TableHead>
+              <TableHead>Priority</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
