@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 
 interface TableColumnHeaderProps {
-  title: string;
+  name: string;
 }
 
 export default function TableColumnHeader<TData, TValue>({
-  title,
+  name,
 }: TableColumnHeaderProps) {
   return (
     <>
       <Button variant="ghost" size="sm" className="-ml-3 h-8">
-        <span>{title}</span>
+        <span>{name}</span>
       </Button>
     </>
   );
