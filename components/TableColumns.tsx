@@ -34,14 +34,14 @@ export const TableColumns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "id",
-    header: () => <TableColumnHeader title="Task" />,
+    header: () => <TableColumnHeader name="Task" />,
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "title",
-    header: () => <TableColumnHeader title="title" />,
+    header: () => <TableColumnHeader name="title" />,
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label);
 
@@ -57,6 +57,6 @@ export const TableColumns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "status",
-    header: () => <TableColumnHeader title="status" />,
+    header: () => <TableColumnHeader name="status" />,
   },
 ];
