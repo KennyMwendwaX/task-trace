@@ -58,5 +58,23 @@ export const TableColumns: ColumnDef<Task>[] = [
   {
     accessorKey: "status",
     header: () => <TableColumnHeader name="status" />,
+    cell: ({ row }) => {
+      const status = statuses.find(
+        (status) => status.value === row.getValue("status")
+      );
+
+      if (!status) {
+        return null;
+      }
+
+      return (
+        <div className="flex w-[100px] items-center">
+          {status.icon && (
+            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{status.label}</span>
+        </div>
+      );
+    },
   },
 ];
