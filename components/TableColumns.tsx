@@ -99,4 +99,8 @@ export const TableColumns: ColumnDef<Task>[] = [
       );
     },
   },
+  {
+    id: "actions",
+    cell: ({ row }) => <TableRowActions row={row} />,
+  },
 ];
