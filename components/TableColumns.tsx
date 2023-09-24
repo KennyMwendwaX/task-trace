@@ -77,4 +77,26 @@ export const TableColumns: ColumnDef<Task>[] = [
       );
     },
   },
+  {
+    accessorKey: "priority",
+    header: () => <TableColumnHeader name="priority" />,
+    cell: ({ row }) => {
+      const priority = priorities.find(
+        (priority) => priority.value === row.getValue("priority")
+      );
+
+      if (!priority) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {priority.icon && (
+            <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{priority.label}</span>
+        </div>
+      );
+    },
+  },
 ];
