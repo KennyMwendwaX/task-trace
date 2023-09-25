@@ -18,9 +18,8 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { undefined } from "zod";
+import { cn } from "@/lib/utils";
 
 interface TableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
