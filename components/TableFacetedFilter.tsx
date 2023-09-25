@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 
 interface TableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
-  title?: string;
+  name?: string;
   options: {
     label: string;
     value: string;
@@ -33,7 +33,7 @@ interface TableFacetedFilterProps<TData, TValue> {
 
 export default function TableFacetedFilter<TData, TValue>({
   column,
-  title,
+  name,
   options,
 }: TableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
@@ -45,7 +45,7 @@ export default function TableFacetedFilter<TData, TValue>({
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="h-8 border-dashed">
             <PlusCircledIcon className="mr-2 h-4 w-4" />
-            {title}
+            {name}
             {selectedValues?.size > 0 && (
               <>
                 <Separator orientation="vertical" className="mx-2 h-4" />
@@ -80,7 +80,7 @@ export default function TableFacetedFilter<TData, TValue>({
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
           <Command>
-            <CommandInput placeholder={title} />
+            <CommandInput placeholder={name} />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>

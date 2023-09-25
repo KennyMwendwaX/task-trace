@@ -31,14 +31,14 @@ export default function TableToolbar<TData>({
           {table.getColumn("status") && (
             <TableFacetedFilter
               column={table.getColumn("status")}
-              title="status"
+              name="status"
               options={statuses}
             />
           )}
           {table.getColumn("priority") && (
             <TableFacetedFilter
               column={table.getColumn("priority")}
-              title="priority"
+              name="priority"
               options={priorities}
             />
           )}
