@@ -3,7 +3,7 @@
 import { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import TableFacetedFilter from "./TableFacetedFilter";
-import { statuses } from "@/data/IconMappingOptions";
+import { priorities, statuses } from "@/data/IconMappingOptions";
 
 interface TableToolbarProps<TData> {
   table: Table<TData>;
@@ -31,6 +31,13 @@ export default function TableToolbar<TData>({
               column={table.getColumn("status")}
               title="status"
               options={statuses}
+            />
+          )}
+          {table.getColumn("priority") && (
+            <TableFacetedFilter
+              column={table.getColumn("priority")}
+              title="priority"
+              options={priorities}
             />
           )}
         </div>
