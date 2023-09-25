@@ -24,7 +24,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-8">
             <Link href="/">
               <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-200">
-                IssueTracker
+                TaskTracker
               </span>
             </Link>
             <div className="space-x-3">
