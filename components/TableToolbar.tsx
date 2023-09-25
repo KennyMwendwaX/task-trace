@@ -4,6 +4,8 @@ import { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import TableFacetedFilter from "./TableFacetedFilter";
 import { priorities, statuses } from "@/data/IconMappingOptions";
+import { Button } from "./ui/button";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 interface TableToolbarProps<TData> {
   table: Table<TData>;
@@ -39,6 +41,15 @@ export default function TableToolbar<TData>({
               title="priority"
               options={priorities}
             />
+          )}
+          {isFiltered && (
+            <Button
+              variant="ghost"
+              onClick={() => table.resetColumnFilters()}
+              className="h-8 px-2 lg:px-3">
+              Reset
+              <Cross2Icon className="ml-2 h-4 w-4" />
+            </Button>
           )}
         </div>
       </div>
