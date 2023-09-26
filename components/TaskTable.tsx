@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import TableToolbar from "./TableToolbar";
+import TablePagination from "./TablePagination";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -112,6 +113,7 @@ export default function TaskTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
+        <TablePagination table={table} />
       </div>
     </>
   );
