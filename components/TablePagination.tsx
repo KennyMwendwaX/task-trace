@@ -31,7 +31,7 @@ export default function TablePagination<TData>({
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
-            <div className="text-sm font-medium">Rows per page</div>
+            <p className="text-sm font-medium">Rows per page</p>
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
@@ -44,9 +44,9 @@ export default function TablePagination<TData>({
               </SelectTrigger>
               <SelectContent side="top">
                 {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectTrigger key={pageSize} value={`${pageSize}`}>
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
-                  </SelectTrigger>
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>

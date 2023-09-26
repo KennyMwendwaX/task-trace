@@ -1,5 +1,3 @@
-"use client";
-
 import { TableColumns } from "@/components/TableColumns";
 import TaskTable from "@/components/TaskTable";
 import { tasks } from "@/data/tasks";
