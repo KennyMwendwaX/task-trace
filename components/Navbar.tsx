@@ -34,9 +34,9 @@ export default function Navbar() {
                 Home
               </Link>
               <Link
-                href="/issues"
+                href="/tasks"
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-                Issues
+                Tasks
               </Link>
             </div>
           </div>
