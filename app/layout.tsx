@@ -9,8 +9,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Issue Tracker",
-  description: "Track ISsues in your project",
+  title: "Task Tracker",
+  description: "Track tasks in your project",
 };
 
 export default function RootLayout({
