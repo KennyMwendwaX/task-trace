@@ -41,7 +41,7 @@ export const TableColumns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "title",
-    header: () => <TableColumnHeader name="title" />,
+    header: () => <TableColumnHeader name="Title" />,
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label);
 
@@ -57,7 +57,7 @@ export const TableColumns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "status",
-    header: () => <TableColumnHeader name="status" />,
+    header: () => <TableColumnHeader name="Status" />,
     cell: ({ row }) => {
       const status = statuses.find(
         (status) => status.value === row.getValue("status")
@@ -79,7 +79,7 @@ export const TableColumns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "priority",
-    header: () => <TableColumnHeader name="priority" />,
+    header: () => <TableColumnHeader name="Priority" />,
     cell: ({ row }) => {
       const priority = priorities.find(
         (priority) => priority.value === row.getValue("priority")
