@@ -1,6 +1,6 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,10 @@ export default function TableRowActions<TData>({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Delete</DropdownMenuItem>
+          <DropdownMenuItem>
+            <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
