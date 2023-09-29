@@ -15,8 +15,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { FaUserCircle } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
     <>
       <nav className="bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-600">
@@ -30,12 +33,20 @@ export default function Navbar() {
             <div className="space-x-3">
               <Link
                 href="/"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                className={`${
+                  pathname === "/"
+                    ? "text-gray-100"
+                    : "text-gray-400 hover:text-gray-200"
+                } text-sm font-medium`}>
                 Home
               </Link>
               <Link
                 href="/tasks"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                className={`${
+                  pathname === "/tasks"
+                    ? "text-gray-100"
+                    : "text-gray-400 hover:text-gray-200"
+                } text-sm font-medium`}>
                 Tasks
               </Link>
             </div>
