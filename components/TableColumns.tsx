@@ -69,9 +69,17 @@ export const TableColumns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex w-[100px] items-center">
-          {status.icon && (
-            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
+          {status.label === "Done" ? (
+            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-green-600" />
+          ) : status.label === "Todo" ? (
+            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-blue-600" />
+          ) : status.label === "In Progress" ? (
+            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-orange-600" />
+          ) : status.label === "Canceled" ? (
+            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
+          ) : status.label === "Backlog" ? (
+            <status.icon className="mr-2 h-5 w-5 text-muted-foreground" />
+          ) : null}
           <span>{status.label}</span>
         </div>
       );
