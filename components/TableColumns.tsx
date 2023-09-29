@@ -54,17 +54,17 @@ export const TableColumns: ColumnDef<Task>[] = [
       }
       return (
         <div className="flex space-x-2">
-          {label.label === "Feature" ? (
+          {label.value === "feature" ? (
             <Badge className="border-blue-600 text-blue-600" variant="outline">
               {label.label}
             </Badge>
-          ) : label.label === "Documentation" ? (
+          ) : label.value === "documentation" ? (
             <Badge
               className="border-purple-600 text-purple-600"
               variant="outline">
               {label.label}
             </Badge>
-          ) : label.label === "Bug" ? (
+          ) : label.value === "bug" ? (
             <Badge
               className="border-orange-600 text-orange-600"
               variant="outline">
@@ -92,16 +92,16 @@ export const TableColumns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex w-[100px] items-center">
-          {status.label === "Done" ? (
-            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-green-600" />
-          ) : status.label === "Todo" ? (
-            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-blue-600" />
-          ) : status.label === "In Progress" ? (
-            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-orange-600" />
-          ) : status.label === "Canceled" ? (
-            <status.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
-          ) : status.label === "Backlog" ? (
-            <status.icon className="mr-2 h-5 w-5 text-muted-foreground" />
+          {status.value === "done" ? (
+            <status.icon className="mr-2 h-5 w-5 text-green-600" />
+          ) : status.value === "todo" ? (
+            <status.icon className="mr-2 h-5 w-5 text-blue-600" />
+          ) : status.value === "in progress" ? (
+            <status.icon className="mr-2 h-5 w-5 text-orange-600" />
+          ) : status.value === "canceled" ? (
+            <status.icon className="mr-2 h-5 w-5 text-red-600" />
+          ) : status.value === "backlog" ? (
+            <status.icon className="mr-2 h-5 w-5 text-gray-600" />
           ) : null}
           <span>{status.label}</span>
         </div>
@@ -122,11 +122,11 @@ export const TableColumns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex items-center">
-          {priority.label === "High" ? (
+          {priority.value === "high" ? (
             <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
-          ) : priority.label === "Medium" ? (
+          ) : priority.value === "medium" ? (
             <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-orange-500" />
-          ) : priority.label === "Low" ? (
+          ) : priority.value === "low" ? (
             <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-blue-600" />
           ) : null}
           <span>{priority.label}</span>
