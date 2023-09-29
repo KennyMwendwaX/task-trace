@@ -91,9 +91,13 @@ export const TableColumns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex items-center">
-          {priority.icon && (
-            <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
+          {priority.label === "High" ? (
+            <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
+          ) : priority.label === "Medium" ? (
+            <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-orange-500" />
+          ) : priority.label === "Low" ? (
+            <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-blue-600" />
+          ) : null}
           <span>{priority.label}</span>
         </div>
       );
