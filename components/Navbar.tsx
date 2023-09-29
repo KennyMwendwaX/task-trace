@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BsSearch } from "react-icons/bs";
+import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { FaUserCircle } from "react-icons/fa";
-import { usePathname } from "next/navigation";
+import { MagnifyingGlassIcon, PersonIcon } from "@radix-ui/react-icons";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -54,7 +53,7 @@ export default function Navbar() {
           <div className="flex md:order-2 items-center space-x-3">
             <div className="relative hidden md:block">
               <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
-                <BsSearch className="text-gray-400" />
+                <MagnifyingGlassIcon className="text-gray-400 w-5 h-5" />
                 <span className="sr-only">Search icon</span>
               </div>
               <input
@@ -72,7 +71,7 @@ export default function Navbar() {
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/avatars/01.png" alt="@shadcn" />
                     <AvatarFallback>
-                      <FaUserCircle size={32} />
+                      <PersonIcon className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
                 </Button>
