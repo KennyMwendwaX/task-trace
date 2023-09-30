@@ -10,10 +10,15 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  LineChart,
+  Line,
 } from "recharts";
 
 interface StatusCounts {
   [key: string]: number;
+}
+interface StatusColors {
+  [key: string]: string;
 }
 
 export default function TaskStatusChart() {
@@ -24,22 +29,39 @@ export default function TaskStatusChart() {
     statusCounts[status] = (statusCounts[status] || 0) + 1;
   });
 
+  const statusColors: StatusColors = {
+    done: "#16a34a",
+    todo: "#2563eb",
+    "in progress": "#9333ea",
+    canceled: "#dc2626",
+    backlog: "#4b5563",
+  };
+
   // Convert the counts into an array of objects suitable for Recharts
   const statusChartData = Object.keys(statusCounts).map((status) => ({
     status,
-    count: statusCounts[status],
+    tasks: statusCounts[status],
+    fill: statusColors[status],
   }));
   return (
     <>
       <div>Task Chart according to status</div>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="35%" height={300}>
         <BarChart
           data={statusChartData}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          margin={{
+            top: 5,
+            right: 10,
+            left: 10,
+            bottom: 5,
+          }}>
+          <CartesianGrid strokeDasharray="3 3" />
+
           <XAxis dataKey="status" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="count" fill="#8884d8" />
+          <Legend />
+          <Bar dataKey="tasks" fill="#8884d8" barSize={50} />
         </BarChart>
       </ResponsiveContainer>
     </>
