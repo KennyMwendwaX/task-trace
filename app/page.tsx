@@ -1,5 +1,4 @@
 import TaskChart from "@/components/TaskChart";
-import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
