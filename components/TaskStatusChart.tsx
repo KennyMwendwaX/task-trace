@@ -10,8 +10,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  LineChart,
-  Line,
 } from "recharts";
 
 interface StatusCounts {
@@ -56,7 +54,6 @@ export default function TaskStatusChart() {
             bottom: 5,
           }}>
           <CartesianGrid strokeDasharray="3 3" />
-
           <XAxis dataKey="status" />
           <YAxis />
           <Tooltip />
