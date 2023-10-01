@@ -69,7 +69,7 @@ export default function Navbar() {
                   variant="ghost"
                   className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+                    {/* <AvatarImage src="/avatars/01.png" alt="@shadcn" /> */}
                     <AvatarFallback>
                       <PersonIcon className="h-5 w-5" />
                     </AvatarFallback>
