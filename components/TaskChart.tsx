@@ -56,7 +56,7 @@ export default function TaskChart() {
   }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white border border-gray-900 p-3">
+        <div className="bg-white border border-slate-900 p-3">
           <div className="">{`${payload[0].name}`}</div>
           <div className="text-purple-600">{`Tasks: ${payload[0].value}`}</div>
         </div>
@@ -66,13 +66,6 @@ export default function TaskChart() {
     return null;
   };
 
-  const data = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   return (
     <>
       <div>Tasks Analytics</div>
@@ -84,6 +77,20 @@ export default function TaskChart() {
           <Tooltip />
           <Legend />
           <Bar dataKey="tasks" fill="#8884d8" barSize={40} />
+        </BarChart>
+      </ResponsiveContainer>
+      <ResponsiveContainer width="35%" height={350}>
+        <BarChart data={statusChartData}>
+          <XAxis
+            dataKey="name"
+            stroke="#888888"
+            fontSize={13}
+            tickLine={false}
+          />
+          <YAxis stroke="#888888" fontSize={12} tickLine={false} />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend />
+          <Bar dataKey="tasks" fill="#adfa1d" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
       <div>Hi</div>
