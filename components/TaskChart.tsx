@@ -1,6 +1,5 @@
 "use client";
 
-import { Task } from "@/data/schema";
 import { tasks } from "@/data/tasks";
 import React from "react";
 import {
@@ -9,12 +8,10 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   PieChart,
   Pie,
-  Cell,
   TooltipProps,
 } from "recharts";
 import {
@@ -59,8 +56,9 @@ export default function TaskChart() {
   }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip">
-          <p className="label">{`${payload[0].name}: ${payload[0].value} tasks`}</p>
+        <div className="bg-white border border-gray-900 p-3">
+          <div className="">{`${payload[0].name}`}</div>
+          <div className="text-purple-600">{`Tasks: ${payload[0].value}`}</div>
         </div>
       );
     }
@@ -89,7 +87,9 @@ export default function TaskChart() {
         </BarChart>
       </ResponsiveContainer>
       <div>Hi</div>
-      <div style={{ width: "100%", height: 300 }}>
+      <div
+        className="border border-slate-800 rounded-lg"
+        style={{ width: "35%", height: 350 }}>
         <ResponsiveContainer>
           <PieChart>
             <Pie
@@ -97,29 +97,16 @@ export default function TaskChart() {
               data={statusChartData}
               fill="#8884d8"
               label
-              labelLine={false}
+              cx="50%"
+              cy="50%"
+              innerRadius={50}
+              outerRadius={80}
             />
             <Tooltip content={<CustomTooltip />} />
+            <Legend />
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <PieChart width={800} height={400}>
-        <Pie
-          data={statusChartData}
-          cx={120}
-          cy={200}
-          innerRadius={60}
-          outerRadius={80}
-          fill="#8884d8"
-          paddingAngle={5}
-          dataKey="tasks"
-          label>
-          <Tooltip />
-          {/* {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))} */}
-        </Pie>
-      </PieChart>
     </>
   );
 }
