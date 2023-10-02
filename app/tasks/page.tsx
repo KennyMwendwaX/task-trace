@@ -10,7 +10,7 @@ export default function Issues() {
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
             <p className="text-muted-foreground">
-              Here&apos;s a list of your tasks for this month!
+              Here&apos;s a list of your tasks!
             </p>
           </div>
         </div>
