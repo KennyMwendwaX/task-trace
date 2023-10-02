@@ -45,30 +45,14 @@ export default function TaskChart() {
     fill: statusColors[status],
   }));
 
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: TooltipProps<ValueType, NameType>) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white border border-slate-900 p-3">
-          <div className="">{`${payload[0].name}`}</div>
-          <div className="text-purple-600">{`Tasks: ${payload[0].value}`}</div>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
   return (
     <>
       <div className="pt-5">
         <div
           className="rounded-lg border bg-card text-card-foreground shadow-sm"
           style={{ width: "40%", height: 400 }}>
-          <div className="text-2xl font-semibold leading-none tracking-tight p-2">
-            Task Analytics
+          <div className="text-xl font-semibold leading-none tracking-tight p-2">
+            Task Analytics Chart
           </div>
           <ResponsiveContainer>
             <PieChart>
@@ -78,7 +62,7 @@ export default function TaskChart() {
                 fill="#8884d8"
                 label
                 cx="50%"
-                cy="50%"
+                cy="40%"
                 innerRadius={70}
                 outerRadius={100}
               />
