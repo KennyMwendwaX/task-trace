@@ -25,6 +25,7 @@ import {
 import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
+import { Button } from "./ui/button";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,7 +65,12 @@ export default function TaskTable<TData, TValue>({
   return (
     <>
       <div className="space-y-4">
-        <TableToolbar table={table} />
+        <div className="flex justify-between">
+          <TableToolbar table={table} />
+          <Button variant="default" className="">
+            Add Task
+          </Button>
+        </div>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
