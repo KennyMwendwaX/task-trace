@@ -71,7 +71,7 @@ export default function TaskTable<TData, TValue>({
           <Link
             className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5"
             href="/tasks/add-task">
-            Add Task
+            New Task
           </Link>{" "}
         </div>
         <div className="rounded-md border">
