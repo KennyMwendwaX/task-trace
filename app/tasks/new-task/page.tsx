@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -9,8 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Editable, useEditor } from "@wysimark/react";
+import { useState } from "react";
 
 export default function NewTask() {
+  const [markdown, setMarkdown] = useState<string>("");
+  const editor = useEditor({});
   return (
     <>
       <div className="container mx-auto mt-4 px-5 pb-5 pt-12">
@@ -79,21 +85,13 @@ export default function NewTask() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <label
-                  htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  rows={8}
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="Write a product description here...">
-                  Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7
-                  processor, Turbo Boost up to 5.0GHz, 16GB 2666MHz DDR4 memory,
-                  Radeon Pro 5500 XT with 8GB of GDDR6 memory, 256GB SSD
-                  storage, Gigabit Ethernet, Magic Mouse 2, Magic Keyboard - US
-                </textarea>
+                <Label htmlFor="description">Description</Label>
+                <Editable
+                  className="h-[300px]"
+                  editor={editor}
+                  value={markdown}
+                  onChange={setMarkdown}
+                />
               </div>
               <div className="flex items-center space-x-4">
                 <button
