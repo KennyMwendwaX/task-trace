@@ -30,26 +30,26 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { Editable, useEditor } from "@wysimark/react";
 import { cn } from "@/lib/utils";
 
-const frameworks = [
+const assignees = [
   {
-    value: "next.js",
-    label: "Next.js",
+    value: "john doe",
+    name: "John Doe",
   },
   {
-    value: "sveltekit",
-    label: "SvelteKit",
+    value: "kodak black",
+    name: "Kodak Black",
   },
   {
-    value: "nuxt.js",
-    label: "Nuxt.js",
+    value: "lil wayne",
+    name: "Lil Wayne",
   },
   {
-    value: "remix",
-    label: "Remix",
+    value: "kendrick lamar",
+    name: "Kendrick Lamar",
   },
   {
-    value: "astro",
-    label: "Astro",
+    value: "kanye west",
+    name: "Kanye West",
   },
 ];
 
@@ -57,17 +57,17 @@ export default function NewTask() {
   const [markdown, setMarkdown] = useState<string>("");
   const editor = useEditor({});
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string | null>(null);
 
   return (
     <>
-      <div className="container mx-auto mt-4 px-8 pb-5 pt-12">
+      <div className="container mx-auto mt-4 px-16 pb-5 pt-12">
         <div className="text-2xl font-bold tracking-tight">New Task</div>
-        <div className="flex items-start pt-4 space-x-6">
+        <div className="flex items-start pt-4 space-x-8">
           <div className="w-[800px]">
             <form className="space-y-5">
               <div className="sm:col-span-2">
-                <Label className="font-semibold" htmlFor="title">
+                <Label className="font-semibold tracking-wide" htmlFor="title">
                   Title
                 </Label>
                 <Input
@@ -79,11 +79,15 @@ export default function NewTask() {
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <Label className="font-semibold" htmlFor="select">
+                  <Label
+                    className="font-semibold tracking-wide"
+                    htmlFor="select">
                     Label
                   </Label>
                   <Select>
-                    <SelectTrigger className="focus:border-2 focus:border-blue-800">
+                    <SelectTrigger
+                      id="select"
+                      className="focus:border-2 focus:border-blue-800">
                       <SelectValue placeholder="Select a Label" />
                     </SelectTrigger>
                     <SelectContent>
@@ -100,7 +104,9 @@ export default function NewTask() {
                   </Select>
                 </div>
                 <div>
-                  <Label className="font-semibold" htmlFor="select">
+                  <Label
+                    className="font-semibold tracking-wide"
+                    htmlFor="select">
                     Status
                   </Label>
                   <Select>
@@ -120,7 +126,9 @@ export default function NewTask() {
                   </Select>
                 </div>
                 <div>
-                  <Label className="font-semibold" htmlFor="select">
+                  <Label
+                    className="font-semibold tracking-wide"
+                    htmlFor="select">
                     Priority
                   </Label>
                   <Select>
@@ -139,7 +147,9 @@ export default function NewTask() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <Label className="font-semibold" htmlFor="description">
+                <Label
+                  className="font-semibold tracking-wide"
+                  htmlFor="description">
                   Description
                 </Label>
                 <Editable
@@ -159,7 +169,7 @@ export default function NewTask() {
           </div>
           <div>
             <div className="flex flex-col space-y-3">
-              <Label className="font-semibold" htmlFor="combobox">
+              <Label className="font-semibold tracking-wide" htmlFor="combobox">
                 Assign task
               </Label>
               <Popover open={open} onOpenChange={setOpen}>
@@ -170,36 +180,35 @@ export default function NewTask() {
                     aria-expanded={open}
                     className="w-[200px] justify-between">
                     {value
-                      ? frameworks.find(
-                          (framework) => framework.value === value
-                        )?.label
-                      : "Select framework..."}
+                      ? assignees.find((assignee) => assignee.value === value)
+                          ?.name
+                      : "Select assignee..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search framework..." />
-                    <CommandEmpty>No framework found.</CommandEmpty>
+                    <CommandInput placeholder="Search assignee..." />
+                    <CommandEmpty>No assignee found.</CommandEmpty>
                     <CommandGroup>
-                      {frameworks.map((framework) => (
+                      {assignees.map((assignee) => (
                         <CommandItem
-                          key={framework.value}
+                          key={assignee.value}
                           onSelect={(currentValue) => {
                             setValue(
-                              currentValue === value ? "" : currentValue
+                              currentValue === value ? null : currentValue
                             );
                             setOpen(false);
                           }}>
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              value === framework.value
+                              value === assignee.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
                           />
-                          {framework.label}
+                          {assignee.name}
                         </CommandItem>
                       ))}
                     </CommandGroup>
