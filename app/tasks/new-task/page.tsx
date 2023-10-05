@@ -20,7 +20,7 @@ export default function NewTask() {
   const editor = useEditor({});
   return (
     <>
-      <div className="container mx-auto mt-4 px-5 pb-5 pt-12">
+      <div className="container mx-auto mt-4 px-8 pb-5 pt-12">
         <div className="text-2xl font-bold tracking-tight">New Task</div>
         <div className="flex items-start pt-4">
           <div className="w-[800px]">
