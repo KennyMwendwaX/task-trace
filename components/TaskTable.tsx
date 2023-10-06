@@ -1,4 +1,5 @@
 "use client";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -25,7 +26,6 @@ import {
 import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
-import { Button } from "./ui/button";
 import Link from "next/link";
 
 interface TaskTableProps<TData, TValue> {
@@ -53,6 +53,7 @@ export default function TaskTable<TData, TValue>({
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
@@ -72,7 +73,7 @@ export default function TaskTable<TData, TValue>({
             className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5"
             href="/tasks/new-task">
             New Task
-          </Link>{" "}
+          </Link>
         </div>
         <div className="rounded-md border">
           <Table>
