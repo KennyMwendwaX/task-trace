@@ -2,7 +2,7 @@ import { TableColumns } from "@/components/TableColumns";
 import TaskTable from "@/components/TaskTable";
 import { tasks } from "@/data/tasks";
 
-export default function Issues() {
+export default function Tasks() {
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
