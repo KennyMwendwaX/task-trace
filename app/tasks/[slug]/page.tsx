@@ -3,6 +3,7 @@
 import { ArrowUpIcon, StopwatchIcon } from "@radix-ui/react-icons";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Markdown from "markdown-to-jsx";
 
 export default function Task() {
   const markdown = `# Markdown Example
@@ -54,9 +55,10 @@ export default function Task() {
             </div>
             <div className="">
               <div className="p-3 text-xl font-thin text-gray-700">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <Markdown>{markdown}</Markdown>
+                {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {markdown}
-                </ReactMarkdown>
+                </ReactMarkdown> */}
                 {/* <p>
                   Flowbite is an open-source library of UI components built with
                   the utility-first classes from Tailwind CSS. It also includes
