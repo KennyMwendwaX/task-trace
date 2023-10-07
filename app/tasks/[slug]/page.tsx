@@ -1,4 +1,5 @@
 import { ArrowUpIcon, StopwatchIcon } from "@radix-ui/react-icons";
+import ReactMarkdown from "react-markdown";
 
 export default function Task() {
   const markdown = `# Markdown Example
@@ -50,7 +51,8 @@ export default function Task() {
             </div>
             <div className="">
               <div className="p-3 text-xl font-thin text-gray-700">
-                <p>
+                <ReactMarkdown>{markdown}</ReactMarkdown>
+                {/* <p>
                   Flowbite is an open-source library of UI components built with
                   the utility-first classes from Tailwind CSS. It also includes
                   interactive elements such as dropdowns, modals, datepickers.
@@ -161,7 +163,7 @@ export default function Task() {
                   A typeface is a collection of letters. While each letter is
                   unique, certain shapes are shared across letters. A typeface
                   represents shared patterns across a collection of letters.
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
