@@ -1,7 +1,30 @@
-import { Badge } from "@/components/ui/badge";
 import { ArrowUpIcon, StopwatchIcon } from "@radix-ui/react-icons";
 
 export default function Task() {
+  const markdown = `# Markdown Example
+
+  ## Headings
+  Markdown supports different heading levels:
+  ### Heading 3
+  #### Heading 4
+  
+  ## Lists
+  You can create ordered lists and unordered lists:
+  1. Ordered List Item 1
+  2. Ordered List Item 2
+     - Unordered Subitem 1
+     - Unordered Subitem 2
+  
+  - Unordered List Item A
+  - Unordered List Item B
+  
+  ## Text Formatting
+  You can format text as **bold**, *italic*, or code
+  - This is **bold text**.
+  - This is *italic text*.
+  - This is inline.
+`;
+
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-14">
@@ -25,7 +48,7 @@ export default function Task() {
                 <ArrowUpIcon className="text-red-600 mr-1.5" /> High
               </span>
             </div>
-            <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div className="">
               <div className="p-3 text-xl font-thin text-gray-700">
                 <p>
                   Flowbite is an open-source library of UI components built with
