@@ -157,6 +157,7 @@ export default function NewTask() {
                   editor={editor}
                   value={markdown}
                   onChange={setMarkdown}
+                  placeholder="Task description..."
                 />
               </div>
               <Button
