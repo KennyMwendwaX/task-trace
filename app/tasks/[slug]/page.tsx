@@ -5,7 +5,8 @@ import { Editable, useEditor } from "@wysimark/react";
 import { useState } from "react";
 
 export default function Task() {
-  const markdownText = `# Markdown Example
+  const markdownText = `
+  # Markdown Example
 
   ## Headings
   Markdown supports different heading levels:
@@ -56,7 +57,7 @@ export default function Task() {
               </span>
             </div>
             <div className="">
-              <div className="text-xl font-thin text-gray-700">
+              <div className="">
                 <Editable
                   className="h-[600px]"
                   editor={editor}
