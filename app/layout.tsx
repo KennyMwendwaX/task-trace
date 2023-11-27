@@ -2,11 +2,7 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-
-const roboto = Roboto({
-  weight: ["400"],
-  subsets: ["latin"],
-});
+import { GeistSans } from "geist/font/sans";
 
 export const metadata: Metadata = {
   title: "Task Tracker",
@@ -20,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={GeistSans.className}>
         <Navbar />
         {children}
       </body>
