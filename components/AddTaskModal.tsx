@@ -8,22 +8,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { AiOutlinePlus } from "react-icons/ai";
 
 export default function AddTaskModal() {
   return (
     <>
       <Dialog>
-        <DialogContent>
+        <DialogTrigger asChild>
+          <Button className="flex items-center space-x-2 rounded-3xl">
+            <AiOutlinePlus className="w-4 h-4 text-white" />
+            <span>New Task</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. Are you sure you want to permanently
-              delete this file from our servers?
-            </DialogDescription>
+            <DialogTitle>Add New Task</DialogTitle>
+            {/* <DialogDescription>
+              Make changes to your profile here. Click save when you are done.
+            </DialogDescription> */}
           </DialogHeader>
-          <DialogFooter>
-            <Button type="submit">Confirm</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
