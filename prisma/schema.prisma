@@ -27,7 +27,7 @@ model Task {
   id          String   @id @default(cuid())
   name        String
   label       String
-  status      Status
+  status      Status   @default(TO_DO)
   priority    Priority
   description String
   assignedTo  String

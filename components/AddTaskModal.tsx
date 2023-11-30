@@ -36,14 +36,26 @@ import {
 } from "@/components/ui/popover";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useForm } from "react-hook-form";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import format from "date-fns/format";
+import { Textarea } from "@/components/ui/textarea";
 
-type FormValues = {
+type Status = "TO_DO" | "IN_PROGRESS" | "CANCELED" | "DONE";
+type Priority = "HIGH" | "MEDIUM" | "LOW";
+
+type Task = {
   name: string;
-  da;
+  label: string;
+  status: Status;
+  priority: Priority;
+  assignedTo: string;
+  description: string;
+  due_date: string;
 };
 
 export default function AddTaskModal() {
-  const form = useForm();
+  const form = useForm<Task>();
 
   async function onSubmit() {
     // console.log(values);
@@ -60,7 +72,7 @@ export default function AddTaskModal() {
         </DialogTrigger>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Add New Task</DialogTitle>
+            <DialogTitle>New Task</DialogTitle>
             {/* <DialogDescription>
               Make changes to your profile here. Click save when you are done.
             </DialogDescription> */}
@@ -68,19 +80,39 @@ export default function AddTaskModal() {
               <form
                 className="space-y-3 px-3"
                 onSubmit={form.handleSubmit(onSubmit)}>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Task Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="name"
+                          className="focus:border-2 focus:border-blue-600"
+                          placeholder="Task name"
+                          {...field}
+                          required
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div className="grid md:grid-cols-2 md:gap-6">
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="label"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Goal Name</FormLabel>
+                        <FormLabel>Task Label</FormLabel>
                         <FormControl>
                           <Input
                             type="text"
-                            id="name"
+                            id="label"
                             className="focus:border-2 focus:border-blue-600"
-                            placeholder="Goal name"
+                            placeholder="Task label"
                             {...field}
                             required
                           />
@@ -89,34 +121,43 @@ export default function AddTaskModal() {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="amount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Goal Amount</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            id="amount"
-                            className="focus:border-2 focus:border-blue-600"
-                            placeholder="Goal amount"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="priority"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Task Priority</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            required>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select priority type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="LOW">Low</SelectItem>
+                              <SelectItem value="MEDIUM">Medium</SelectItem>
+                              <SelectItem value="HIGH">High</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <div className="relative">
                     {/* Use flex to align label and popover content */}
                     <FormField
                       control={form.control}
-                      name="target_date"
+                      name="due_date"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
-                          <FormLabel>Target Date</FormLabel>
+                          <FormLabel>Due Date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
@@ -127,7 +168,7 @@ export default function AddTaskModal() {
                                     !field.value && "text-muted-foreground"
                                   )}>
                                   {field.value ? (
-                                    format(field.value, "PPP")
+                                    format(new Date(field.value), "PPP")
                                   ) : (
                                     <span>Pick a date</span>
                                   )}
@@ -140,7 +181,7 @@ export default function AddTaskModal() {
                               align="start">
                               <Calendar
                                 mode="single"
-                                selected={field.value}
+                                selected={new Date(field.value)}
                                 onSelect={field.onChange}
                                 initialFocus
                               />
@@ -151,37 +192,26 @@ export default function AddTaskModal() {
                       )}
                     />
                   </div>
-                  <div className="relative">
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Goal Type</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            required>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select goal type" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Short Term">
-                                Short Term
-                              </SelectItem>
-                              <SelectItem value="Mid Term">Mid Term</SelectItem>
-                              <SelectItem value="Long Term">
-                                Long Term
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="assignedTo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Assign Task</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            id="name"
+                            className="focus:border-2 focus:border-blue-600"
+                            placeholder="Task name"
+                            {...field}
+                            required
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div>
                   <FormField
@@ -194,7 +224,7 @@ export default function AddTaskModal() {
                           <Textarea
                             id="description"
                             className="focus:border-2 focus:border-blue-600"
-                            placeholder="Goal description"
+                            placeholder="Task description"
                             {...field}
                             required
                           />
@@ -205,7 +235,7 @@ export default function AddTaskModal() {
                   />
                 </div>
                 <DialogFooter>
-                  <Button type="submit">Save Goal</Button>
+                  <Button type="submit">Save Task</Button>
                 </DialogFooter>
               </form>
             </Form>
