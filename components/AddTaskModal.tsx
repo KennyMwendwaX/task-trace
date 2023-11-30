@@ -37,8 +37,17 @@ import {
 import { AiOutlinePlus } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 
+type FormValues = {
+  name: string;
+  da;
+};
+
 export default function AddTaskModal() {
   const form = useForm();
+
+  async function onSubmit() {
+    // console.log(values);
+  }
 
   return (
     <>
