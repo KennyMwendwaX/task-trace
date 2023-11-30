@@ -91,7 +91,7 @@ export const TableColumns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex items-center">
           {status.value === "done" ? (
             <status.icon className="mr-2 h-5 w-5 text-green-600" />
           ) : status.value === "todo" ? (
