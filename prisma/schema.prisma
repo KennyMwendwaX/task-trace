@@ -10,11 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  TO_DO
+  IN_PROGRESS
+  CANCELED
+  DONE
+}
+
 model Task {
   id         String   @id @default(cuid())
   name       String
   label      String
-  status     String
+  status     Status
   priority   String
   assignedTo String
   due_date   String
