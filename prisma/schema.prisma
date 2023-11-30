@@ -24,13 +24,14 @@ enum Priority {
 }
 
 model Task {
-  id         String   @id @default(cuid())
-  name       String
-  label      String
-  status     Status
-  priority   Priority
-  assignedTo String
-  due_date   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  label       String
+  status      Status
+  priority    Priority
+  description String
+  assignedTo  String
+  due_date    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
