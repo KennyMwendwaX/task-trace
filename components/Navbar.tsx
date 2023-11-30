@@ -48,6 +48,15 @@ export default function Navbar() {
                 } text-sm font-medium`}>
                 Tasks
               </Link>
+              <Link
+                href="/taskss"
+                className={`${
+                  pathname === "/tasks"
+                    ? "text-gray-100"
+                    : "text-gray-400 hover:text-gray-200"
+                } text-sm font-medium`}>
+                Taskss
+              </Link>
             </div>
           </div>
           <div className="flex md:order-2 items-center space-x-3">
