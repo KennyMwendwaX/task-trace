@@ -40,6 +40,29 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
 import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, ChevronsUpDown } from "lucide-react";
+import * as z from "zod";
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+
+const languages = [
+  { label: "English", value: "en" },
+  { label: "French", value: "fr" },
+  { label: "German", value: "de" },
+  { label: "Spanish", value: "es" },
+  { label: "Portuguese", value: "pt" },
+  { label: "Russian", value: "ru" },
+  { label: "Japanese", value: "ja" },
+  { label: "Korean", value: "ko" },
+  { label: "Chinese", value: "zh" },
+] as const;
 
 type Status = "TO_DO" | "IN_PROGRESS" | "CANCELED" | "DONE";
 type Priority = "HIGH" | "MEDIUM" | "LOW";
@@ -52,13 +75,14 @@ type Task = {
   assignedTo: string;
   description: string;
   due_date: string;
+  language: string;
 };
 
 export default function AddTaskModal() {
   const form = useForm<Task>();
 
-  async function onSubmit() {
-    // console.log(values);
+  async function onSubmit(values: Task) {
+    console.log(values);
   }
 
   return (
@@ -76,6 +100,7 @@ export default function AddTaskModal() {
             {/* <DialogDescription>
               Make changes to your profile here. Click save when you are done.
             </DialogDescription> */}
+
             <Form {...form}>
               <form
                 className="space-y-3 px-3"
@@ -195,21 +220,57 @@ export default function AddTaskModal() {
                   </div>
                   <FormField
                     control={form.control}
-                    name="assignedTo"
+                    name="language"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="flex flex-col">
                         <FormLabel>Assign Task</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            id="name"
-                            className="focus:border-2 focus:border-blue-600"
-                            placeholder="Task name"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "justify-between",
+                                  !field.value && "text-muted-foreground"
+                                )}>
+                                {field.value
+                                  ? languages.find(
+                                      (language) =>
+                                        language.value === field.value
+                                    )?.label
+                                  : "Select user"}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandInput placeholder="Search user" />
+                              <CommandEmpty>No language found.</CommandEmpty>
+                              <CommandGroup>
+                                {languages.map((language) => (
+                                  <CommandItem
+                                    value={language.label}
+                                    key={language.value}
+                                    onSelect={() => {
+                                      form.setValue("language", language.value);
+                                    }}>
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        language.value === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {language.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                       </FormItem>
                     )}
                   />
