@@ -116,7 +116,7 @@ export default function AddTaskModal() {
 
   return (
     <>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
         <DialogTrigger asChild>
           <Button className="flex items-center space-x-2 rounded-3xl">
             <AiOutlinePlus className="w-4 h-4 text-white" />
