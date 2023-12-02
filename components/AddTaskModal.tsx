@@ -98,7 +98,7 @@ export default function AddTaskModal() {
 
             <Form {...form}>
               <form
-                className="space-y-3 px-3"
+                className="space-y-3 pt-4 px-3"
                 onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                   control={form.control}
