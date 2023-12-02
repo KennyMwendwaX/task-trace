@@ -47,6 +47,8 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const users = [
   { name: "Erick", value: "en" },
@@ -75,9 +77,41 @@ type Task = {
 
 export default function AddTaskModal() {
   const form = useForm<Task>();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const toggleDialog = () => {
+    setDialogOpen(!isDialogOpen);
+  };
+
+  const {
+    mutate: addTask,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async (values: Task) => {
+      const options = {
+        method: "POST",
+        body: JSON.stringify(values),
+      };
+      const response = await fetch("/api/tasks", options);
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["goalList"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   async function onSubmit(values: Task) {
-    console.log(values);
+    addTask(values);
+    toggleDialog();
   }
 
   return (
