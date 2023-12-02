@@ -1,4 +1,5 @@
 import prisma from "@/prisma/db";
+import { Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -16,6 +17,42 @@ export async function GET() {
     return NextResponse.json(
       { message: "Server error, Try again later" },
       { status: 200 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  const req = await request.json();
+  const { name, label, priority, due_date, assignedTo, description } = req;
+
+  try {
+    const task = await prisma.task.create({
+      data: {
+        name,
+        label,
+        priority,
+        due_date,
+        assignedTo,
+        description,
+        status: Status.TO_DO,
+      },
+    });
+
+    if (task) {
+      return NextResponse.json(
+        { message: "Task created successfully" },
+        { status: 201 }
+      );
+    } else {
+      return NextResponse.json(
+        { message: "Failed to create task" },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Server error, try again later" },
+      { status: 500 }
     );
   }
 }
