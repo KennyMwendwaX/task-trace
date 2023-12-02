@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -40,10 +39,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
 import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import * as z from "zod";
-
 import {
   Command,
   CommandEmpty,
@@ -52,16 +48,16 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
+const users = [
+  { name: "Erick", value: "en" },
+  { name: "Francis", value: "fr" },
+  { name: "Gilbert", value: "de" },
+  { name: "Sandy", value: "es" },
+  { name: "Patricia", value: "pt" },
+  { name: "Randy", value: "ru" },
+  { name: "Jones", value: "ja" },
+  { name: "Karen", value: "ko" },
+  { name: "Carl", value: "zh" },
 ] as const;
 
 type Status = "TO_DO" | "IN_PROGRESS" | "CANCELED" | "DONE";
@@ -75,7 +71,6 @@ type Task = {
   assignedTo: string;
   description: string;
   due_date: string;
-  language: string;
 };
 
 export default function AddTaskModal() {
@@ -220,7 +215,7 @@ export default function AddTaskModal() {
                   </div>
                   <FormField
                     control={form.control}
-                    name="language"
+                    name="assignedTo"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel>Assign Task</FormLabel>
@@ -235,36 +230,35 @@ export default function AddTaskModal() {
                                   !field.value && "text-muted-foreground"
                                 )}>
                                 {field.value
-                                  ? languages.find(
-                                      (language) =>
-                                        language.value === field.value
-                                    )?.label
-                                  : "Select user"}
+                                  ? users.find(
+                                      (user) => user.value === field.value
+                                    )?.name
+                                  : "Select name"}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
                           <PopoverContent className="w-[200px] p-0">
                             <Command>
-                              <CommandInput placeholder="Search user" />
-                              <CommandEmpty>No language found.</CommandEmpty>
+                              <CommandInput placeholder="Search name" />
+                              <CommandEmpty>No user found.</CommandEmpty>
                               <CommandGroup>
-                                {languages.map((language) => (
+                                {users.map((user) => (
                                   <CommandItem
-                                    value={language.label}
-                                    key={language.value}
+                                    value={user.name}
+                                    key={user.value}
                                     onSelect={() => {
-                                      form.setValue("language", language.value);
+                                      form.setValue("assignedTo", user.value);
                                     }}>
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        language.value === field.value
+                                        user.value === field.value
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
                                     />
-                                    {language.label}
+                                    {user.name}
                                   </CommandItem>
                                 ))}
                               </CommandGroup>
