@@ -1,8 +1,37 @@
+"use client";
+
 import { TableColumns } from "@/components/table/TableColumns";
 import TaskTable from "@/components/table/TaskTable";
 import { tasks } from "@/data/tasks";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+type Task = {
+  id: string;
+  name: string;
+  label: string;
+  status: string;
+  priority: string;
+  description: string;
+  assignedTo: string;
+  due_date: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export default function Tasks() {
+  const {
+    data: tasks,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/tasks");
+      return data.tasks as Task[];
+    },
+  });
+
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
@@ -16,7 +45,7 @@ export default function Tasks() {
             </p>
           </div>
         </div>
-        <TaskTable data={tasks} columns={TableColumns} />
+        {/* <TaskTable data={tasks} columns={TableColumns} /> */}
       </div>
     </>
   );
