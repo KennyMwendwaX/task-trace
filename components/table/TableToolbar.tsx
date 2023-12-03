@@ -4,7 +4,7 @@ import { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import TableFacetedFilter from "./TableFacetedFilter";
 import { priorities, statuses } from "@/data/IconMappingOptions";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 interface TableToolbarProps<TData> {

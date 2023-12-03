@@ -1,5 +1,5 @@
-import { TableColumns } from "@/components/TableColumns";
-import TaskTable from "@/components/TaskTable";
+import { TableColumns } from "@/components/table/TableColumns";
+import TaskTable from "@/components/table/TaskTable";
 import { tasks } from "@/data/tasks";
 
 export default function Tasks() {
