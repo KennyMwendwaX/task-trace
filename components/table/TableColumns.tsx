@@ -40,8 +40,8 @@ export const TableColumns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
-    header: () => <TableColumnHeader name="Title" />,
+    accessorKey: "name",
+    header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label);
 
