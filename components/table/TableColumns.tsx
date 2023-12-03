@@ -33,13 +33,6 @@ export const TableColumns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: () => <TableColumnHeader name="Task" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "name",
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
