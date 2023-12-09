@@ -16,19 +16,21 @@ export default function Tasks() {
     },
   });
 
-  const tasks = data?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const tasks =
+    data?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    ) || [];
 
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
         <div className="flex items-center justify-between space-y-2">
           <div>
-            <div className="text-2xl font-bold tracking-tight">
+            <div className="text-3xl font-bold tracking-tight">
               Welcome back!
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-xl text-muted-foreground">
               Here&apos;s a list of your tasks!
             </p>
           </div>
@@ -39,11 +41,7 @@ export default function Tasks() {
             <Loading />
           ) : (
             <>
-              {tasks && tasks.length > 0 ? (
-                <TaskTable data={tasks} columns={TableColumns} />
-              ) : (
-                <div>No tasks available</div>
-              )}
+              <TaskTable data={tasks} columns={TableColumns} />
             </>
           )}
         </div>

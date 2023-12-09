@@ -25,6 +25,8 @@ export async function POST(request: Request) {
   const req = await request.json();
   const { name, label, priority, due_date, assignedTo, description } = req;
 
+  console.log(req);
+
   try {
     const task = await prisma.task.create({
       data: {
