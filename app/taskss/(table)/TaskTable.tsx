@@ -27,6 +27,7 @@ import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
 import AddTaskModal from "@/components/AddTaskModal";
+import Modal from "./Modal";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,7 +70,7 @@ export default function TaskTable<TData, TValue>({
       <div className="space-y-4">
         <div className="flex justify-between">
           <TableToolbar table={table} />
-          <AddTaskModal />
+          <Modal />
         </div>
         <div className="rounded-md border">
           <Table>
