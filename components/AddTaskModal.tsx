@@ -49,6 +49,8 @@ import {
 } from "@/components/ui/command";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Task, taskSchema } from "@/lib/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const users = [
   { name: "Erick", value: "en" },
@@ -62,21 +64,10 @@ const users = [
   { name: "Carl", value: "zh" },
 ] as const;
 
-type Status = "TO_DO" | "IN_PROGRESS" | "CANCELED" | "DONE";
-type Priority = "HIGH" | "MEDIUM" | "LOW";
-
-type Task = {
-  name: string;
-  label: string;
-  status: Status;
-  priority: Priority;
-  assignedTo: string;
-  description: string;
-  due_date: string;
-};
-
 export default function AddTaskModal() {
-  const form = useForm<Task>();
+  const form = useForm<Task>({
+    resolver: zodResolver(taskSchema),
+  });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 

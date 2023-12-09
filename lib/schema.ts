@@ -5,7 +5,7 @@ export const taskSchema = z.object({
   label: z.string(),
   priority: z.string(),
   status: z.string(),
-  due_date: z.string(),
+  due_date: z.date(),
   assignedTo: z.string(),
   description: z.string(),
 });

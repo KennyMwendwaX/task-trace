@@ -5,6 +5,7 @@ import TaskTable from "@/components/table/TaskTable";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { Task } from "@/lib/schema";
+import Loading from "@/components/Loading";
 
 export default function Tasks() {
   const { data, isLoading, error } = useQuery({
@@ -34,10 +35,16 @@ export default function Tasks() {
         </div>
 
         <div className="pt-4">
-          {tasks && tasks.length > 0 ? (
-            <TaskTable data={tasks} columns={TableColumns} />
+          {isLoading ? (
+            <Loading />
           ) : (
-            <div>No tasks available</div>
+            <>
+              {tasks && tasks.length > 0 ? (
+                <TaskTable data={tasks} columns={TableColumns} />
+              ) : (
+                <div>No tasks available</div>
+              )}
+            </>
           )}
         </div>
       </div>
