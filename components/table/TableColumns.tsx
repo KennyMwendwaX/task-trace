@@ -65,7 +65,7 @@ export const TableColumns: ColumnDef<Task>[] = [
             </Badge>
           ) : null}
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
+            {row.getValue("name")}
           </span>
         </div>
       );
