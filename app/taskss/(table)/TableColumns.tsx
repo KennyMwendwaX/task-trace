@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { labels, priorities, statuses } from "@/lib/taskConfig";
+import { labels, priorities, statuses } from "@/data/IconMappingOptions";
 import { Task } from "@/data/schema";
 import TableColumnHeader from "./TableColumnHeader";
 import TableRowActions from "./TableRowActions";
@@ -33,8 +33,8 @@ export const TableColumns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: () => <TableColumnHeader name="Name" />,
+    accessorKey: "title",
+    header: () => <TableColumnHeader name="Title" />,
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label);
 
