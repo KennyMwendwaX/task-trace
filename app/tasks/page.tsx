@@ -19,11 +19,7 @@ type Task = {
 };
 
 export default function Tasks() {
-  const {
-    data: tasks,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
       const { data } = await axios.get("/api/tasks");
@@ -31,7 +27,9 @@ export default function Tasks() {
     },
   });
 
-  console.log(tasks);
+  const tasks = data?.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <>

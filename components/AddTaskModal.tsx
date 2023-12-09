@@ -101,7 +101,7 @@ export default function AddTaskModal() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["goalList"],
+        queryKey: ["tasks"],
       });
     },
     onError: (error) => {
