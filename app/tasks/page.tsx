@@ -2,7 +2,6 @@
 
 import { TableColumns } from "@/components/table/TableColumns";
 import TaskTable from "@/components/table/TaskTable";
-import { tasks } from "@/data/tasks";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -45,7 +44,11 @@ export default function Tasks() {
             </p>
           </div>
         </div>
-        {/* <TaskTable data={tasks} columns={TableColumns} /> */}
+        {tasks && tasks.length > 0 ? (
+          <TaskTable data={tasks} columns={TableColumns} />
+        ) : (
+          <div>No tasks available</div>
+        )}
       </div>
     </>
   );

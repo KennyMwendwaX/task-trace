@@ -41,7 +41,7 @@ export const TableColumns: ColumnDef<Task>[] = [
       if (!label) {
         return (
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
+            {row.getValue("name")}
           </span>
         );
       }
