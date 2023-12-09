@@ -36,20 +36,20 @@ export const TableColumns: ColumnDef<Task>[] = [
     accessorKey: "name",
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label);
+      // const label = labels.find((label) => label.value === row.original.label);
 
-      if (!label) {
-        return (
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name")}
-          </span>
-        );
-      }
+      // if (!label) {
+      //   return (
+      //     <span className="max-w-[500px] truncate font-medium">
+      //       {row.getValue("name")}
+      //     </span>
+      //   );
+      // }
       return (
         <div className="flex space-x-2">
-          {label.value === "feature" ? (
+          {/* {label.value === "feature" ? (
             <Badge className="border-blue-600 text-blue-600" variant="outline">
-              {label.label}
+             {label.label}
             </Badge>
           ) : label.value === "documentation" ? (
             <Badge
@@ -63,7 +63,11 @@ export const TableColumns: ColumnDef<Task>[] = [
               variant="outline">
               {label.label}
             </Badge>
-          ) : null}
+          ) : null}  */}
+          <Badge className="border-blue-600 text-blue-600" variant="outline">
+            {row.original.label}
+          </Badge>
+
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("name")}
           </span>
@@ -85,16 +89,14 @@ export const TableColumns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex items-center">
-          {status.value === "done" ? (
+          {status.value === "DONE" ? (
             <status.icon className="mr-2 h-5 w-5 text-green-600" />
-          ) : status.value === "todo" ? (
+          ) : status.value === "TO_DO" ? (
             <status.icon className="mr-2 h-5 w-5 text-blue-600" />
-          ) : status.value === "in progress" ? (
+          ) : status.value === "IN_PROGRESS" ? (
             <status.icon className="mr-2 h-5 w-5 text-orange-600" />
-          ) : status.value === "canceled" ? (
+          ) : status.value === "CANCELED" ? (
             <status.icon className="mr-2 h-5 w-5 text-red-600" />
-          ) : status.value === "backlog" ? (
-            <status.icon className="mr-2 h-5 w-5 text-gray-600" />
           ) : null}
           <span>{status.label}</span>
         </div>
@@ -115,11 +117,11 @@ export const TableColumns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex items-center">
-          {priority.value === "high" ? (
+          {priority.value === "HIGH" ? (
             <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
-          ) : priority.value === "medium" ? (
+          ) : priority.value === "MEDIUM" ? (
             <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-orange-500" />
-          ) : priority.value === "low" ? (
+          ) : priority.value === "LOW" ? (
             <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-blue-600" />
           ) : null}
           <span>{priority.label}</span>

@@ -25,22 +25,22 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "todo",
+    value: "TO_DO",
     label: "Todo",
     icon: CircleIcon,
   },
   {
-    value: "in progress",
+    value: "IN_PROGRESS",
     label: "In Progress",
     icon: StopwatchIcon,
   },
   {
-    value: "done",
+    value: "DONE",
     label: "Done",
     icon: CheckCircledIcon,
   },
   {
-    value: "canceled",
+    value: "CANCELED",
     label: "Canceled",
     icon: CrossCircledIcon,
   },
@@ -49,17 +49,17 @@ export const statuses = [
 export const priorities = [
   {
     label: "Low",
-    value: "low",
+    value: "LOW",
     icon: ArrowDownIcon,
   },
   {
     label: "Medium",
-    value: "medium",
+    value: "MEDIUM",
     icon: ArrowRightIcon,
   },
   {
     label: "High",
-    value: "high",
+    value: "HIGH",
     icon: ArrowUpIcon,
   },
 ];

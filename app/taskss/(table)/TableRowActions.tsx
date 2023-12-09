@@ -18,7 +18,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { labels } from "@/data/IconMappingOptions";
-import { taskSchema } from "@/data/schema";
+import { z } from "zod";
+
+export const taskSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  status: z.string(),
+  label: z.string(),
+  priority: z.string(),
+});
 
 interface TableRowActions<TData> {
   row: Row<TData>;
