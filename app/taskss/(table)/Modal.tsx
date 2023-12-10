@@ -255,7 +255,9 @@ export default function Modal() {
                 </div>
               </div>
 
-              <Button type="submit">Save Task</Button>
+              <DialogFooter>
+                <Button type="submit">Save Task</Button>
+              </DialogFooter>
             </form>
           </DialogHeader>
         </DialogContent>

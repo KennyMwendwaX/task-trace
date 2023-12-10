@@ -6,9 +6,16 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "@/data/IconMappingOptions";
-import { Task } from "@/lib/schema";
 import TableColumnHeader from "./TableColumnHeader";
 import TableRowActions from "./TableRowActions";
+
+type Task = {
+  id: string;
+  title: string;
+  status: string;
+  label: string;
+  priority: string;
+};
 
 export const TableColumns: ColumnDef<Task>[] = [
   {
