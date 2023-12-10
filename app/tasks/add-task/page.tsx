@@ -46,7 +46,7 @@ const users = [
   { name: "Carl", value: "zh" },
 ] as const;
 
-export default function NewTask() {
+export default function AddTask() {
   const {
     register,
     handleSubmit,
