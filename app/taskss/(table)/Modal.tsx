@@ -67,7 +67,6 @@ export default function Modal() {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [date, setDate] = useState<Date>();
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [openSelectDate, setOpenSelectDate] = useState(false);
   const [openAssignTask, setOpenAssignTask] = useState(false);
   const queryClient = useQueryClient();
 
@@ -85,10 +84,10 @@ export default function Modal() {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/tasks", options);
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
+      const response = await fetch("/api/", options);
+      // if (!response.ok) {
+      //   throw new Error("Something went wrong");
+      // }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -102,8 +101,8 @@ export default function Modal() {
 
   async function onSubmit(values: Task) {
     console.log(values);
-    addTask(values);
-    toggleDialog();
+    // addTask(values);
+    // toggleDialog();
   }
 
   return (
