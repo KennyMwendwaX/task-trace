@@ -70,9 +70,9 @@ export default function AddTask() {
         body: JSON.stringify(values),
       };
       const response = await fetch("/api/", options);
-      // if (!response.ok) {
-      //   throw new Error("Something went wrong");
-      // }
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -91,137 +91,140 @@ export default function AddTask() {
   }
   return (
     <>
-      <form className="space-y-3 pt-4 px-3" onSubmit={handleSubmit(onSubmit)}>
-        <div className="relative">
-          <Label htmlFor="name">Task Name</Label>
-          <Input
-            type="text"
-            id="name"
-            className="focus:border-2 focus:border-blue-600"
-            placeholder="Task name"
-            required
-            {...register("name")}
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 md:gap-6">
+      <div className="container mx-auto mt-4 px-56 pb-5 pt-12">
+        <div className="text-3xl font-bold tracking-tight">Add New Task</div>
+        <form className="space-y-3 pt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="relative">
-            <Label htmlFor="label">Task Name</Label>
+            <Label htmlFor="name">Task Name</Label>
             <Input
               type="text"
-              id="label"
+              id="name"
               className="focus:border-2 focus:border-blue-600"
-              placeholder="Task label"
+              placeholder="Task name"
               required
-              {...register("label")}
+              {...register("name")}
             />
           </div>
 
-          <div className="relative">
-            <Label htmlFor="priority">Task Priority</Label>
-            <Select required {...register("priority")}>
-              <SelectTrigger id="priority">
-                <SelectValue placeholder="Select priority type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="LOW">Low</SelectItem>
-                <SelectItem value="MEDIUM">Medium</SelectItem>
-                <SelectItem value="HIGH">High</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="relative">
+              <Label htmlFor="label">Task Name</Label>
+              <Input
+                type="text"
+                id="label"
+                className="focus:border-2 focus:border-blue-600"
+                placeholder="Task label"
+                required
+                {...register("label")}
+              />
+            </div>
+
+            <div className="relative">
+              <Label htmlFor="priority">Task Priority</Label>
+              <Select required {...register("priority")}>
+                <SelectTrigger id="priority">
+                  <SelectValue placeholder="Select priority type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="LOW">Low</SelectItem>
+                  <SelectItem value="MEDIUM">Medium</SelectItem>
+                  <SelectItem value="HIGH">High</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="relative flex flex-col space-y-1">
+              <Label htmlFor="due_date">Due Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}>
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                    disabled={(date) => date <= new Date()}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="relative flex flex-col space-y-1">
+              <Label htmlFor="assigned_to">Assign Task</Label>
+              <Popover open={openAssignTask} onOpenChange={setOpenAssignTask}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className={cn(
+                      "justify-between",
+                      !selectedUser && "text-muted-foreground"
+                    )}>
+                    {selectedUser
+                      ? users.find((user) => user.value === selectedUser)?.name
+                      : "Select name"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search name" />
+                    <CommandEmpty>No user found.</CommandEmpty>
+                    <CommandGroup>
+                      {users.map((user) => (
+                        <CommandItem
+                          value={user.name}
+                          key={user.value}
+                          onSelect={() => {
+                            setSelectedUser((prevUser) =>
+                              prevUser === user.value ? null : user.value
+                            );
+                            setOpenAssignTask(false);
+                          }}>
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedUser === user.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {user.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
 
-          <div className="relative flex flex-col space-y-1">
-            <Label htmlFor="due_date">Due Date</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}>
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                  disabled={(date) => date <= new Date()}
-                />
-              </PopoverContent>
-            </Popover>
+          <div>
+            <div className="relative">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                className="focus:border-2 focus:border-blue-600"
+                placeholder="Task description"
+                required
+                {...register("description")}
+              />
+            </div>
           </div>
 
-          <div className="relative flex flex-col space-y-1">
-            <Label htmlFor="assigned_to">Assign Task</Label>
-            <Popover open={openAssignTask} onOpenChange={setOpenAssignTask}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    "justify-between",
-                    !selectedUser && "text-muted-foreground"
-                  )}>
-                  {selectedUser
-                    ? users.find((user) => user.value === selectedUser)?.name
-                    : "Select name"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
-                <Command>
-                  <CommandInput placeholder="Search name" />
-                  <CommandEmpty>No user found.</CommandEmpty>
-                  <CommandGroup>
-                    {users.map((user) => (
-                      <CommandItem
-                        value={user.name}
-                        key={user.value}
-                        onSelect={() => {
-                          setSelectedUser((prevUser) =>
-                            prevUser === user.value ? null : user.value
-                          );
-                          setOpenAssignTask(false);
-                        }}>
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedUser === user.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {user.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div>
-          <div className="relative">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              className="focus:border-2 focus:border-blue-600"
-              placeholder="Task description"
-              required
-              {...register("description")}
-            />
-          </div>
-        </div>
-
-        <Button type="submit">Save Task</Button>
-      </form>
+          <Button type="submit">Save Task</Button>
+        </form>
+      </div>
     </>
   );
 }
