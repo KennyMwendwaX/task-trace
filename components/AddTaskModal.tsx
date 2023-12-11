@@ -110,8 +110,8 @@ export default function AddTaskModal() {
 
   async function onSubmit(values: Task) {
     console.log(values);
-    // addTask(values);
-    // toggleDialog();
+    addTask(values);
+    toggleDialog();
   }
 
   return (

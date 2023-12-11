@@ -17,10 +17,14 @@ export default function Tasks() {
   });
 
   const tasks =
-    data?.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ) || [];
+    data
+      ?.map((task) => ({
+        ...task,
+        createdAt: new Date(task.createdAt),
+        updatedAt: new Date(task.updatedAt),
+        due_date: new Date(task.due_date),
+      }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
 
   return (
     <>
