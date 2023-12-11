@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "@/lib/taskConfig";
-import { Task } from "@/lib/schema";
+import { Task, taskSchema } from "@/lib/schema";
 import TableColumnHeader from "./TableColumnHeader";
 import TableRowActions from "./TableRowActions";
+import format from "date-fns/format";
 
 export const TableColumns: ColumnDef<Task>[] = [
   {
@@ -127,6 +128,20 @@ export const TableColumns: ColumnDef<Task>[] = [
           <span>{priority.label}</span>
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "assignedTo",
+    header: () => <TableColumnHeader name="Assigned To" />,
+    cell: ({ row }) => <div>{row.getValue("assignedTo")}</div>,
+  },
+  {
+    accessorKey: "due_date",
+    header: () => <TableColumnHeader name="Due Date" />,
+    cell: ({ row }) => {
+      const task = taskSchema.parse(row.original);
+      const date = format(task.due_date, "dd/MM/yyyy");
+      return <div>{date}</div>;
     },
   },
   {

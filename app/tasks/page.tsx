@@ -20,9 +20,9 @@ export default function Tasks() {
     data
       ?.map((task) => ({
         ...task,
+        due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
         updatedAt: new Date(task.updatedAt),
-        due_date: new Date(task.due_date),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
 
