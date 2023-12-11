@@ -66,15 +66,15 @@ const users = [
 
 export default function AddTaskModal() {
   const form = useForm<Task>({
-    resolver: zodResolver(taskSchema),
-    defaultValues: {
-      name: "",
-      label: "",
-      priority: "",
-      due_date: new Date(Date.now()),
-      assignedTo: "",
-      description: "",
-    },
+    // resolver: zodResolver(taskSchema),
+    // defaultValues: {
+    //   name: "",
+    //   label: "",
+    //   priority: "",
+    //   due_date: new Date(Date.now()),
+    //   assignedTo: "",
+    //   description: "",
+    // },
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -110,8 +110,8 @@ export default function AddTaskModal() {
 
   async function onSubmit(values: Task) {
     console.log(values);
-    addTask(values);
-    toggleDialog();
+    // addTask(values);
+    // toggleDialog();
   }
 
   return (
@@ -154,6 +154,7 @@ export default function AddTaskModal() {
                     </FormItem>
                   )}
                 />
+
                 <div className="grid md:grid-cols-2 md:gap-6">
                   <FormField
                     control={form.control}
