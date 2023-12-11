@@ -1,3 +1,4 @@
+import { taskSchema } from "@/lib/schema";
 import prisma from "@/prisma/db";
 import { Status } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -23,19 +24,26 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const req = await request.json();
-  const { name, label, priority, due_date, assignedTo, description } = req;
 
-  console.log(req);
+  // Convert 'due_date' string to a Date object
+  const parsedData = {
+    ...req,
+    due_date: new Date(req.due_date),
+  };
+
+  // Apply Zod schema to validate and parse the request data
+  const validatedData = taskSchema.parse(parsedData);
+
+  if (!validatedData)
+    return NextResponse.json(
+      { message: "Invalid request data" },
+      { status: 400 }
+    );
 
   try {
     const task = await prisma.task.create({
       data: {
-        name,
-        label,
-        priority,
-        due_date,
-        assignedTo,
-        description,
+        ...validatedData,
         status: Status.TO_DO,
       },
     });

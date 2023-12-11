@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { labels } from "@/data/IconMappingOptions";
-import { Task, taskSchema } from "@/lib/schema";
+import { taskSchema } from "@/lib/schema";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
