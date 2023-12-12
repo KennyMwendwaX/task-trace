@@ -48,17 +48,16 @@ export async function POST(request: Request) {
       },
     });
 
-    if (task) {
-      return NextResponse.json(
-        { message: "Task created successfully" },
-        { status: 201 }
-      );
-    } else {
+    if (!task)
       return NextResponse.json(
         { message: "Failed to create task" },
         { status: 500 }
       );
-    }
+
+    return NextResponse.json(
+      { message: "Task created successfully" },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },

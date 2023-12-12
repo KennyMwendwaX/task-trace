@@ -37,6 +37,7 @@ export const taskSchema = z.object({
 
 export type Task = z.infer<typeof taskSchema> & {
   id: string;
+  status: "TO_DO" | "IN_PROGRESS" | "DONE" | "CANCELED";
   createdAt: Date;
   updatedAt: Date;
 };

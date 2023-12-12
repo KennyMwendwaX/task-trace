@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { tasks } from "@/data/tasks";
 import {
   CheckCircledIcon,
   CircleIcon,
