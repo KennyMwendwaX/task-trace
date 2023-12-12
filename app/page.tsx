@@ -25,14 +25,16 @@ export default function Home() {
 
         {isLoading ? (
           <Loading />
-        ) : (
+        ) : tasks.length > 0 ? (
           <>
             <TaskOverview tasks={tasks} />
             <div className="flex space-x-4 items-start pt-5">
-              <TaskChart />
+              <TaskChart tasks={tasks} />
               <LatestTasks />
             </div>
           </>
+        ) : (
+          <div>No tasks available</div>
         )}
       </div>
     </>

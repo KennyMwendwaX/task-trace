@@ -1,6 +1,6 @@
 "use client";
 
-import { tasks } from "@/data/tasks";
+import { Task } from "@/lib/schema";
 import React from "react";
 import {
   ResponsiveContainer,
@@ -15,6 +15,10 @@ import {
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
 
+type Props = {
+  tasks: Task[];
+};
+
 interface StatusCounts {
   [key: string]: number;
 }
@@ -22,7 +26,7 @@ interface StatusColors {
   [key: string]: string;
 }
 
-export default function TaskChart() {
+export default function TaskChart({ tasks }: Props) {
   // Count the number of tasks for each status
   const statusCounts: StatusCounts = {};
   tasks.forEach((task) => {
@@ -30,17 +34,23 @@ export default function TaskChart() {
     statusCounts[status] = (statusCounts[status] || 0) + 1;
   });
 
+  const statusText: Record<string, string> = {
+    DONE: "Done",
+    TO_DO: "Todo",
+    IN_PROGRESS: "In Progress",
+    CANCELED: "Canceled",
+  };
+
   const statusColors: StatusColors = {
-    done: "#16a34a",
-    todo: "#2563eb",
-    "in progress": "#9333ea",
-    canceled: "#dc2626",
-    backlog: "#4b5563",
+    DONE: "#16a34a",
+    TO_DO: "#2563eb",
+    IN_PROGRESS: "#9333ea",
+    CANCELED: "#dc2626",
   };
 
   // Convert the counts into an array of objects suitable for Recharts
   const statusChartData = Object.keys(statusCounts).map((status) => ({
-    name: status,
+    name: statusText[status],
     tasks: statusCounts[status],
     fill: statusColors[status],
   }));
