@@ -15,9 +15,9 @@ import {
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
 
-type Props = {
+interface Props {
   tasks: Task[];
-};
+}
 
 interface StatusCounts {
   [key: string]: number;

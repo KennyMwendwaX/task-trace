@@ -8,9 +8,9 @@ import {
   StopwatchIcon,
 } from "@radix-ui/react-icons";
 
-type Props = {
+interface Props {
   tasks: Task[];
-};
+}
 
 export default function TaskOverview({ tasks }: Props) {
   const tasksDone = tasks.filter((task) => task.status === "DONE");
@@ -31,48 +31,48 @@ export default function TaskOverview({ tasks }: Props) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Done</CardTitle>
+            <CardTitle className="text-base font-medium">Done</CardTitle>
             <CheckCircledIcon className="h-5 w-5 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tasksDone.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold">{tasksDone.length}</div>
+            <p className="text-sm text-muted-foreground">
               {tasks_done_percentage}% of all tasks
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Todo</CardTitle>
+            <CardTitle className="text-base font-medium">Todo</CardTitle>
             <CircleIcon className="h-5 w-5 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tasksTodo.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold">{tasksTodo.length}</div>
+            <p className="text-sm text-muted-foreground">
               {tasks_todo_percentage}% of all tasks
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+            <CardTitle className="text-base font-medium">In Progress</CardTitle>
             <StopwatchIcon className="h-5 w-5 text-orange-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tasksInProgress.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold">{tasksInProgress.length}</div>
+            <p className="text-sm text-muted-foreground">
               {tasks_inProgress_percentage}% of all tasks
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Canceled</CardTitle>
+            <CardTitle className="text-base font-medium">Canceled</CardTitle>
             <CrossCircledIcon className="h-5 w-5 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tasksCanceled.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold">{tasksCanceled.length}</div>
+            <p className="text-sm text-muted-foreground">
               {tasks_canceled_percentage}% of all tasks
             </p>
           </CardContent>
