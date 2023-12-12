@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Task } from "@/lib/schema";
 import {
   CheckCircledIcon,
   CircleIcon,
@@ -7,26 +8,27 @@ import {
   StopwatchIcon,
 } from "@radix-ui/react-icons";
 
-export default function TaskOverview() {
-  const tasksDone = tasks.filter((task) => task.status === "done");
+type Props = {
+  tasks: Task[];
+};
+
+export default function TaskOverview({ tasks }: Props) {
+  const tasksDone = tasks.filter((task) => task.status === "DONE");
   const tasks_done_percentage = (tasksDone.length / tasks.length) * 100;
 
-  const tasksTodo = tasks.filter((task) => task.status === "todo");
+  const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
   const tasks_todo_percentage = (tasksTodo.length / tasks.length) * 100;
 
-  const tasksInProgress = tasks.filter((task) => task.status === "in progress");
+  const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
   const tasks_inProgress_percentage =
     (tasksInProgress.length / tasks.length) * 100;
 
-  const tasksCanceled = tasks.filter((task) => task.status === "canceled");
+  const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
   const tasks_canceled_percentage = (tasksCanceled.length / tasks.length) * 100;
-
-  const tasksBacklog = tasks.filter((task) => task.status === "backlog");
-  const tasks_backlog_percentage = (tasksBacklog.length / tasks.length) * 100;
 
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Done</CardTitle>
@@ -72,18 +74,6 @@ export default function TaskOverview() {
             <div className="text-2xl font-bold">{tasksCanceled.length}</div>
             <p className="text-xs text-muted-foreground">
               {tasks_canceled_percentage}% of all tasks
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Backlog</CardTitle>
-            <QuestionMarkCircledIcon className="h-5 w-5 text-gray-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{tasksBacklog.length}</div>
-            <p className="text-xs text-muted-foreground">
-              {tasks_backlog_percentage}% of all tasks
             </p>
           </CardContent>
         </Card>
