@@ -6,6 +6,7 @@ import LatestTasks from "@/components/LatestTasks";
 import { Task } from "@/lib/schema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/Loading";
 
 export default function Home() {
   const { data, isLoading, error } = useQuery({
@@ -21,11 +22,18 @@ export default function Home() {
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
         <h2 className="text-3xl font-bold tracking-tight pb-2">Dashboard</h2>
-        <TaskOverview tasks={tasks} />
-        <div className="flex space-x-4 items-start pt-5">
-          <TaskChart />
-          <LatestTasks />
-        </div>
+
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <TaskOverview tasks={tasks} />
+            <div className="flex space-x-4 items-start pt-5">
+              <TaskChart />
+              <LatestTasks />
+            </div>
+          </>
+        )}
       </div>
     </>
   );
