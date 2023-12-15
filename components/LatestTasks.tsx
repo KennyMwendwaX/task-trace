@@ -41,8 +41,12 @@ export default function LatestTasks({ tasks }: Props) {
                 </tr>
               </thead>
               <tbody>
-                {latestTasks.map((task) => (
-                  <tr key={task.id} className="bg-white border-b">
+                {latestTasks.map((task, index) => (
+                  <tr
+                    key={task.id}
+                    className={`bg-white ${
+                      index === latestTasks.length - 1 ? "" : "border-b"
+                    }`}>
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
