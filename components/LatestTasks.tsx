@@ -1,11 +1,20 @@
-export default function LatestTasks() {
+"use client";
+
+import { Task } from "@/lib/schema";
+import { Card } from "@/components/ui/card";
+
+type Props = {
+  tasks: Task[];
+};
+
+export default function LatestTasks({ tasks }: Props) {
   return (
     <>
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <Card className="w-[800px]">
         <div className="text-xl font-semibold leading-none tracking-tight p-2">
           Latest Tasks
         </div>
-      </div>
+      </Card>
     </>
   );
 }

@@ -30,7 +30,7 @@ export default function Home() {
             <TaskOverview tasks={tasks} />
             <div className="flex space-x-4 items-start pt-5">
               <TaskChart tasks={tasks} />
-              <LatestTasks />
+              <LatestTasks tasks={tasks} />
             </div>
           </>
         ) : (
