@@ -19,6 +19,7 @@ import {
 
 import { labels } from "@/data/IconMappingOptions";
 import { taskSchema } from "@/lib/schema";
+import DeleteTaskModal from "../DeleteTaskModal";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -58,8 +59,7 @@ export default function TableRowActions<TData>({
           </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
-            Delete
+            <DeleteTaskModal />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
