@@ -39,7 +39,7 @@ export const taskSchema = z.object({
   updatedAt: z.date(),
 });
 
-// Extended schema for client-side form validation
+// Omitted schema for client-side form validation
 export const taskFormSchema = taskSchema.omit({
   id: true,
   status: true,
@@ -47,4 +47,4 @@ export const taskFormSchema = taskSchema.omit({
   updatedAt: true,
 });
 
-export type Task = z.infer<typeof taskFormSchema>;
+export type Task = z.infer<typeof taskSchema>;

@@ -3,6 +3,8 @@
 import { Task } from "@/lib/schema";
 import { Card } from "@/components/ui/card";
 import format from "date-fns/format";
+import { IoChevronForward } from "react-icons/io5";
+import Link from "next/link";
 
 type Props = {
   tasks: Task[];
@@ -20,8 +22,16 @@ export default function LatestTasks({ tasks }: Props) {
   return (
     <>
       <Card className="w-[800px]">
-        <div className="text-xl font-semibold leading-none tracking-tight p-2">
-          Latest Tasks
+        <div className="flex justify-between p-2">
+          <div className="text-xl font-semibold leading-none tracking-tight">
+            Latest Tasks
+          </div>
+          <Link
+            href="/tasks"
+            className="flex items-center space-x-1 cursor-pointer text-blue-800 hover:underline">
+            <span>See all tasks</span>
+            <IoChevronForward className="w-5 h-5" />
+          </Link>
         </div>
 
         {latestTasks.length > 0 ? (
