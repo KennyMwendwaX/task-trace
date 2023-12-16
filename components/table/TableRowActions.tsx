@@ -92,7 +92,9 @@ export default function TableRowActions<TData>({
           </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <button className="flex items-center cursor-pointer">
+            <button
+              onClick={() => taskDelete(task.id)}
+              className="flex items-center cursor-pointer">
               <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
               Delete
             </button>

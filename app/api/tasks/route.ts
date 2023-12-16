@@ -1,4 +1,4 @@
-import { taskSchema } from "@/lib/schema";
+import { taskFormSchema } from "@/lib/schema";
 import prisma from "@/prisma/db";
 import { Status } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   };
 
   // Apply Zod schema to validate and parse the request data
-  const validatedData = taskSchema.parse(parsedData);
+  const validatedData = taskFormSchema.parse(parsedData);
 
   if (!validatedData)
     return NextResponse.json(
