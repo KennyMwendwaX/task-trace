@@ -43,7 +43,11 @@ export default function Home() {
             Track tasks, manage your time, and collaborate with your team.
           </p>
           <div className="flex justify-center">
-            <Button>Get Started</Button>
+            <Button
+              size="lg"
+              className="rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
+              <Link href="/dashboard">Get Started</Link>
+            </Button>
           </div>
         </section>
         <section
