@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const taskSchema = z.object({
+  id: z.string(),
   name: z
     .string({
       required_error: "Name is required",
@@ -15,6 +16,7 @@ export const taskSchema = z.object({
     })
     .min(2, { message: "Label must be greater than 2 characters long" })
     .max(10, { message: "Label must be less than 10 characters long" }),
+  status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED"]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"], {
     required_error: "Priority is required",
     invalid_type_error: "Priority must be a Low, Medium or High",
@@ -33,11 +35,16 @@ export const taskSchema = z.object({
     .max(200, {
       message: "Task description cannot be longer than 200 characters",
     }),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
-export type Task = z.infer<typeof taskSchema> & {
-  id: string;
-  status: "TO_DO" | "IN_PROGRESS" | "DONE" | "CANCELED";
-  createdAt: Date;
-  updatedAt: Date;
-};
+// Extended schema for client-side form validation
+export const taskFormSchema = taskSchema.omit({
+  id: true,
+  status: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type Task = z.infer<typeof taskFormSchema>;

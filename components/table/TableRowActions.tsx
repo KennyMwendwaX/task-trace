@@ -20,15 +20,48 @@ import {
 import { labels } from "@/data/IconMappingOptions";
 import { taskSchema } from "@/lib/schema";
 import DeleteTaskModal from "../DeleteTaskModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
 }
 
+//! Add props to taskSchema
+
 export default function TableRowActions<TData>({
   row,
 }: TableRowActions<TData>) {
+  const queryClient = useQueryClient();
   const task = taskSchema.parse(row.original);
+
+  const {
+    mutate: deleteTask,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async (taskId: string) => {
+      const options = {
+        method: "DELETE",
+      };
+      const response = await fetch(`/api/tasks/${taskId}/delete`, options);
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const taskDelete = async (taskId: string) => {
+    deleteTask(taskId);
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -59,7 +92,10 @@ export default function TableRowActions<TData>({
           </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <DeleteTaskModal />
+            <button className="flex items-center cursor-pointer">
+              <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
+              Delete
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

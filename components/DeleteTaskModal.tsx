@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -8,11 +10,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 export default function DeleteTaskModal() {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const toggleDialog = () => {
+    setDialogOpen(!isDialogOpen);
+  };
   return (
     <div>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
         <DialogTrigger asChild>
           <div className="flex items-center cursor-pointer">
             <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
