@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { statuses } from "@/lib/taskConfig";
+import { statuses, priorities } from "@/lib/taskConfig";
 import { taskSchema } from "@/lib/schema";
 import DeleteTaskModal from "../DeleteTaskModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -75,7 +75,6 @@ export default function TableRowActions<TData>({
           <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuItem>Make a copy</DropdownMenuItem>
           <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
@@ -85,6 +84,21 @@ export default function TableRowActions<TData>({
                     key={status.value}
                     value={status.value}>
                     {status.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSeparator />
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={task.priority}>
+                {priorities.map((priority) => (
+                  <DropdownMenuRadioItem
+                    key={priority.value}
+                    value={priority.value}>
+                    {priority.label}
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
