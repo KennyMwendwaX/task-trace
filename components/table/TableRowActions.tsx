@@ -37,11 +37,11 @@ export default function TableRowActions<TData>({
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (taskId: string) => {
+    mutationFn: async () => {
       const options = {
         method: "DELETE",
       };
-      const response = await fetch(`/api/tasks/${taskId}/delete`, options);
+      const response = await fetch(`/api/tasks/${task.id}/delete`, options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -56,8 +56,39 @@ export default function TableRowActions<TData>({
     },
   });
 
-  const taskDelete = async (taskId: string) => {
-    deleteTask(taskId);
+  const {
+    mutate: changePriority,
+    isPending: isPriorityLoading,
+    error: priorityChangeError,
+  } = useMutation({
+    mutationFn: async () => {
+      const options = {
+        method: "PUT",
+      };
+      const response = await fetch(
+        `/api/tasks/${task.id}/update-priority`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const taskDelete = async () => {
+    deleteTask();
+  };
+
+  const handlePriorityChange = async (priorityValue: string) => {
+    handlePriorityChange(priorityValue);
   };
 
   return (
@@ -93,6 +124,7 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.priority}>
                 {priorities.map((priority) => (
                   <DropdownMenuRadioItem
+                    onClick={() => handlePriorityChange(priority.value)}
                     key={priority.value}
                     value={priority.value}>
                     {priority.label}
@@ -104,7 +136,7 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <button
-              onClick={() => taskDelete(task.id)}
+              onClick={() => taskDelete()}
               className="flex items-center cursor-pointer">
               <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
               Delete
