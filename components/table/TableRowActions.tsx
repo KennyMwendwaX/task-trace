@@ -73,8 +73,6 @@ export default function TableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
@@ -89,7 +87,6 @@ export default function TableRowActions<TData>({
               </DropdownMenuRadioGroup>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
-          <DropdownMenuSeparator />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
