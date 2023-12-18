@@ -1,6 +1,5 @@
 import { taskFormSchema } from "@/lib/schema";
 import prisma from "@/prisma/db";
-import { Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
     const task = await prisma.task.create({
       data: {
         ...validatedData,
-        status: Status.TO_DO,
+        status: "TO_DO",
       },
     });
 

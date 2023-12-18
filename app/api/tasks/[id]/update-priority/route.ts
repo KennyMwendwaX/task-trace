@@ -14,10 +14,8 @@ export async function PUT(
 ) {
   const id = params.id;
 
-  const req = await request.json();
-
   // Parse the request body using the requestSchema
-  const priority = requestSchema.parse(req);
+  const req = requestSchema.parse(await request.json());
 
   try {
     const updatedTask = await prisma.task.update({
@@ -25,7 +23,7 @@ export async function PUT(
         id: id,
       },
       data: {
-        priority: priority,
+        priority: req.priority,
       },
     });
 
