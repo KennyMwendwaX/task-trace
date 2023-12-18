@@ -57,14 +57,42 @@ export default function TableRowActions<TData>({
   });
 
   const {
+    mutate: changeStatus,
+    isPending: isStatusLoading,
+    error: statusChangeError,
+  } = useMutation({
+    mutationFn: async (status: string) => {
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(status),
+      };
+      const response = await fetch(
+        `/api/tasks/${task.id}/update-status`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const {
     mutate: changePriority,
     isPending: isPriorityLoading,
     error: priorityChangeError,
   } = useMutation({
-    mutationFn: async (priorityValue: string) => {
+    mutationFn: async (priority: string) => {
       const options = {
         method: "PUT",
-        body: JSON.stringify(priorityValue),
+        body: JSON.stringify(priority),
       };
       const response = await fetch(
         `/api/tasks/${task.id}/update-priority`,
@@ -88,8 +116,12 @@ export default function TableRowActions<TData>({
     deleteTask();
   };
 
-  const handlePriorityChange = async (priorityValue: string) => {
-    changePriority(priorityValue);
+  const handleStatusChange = async (status: string) => {
+    changeStatus(status);
+  };
+
+  const handlePriorityChange = async (priority: string) => {
+    changePriority(priority);
   };
 
   return (
@@ -111,6 +143,7 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.status}>
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
+                    onClick={() => handlePriorityChange(status.value)}
                     key={status.value}
                     value={status.value}>
                     {status.label}
