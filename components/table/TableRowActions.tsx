@@ -61,9 +61,10 @@ export default function TableRowActions<TData>({
     isPending: isPriorityLoading,
     error: priorityChangeError,
   } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (priorityValue: string) => {
       const options = {
         method: "PUT",
+        body: JSON.stringify(priorityValue),
       };
       const response = await fetch(
         `/api/tasks/${task.id}/update-priority`,
@@ -88,7 +89,7 @@ export default function TableRowActions<TData>({
   };
 
   const handlePriorityChange = async (priorityValue: string) => {
-    handlePriorityChange(priorityValue);
+    changePriority(priorityValue);
   };
 
   return (
