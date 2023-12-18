@@ -143,7 +143,7 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.status}>
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handlePriorityChange(status.value)}
+                    onClick={() => handleStatusChange(status.value)}
                     key={status.value}
                     value={status.value}>
                     {status.label}
