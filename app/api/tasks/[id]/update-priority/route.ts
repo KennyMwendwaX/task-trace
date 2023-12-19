@@ -19,6 +19,12 @@ export async function PUT(
   // Parse the request body using the requestSchema
   const validatedData = requestSchema.parse({ priority });
 
+  if (!validatedData)
+    return NextResponse.json(
+      { message: "Invalid request data" },
+      { status: 400 }
+    );
+
   try {
     const updatedTask = await prisma.task.update({
       where: {
