@@ -38,15 +38,6 @@ export default function Navbar() {
             </Link>
             <div className="space-x-3">
               <Link
-                href="/"
-                className={`${
-                  pathname === "/"
-                    ? "text-gray-100"
-                    : "text-gray-400 hover:text-gray-200"
-                } text-sm font-medium`}>
-                Home
-              </Link>
-              <Link
                 href="/dashboard"
                 className={`${
                   pathname === "/dashboard"
@@ -90,6 +81,7 @@ export default function Navbar() {
                       <PersonIcon className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
+                  <span className="sr-only">User button</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>

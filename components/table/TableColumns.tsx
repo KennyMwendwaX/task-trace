@@ -10,6 +10,7 @@ import { Task, taskSchema } from "@/lib/schema";
 import TableColumnHeader from "./TableColumnHeader";
 import TableRowActions from "./TableRowActions";
 import format from "date-fns/format";
+import Link from "next/link";
 
 export const TableColumns: ColumnDef<Task>[] = [
   {
@@ -37,6 +38,7 @@ export const TableColumns: ColumnDef<Task>[] = [
     accessorKey: "name",
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
+      const task = taskSchema.parse(row.original);
       // const label = labels.find((label) => label.value === row.original.label);
 
       // if (!label) {
@@ -70,7 +72,9 @@ export const TableColumns: ColumnDef<Task>[] = [
           </Badge>
 
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name")}
+            <Link className="hover:underline" href={`/tasks/${task.id}`}>
+              {row.getValue("name")}
+            </Link>
           </span>
         </div>
       );
