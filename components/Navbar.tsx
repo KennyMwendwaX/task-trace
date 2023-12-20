@@ -47,6 +47,15 @@ export default function Navbar() {
                 Home
               </Link>
               <Link
+                href="/dashboard"
+                className={`${
+                  pathname === "/dashboard"
+                    ? "text-gray-100"
+                    : "text-gray-400 hover:text-gray-200"
+                } text-sm font-medium`}>
+                Dashboard
+              </Link>
+              <Link
                 href="/tasks"
                 className={`${
                   pathname === "/tasks"
@@ -54,15 +63,6 @@ export default function Navbar() {
                     : "text-gray-400 hover:text-gray-200"
                 } text-sm font-medium`}>
                 Tasks
-              </Link>
-              <Link
-                href="/taskss"
-                className={`${
-                  pathname === "/tasks"
-                    ? "text-gray-100"
-                    : "text-gray-400 hover:text-gray-200"
-                } text-sm font-medium`}>
-                Taskss
               </Link>
             </div>
           </div>
