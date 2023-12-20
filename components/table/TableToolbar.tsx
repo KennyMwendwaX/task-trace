@@ -26,7 +26,7 @@ export default function TableToolbar<TData>({
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
             }
-            className="h-8 w-[150px] lg:w-[250px]"
+            className="h-8 focus:border-2 focus:border-blue-600 w-[150px] lg:w-[250px]"
           />
           {table.getColumn("status") && (
             <TableFacetedFilter

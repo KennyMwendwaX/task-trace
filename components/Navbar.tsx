@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { MagnifyingGlassIcon, PersonIcon } from "@radix-ui/react-icons";
+import {
+  CheckCircledIcon,
+  MagnifyingGlassIcon,
+  PersonIcon,
+} from "@radix-ui/react-icons";
 import { LuActivity } from "react-icons/lu";
 
 export default function Navbar() {
@@ -26,7 +30,8 @@ export default function Navbar() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-2">
           <div className="flex items-center space-x-8">
             <Link className="flex items-center space-x-1" href="/">
-              <LuActivity className="text-slate-200 w-7 h-7" />
+              {/* <LuActivity className="text-slate-200 w-7 h-7" /> */}
+              <CheckCircledIcon className="text-slate-200 w-7 h-7" />
               <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-200">
                 TaskTracker
               </span>
