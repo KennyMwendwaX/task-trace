@@ -20,6 +20,7 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 import { LuActivity } from "react-icons/lu";
+import { FiCheckCircle } from "react-icons/fi";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -30,8 +31,7 @@ export default function Navbar() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-2">
           <div className="flex items-center space-x-8">
             <Link className="flex items-center space-x-1" href="/">
-              {/* <LuActivity className="text-slate-200 w-7 h-7" /> */}
-              <CheckCircledIcon className="text-slate-200 w-7 h-7" />
+              <FiCheckCircle className="text-slate-200 w-7 h-7" />
               <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-200">
                 TaskTracker
               </span>

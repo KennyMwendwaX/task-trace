@@ -162,6 +162,13 @@ export default function TableRowActions<TData>({
                     key={priority.value}
                     value={priority.value}>
                     {priority.label}
+                    {priority.value === "HIGH" ? (
+                      <priority.icon className="h-5 w-5 text-muted-foreground text-red-600" />
+                    ) : priority.value === "MEDIUM" ? (
+                      <priority.icon className="h-5 w-5 text-muted-foreground text-orange-500" />
+                    ) : priority.value === "LOW" ? (
+                      <priority.icon className="h-5 w-5 text-muted-foreground text-blue-600" />
+                    ) : null}
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
