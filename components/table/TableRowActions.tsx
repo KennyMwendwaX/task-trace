@@ -146,6 +146,15 @@ export default function TableRowActions<TData>({
                     onClick={() => handleStatusChange(status.value)}
                     key={status.value}
                     value={status.value}>
+                    {status.value === "DONE" ? (
+                      <status.icon className="mr-2 h-5 w-5 text-green-600" />
+                    ) : status.value === "TO_DO" ? (
+                      <status.icon className="mr-2 h-5 w-5 text-blue-600" />
+                    ) : status.value === "IN_PROGRESS" ? (
+                      <status.icon className="mr-2 h-5 w-5 text-orange-600" />
+                    ) : status.value === "CANCELED" ? (
+                      <status.icon className="mr-2 h-5 w-5 text-red-600" />
+                    ) : null}
                     {status.label}
                   </DropdownMenuRadioItem>
                 ))}
@@ -161,14 +170,14 @@ export default function TableRowActions<TData>({
                     onClick={() => handlePriorityChange(priority.value)}
                     key={priority.value}
                     value={priority.value}>
-                    {priority.label}
                     {priority.value === "HIGH" ? (
-                      <priority.icon className="h-5 w-5 text-muted-foreground text-red-600" />
+                      <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
                     ) : priority.value === "MEDIUM" ? (
-                      <priority.icon className="h-5 w-5 text-muted-foreground text-orange-500" />
+                      <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-orange-500" />
                     ) : priority.value === "LOW" ? (
-                      <priority.icon className="h-5 w-5 text-muted-foreground text-blue-600" />
+                      <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-blue-600" />
                     ) : null}
+                    {priority.label}
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
