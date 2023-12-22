@@ -1,6 +1,6 @@
 "use client";
 
-import { taskSchema } from "@/lib/schema";
+import { Task, taskSchema } from "@/lib/schema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -8,14 +8,14 @@ export default function Task({ params }: { params: { slug: string } }) {
   const id = params.slug;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["tasks"],
+    queryKey: ["task"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/tasks/${id}`);
-      return data.tasks;
+      return data.tasks as Task;
     },
   });
 
-  const task = taskSchema.parse(data);
+  const task = data;
 
   return (
     <>
