@@ -55,10 +55,12 @@ export default function Tasks() {
             ) : (
               <>
                 <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-                  <MdOutlineAddTask className="h-12 w-12 text-muted-foreground" />
+                  <MdOutlineAddTask className="h-14 w-14 text-muted-foreground" />
 
-                  <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
-                  <p className="mb-4 mt-2 text-base text-muted-foreground">
+                  <h3 className="mt-4 text-2xl font-semibold">
+                    No tasks added
+                  </h3>
+                  <p className="mb-4 mt-2 text-lg text-muted-foreground">
                     You have not added any tasks. Add one below.
                   </p>
                   <AddTaskModal />
