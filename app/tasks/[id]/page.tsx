@@ -7,6 +7,8 @@ import axios from "axios";
 export default function Task({ params }: { params: { slug: string } }) {
   const id = params.slug;
 
+  console.log(typeof id);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
