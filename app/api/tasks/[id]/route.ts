@@ -10,8 +10,6 @@ export async function GET(
   if (!id)
     return NextResponse.json({ message: "No task Id found" }, { status: 404 });
 
-  console.log(id);
-
   try {
     const task = await prisma.task.findUnique({
       where: {
@@ -24,8 +22,6 @@ export async function GET(
         { message: "Failed to return task" },
         { status: 404 }
       );
-
-    console.log(task);
 
     return NextResponse.json({ task }, { status: 200 });
   } catch (error) {

@@ -7,19 +7,15 @@ import axios from "axios";
 export default function Task({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  console.log(typeof id, id);
-
   const { data, isLoading, error } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/tasks/${id}`);
-      return data.tasks as Task;
+      return data.task as Task;
     },
   });
 
   const task = data;
-
-  console.log(task);
 
   return (
     <>
