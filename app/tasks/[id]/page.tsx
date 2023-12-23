@@ -4,10 +4,10 @@ import { Task, taskSchema } from "@/lib/schema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export default function Task({ params }: { params: { slug: string } }) {
-  const id = params.slug;
+export default function Task({ params }: { params: { id: string } }) {
+  const id = params.id;
 
-  console.log(typeof id);
+  console.log(typeof id, id);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["task"],
@@ -18,6 +18,8 @@ export default function Task({ params }: { params: { slug: string } }) {
   });
 
   const task = data;
+
+  console.log(task);
 
   return (
     <>
