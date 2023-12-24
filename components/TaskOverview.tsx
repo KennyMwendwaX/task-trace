@@ -26,13 +26,9 @@ export default function TaskOverview({ tasks }: Props) {
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
   const tasks_canceled_percentage = (tasksCanceled.length / tasks.length) * 100;
 
-  const tasksBacklogged = tasks.filter((task) => task.status === "BACKLOG");
-  const tasks_backlogged_percentage =
-    (tasksBacklogged.length / tasks.length) * 100;
-
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-base font-medium">Done</CardTitle>
@@ -81,7 +77,7 @@ export default function TaskOverview({ tasks }: Props) {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-base font-medium">Backlog</CardTitle>
             <QuestionMarkCircledIcon className="h-5 w-5 text-gray-600" />
@@ -92,7 +88,7 @@ export default function TaskOverview({ tasks }: Props) {
               {tasks_backlogged_percentage}% of all tasks
             </p>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </>
   );
