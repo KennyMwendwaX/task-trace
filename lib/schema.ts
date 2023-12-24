@@ -16,7 +16,7 @@ export const taskSchema = z.object({
     })
     .min(2, { message: "Label must be greater than 2 characters long" })
     .max(10, { message: "Label must be less than 10 characters long" }),
-  status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED"]),
+  status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED", "BACKLOG"]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"], {
     required_error: "Priority is required",
     invalid_type_error: "Priority must be a Low, Medium or High",
