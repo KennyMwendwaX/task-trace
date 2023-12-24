@@ -5,6 +5,7 @@ import {
   CheckCircledIcon,
   CircleIcon,
   CrossCircledIcon,
+  QuestionMarkIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
 
@@ -43,6 +44,11 @@ export const statuses = [
     value: "CANCELED",
     label: "Canceled",
     icon: CrossCircledIcon,
+  },
+  {
+    value: "BACKLOG",
+    label: "Backlog",
+    icon: QuestionMarkIcon,
   },
 ];
 
