@@ -25,6 +25,7 @@
     "@tanstack/react-query-devtools": "^5.13.4",
     "@tanstack/react-table": "^8.10.7",
     "axios": "^1.6.2",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -44,6 +45,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
