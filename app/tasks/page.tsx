@@ -13,7 +13,7 @@ export default function Tasks() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/tasks");
+      const { data } = await axios.get("/api/user/tasks");
       return data.tasks as Task[];
     },
   });
