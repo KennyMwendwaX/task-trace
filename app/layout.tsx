@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import TanstackProvider from "@/providers/TanstackProvider";
+import Layout from "./dashboard/layout";
 
 export const metadata: Metadata = {
   title: "Task Tracker",
@@ -18,8 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={GeistSans.className}>
         <TanstackProvider>
-          <Navbar />
-          {children}
+          <Layout>{children}</Layout>
         </TanstackProvider>
       </body>
     </html>

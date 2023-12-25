@@ -77,7 +77,7 @@ export default function Signup() {
   return (
     <>
       <div className="mx-auto flex flex-col bg-gray-100 items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-        <Link className="flex items-center space-x-1" href="/">
+        <Link className="pb-4 flex items-center space-x-1" href="/">
           <FiCheckCircle className="text-black w-7 h-7" />
           <span className="self-center text-xl font-semibold whitespace-nowrap text-black">
             TaskTracker
