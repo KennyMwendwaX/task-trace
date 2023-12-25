@@ -30,17 +30,16 @@ export async function POST(request: Request) {
     });
 
     // Return success message
-    if (user) {
-      return NextResponse.json(
-        { message: "User registered successfully" },
-        { status: 201 }
-      );
-    } else {
+    if (!user)
       return NextResponse.json(
         { message: "Failed to register user" },
         { status: 500 }
       );
-    }
+
+    return NextResponse.json(
+      { message: "User registered successfully" },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },
