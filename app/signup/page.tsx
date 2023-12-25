@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupFormSchema } from "@/lib/schema/SignupFormSchema";
 import { redirect, useRouter } from "next/navigation";
+import { FiCheckCircle } from "react-icons/fi";
 // import { useSession } from "next-auth/react";
 
 type FormValues = {
@@ -76,12 +77,12 @@ export default function Signup() {
   return (
     <>
       <div className="mx-auto flex flex-col bg-gray-100 items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-        <a
-          href="#"
-          className="p-4 flex items-center text-2xl font-semibold text-black">
-          {/* <Image className="mr-2 h-8 w-8" src={Img} alt="logo" /> */}
-          PesaIQ
-        </a>
+        <Link className="flex items-center space-x-1" href="/">
+          <FiCheckCircle className="text-black w-7 h-7" />
+          <span className="self-center text-xl font-semibold whitespace-nowrap text-black">
+            TaskTracker
+          </span>
+        </Link>
         <div className="w-full rounded-lg bg-white shadow sm:max-w-md md:mt-0 xl:p-0">
           <div className="space-y-3 p-6 sm:p-8 md:space-y-5">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl">
