@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@/lib/schema";
+import { Task } from "@/lib/schema/TaskSchema";
 import React from "react";
 import {
   ResponsiveContainer,

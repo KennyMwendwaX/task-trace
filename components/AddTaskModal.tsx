@@ -49,7 +49,7 @@ import {
 } from "@/components/ui/command";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Task, taskSchema } from "@/lib/schema";
+import { Task, taskSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const users = [

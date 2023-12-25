@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { statuses, priorities } from "@/lib/taskConfig";
-import { taskSchema } from "@/lib/schema";
+import { taskSchema } from "@/lib/schema/TaskSchema";
 import DeleteTaskModal from "../DeleteTaskModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@/lib/schema";
+import { Task } from "@/lib/schema/TaskSchema";
 import { Card } from "@/components/ui/card";
 import format from "date-fns/format";
 import { IoChevronForward } from "react-icons/io5";

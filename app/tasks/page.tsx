@@ -4,7 +4,7 @@ import { TableColumns } from "@/components/table/TableColumns";
 import TaskTable from "@/components/table/TaskTable";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { Task } from "@/lib/schema";
+import type { Task } from "@/lib/schema/TaskSchema";
 import Loading from "@/components/Loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";

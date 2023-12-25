@@ -3,7 +3,7 @@
 import TaskOverview from "@/components/TaskOverview";
 import TaskChart from "@/components/TaskChart";
 import LatestTasks from "@/components/LatestTasks";
-import { Task } from "@/lib/schema";
+import { Task } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";

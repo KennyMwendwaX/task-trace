@@ -1,7 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { Task, taskSchema } from "@/lib/schema";
+import { Task, taskSchema } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
