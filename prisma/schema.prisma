@@ -10,6 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  // accounts      Account[]
+  // sessions      Session[]
+  tasks         Task[]
+}
+
 model Task {
   id          String   @id @default(cuid())
   name        String
@@ -21,4 +33,6 @@ model Task {
   due_date    DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?
 }
