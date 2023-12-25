@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupFormSchema } from "@/lib/schema/SignupFormSchema";
 import { redirect, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 
 type FormValues = {
   name: string;
@@ -37,11 +37,11 @@ export default function Signup() {
     resolver: zodResolver(signupFormSchema),
   });
 
-  const { data: session, status } = useSession();
+  //   const { data: session, status } = useSession();
 
-  if (session && status === "authenticated") {
-    redirect("/");
-  }
+  //   if (session && status === "authenticated") {
+  //     redirect("/");
+  //   }
 
   const errors = form.formState.errors;
 
