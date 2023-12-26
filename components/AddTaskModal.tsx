@@ -52,6 +52,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Task, taskSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { User } from "@/lib/schema/UserSchema";
 
 const users = [
   { name: "Erick", value: "en" },
@@ -88,7 +89,7 @@ export default function AddTaskModal() {
     queryKey: ["users"],
     queryFn: async () => {
       const { data } = await axios.get("/api/users");
-      return data.users;
+      return data.users as User[];
     },
   });
 

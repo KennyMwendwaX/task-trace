@@ -26,6 +26,7 @@ export const userSchema = z.object({
     .max(20, { message: "Password must be less than 20 characters long" })
     .refine((value) => !/\s/.test(value), "Invalid Password"),
   image: z.string().nullable(),
+  createdAt: z.date(),
 });
 
 export const signupFormSchema = userSchema
@@ -33,6 +34,7 @@ export const signupFormSchema = userSchema
     id: true,
     emailVerified: true,
     image: true,
+    createdAt: true,
   })
   .extend({
     confirm_password: z.string({
@@ -50,6 +52,7 @@ export const signinFormSchema = userSchema.omit({
   name: true,
   emailVerified: true,
   image: true,
+  createdAt: true,
 });
 
 export type User = z.infer<typeof userSchema>;
