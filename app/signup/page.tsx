@@ -17,7 +17,7 @@ import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupFormSchema } from "@/lib/schema/SignupFormSchema";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FiCheckCircle } from "react-icons/fi";
 // import { useSession } from "next-auth/react";
 
@@ -69,9 +69,9 @@ export default function Signup() {
       setServerErrors("Server error, try again later");
     }
 
-    if (register.ok) {
-      router.push("/signin");
-    }
+    // if (register.ok) {
+    //   router.push("/signin");
+    // }
   }
 
   return (

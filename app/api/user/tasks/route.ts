@@ -15,7 +15,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, Try again later" },
-      { status: 200 }
+      { status: 500 }
     );
   }
 }
