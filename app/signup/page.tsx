@@ -16,7 +16,7 @@ import { FaUser } from "react-icons/fa6";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupFormSchema } from "@/lib/schema/SignupFormSchema";
+import { signupFormSchema } from "@/lib/schema/UserSchema";
 import { useRouter } from "next/navigation";
 import { FiCheckCircle } from "react-icons/fi";
 // import { useSession } from "next-auth/react";
