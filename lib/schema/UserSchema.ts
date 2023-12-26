@@ -44,3 +44,12 @@ export const signupFormSchema = userSchema
     message: "Passwords do not match",
     path: ["confirm_password"],
   });
+
+export const signinFormSchema = userSchema.omit({
+  id: true,
+  name: true,
+  emailVerified: true,
+  image: true,
+});
+
+export type User = z.infer<typeof userSchema>;
