@@ -48,9 +48,10 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Task, taskSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 
 const users = [
   { name: "Erick", value: "en" },
@@ -83,6 +84,14 @@ export default function AddTaskModal() {
     setDialogOpen(!isDialogOpen);
   };
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/users");
+      return data.users;
+    },
+  });
+
   const {
     mutate: addTask,
     isPending,
@@ -108,8 +117,8 @@ export default function AddTaskModal() {
     },
   });
 
+  console.log(data);
   async function onSubmit(values: Task) {
-    console.log(values);
     addTask(values);
     toggleDialog();
   }
