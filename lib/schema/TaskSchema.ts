@@ -48,3 +48,4 @@ export const taskFormSchema = taskSchema.omit({
 });
 
 export type Task = z.infer<typeof taskSchema>;
+export type TaskFormValues = z.infer<typeof taskFormSchema>;

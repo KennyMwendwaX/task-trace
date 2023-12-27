@@ -49,7 +49,7 @@ import {
 } from "@/components/ui/command";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Task, taskSchema } from "@/lib/schema/TaskSchema";
+import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { User } from "@/lib/schema/UserSchema";
@@ -67,7 +67,7 @@ const users = [
 ] as const;
 
 export default function AddTaskModal() {
-  const form = useForm<Task>({
+  const form = useForm<TaskFormValues>({
     // resolver: zodResolver(taskSchema),
     // defaultValues: {
     //   name: "",
@@ -98,7 +98,7 @@ export default function AddTaskModal() {
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (values: Task) => {
+    mutationFn: async (values: TaskFormValues) => {
       const options = {
         method: "POST",
         body: JSON.stringify(values),
@@ -119,7 +119,7 @@ export default function AddTaskModal() {
   });
 
   console.log(data);
-  async function onSubmit(values: Task) {
+  async function onSubmit(values: TaskFormValues) {
     addTask(values);
     toggleDialog();
   }
