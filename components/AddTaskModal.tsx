@@ -54,29 +54,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { User } from "@/lib/schema/UserSchema";
 
-const users = [
-  { name: "Erick", value: "en" },
-  { name: "Francis", value: "fr" },
-  { name: "Gilbert", value: "de" },
-  { name: "Sandy", value: "es" },
-  { name: "Patricia", value: "pt" },
-  { name: "Randy", value: "ru" },
-  { name: "Jones", value: "ja" },
-  { name: "Karen", value: "ko" },
-  { name: "Carl", value: "zh" },
-] as const;
+// const users = [
+//   { name: "Erick", value: "en" },
+//   { name: "Francis", value: "fr" },
+//   { name: "Gilbert", value: "de" },
+//   { name: "Sandy", value: "es" },
+//   { name: "Patricia", value: "pt" },
+//   { name: "Randy", value: "ru" },
+//   { name: "Jones", value: "ja" },
+//   { name: "Karen", value: "ko" },
+//   { name: "Carl", value: "zh" },
+// ] as const;
 
 export default function AddTaskModal() {
   const form = useForm<TaskFormValues>({
     // resolver: zodResolver(taskSchema),
-    // defaultValues: {
-    //   name: "",
-    //   label: "",
-    //   priority: "",
-    //   due_date: new Date(Date.now()),
-    //   assignedTo: "",
-    //   description: "",
-    // },
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -103,7 +95,7 @@ export default function AddTaskModal() {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/tasks", options);
+      const response = await fetch("/api/user/tasks", options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -118,7 +110,9 @@ export default function AddTaskModal() {
     },
   });
 
-  console.log(data);
+  const users = data || [];
+  console.log(users);
+
   async function onSubmit(values: TaskFormValues) {
     addTask(values);
     toggleDialog();
@@ -276,7 +270,7 @@ export default function AddTaskModal() {
                                 )}>
                                 {field.value
                                   ? users.find(
-                                      (user) => user.value === field.value
+                                      (user) => user.email === field.value
                                     )?.name
                                   : "Select name"}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -291,14 +285,14 @@ export default function AddTaskModal() {
                                 {users.map((user) => (
                                   <CommandItem
                                     value={user.name}
-                                    key={user.value}
+                                    key={user.id}
                                     onSelect={() => {
-                                      form.setValue("assignedTo", user.value);
+                                      form.setValue("assignedTo", user.email);
                                     }}>
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        user.value === field.value
+                                        user.email === field.value
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
