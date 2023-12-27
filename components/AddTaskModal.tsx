@@ -54,21 +54,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { User } from "@/lib/schema/UserSchema";
 
-// const users = [
-//   { name: "Erick", value: "en" },
-//   { name: "Francis", value: "fr" },
-//   { name: "Gilbert", value: "de" },
-//   { name: "Sandy", value: "es" },
-//   { name: "Patricia", value: "pt" },
-//   { name: "Randy", value: "ru" },
-//   { name: "Jones", value: "ja" },
-//   { name: "Karen", value: "ko" },
-//   { name: "Carl", value: "zh" },
-// ] as const;
-
 export default function AddTaskModal() {
   const form = useForm<TaskFormValues>({
-    // resolver: zodResolver(taskSchema),
+    // resolver: zodResolver(taskFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
