@@ -56,7 +56,7 @@ import { User } from "@/lib/schema/UserSchema";
 
 export default function AddTaskModal() {
   const form = useForm<TaskFormValues>({
-    // resolver: zodResolver(taskFormSchema),
+    resolver: zodResolver(taskFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
