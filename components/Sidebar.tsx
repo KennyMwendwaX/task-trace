@@ -47,6 +47,12 @@ export default function Sidebar() {
               {/* <FaArrowTrendDown className="ml-2 w-5 h-5" /> */}
               <span>Upcoming</span>
             </Link>
+            <Link
+              href="/upcoming"
+              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
+              {/* <FaArrowTrendDown className="ml-2 w-5 h-5" /> */}
+              <span>Team</span>
+            </Link>
           </div>
           <div className="absolute bottom-2 px-3 flex items-center space-x-2 bg-slate-200 rounded-xl">
             <Avatar>

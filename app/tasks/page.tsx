@@ -8,6 +8,7 @@ import type { Task } from "@/lib/schema/TaskSchema";
 import Loading from "@/components/Loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Tasks() {
   const { data, isLoading, error } = useQuery({
@@ -47,6 +48,16 @@ export default function Tasks() {
                     </p>
                   </div>
                 </div>
+
+                <Tabs className="pt-2">
+                  <TabsList>
+                    <TabsTrigger value="all">All</TabsTrigger>
+                    <TabsTrigger value="done">Done</TabsTrigger>
+                    <TabsTrigger value="todo">Todo</TabsTrigger>
+                    <TabsTrigger value="inprogress">In Progress</TabsTrigger>
+                    <TabsTrigger value="canceled">Canceled</TabsTrigger>
+                  </TabsList>
+                </Tabs>
 
                 <div className="pt-4">
                   <TaskTable data={tasks} columns={TableColumns} />
