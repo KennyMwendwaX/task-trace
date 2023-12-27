@@ -9,16 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  CheckCircledIcon,
-  MagnifyingGlassIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
+import { PersonIcon } from "@radix-ui/react-icons";
 import { LuActivity } from "react-icons/lu";
 import { FiCheckCircle } from "react-icons/fi";
 import Sidebar from "./Sidebar";
@@ -40,26 +35,6 @@ export default function Navbar() {
                   TaskTracker
                 </span>
               </Link>
-              <div className="space-x-3">
-                <Link
-                  href="/dashboard"
-                  className={`${
-                    pathname === "/dashboard"
-                      ? "text-gray-100"
-                      : "text-gray-400 hover:text-gray-200"
-                  } text-sm font-medium`}>
-                  Dashboard
-                </Link>
-                <Link
-                  href="/tasks"
-                  className={`${
-                    pathname === "/tasks"
-                      ? "text-gray-100"
-                      : "text-gray-400 hover:text-gray-200"
-                  } text-sm font-medium`}>
-                  Tasks
-                </Link>
-              </div>
             </div>
           </div>
           <div className="flex md:order-2 items-center space-x-3">
