@@ -21,6 +21,7 @@ import {
 } from "@radix-ui/react-icons";
 import { LuActivity } from "react-icons/lu";
 import { FiCheckCircle } from "react-icons/fi";
+import Sidebar from "./Sidebar";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -30,6 +31,7 @@ export default function Navbar() {
       <nav className="bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-600">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-2">
           <div className="flex items-center space-x-8">
+            <Sidebar />
             <Link className="flex items-center space-x-1" href="/">
               <FiCheckCircle className="text-slate-200 w-7 h-7" />
               <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-200">
