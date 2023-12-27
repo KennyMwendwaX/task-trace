@@ -41,7 +41,10 @@ export default function TableRowActions<TData>({
       const options = {
         method: "DELETE",
       };
-      const response = await fetch(`/api/tasks/${task.id}/delete`, options);
+      const response = await fetch(
+        `/api/user/tasks/${task.id}/delete`,
+        options
+      );
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -67,7 +70,7 @@ export default function TableRowActions<TData>({
         body: JSON.stringify(status),
       };
       const response = await fetch(
-        `/api/tasks/${task.id}/update-status`,
+        `/api/user/tasks/${task.id}/update-status`,
         options
       );
       if (!response.ok) {
@@ -95,7 +98,7 @@ export default function TableRowActions<TData>({
         body: JSON.stringify(priority),
       };
       const response = await fetch(
-        `/api/tasks/${task.id}/update-priority`,
+        `/api/user/tasks/${task.id}/update-priority`,
         options
       );
       if (!response.ok) {
