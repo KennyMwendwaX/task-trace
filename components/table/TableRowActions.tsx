@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 
@@ -31,7 +32,7 @@ export default function TableRowActions<TData>({
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
   const task = taskSchema.parse(row.original);
-
+  const router = useRouter();
   const {
     mutate: deleteTask,
     isPending,
@@ -117,6 +118,7 @@ export default function TableRowActions<TData>({
 
   const taskDelete = async () => {
     deleteTask();
+    router.refresh();
   };
 
   const handleStatusChange = async (status: string) => {

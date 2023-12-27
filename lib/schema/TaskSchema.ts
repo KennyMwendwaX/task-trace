@@ -8,7 +8,7 @@ export const taskSchema = z.object({
       invalid_type_error: "Name must be a string",
     })
     .min(2, { message: "Name must be greater than 2 characters long" })
-    .max(20, { message: "Name must be less than 20 characters long" }),
+    .max(50, { message: "Name must be less than 20 characters long" }),
   label: z
     .string({
       required_error: "Label is required",
