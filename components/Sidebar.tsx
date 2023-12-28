@@ -11,7 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { LuUser2 } from "react-icons/lu";
+import { LuCalendarClock, LuUser2 } from "react-icons/lu";
+import { RxDashboard } from "react-icons/rx";
+import { FiCheckCircle, FiUsers } from "react-icons/fi";
+import { IoFileTrayOutline } from "react-icons/io5";
 
 export default function Sidebar() {
   return (
@@ -26,31 +29,34 @@ export default function Sidebar() {
         </Button>
         <SheetContent side="left" className="w-[350px] rounded-r-2xl">
           <SheetHeader>
-            <SheetTitle className="ml-2 text-3xl">TaskTracker</SheetTitle>
+            <SheetTitle className="ml-2 text-3xl flex items-center text-slate-900 space-x-2">
+              <FiCheckCircle className="w-7 h-7" />
+              <span>TaskTracker</span>
+            </SheetTitle>
           </SheetHeader>
           <div className="space-y-1.5 pt-2">
             <Link
               href="/dashboard"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              {/* <FaArrowTrendDown className="ml-2 w-5 h-5" /> */}
+              <RxDashboard className="ml-2 w-5 h-5" />
               <span>Dashboard</span>
             </Link>
             <Link
               href="/tasks"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              {/* <FaArrowTrendDown className="ml-2 w-5 h-5" /> */}
+              <IoFileTrayOutline className="ml-2 w-6 h-6" />
               <span>Tasks</span>
             </Link>
             <Link
               href="/upcoming"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              {/* <FaArrowTrendDown className="ml-2 w-5 h-5" /> */}
+              <LuCalendarClock className="ml-2 w-6 h-6" />
               <span>Upcoming</span>
             </Link>
             <Link
               href="/upcoming"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              {/* <FaArrowTrendDown className="ml-2 w-5 h-5" /> */}
+              <FiUsers className="ml-2 w-5 h-5" />
               <span>Team</span>
             </Link>
           </div>
