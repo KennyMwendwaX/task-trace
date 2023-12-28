@@ -32,6 +32,7 @@ export default function Tasks() {
   const tasksDone = tasks.filter((task) => task.status === "DONE");
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
   const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
+  const tasksCanceled = tasks.filter((task) => task.status )
 
   return (
     <>
@@ -83,7 +84,15 @@ export default function Tasks() {
                         columns={TableColumns}
                       />
                     </div>
-                  </TabsContent>
+                  {/* </TabsContent>
+                  <TabsContent value="canceled">
+                    <div className="pt-4">
+                      <TaskTable
+                        data={tasksInProgress}
+                        columns={TableColumns}
+                      />
+                    </div>
+                  </TabsContent> */}
                 </Tabs>
               </>
             ) : (
