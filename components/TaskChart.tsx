@@ -85,13 +85,12 @@ export default function TaskChart({ tasks }: Props) {
               dataKey="tasks"
               data={statusChartData}
               fill="#8884d8"
-              label
               cx="50%"
               cy="40%"
               innerRadius={70}
               outerRadius={100}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip />
             <Legend align="right" verticalAlign="middle" layout="vertical" />
           </PieChart>
         </ResponsiveContainer>
