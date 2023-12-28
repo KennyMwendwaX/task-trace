@@ -64,6 +64,11 @@ export default function Tasks() {
                       <TaskTable data={tasks} columns={TableColumns} />
                     </div>
                   </TabsContent>
+                  <TabsContent value="done">
+                    <div className="pt-4">
+                      <TaskTable data={tasksDone} columns={TableColumns} />
+                    </div>
+                  </TabsContent>
                 </Tabs>
               </>
             ) : (
