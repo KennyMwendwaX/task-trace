@@ -30,6 +30,8 @@ export default function Tasks() {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
 
   const tasksDone = tasks.filter((task) => task.status === "DONE");
+  const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
+  const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
 
   return (
     <>
@@ -67,6 +69,19 @@ export default function Tasks() {
                   <TabsContent value="done">
                     <div className="pt-4">
                       <TaskTable data={tasksDone} columns={TableColumns} />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="todo">
+                    <div className="pt-4">
+                      <TaskTable data={tasksTodo} columns={TableColumns} />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="inprogress">
+                    <div className="pt-4">
+                      <TaskTable
+                        data={tasksInProgress}
+                        columns={TableColumns}
+                      />
                     </div>
                   </TabsContent>
                 </Tabs>
