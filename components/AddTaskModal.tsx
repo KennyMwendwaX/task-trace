@@ -99,7 +99,6 @@ export default function AddTaskModal() {
   });
 
   const users = data || [];
-  console.log(users);
 
   async function onSubmit(values: TaskFormValues) {
     addTask(values);

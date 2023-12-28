@@ -8,7 +8,7 @@ import type { Task } from "@/lib/schema/TaskSchema";
 import Loading from "@/components/Loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Tasks() {
   const { data, isLoading, error } = useQuery({
@@ -28,6 +28,8 @@ export default function Tasks() {
         updatedAt: new Date(task.updatedAt),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
+
+  const tasksDone = tasks.filter((task) => task.status === "DONE");
 
   return (
     <>
@@ -49,19 +51,20 @@ export default function Tasks() {
                   </div>
                 </div>
 
-                <Tabs className="pt-2">
-                  <TabsList>
+                <Tabs defaultValue="all" className="pt-2">
+                  <TabsList className="grid grid-cols-5 w-[600px]">
                     <TabsTrigger value="all">All</TabsTrigger>
                     <TabsTrigger value="done">Done</TabsTrigger>
                     <TabsTrigger value="todo">Todo</TabsTrigger>
                     <TabsTrigger value="inprogress">In Progress</TabsTrigger>
                     <TabsTrigger value="canceled">Canceled</TabsTrigger>
                   </TabsList>
+                  <TabsContent value="all">
+                    <div className="pt-4">
+                      <TaskTable data={tasks} columns={TableColumns} />
+                    </div>
+                  </TabsContent>
                 </Tabs>
-
-                <div className="pt-4">
-                  <TaskTable data={tasks} columns={TableColumns} />
-                </div>
               </>
             ) : (
               <>
