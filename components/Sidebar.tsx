@@ -54,7 +54,7 @@ export default function Sidebar() {
               <span>Upcoming</span>
             </Link>
             <Link
-              href="/upcoming"
+              href="/team"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
               <FiUsers className="ml-2 w-5 h-5" />
               <span>Team</span>
