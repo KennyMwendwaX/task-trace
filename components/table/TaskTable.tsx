@@ -27,6 +27,8 @@ import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
 import AddTaskModal from "@/components/AddTaskModal";
+import { Task } from "@/lib/schema/TaskSchema";
+import { IoDownloadOutline } from "react-icons/io5";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,12 +66,29 @@ export default function TaskTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  const tasks = data as Task[];
+
+  const csvData = tasks.map((task) => ({
+    name: task.name,
+    status: task.status,
+    priority: task.priority,
+    assignedTo: task.assignedTo,
+    due_date: task.due_date,
+  }));
+
   return (
     <>
       <div className="space-y-4">
         <div className="flex justify-between">
           <TableToolbar table={table} />
-          <AddTaskModal />
+
+          <div className="flex items-center space-x-2">
+            <AddTaskModal />
+            <div className="inline-flex bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer">
+              <IoDownloadOutline className="mr-1 w-5 h-5 text-white" />
+              <span>Export CSV/Excel</span>
+            </div>
+          </div>
         </div>
         <div className="rounded-md border">
           <Table>
