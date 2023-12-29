@@ -75,7 +75,7 @@ export default function TaskChart({ tasks }: Props) {
     <>
       <div
         className="rounded-lg border bg-card text-card-foreground shadow-sm"
-        style={{ width: "40%", height: 400 }}>
+        style={{ width: "40%", height: 412 }}>
         <div className="text-xl font-semibold leading-none tracking-tight p-2">
           Task Analytics Chart
         </div>
