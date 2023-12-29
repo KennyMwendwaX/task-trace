@@ -38,14 +38,11 @@ export default function TableRowActions<TData>({
     isPending,
     error,
   } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (id: string) => {
       const options = {
         method: "DELETE",
       };
-      const response = await fetch(
-        `/api/user/tasks/${task.id}/delete`,
-        options
-      );
+      const response = await fetch(`/api/user/tasks/${id}/delete`, options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -116,9 +113,8 @@ export default function TableRowActions<TData>({
     },
   });
 
-  const taskDelete = async () => {
-    deleteTask();
-    router.refresh();
+  const taskDelete = async (id: string) => {
+    deleteTask(id);
   };
 
   const handleStatusChange = async (status: string) => {
@@ -191,7 +187,7 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <button
-              onClick={() => taskDelete()}
+              onClick={() => taskDelete(task.id)}
               className="flex items-center cursor-pointer">
               <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
               Delete
