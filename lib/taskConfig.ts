@@ -45,11 +45,6 @@ export const statuses = [
     label: "Canceled",
     icon: CrossCircledIcon,
   },
-  {
-    value: "BACKLOG",
-    label: "Backlog",
-    icon: QuestionMarkCircledIcon,
-  },
 ];
 
 export const priorities = [
