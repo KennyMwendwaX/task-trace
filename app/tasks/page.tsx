@@ -48,9 +48,9 @@ export default function Tasks() {
                     <div className="text-3xl font-bold tracking-tight">
                       Welcome back!
                     </div>
-                    <p className="text-xl text-muted-foreground">
+                    <div className="text-xl text-muted-foreground">
                       Here&apos;s a list of your tasks!
-                    </p>
+                    </div>
                   </div>
                 </div>
 
