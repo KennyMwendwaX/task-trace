@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { User, userSchema } from "@/lib/schema/UserSchema";
 import TableColumnHeader from "./TableColumnHeader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const TableColumns: ColumnDef<User>[] = [
   {
@@ -34,7 +35,16 @@ export const TableColumns: ColumnDef<User>[] = [
     header: () => <TableColumnHeader name="Member" />,
     cell: ({ row }) => {
       const member = userSchema.parse(row.original);
-      return <div>{member.name}</div>;
+      const memberName = member.name;
+      return (
+        <div className="flex items-center space-x-2">
+          <Avatar className="h-9 w-9">
+            <AvatarImage alt="User 1" src="/placeholder-avatar.jpg" />
+            <AvatarFallback>{memberName[0]}</AvatarFallback>
+          </Avatar>
+          <span>{memberName}</span>
+        </div>
+      );
     },
   },
   {

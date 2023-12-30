@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { userSchema } from "./UserSchema";
 
 export const taskSchema = z.object({
   id: z.string(),
