@@ -137,7 +137,10 @@ export const TableColumns: ColumnDef<Task>[] = [
   {
     accessorKey: "assignedTo",
     header: () => <TableColumnHeader name="Assigned To" />,
-    cell: ({ row }) => <div>{row.getValue("assignedTo")}</div>,
+    cell: ({ row }) => {
+      const task = taskSchema.parse(row.original);
+      return <div>{task.userId}</div>;
+    },
   },
   {
     accessorKey: "due_date",
