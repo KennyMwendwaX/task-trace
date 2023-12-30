@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { User, userSchema } from "@/lib/schema/UserSchema";
 import TableColumnHeader from "./TableColumnHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import TableRowActions from "./TableRowActions";
 
 export const TableColumns: ColumnDef<User>[] = [
   {
@@ -97,5 +98,9 @@ export const TableColumns: ColumnDef<User>[] = [
       const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
       return <div>{tasksCanceled.length}</div>;
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <TableRowActions row={row} />,
   },
 ];
