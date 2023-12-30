@@ -1,7 +1,7 @@
 "use client";
 
-import { TableColumns } from "@/components/table/TableColumns";
-import TaskTable from "@/components/table/TaskTable";
+import { TableColumns } from "@/components/tables/TaskTable/TableColumns";
+import TaskTable from "@/components/tables/TaskTable/TaskTable";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { Task } from "@/lib/schema/TaskSchema";
