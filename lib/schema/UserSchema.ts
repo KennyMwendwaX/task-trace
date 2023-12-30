@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { taskSchema } from "./TaskSchema";
 
 export const userSchema = z.object({
   id: z.string(),
@@ -27,6 +28,7 @@ export const userSchema = z.object({
     .refine((value) => !/\s/.test(value), "Invalid Password"),
   image: z.string().nullable(),
   createdAt: z.date(),
+  tasks: z.array(taskSchema),
 });
 
 export const signupFormSchema = userSchema
@@ -35,6 +37,7 @@ export const signupFormSchema = userSchema
     emailVerified: true,
     image: true,
     createdAt: true,
+    tasks: true,
   })
   .extend({
     confirm_password: z.string({
@@ -53,6 +56,7 @@ export const signinFormSchema = userSchema.omit({
   emailVerified: true,
   image: true,
   createdAt: true,
+  tasks: true,
 });
 
 export type User = z.infer<typeof userSchema>;
