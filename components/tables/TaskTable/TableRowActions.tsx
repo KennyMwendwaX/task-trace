@@ -32,7 +32,6 @@ export default function TableRowActions<TData>({
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
   const task = taskSchema.parse(row.original);
-  const router = useRouter();
   const {
     mutate: deleteTask,
     isPending,
