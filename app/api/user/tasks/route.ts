@@ -4,11 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const tasks = await prisma.task.findMany({
-      include: {
-        User: true,
-      },
-    });
+    const tasks = await prisma.task.findMany();
     if (tasks.length === 0)
       return NextResponse.json(
         { message: "Failed to return tasks" },
