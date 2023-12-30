@@ -44,7 +44,7 @@ export default function TaskChart({ tasks }: Props) {
   const statusColors: StatusColors = {
     DONE: "#16a34a",
     TO_DO: "#2563eb",
-    IN_PROGRESS: "#9333ea",
+    IN_PROGRESS: "#FFA500CC",
     CANCELED: "#dc2626",
   };
 
