@@ -26,6 +26,10 @@ export default function Tasks() {
         due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
         updatedAt: new Date(task.updatedAt),
+        User: {
+          ...task.User,
+          createdAt: new Date(task.User.createdAt),
+        },
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
 

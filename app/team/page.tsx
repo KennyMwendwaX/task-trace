@@ -21,6 +21,12 @@ export default function Team() {
       ?.map((member) => ({
         ...member,
         createdAt: new Date(member.createdAt),
+        tasks: member.tasks.map((task) => ({
+          ...task,
+          due_date: new Date(task.due_date),
+          createdAt: new Date(task.createdAt),
+          updatedAt: new Date(task.updatedAt),
+        })),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
 
