@@ -18,40 +18,38 @@ export default function TableToolbar<TData>({
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="flex flex-1 items-center space-x-2">
-          <Input
-            placeholder="Search tasks..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="h-8 focus:border-2 focus:border-blue-600 w-[150px] lg:w-[250px]"
+      <div className="flex flex-1 items-center space-x-2">
+        <Input
+          placeholder="Search tasks..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="h-8 focus:border-2 focus:border-blue-600 w-[150px] lg:w-[250px]"
+        />
+        {table.getColumn("status") && (
+          <TableFacetedFilter
+            column={table.getColumn("status")}
+            name="Status"
+            options={statuses}
           />
-          {table.getColumn("status") && (
-            <TableFacetedFilter
-              column={table.getColumn("status")}
-              name="Status"
-              options={statuses}
-            />
-          )}
-          {table.getColumn("priority") && (
-            <TableFacetedFilter
-              column={table.getColumn("priority")}
-              name="Priority"
-              options={priorities}
-            />
-          )}
-          {isFiltered && (
-            <Button
-              variant="ghost"
-              onClick={() => table.resetColumnFilters()}
-              className="h-8 px-2 lg:px-3">
-              Reset
-              <Cross2Icon className="ml-2 h-4 w-4" />
-            </Button>
-          )}
-        </div>
+        )}
+        {table.getColumn("priority") && (
+          <TableFacetedFilter
+            column={table.getColumn("priority")}
+            name="Priority"
+            options={priorities}
+          />
+        )}
+        {isFiltered && (
+          <Button
+            variant="ghost"
+            onClick={() => table.resetColumnFilters()}
+            className="h-8 px-2 lg:px-3">
+            Reset
+            <Cross2Icon className="ml-2 h-4 w-4" />
+          </Button>
+        )}
       </div>
     </>
   );
