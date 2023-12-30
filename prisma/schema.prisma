@@ -65,7 +65,6 @@ model Task {
   status      String
   priority    String
   description String
-  assignedTo  String
   due_date    DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
