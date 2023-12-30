@@ -31,8 +31,8 @@ export const TableColumns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "member",
-    header: () => <TableColumnHeader name="Member" />,
+    accessorKey: "name",
+    header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
       const member = userSchema.parse(row.original);
       const memberName = member.name;

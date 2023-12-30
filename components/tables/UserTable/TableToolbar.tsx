@@ -14,9 +14,9 @@ export default function TableToolbar<TData>({
     <>
       <Input
         placeholder="Search members..."
-        value={(table.getColumn("member")?.getFilterValue() as string) ?? ""}
+        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
         onChange={(event) =>
-          table.getColumn("member")?.setFilterValue(event.target.value)
+          table.getColumn("name")?.setFilterValue(event.target.value)
         }
         className="h-8 focus:border-2 focus:border-blue-600 w-[150px] lg:w-[250px]"
       />
