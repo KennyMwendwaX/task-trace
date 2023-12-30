@@ -15,6 +15,15 @@ export default function Team() {
       return data.users as User[];
     },
   });
+
+  const members =
+    data
+      ?.map((member) => ({
+        ...member,
+        createdAt: new Date(member.createdAt),
+      }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
+
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
@@ -22,6 +31,7 @@ export default function Team() {
         <div className="text-xl text-muted-foreground">
           Here&apos;s a list of your team!
         </div>
+        <UserTable data={members} columns={TableColumns} />
       </div>
     </>
   );

@@ -241,7 +241,7 @@ export default function AddTaskModal() {
                   </div>
                   <FormField
                     control={form.control}
-                    name="assignedTo"
+                    name="userId"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel>Assign Task</FormLabel>
@@ -257,7 +257,7 @@ export default function AddTaskModal() {
                                 )}>
                                 {field.value
                                   ? users.find(
-                                      (user) => user.email === field.value
+                                      (user) => user.id === field.value
                                     )?.name
                                   : "Select name"}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -274,12 +274,12 @@ export default function AddTaskModal() {
                                     value={user.name}
                                     key={user.id}
                                     onSelect={() => {
-                                      form.setValue("assignedTo", user.email);
+                                      form.setValue("userId", user.id);
                                     }}>
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        user.email === field.value
+                                        user.id === field.value
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
