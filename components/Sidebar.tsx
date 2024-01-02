@@ -42,7 +42,7 @@ export default function Sidebar() {
               <span>Dashboard</span>
             </Link>
             <Link
-              href="/tasks"
+              href="/projects"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
               <IoFileTrayOutline className="ml-2 w-6 h-6" />
               <span>Projects</span>
@@ -66,7 +66,7 @@ export default function Sidebar() {
               <span>Team</span>
             </Link>
           </div>
-          <div className="absolute bottom-2 px-3 flex items-center space-x-2 bg-slate-200 rounded-xl">
+          <div className="absolute bottom-2 px-[60px] flex items-center space-x-2 bg-slate-200 rounded-xl">
             <Avatar>
               <AvatarImage src={""} />
               <AvatarFallback>
