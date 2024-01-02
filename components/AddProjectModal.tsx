@@ -90,8 +90,6 @@ export default function AddProjectModal() {
     },
   });
 
-  const users = data || [];
-
   async function onSubmit(values: TaskFormValues) {
     addTask(values);
     toggleDialog();
@@ -116,28 +114,29 @@ export default function AddProjectModal() {
               <form
                 className="space-y-3 pt-4 px-3"
                 onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Project Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="name"
-                          className="focus:border-2 focus:border-blue-600"
-                          placeholder="Project name"
-                          {...field}
-                          required
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <div className="grid md:grid-cols-2 md:gap-6">
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Project Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              id="name"
+                              className="focus:border-2 focus:border-blue-600"
+                              placeholder="Project name"
+                              {...field}
+                              required
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className="relative">
                     <FormField
                       control={form.control}
@@ -155,34 +154,6 @@ export default function AddProjectModal() {
                               required
                             />
                           </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <FormField
-                      control={form.control}
-                      name="priority"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Project Priority</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            required>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select priority type" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="LOW">Low</SelectItem>
-                              <SelectItem value="MEDIUM">Medium</SelectItem>
-                              <SelectItem value="HIGH">High</SelectItem>
-                            </SelectContent>
-                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}

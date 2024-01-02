@@ -67,8 +67,8 @@ model Project {
   label       String
   status      String
   description String
-  startDate   DateTime
-  endDate     DateTime
+  start_date  DateTime
+  end_date    DateTime
   members     Member[]
   tasks       Task[]
   createdAt   DateTime @default(now())
