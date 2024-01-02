@@ -3,7 +3,6 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -12,7 +11,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,13 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
@@ -38,25 +29,18 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  ProjectFormValues,
+  projectFormSchema,
+} from "@/lib/schema/ProjectSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { User } from "@/lib/schema/UserSchema";
 import { Button } from "./ui/button";
 
 export default function AddProjectModal() {
-  const form = useForm<TaskFormValues>({
-    // resolver: zodResolver(taskFormSchema),
+  const form = useForm<ProjectFormValues>({
+    resolver: zodResolver(projectFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -70,7 +54,7 @@ export default function AddProjectModal() {
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (values: TaskFormValues) => {
+    mutationFn: async (values: ProjectFormValues) => {
       const options = {
         method: "POST",
         body: JSON.stringify(values),
@@ -90,7 +74,7 @@ export default function AddProjectModal() {
     },
   });
 
-  async function onSubmit(values: TaskFormValues) {
+  async function onSubmit(values: ProjectFormValues) {
     addTask(values);
     toggleDialog();
   }
