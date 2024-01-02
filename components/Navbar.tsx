@@ -20,8 +20,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-8">
             <div className="space-x-3 items-center">
               <Link href="/" className="flex items-center gap-2 font-semibold">
-                <ProjectorIcon className="h-6 w-6" />
-                <span>Task Tracker</span>
+                <span>TaskTracker</span>
               </Link>
             </div>
           </div>

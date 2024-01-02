@@ -63,6 +63,7 @@ model VerificationToken {
 model Project {
   id          String   @id @default(cuid())
   name        String
+  label       String
   description String
   startDate   DateTime
   endDate     DateTime
