@@ -56,7 +56,7 @@ import { Button } from "./ui/button";
 
 export default function AddProjectModal() {
   const form = useForm<TaskFormValues>({
-    resolver: zodResolver(taskFormSchema),
+    // resolver: zodResolver(taskFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -64,14 +64,6 @@ export default function AddProjectModal() {
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
   };
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
-    },
-  });
 
   const {
     mutate: addTask,
@@ -146,26 +138,28 @@ export default function AddProjectModal() {
                 />
 
                 <div className="grid md:grid-cols-2 md:gap-6">
-                  <FormField
-                    control={form.control}
-                    name="label"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Project Label</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            id="label"
-                            className="focus:border-2 focus:border-blue-600"
-                            placeholder="Project label"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="label"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Project Label</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              id="label"
+                              className="focus:border-2 focus:border-blue-600"
+                              placeholder="Project label"
+                              {...field}
+                              required
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <div className="relative">
                     <FormField
@@ -196,13 +190,12 @@ export default function AddProjectModal() {
                   </div>
 
                   <div className="relative">
-                    {/* Use flex to align label and popover content */}
                     <FormField
                       control={form.control}
-                      name="due_date"
+                      name="start_date"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
-                          <FormLabel>Due Date</FormLabel>
+                          <FormLabel>Start Date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
@@ -238,61 +231,49 @@ export default function AddProjectModal() {
                       )}
                     />
                   </div>
-                  <FormField
-                    control={form.control}
-                    name="userId"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Assign Project</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className={cn(
-                                  "justify-between",
-                                  !field.value && "text-muted-foreground"
-                                )}>
-                                {field.value
-                                  ? users.find(
-                                      (user) => user.id === field.value
-                                    )?.name
-                                  : "Select name"}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
-                            <Command>
-                              <CommandInput placeholder="Search name" />
-                              <CommandEmpty>No user found.</CommandEmpty>
-                              <CommandGroup>
-                                {users.map((user) => (
-                                  <CommandItem
-                                    value={user.name}
-                                    key={user.id}
-                                    onSelect={() => {
-                                      form.setValue("userId", user.id);
-                                    }}>
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        user.id === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {user.name}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                      </FormItem>
-                    )}
-                  />
+
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="end_date"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>End Date</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "justify-start text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}>
+                                  {field.value ? (
+                                    format(new Date(field.value), "PPP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start">
+                              <Calendar
+                                mode="single"
+                                selected={new Date(field.value)}
+                                onSelect={field.onChange}
+                                initialFocus
+                                disabled={(date) => date <= new Date()}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
                 <div>
                   <FormField

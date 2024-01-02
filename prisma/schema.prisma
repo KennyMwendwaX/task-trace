@@ -65,6 +65,7 @@ model Project {
   id          String   @id @default(cuid())
   name        String
   label       String
+  status      String
   description String
   startDate   DateTime
   endDate     DateTime
