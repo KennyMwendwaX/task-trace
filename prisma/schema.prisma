@@ -19,6 +19,7 @@ model User {
   role          String
   image         String?
   createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
   projects      Project[]
