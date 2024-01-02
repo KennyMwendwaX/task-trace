@@ -59,7 +59,7 @@ export default function AddProjectModal() {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/user/tasks", options);
+      const response = await fetch("/api/projects", options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
