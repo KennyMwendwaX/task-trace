@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 
 import { CalendarIcon, HomeIcon, ProjectorIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { LuUser2 } from "react-icons/lu";
 
 export default function Sidebar() {
   return (
@@ -41,6 +43,20 @@ export default function Sidebar() {
               <CalendarIcon className="h-4 w-4" />
               Schedule
             </Link>
+            <div className="absolute bottom-2 px-8 flex items-center space-x-2 bg-slate-200 rounded-xl">
+              <Avatar>
+                <AvatarImage src={""} />
+                <AvatarFallback>
+                  <LuUser2 className="w-5 h-5" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="py-2 space-y-1">
+                <div className="pt-1">John Doe</div>
+                <span className="text-muted-foreground text-sm pb-1">
+                  johndoe@gmail.com
+                </span>
+              </div>
+            </div>
           </nav>
         </div>
       </div>
