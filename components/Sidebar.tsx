@@ -1,87 +1,49 @@
 "use client";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { usePathname } from "next/navigation";
+
+import { CalendarIcon, HomeIcon, ProjectorIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
-import { LuCalendarClock, LuUser2 } from "react-icons/lu";
-import { RxDashboard } from "react-icons/rx";
-import { FiCheckCircle, FiUsers } from "react-icons/fi";
-import { IoFileTrayOutline } from "react-icons/io5";
 
 export default function Sidebar() {
   return (
     <>
-      <Sheet>
-        <Button
-          className="bg-transparent border border-slate-500 py-1.5 px-2.5"
-          asChild>
-          <SheetTrigger>
-            <HamburgerMenuIcon className="w-5 h-5" />
-          </SheetTrigger>
-        </Button>
-        <SheetContent side="left" className="w-[350px] rounded-r-2xl">
-          <SheetHeader>
-            <SheetTitle className="ml-2 text-3xl flex items-center text-slate-900 space-x-2">
-              <FiCheckCircle className="w-7 h-7" />
-              <span>TaskTracker</span>
-            </SheetTitle>
-          </SheetHeader>
-          <div className="space-y-1.5 pt-2">
+      <div className="flex h-full max-h-screen flex-col gap-2">
+        <div className="flex h-[60px] items-center border-b px-6">
+          <Link className="flex items-center gap-2 font-semibold" href="#">
+            <ProjectorIcon className="h-6 w-6" />
+            <span>Task Tracker</span>
+          </Link>
+        </div>
+        <div className="flex-1 overflow-auto py-2">
+          <nav className="grid items-start px-4 text-sm font-medium">
             <Link
-              href="/dashboard"
-              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              <RxDashboard className="ml-2 w-5 h-5" />
-              <span>Dashboard</span>
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#">
+              <HomeIcon className="h-4 w-4" />
+              Home
             </Link>
             <Link
-              href="/projects"
-              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              <IoFileTrayOutline className="ml-2 w-6 h-6" />
-              <span>Projects</span>
+              className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
+              href="#">
+              <ProjectorIcon className="h-4 w-4" />
+              Projects
             </Link>
             <Link
-              href="/tasks"
-              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              <IoFileTrayOutline className="ml-2 w-6 h-6" />
-              <span>Tasks</span>
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#">
+              <UsersIcon className="h-4 w-4" />
+              Team
             </Link>
             <Link
-              href="/upcoming"
-              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              <LuCalendarClock className="ml-2 w-6 h-6" />
-              <span>Upcoming</span>
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              href="#">
+              <CalendarIcon className="h-4 w-4" />
+              Schedule
             </Link>
-            <Link
-              href="/team"
-              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
-              <FiUsers className="ml-2 w-5 h-5" />
-              <span>Team</span>
-            </Link>
-          </div>
-          <div className="absolute bottom-2 px-[60px] flex items-center space-x-2 bg-slate-200 rounded-xl">
-            <Avatar>
-              <AvatarImage src={""} />
-              <AvatarFallback>
-                <LuUser2 className="w-5 h-5" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="py-2 space-y-1">
-              <div className="pt-1">John Doe</div>
-              <span className="text-muted-foreground text-sm pb-1">
-                johndoe@gmail.com
-              </span>
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+          </nav>
+        </div>
+      </div>
     </>
   );
 }
