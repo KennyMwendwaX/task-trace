@@ -45,6 +45,12 @@ export default function Sidebar() {
               href="/tasks"
               className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
               <IoFileTrayOutline className="ml-2 w-6 h-6" />
+              <span>Projects</span>
+            </Link>
+            <Link
+              href="/tasks"
+              className="flex items-center py-2 space-x-4 rounded-lg cursor-pointer hover:bg-slate-200">
+              <IoFileTrayOutline className="ml-2 w-6 h-6" />
               <span>Tasks</span>
             </Link>
             <Link
