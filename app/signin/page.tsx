@@ -32,11 +32,11 @@ export default function Signin() {
     resolver: zodResolver(signinFormSchema),
   });
 
-  const { data: session, status } = useSession();
+  //   const { data: session, status } = useSession();
 
-  if (session && status === "authenticated") {
-    redirect("/");
-  }
+  //   if (session && status === "authenticated") {
+  //     redirect("/");
+  //   }
 
   const errors = form.formState.errors;
 
