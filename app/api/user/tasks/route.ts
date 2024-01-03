@@ -6,10 +6,7 @@ export async function GET() {
   try {
     const tasks = await prisma.task.findMany();
     if (tasks.length === 0)
-      return NextResponse.json(
-        { message: "Failed to return tasks" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "No tasks found" }, { status: 404 });
 
     return NextResponse.json({ tasks }, { status: 200 });
   } catch (error) {
@@ -24,13 +21,13 @@ export async function POST(request: Request) {
   const req = await request.json();
 
   // Convert 'due_date' string to a Date object
-  const parsedData = {
+  const requestData = {
     ...req,
     due_date: new Date(req.due_date),
   };
 
   // Apply Zod schema to validate and parse the request data
-  const validatedData = taskFormSchema.parse(parsedData);
+  const validatedData = taskFormSchema.parse(requestData);
 
   if (!validatedData)
     return NextResponse.json(
