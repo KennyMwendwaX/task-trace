@@ -27,18 +27,24 @@ export async function POST(request: Request) {
   };
 
   // Apply Zod schema to validate and parse the request data
-  const validatedData = taskFormSchema.parse(requestData);
+  const result = taskFormSchema.safeParse(requestData);
 
-  if (!validatedData)
+  if (!result.success)
     return NextResponse.json(
       { message: "Invalid request data" },
       { status: 400 }
     );
 
+  const { name, label, priority, due_date, description } = result.data;
+
   try {
     const task = await prisma.task.create({
       data: {
-        ...validatedData,
+        name,
+        label,
+        priority,
+        due_date,
+        description,
         status: "TO_DO",
       },
     });
