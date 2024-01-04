@@ -1,10 +1,26 @@
 import prisma from "@/prisma/db";
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcrypt";
+import { userSchema } from "@/lib/schema/UserSchema";
 
 export async function POST(request: Request) {
   const req = await request.json();
-  const { name, email, password } = req;
+  const requestSchema = userSchema.omit({
+    id: true,
+    emailVerified: true,
+    image: true,
+    createdAt: true,
+    tasks: true,
+  });
+  const result = requestSchema.safeParse(req);
+
+  if (!result.success)
+    return NextResponse.json(
+      { message: "Invalid request data" },
+      { status: 400 }
+    );
+
+  const { name, email, password } = result.data;
 
   try {
     // Check if the email is already registered
