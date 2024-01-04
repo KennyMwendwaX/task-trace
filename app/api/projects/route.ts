@@ -30,18 +30,24 @@ export async function POST(request: Request) {
     end_date: new Date(req.end_date),
   };
 
-  const validatedData = projectFormSchema.parse(requestData);
+  const result = projectFormSchema.safeParse(requestData);
 
-  if (!validatedData)
+  if (!result.success)
     return NextResponse.json(
       { message: "Invalid request data" },
       { status: 400 }
     );
 
+  const { name, label, start_date, end_date, description } = result.data;
+
   try {
     const project = await prisma.project.create({
       data: {
-        ...validatedData,
+        name,
+        label,
+        start_date,
+        end_date,
+        description,
         status: "TO_DO",
       },
     });

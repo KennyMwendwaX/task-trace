@@ -5,6 +5,7 @@ import { userSchema } from "@/lib/schema/UserSchema";
 
 export async function POST(request: Request) {
   const req = await request.json();
+
   const requestSchema = userSchema.omit({
     id: true,
     emailVerified: true,
@@ -12,6 +13,7 @@ export async function POST(request: Request) {
     createdAt: true,
     tasks: true,
   });
+
   const result = requestSchema.safeParse(req);
 
   if (!result.success)
