@@ -3,11 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const users = await prisma.user.findMany({
-      include: {
-        tasks: true,
-      },
-    });
+    const users = await prisma.user.findMany();
 
     if (users.length === 0)
       return NextResponse.json(
