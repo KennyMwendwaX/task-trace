@@ -19,7 +19,7 @@ import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { credentialsLogin } from "@/actions/login";
+import { credentialsLogin, providerLogin } from "@/actions/login";
 
 type FormValues = {
   email: string;
@@ -51,14 +51,12 @@ export default function Signin() {
     });
   }
 
-  // Handle Google Signin
-  async function handleGoogleSignin() {
-    signIn("google", { callbackUrl: "http://localhost:3000/" });
-  }
-
-  // Handle Github Signin
-  async function handleGithubSignin() {
-    signIn("github", { callbackUrl: "http://localhost:3000/" });
+  async function providerSignin(provider: "google" | "github") {
+    startTransition(() => {
+      providerLogin(provider).then((data) => {
+        setServerError(data?.error);
+      });
+    });
   }
 
   return (
@@ -187,7 +185,7 @@ export default function Signin() {
 
             <div className="space-y-2">
               <Button
-                onClick={handleGoogleSignin}
+                onClick={() => providerSignin("google")}
                 variant="outline"
                 className="w-full flex items-center">
                 <FcGoogle className="mr-1 w-5 h-5" />
@@ -195,7 +193,7 @@ export default function Signin() {
               </Button>
               <Button
                 variant="outline"
-                onClick={handleGithubSignin}
+                onClick={() => providerSignin("github")}
                 className="w-full flex items-center">
                 <FaGithub className="mr-1 w-5 h-5" />
                 Sign in with Github

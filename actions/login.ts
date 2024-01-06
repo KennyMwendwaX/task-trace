@@ -15,7 +15,6 @@ export const credentialsLogin = async (values: SigninValues) => {
       password: password,
       redirectTo: DEFAULT_ROUTE_REDIRECT, // Do not redirect, so we can handle the result ourselves
     });
-    console.log(result);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
