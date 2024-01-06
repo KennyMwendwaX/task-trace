@@ -10,8 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
+enum UserRole {
   USER
+  ADMIN
+}
+
+enum ProjectRole {
+  MEMBER
   ADMIN
 }
 
@@ -21,7 +26,7 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   password      String
-  role          Role      @default(USER)
+  role          UserRole  @default(USER)
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -83,14 +88,14 @@ model Project {
 }
 
 model Member {
-  id        String   @id @default(cuid())
+  id        String      @id @default(cuid())
   projectId String
   userId    String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  project   Project  @relation(fields: [projectId], references: [id])
+  role      ProjectRole @default(MEMBER)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  user      User        @relation(fields: [userId], references: [id])
+  project   Project     @relation(fields: [projectId], references: [id])
   tasks     Task[]
 
   @@unique([projectId, userId])
