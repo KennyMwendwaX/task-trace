@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -5,7 +8,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "emailVerified" TIMESTAMP(3),
     "password" TEXT NOT NULL,
-    "role" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -69,7 +72,7 @@ CREATE TABLE "Member" (
     "id" TEXT NOT NULL,
     "projectId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "role" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
