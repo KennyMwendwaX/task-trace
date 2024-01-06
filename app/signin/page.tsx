@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signinFormSchema } from "@/lib/schema/UserSchema";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 type FormValues = {
   email: string;
@@ -200,15 +202,15 @@ export default function Signin() {
                 onClick={handleGoogleSignin}
                 variant="outline"
                 className="w-full flex items-center">
-                <Image width={20} height={20} alt="google" src="/google.svg" />
-                &nbsp;Sign in with Google
+                <FcGoogle className="mr-1 w-5 h-5" />
+                Sign in with Google
               </Button>
               <Button
                 variant="outline"
                 onClick={handleGithubSignin}
                 className="w-full flex items-center">
-                <Image width={22} height={22} alt="github" src="/github.svg" />
-                &nbsp;Sign in with Github
+                <FaGithub className="mr-1 w-5 h-5" />
+                Sign in with Github
               </Button>
             </div>
             <p className="text-sm font-light text-black">
