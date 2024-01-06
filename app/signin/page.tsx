@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   Form,
@@ -9,7 +8,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
@@ -20,6 +19,7 @@ import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { credentialsLogin } from "@/actions/login";
 
 type FormValues = {
   email: string;
@@ -28,7 +28,8 @@ type FormValues = {
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
-  const [serverErrors, setServerErrors] = useState("");
+  const [serverError, setServerError] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(signinSchema),
@@ -43,24 +44,11 @@ export default function Signin() {
   const errors = form.formState.errors;
 
   async function onSubmit(values: FormValues) {
-    try {
-      const result = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false, // Do not redirect, so we can handle the result ourselves
+    startTransition(() => {
+      credentialsLogin(values).then((data) => {
+        setServerError(data?.error);
       });
-
-      if (result?.error) {
-        // If there was an error, display the error message to the user
-        setServerErrors(result.error);
-      } else {
-        // If there was no error, redirect the user to the home page
-        redirect("/");
-      }
-    } catch (error) {
-      // If there was an unexpected error, display a generic error message to the user
-      setServerErrors("An unexpected error occurred. Please try again later.");
-    }
+    });
   }
 
   // Handle Google Signin
@@ -88,11 +76,11 @@ export default function Signin() {
               Sign in to your account
             </h1>
 
-            {serverErrors && (
+            {serverError && (
               <div
                 className="mb-4 rounded-lg border border-red-600 bg-red-50 p-4 text-sm text-red-800"
                 role="alert">
-                {serverErrors}
+                {serverError}
               </div>
             )}
 
