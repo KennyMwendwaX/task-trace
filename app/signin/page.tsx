@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signinFormSchema } from "@/lib/schema/UserSchema";
+import { signinSchema } from "@/lib/schema/UserSchema";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
@@ -31,7 +31,7 @@ export default function Signin() {
   const [serverErrors, setServerErrors] = useState("");
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(signinFormSchema),
+    resolver: zodResolver(signinSchema),
   });
 
   //   const { data: session, status } = useSession();

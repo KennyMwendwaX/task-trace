@@ -74,7 +74,7 @@ export const userSchema = z.object({
   ),
 });
 
-export const signupFormSchema = userSchema
+export const signupSchema = userSchema
   .omit({
     id: true,
     emailVerified: true,
@@ -93,7 +93,7 @@ export const signupFormSchema = userSchema
     path: ["confirm_password"],
   });
 
-export const signinFormSchema = userSchema.omit({
+export const signinSchema = userSchema.omit({
   id: true,
   name: true,
   emailVerified: true,
