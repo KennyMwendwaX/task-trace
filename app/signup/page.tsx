@@ -16,17 +16,10 @@ import { FaUser } from "react-icons/fa6";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema } from "@/lib/schema/UserSchema";
+import { SignupValues, signupSchema } from "@/lib/schema/UserSchema";
 import { useRouter } from "next/navigation";
 import { FiCheckCircle } from "react-icons/fi";
 // import { useSession } from "next-auth/react";
-
-type FormValues = {
-  name: string;
-  email: string;
-  password: string;
-  confirm_password: string;
-};
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +27,7 @@ export default function Signup() {
   const [serverErrors, setServerErrors] = useState("");
   const router = useRouter();
 
-  const form = useForm<FormValues>({
+  const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
   });
 
@@ -46,7 +39,7 @@ export default function Signup() {
 
   const errors = form.formState.errors;
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: SignupValues) {
     const payload = {
       name: values.name,
       email: values.email,
