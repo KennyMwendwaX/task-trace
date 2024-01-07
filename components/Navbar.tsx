@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
 import { ProjectorIcon } from "lucide-react";
+import { logout } from "@/actions/auth/logout";
 
 export default function Navbar() {
   return (
@@ -47,7 +48,9 @@ export default function Navbar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <button className="flex items-center">
+                  <button
+                    onClick={() => logout()}
+                    className="flex items-center">
                     <MdLogout className="mr-1 w-4 h-4" />
                     Log out
                   </button>
