@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { CalendarIcon, HomeIcon, ProjectorIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { LuUser2 } from "react-icons/lu";
+import { LuUser2, LuCalendar, LuProjector, LuUsers } from "react-icons/lu";
+import { RxDashboard } from "react-icons/rx";
 
 export default function Sidebar() {
   return (
@@ -17,27 +18,27 @@ export default function Sidebar() {
         <div className="flex-1 justify-center pt-[80px] py-2">
           <nav className="grid items-start px-4 text-sm font-medium">
             <Link
-              href="/home"
+              href="/dashboard"
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50">
-              <HomeIcon className="h-4 w-4" />
-              Home
+              <RxDashboard className="w-4 h-4" />
+              Dashboard
             </Link>
             <Link
               href="/projects"
               className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2.5 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50">
-              <ProjectorIcon className="h-4 w-4" />
+              <LuProjector className="h-4 w-4" />
               Projects
             </Link>
             <Link
               href="/team"
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50">
-              <UsersIcon className="h-4 w-4" />
+              <LuUsers className="h-4 w-4" />
               Team
             </Link>
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
               href="#">
-              <CalendarIcon className="h-4 w-4" />
+              <LuCalendar className="h-4 w-4" />
               Schedule
             </Link>
             <div className="absolute bottom-2 px-8 flex items-center space-x-2 bg-slate-200 rounded-xl">
