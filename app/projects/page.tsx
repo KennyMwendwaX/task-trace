@@ -28,7 +28,6 @@ export default function Projects() {
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
-          {JSON.stringify(projects)}
         </div>
       </main>
     </>

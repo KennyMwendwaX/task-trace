@@ -7,6 +7,10 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Project } from "@/lib/schema/ProjectSchema";
+import { User } from "@/lib/schema/UserSchema";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { da } from "date-fns/locale";
 import Link from "next/link";
 import { IoChevronForward } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
@@ -16,6 +20,19 @@ interface Props {
 }
 
 export default function ProjectCard({ project }: Props) {
+  const {
+    data: owner,
+    isLoading: ownerLoading,
+    error: ownerError,
+  } = useQuery({
+    queryKey: ["user", project.ownerId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/users/${project.ownerId}`);
+      return data.user as User;
+    },
+    enabled: !!project.ownerId, // Only fetch when ownerId is available
+  });
+
   return (
     <>
       <Card>
@@ -28,7 +45,7 @@ export default function ProjectCard({ project }: Props) {
                 <LuUser2 className="w-5 h-5" />
               </AvatarFallback>
             </Avatar>
-            <div>John Doe</div>
+            <div>{owner?.name}</div>
           </div>
         </CardHeader>
         <CardContent className="space-y-2">
