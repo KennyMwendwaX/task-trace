@@ -1,6 +1,7 @@
 import prisma from "@/prisma/db";
 import { NextResponse } from "next/server";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
+import { auth } from "@/auth";
 
 export async function GET() {
   try {
@@ -22,6 +23,11 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const session = await auth();
+
+  if (!session || session.user.role !== "ADMIN")
+    return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+
   const req = await request.json();
 
   const requestData = {

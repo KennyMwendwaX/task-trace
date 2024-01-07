@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   Form,
@@ -31,12 +30,6 @@ export default function Signup() {
     resolver: zodResolver(signupSchema),
   });
 
-  //   const { data: session, status } = useSession();
-
-  //   if (session && status === "authenticated") {
-  //     redirect("/");
-  //   }
-
   const errors = form.formState.errors;
 
   async function onSubmit(values: SignupValues) {
@@ -62,9 +55,9 @@ export default function Signup() {
       setServerErrors("Server error, try again later");
     }
 
-    // if (register.ok) {
-    //   router.push("/signin");
-    // }
+    if (register.ok) {
+      router.push("/signin");
+    }
   }
 
   return (
