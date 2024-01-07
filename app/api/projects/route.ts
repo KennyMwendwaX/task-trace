@@ -55,8 +55,22 @@ export async function POST(request: Request) {
         end_date,
         description,
         status: "TO_DO",
+        owner: {
+          connect: { id: session.user.id },
+        },
       },
     });
+
+    if (!project)
+      return NextResponse.json(
+        { message: "Failed to create project" },
+        { status: 500 }
+      );
+
+    return NextResponse.json(
+      { message: "Project created successfully" },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },

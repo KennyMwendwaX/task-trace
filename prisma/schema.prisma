@@ -83,8 +83,8 @@ model Project {
   tasks       Task[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  owner       User?    @relation(fields: [ownerId], references: [id])
-  ownerId     String?
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
 }
 
 model Member {
@@ -112,8 +112,8 @@ model Task {
   due_date    DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  member      Member?  @relation(fields: [memberId], references: [id])
-  memberId    String?
-  projectId   String?
-  project     Project? @relation(fields: [projectId], references: [id])
+  member      Member   @relation(fields: [memberId], references: [id])
+  memberId    String
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
 }
