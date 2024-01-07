@@ -10,14 +10,16 @@ import { Project } from "@/lib/schema/ProjectSchema";
 import { User } from "@/lib/schema/UserSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { da } from "date-fns/locale";
 import Link from "next/link";
 import { IoChevronForward } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
+import { statuses } from "@/lib/config";
 
 interface Props {
   project: Project;
 }
+
+// ! add dates
 
 export default function ProjectCard({ project }: Props) {
   const {
@@ -32,6 +34,10 @@ export default function ProjectCard({ project }: Props) {
     },
     enabled: !!project.ownerId, // Only fetch when ownerId is available
   });
+
+  const projectStatus = statuses.find(
+    (status) => status.value === project.status
+  );
 
   return (
     <>
@@ -49,11 +55,27 @@ export default function ProjectCard({ project }: Props) {
           </div>
         </CardHeader>
         <CardContent className="space-y-2">
-          <Badge
-            variant="outline"
-            className="border-orange-600 text-orange-500">
-            {project.status}
-          </Badge>
+          {projectStatus?.value === "DONE" ? (
+            <Badge
+              variant="outline"
+              className="border-green-600 text-green-500">
+              {projectStatus?.label}
+            </Badge>
+          ) : projectStatus?.value === "TO_DO" ? (
+            <Badge variant="outline" className="border-blue-600 text-blue-500">
+              {projectStatus?.label}
+            </Badge>
+          ) : projectStatus?.value === "IN_PROGRESS" ? (
+            <Badge
+              variant="outline"
+              className="border-orange-600 text-orange-500">
+              {projectStatus?.label}
+            </Badge>
+          ) : projectStatus?.value === "CANCELED" ? (
+            <Badge variant="outline" className="border-red-600 text-red-500">
+              {projectStatus?.label}
+            </Badge>
+          ) : null}
           <p className="text-sm text-gray-500">{project.description}</p>
           <p className="text-sm text-gray-500">Task Completion Rate: 35/50</p>
           <div className="w-full h-2 bg-gray-200 rounded-full">
