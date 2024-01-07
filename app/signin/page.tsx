@@ -19,7 +19,7 @@ import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { credentialsLogin, providerLogin } from "@/actions/login";
+import { credentialsLogin, providerLogin } from "@/actions/auth/login";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
