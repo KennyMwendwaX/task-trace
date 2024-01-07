@@ -14,24 +14,19 @@ import { Button } from "@/components/ui/button";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signinSchema } from "@/lib/schema/UserSchema";
+import { SigninValues, signinSchema } from "@/lib/schema/UserSchema";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { credentialsLogin, providerLogin } from "@/actions/login";
 
-type FormValues = {
-  email: string;
-  password: string;
-};
-
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<FormValues>({
+  const form = useForm<SigninValues>({
     resolver: zodResolver(signinSchema),
   });
 
@@ -43,7 +38,7 @@ export default function Signin() {
 
   const errors = form.formState.errors;
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: SigninValues) {
     startTransition(() => {
       credentialsLogin(values).then((data) => {
         setServerError(data?.error);
