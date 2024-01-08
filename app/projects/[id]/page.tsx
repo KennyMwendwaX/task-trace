@@ -10,6 +10,8 @@ import Loading from "@/components/Loading";
 import { MdOutlineAddTask } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
 import { User } from "@/lib/schema/UserSchema";
+import AddMemberModal from "@/components/AddMemberModal";
+import { FiUserPlus } from "react-icons/fi";
 
 export default function Project({ params }: { params: { id: string } }) {
   const projectId = params.id;
@@ -42,6 +44,25 @@ export default function Project({ params }: { params: { id: string } }) {
 
   const members = membersData || [];
   const tasks = tasksData || [];
+
+  if (!members || members.length == 0) {
+    return (
+      <>
+        <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
+          <FiUserPlus className="h-14 w-14 text-muted-foreground" />
+
+          <h3 className="mt-4 text-2xl font-semibold">
+            No members in the project
+          </h3>
+          <p className="mb-4 mt-2 text-lg text-muted-foreground">
+            There are no members in the project. Add one below.
+          </p>
+          <AddMemberModal />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">

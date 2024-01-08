@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { taskSchema } from "./TaskSchema";
 
 export const userSchema = z.object({
   id: z.string(),
@@ -25,6 +24,7 @@ export const userSchema = z.object({
     })
     .min(8, { message: "Password must be greater than 8 characters long" })
     .refine((value) => !/\s/.test(value), "Invalid Password"),
+  role: z.enum(["USER", "ADMIN"]),
   image: z.string().nullable(),
   createdAt: z.date(),
 });
@@ -33,9 +33,9 @@ export const signupSchema = userSchema
   .omit({
     id: true,
     emailVerified: true,
+    role: true,
     image: true,
     createdAt: true,
-    tasks: true,
   })
   .extend({
     confirm_password: z.string({
@@ -52,10 +52,13 @@ export const signinSchema = userSchema.omit({
   id: true,
   name: true,
   emailVerified: true,
+  role: true,
   image: true,
   createdAt: true,
   tasks: true,
 });
+
+export const memberFormSchema = userSchema.omit({});
 
 export type User = z.infer<typeof userSchema>;
 export type SignupValues = z.infer<typeof signupSchema>;
