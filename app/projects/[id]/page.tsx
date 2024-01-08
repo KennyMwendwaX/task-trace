@@ -9,9 +9,30 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { MdOutlineAddTask } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
+import { User } from "@/lib/schema/UserSchema";
 
-export default function Project() {
-  const { data, isLoading, error } = useQuery({
+export default function Project({ params }: { params: { id: string } }) {
+  const projectId = params.id;
+
+  console.log(projectId);
+
+  const {
+    data: membersData,
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["members"],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}/members`);
+      return data.members as User[];
+    },
+  });
+
+  const {
+    data: tasksData,
+    isLoading: tasksIsLoading,
+    error: tasksError,
+  } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
       const { data } = await axios.get("/api/user/tasks");
@@ -19,11 +40,12 @@ export default function Project() {
     },
   });
 
-  const tasks = data || [];
+  const members = membersData || [];
+  const tasks = tasksData || [];
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
-        {isLoading ? (
+        {tasksIsLoading ? (
           <Loading />
         ) : tasks.length > 0 ? (
           <>
