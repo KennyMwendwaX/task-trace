@@ -27,24 +27,31 @@ import { Check, ChevronsUpDown, Command } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ProjectFormValues,
-  projectFormSchema,
-} from "@/lib/schema/ProjectSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { User } from "@/lib/schema/UserSchema";
+import {
+  MemberFormSchema,
+  User,
+  memberFormSchema,
+} from "@/lib/schema/UserSchema";
 import {
   CommandInput,
   CommandEmpty,
   CommandGroup,
   CommandItem,
 } from "@/components/ui/command";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function AddMemberModal() {
-  const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectFormSchema),
+  const form = useForm<MemberFormSchema>({
+    resolver: zodResolver(memberFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -66,7 +73,7 @@ export default function AddMemberModal() {
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (values: ProjectFormValues) => {
+    mutationFn: async (values: MemberFormSchema) => {
       const options = {
         method: "POST",
         body: JSON.stringify(values),
@@ -87,8 +94,9 @@ export default function AddMemberModal() {
   });
 
   const users = usersData || [];
+  console.log(users);
 
-  async function onSubmit(values: ProjectFormValues) {
+  async function onSubmit(values: MemberFormSchema) {
     addMember(values);
     toggleDialog();
   }
@@ -114,64 +122,85 @@ export default function AddMemberModal() {
                 className="space-y-3 pt-4 px-3"
                 onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative">
-                    <FormField
-                      control={form.control}
-                      name="userId"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel>Assign Task</FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant="outline"
-                                  role="combobox"
-                                  className={cn(
-                                    "justify-between",
-                                    !field.value && "text-muted-foreground"
-                                  )}>
-                                  {field.value
-                                    ? users.find(
-                                        (user) => user.id === field.value
-                                      )?.name
-                                    : "Select name"}
-                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[200px] p-0">
-                              <Command>
-                                <CommandInput placeholder="Search name" />
-                                <CommandEmpty>No user found.</CommandEmpty>
-                                <CommandGroup>
-                                  {users.map((user) => (
-                                    <CommandItem
-                                      value={user.name}
-                                      key={user.id}
-                                      onSelect={() => {
-                                        form.setValue("userId", user.id);
-                                      }}>
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          user.id === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                      {user.name}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="relative"></div>
+                  <FormField
+                    control={form.control}
+                    name="userId"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Assign Member</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "justify-between",
+                                  !field.value && "text-muted-foreground"
+                                )}>
+                                {field.value
+                                  ? users.find(
+                                      (user) => user.id === field.value
+                                    )?.name
+                                  : "Select name"}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandInput placeholder="Search name" />
+                              <CommandEmpty>No user found.</CommandEmpty>
+                              <CommandGroup>
+                                {users.map((user) => (
+                                  <CommandItem
+                                    value={user.name}
+                                    key={user.id}
+                                    onSelect={() => {
+                                      form.setValue("userId", user.id);
+                                    }}>
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        user.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {user.name}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Member role</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          required>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select member role" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="MEMBER">MEMBER</SelectItem>
+                            <SelectItem value="ADMIN">ADMIN</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
                 <DialogFooter>
