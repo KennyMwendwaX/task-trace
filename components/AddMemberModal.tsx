@@ -49,7 +49,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function AddMemberModal() {
+interface Props {
+  projectId: string;
+}
+
+export default function AddMemberModal({ projectId }: Props) {
   const form = useForm<MemberFormSchema>({
     resolver: zodResolver(memberFormSchema),
   });
@@ -78,14 +82,17 @@ export default function AddMemberModal() {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/projects", options);
+      const response = await fetch(
+        `/api/projects/${projectId}/members`,
+        options
+      );
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["members"],
       });
     },
     onError: (error) => {

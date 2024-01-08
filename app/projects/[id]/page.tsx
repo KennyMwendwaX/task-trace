@@ -57,7 +57,7 @@ export default function Project({ params }: { params: { id: string } }) {
           <p className="mb-4 mt-2 text-lg text-muted-foreground">
             There are no members in the project. Add one below.
           </p>
-          <AddMemberModal />
+          <AddMemberModal projectId={projectId} />
         </div>
       </>
     );
