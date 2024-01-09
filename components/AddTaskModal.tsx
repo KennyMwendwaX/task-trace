@@ -51,10 +51,13 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { User } from "@/lib/schema/UserSchema";
 
-export default function AddTaskModal() {
+interface Props {
+  users: User[];
+}
+
+export default function AddTaskModal({ users }: Props) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
@@ -64,14 +67,6 @@ export default function AddTaskModal() {
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
   };
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
-    },
-  });
 
   const {
     mutate: addTask,
@@ -97,8 +92,6 @@ export default function AddTaskModal() {
       console.log(error);
     },
   });
-
-  const users = data || [];
 
   async function onSubmit(values: TaskFormValues) {
     addTask(values);

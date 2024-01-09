@@ -47,7 +47,7 @@ export default function Project({ params }: { params: { id: string } }) {
   } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/user/tasks");
+      const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
       return data.tasks as Task[];
     },
   });
@@ -98,7 +98,7 @@ export default function Project({ params }: { params: { id: string } }) {
             <p className="mb-4 mt-2 text-lg text-muted-foreground">
               You have not added any tasks. Add one below.
             </p>
-            <AddTaskModal />
+            <AddTaskModal users={users} />
           </div>
         )}
       </div>
