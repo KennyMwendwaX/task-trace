@@ -48,16 +48,16 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@/lib/schema/UserSchema";
 
 interface Props {
-  users: User[];
+  members: User[];
 }
 
-export default function AddTaskModal({ users }: Props) {
+export default function AddTaskModal({ members }: Props) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
@@ -78,7 +78,7 @@ export default function AddTaskModal({ users }: Props) {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/user/tasks", options);
+      const response = await fetch("/api/member/tasks", options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -234,7 +234,7 @@ export default function AddTaskModal({ users }: Props) {
                   </div>
                   <FormField
                     control={form.control}
-                    name="userId"
+                    name="memberId"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel>Assign Task</FormLabel>
@@ -249,8 +249,8 @@ export default function AddTaskModal({ users }: Props) {
                                   !field.value && "text-muted-foreground"
                                 )}>
                                 {field.value
-                                  ? users.find(
-                                      (user) => user.id === field.value
+                                  ? members.find(
+                                      (member) => member.id === field.value
                                     )?.name
                                   : "Select name"}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -260,24 +260,24 @@ export default function AddTaskModal({ users }: Props) {
                           <PopoverContent className="w-[200px] p-0">
                             <Command>
                               <CommandInput placeholder="Search name" />
-                              <CommandEmpty>No user found.</CommandEmpty>
+                              <CommandEmpty>No member found.</CommandEmpty>
                               <CommandGroup>
-                                {users.map((user) => (
+                                {members.map((member) => (
                                   <CommandItem
-                                    value={user.name}
-                                    key={user.id}
+                                    value={member.name}
+                                    key={member.id}
                                     onSelect={() => {
-                                      form.setValue("userId", user.id);
+                                      form.setValue("memberId", member.id);
                                     }}>
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        user.id === field.value
+                                        member.id === field.value
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
                                     />
-                                    {user.name}
+                                    {member.name}
                                   </CommandItem>
                                 ))}
                               </CommandGroup>

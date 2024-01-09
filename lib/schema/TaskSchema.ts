@@ -25,9 +25,9 @@ export const taskSchema = z.object({
     required_error: "Please select a date and time",
     invalid_type_error: "That's not a date!",
   }),
-  userId: z.string({
-    required_error: "User is required",
-    invalid_type_error: "User must be a string",
+  memberId: z.string({
+    required_error: "Member is required",
+    invalid_type_error: "Member must be a string",
   }),
   description: z
     .string()
