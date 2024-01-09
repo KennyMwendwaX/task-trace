@@ -252,14 +252,14 @@ export default function AddTaskModal({ members }: Props) {
                                   ? members.find(
                                       (member) => member.id === field.value
                                     )?.name
-                                  : "Select name"}
+                                  : "Select member"}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
                           <PopoverContent className="w-[200px] p-0">
                             <Command>
-                              <CommandInput placeholder="Search name" />
+                              <CommandInput placeholder="Search member" />
                               <CommandEmpty>No member found.</CommandEmpty>
                               <CommandGroup>
                                 {members.map((member) => (
