@@ -86,6 +86,7 @@ export async function POST(
       data: {
         role: role,
         userId: user.id,
+        userName: user.name,
         projectId: project.id,
       },
     });

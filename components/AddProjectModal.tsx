@@ -66,7 +66,7 @@ export default function AddProjectModal() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["projects"],
       });
     },
     onError: (error) => {

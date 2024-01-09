@@ -51,11 +51,11 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/UserSchema";
 
 interface Props {
   projectId: string;
-  members: User[];
+  members: Member[];
 }
 
 export default function AddTaskModal({ projectId, members }: Props) {
@@ -254,7 +254,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                                 {field.value
                                   ? members.find(
                                       (member) => member.id === field.value
-                                    )?.name
+                                    )?.userName
                                   : "Select member"}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
@@ -267,7 +267,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                               <CommandGroup>
                                 {members.map((member) => (
                                   <CommandItem
-                                    value={member.name}
+                                    value={member.userName}
                                     key={member.id}
                                     onSelect={() => {
                                       form.setValue("memberId", member.id);
@@ -280,7 +280,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                                           : "opacity-0"
                                       )}
                                     />
-                                    {member.name}
+                                    {member.userName}
                                   </CommandItem>
                                 ))}
                               </CommandGroup>

@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { MdOutlineAddTask } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
-import { User } from "@/lib/schema/UserSchema";
+import { Member, User } from "@/lib/schema/UserSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiUserPlus } from "react-icons/fi";
 
@@ -36,7 +36,7 @@ export default function Project({ params }: { params: { id: string } }) {
     queryKey: ["members"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/members`);
-      return data.members as User[];
+      return data.members as Member[];
     },
   });
 

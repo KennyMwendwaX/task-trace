@@ -31,7 +31,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   User,
-  MemberFormSchema,
+  MemberFormValues,
   memberFormSchema,
 } from "@/lib/schema/UserSchema";
 import {
@@ -55,7 +55,7 @@ interface Props {
 }
 
 export default function AddMemberModal({ projectId, users }: Props) {
-  const form = useForm<MemberFormSchema>({
+  const form = useForm<MemberFormValues>({
     resolver: zodResolver(memberFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -70,7 +70,7 @@ export default function AddMemberModal({ projectId, users }: Props) {
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (values: MemberFormSchema) => {
+    mutationFn: async (values: MemberFormValues) => {
       const options = {
         method: "POST",
         body: JSON.stringify(values),
@@ -95,7 +95,7 @@ export default function AddMemberModal({ projectId, users }: Props) {
 
   console.log(users);
 
-  async function onSubmit(values: MemberFormSchema) {
+  async function onSubmit(values: MemberFormValues) {
     addMember(values);
     toggleDialog();
   }

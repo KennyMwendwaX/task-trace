@@ -69,6 +69,7 @@ export const memberSchema = userSchema
   .extend({
     projectId: z.string(),
     userId: z.string(),
+    userName: z.string(),
     role: z.enum(["MEMBER", "ADMIN"]),
     updatedAt: z.date(),
   });
@@ -83,5 +84,5 @@ export const memberFormSchema = memberSchema.omit({
 export type User = z.infer<typeof userSchema>;
 export type SignupValues = z.infer<typeof signupSchema>;
 export type SigninValues = z.infer<typeof signinSchema>;
-export type MemberSchema = z.infer<typeof memberSchema>;
-export type MemberFormSchema = z.infer<typeof memberFormSchema>;
+export type Member = z.infer<typeof memberSchema>;
+export type MemberFormValues = z.infer<typeof memberFormSchema>;
