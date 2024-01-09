@@ -16,7 +16,17 @@ import { FiUserPlus } from "react-icons/fi";
 export default function Project({ params }: { params: { id: string } }) {
   const projectId = params.id;
 
-  console.log(projectId);
+  const {
+    data: usersData,
+    isLoading: usersIsLoading,
+    error: usersError,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/users");
+      return data.users as User[];
+    },
+  });
 
   const {
     data: membersData,
@@ -42,6 +52,7 @@ export default function Project({ params }: { params: { id: string } }) {
     },
   });
 
+  const users = usersData || [];
   const members = membersData || [];
   const tasks = tasksData || [];
 
@@ -57,7 +68,7 @@ export default function Project({ params }: { params: { id: string } }) {
           <p className="mb-4 mt-2 text-lg text-muted-foreground">
             There are no members in the project. Add one below.
           </p>
-          <AddMemberModal projectId={projectId} />
+          <AddMemberModal projectId={projectId} users={users} />
         </div>
       </>
     );

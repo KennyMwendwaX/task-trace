@@ -51,9 +51,10 @@ import {
 
 interface Props {
   projectId: string;
+  users: User[];
 }
 
-export default function AddMemberModal({ projectId }: Props) {
+export default function AddMemberModal({ projectId, users }: Props) {
   const form = useForm<MemberFormSchema>({
     resolver: zodResolver(memberFormSchema),
   });
@@ -63,14 +64,6 @@ export default function AddMemberModal({ projectId }: Props) {
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
   };
-
-  const { data: usersData, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
-    },
-  });
 
   const {
     mutate: addMember,
@@ -100,7 +93,6 @@ export default function AddMemberModal({ projectId }: Props) {
     },
   });
 
-  const users = usersData || [];
   console.log(users);
 
   async function onSubmit(values: MemberFormSchema) {
@@ -184,30 +176,32 @@ export default function AddMemberModal({ projectId }: Props) {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Member role</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          required>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select member role" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="MEMBER">MEMBER</SelectItem>
-                            <SelectItem value="ADMIN">ADMIN</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="role"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Member role</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            required>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select member role" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="MEMBER">MEMBER</SelectItem>
+                              <SelectItem value="ADMIN">ADMIN</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
                 <DialogFooter>
