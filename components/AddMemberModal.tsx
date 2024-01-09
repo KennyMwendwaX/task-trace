@@ -23,19 +23,19 @@ import {
 } from "@/components/ui/popover";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useForm } from "react-hook-form";
-import { Check, ChevronsUpDown, Command } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import {
-  MemberFormSchema,
   User,
+  MemberFormSchema,
   memberFormSchema,
 } from "@/lib/schema/UserSchema";
 import {
+  Command,
   CommandInput,
   CommandEmpty,
   CommandGroup,
