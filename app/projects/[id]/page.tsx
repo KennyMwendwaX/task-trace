@@ -98,7 +98,7 @@ export default function Project({ params }: { params: { id: string } }) {
             <p className="mb-4 mt-2 text-lg text-muted-foreground">
               You have not added any tasks. Add one below.
             </p>
-            <AddTaskModal members={members} />
+            <AddTaskModal projectId={projectId} members={members} />
           </div>
         )}
       </div>

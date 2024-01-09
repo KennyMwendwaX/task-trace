@@ -19,7 +19,7 @@ export async function GET(
         id: projectId,
       },
       include: {
-        members: { include: { user: true } },
+        members: true,
       },
     });
 

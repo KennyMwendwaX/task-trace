@@ -54,10 +54,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@/lib/schema/UserSchema";
 
 interface Props {
+  projectId: string;
   members: User[];
 }
 
-export default function AddTaskModal({ members }: Props) {
+export default function AddTaskModal({ projectId, members }: Props) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
@@ -78,7 +79,7 @@ export default function AddTaskModal({ members }: Props) {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/member/tasks", options);
+      const response = await fetch(`/api/projects/${projectId}/tasks`, options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
@@ -92,6 +93,8 @@ export default function AddTaskModal({ members }: Props) {
       console.log(error);
     },
   });
+
+  console.log(members);
 
   async function onSubmit(values: TaskFormValues) {
     addTask(values);

@@ -91,6 +91,7 @@ model Member {
   id        String      @id @default(cuid())
   projectId String
   userId    String
+  userName  String
   role      ProjectRole @default(MEMBER)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
