@@ -10,17 +10,24 @@ import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function Tasks() {
-  const { data, isLoading, error } = useQuery({
+export default function Tasks({ params }: { params: { id: string } }) {
+  const projectId = params.id;
+  console.log(projectId);
+
+  const {
+    data: tasksData,
+    isLoading: tasksIsLoading,
+    error: tasksError,
+  } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/user/tasks");
+      const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
       return data.tasks as Task[];
     },
   });
 
   const tasks =
-    data
+    tasksData
       ?.map((task) => ({
         ...task,
         due_date: new Date(task.due_date),
@@ -103,7 +110,7 @@ export default function Tasks() {
                   <p className="mb-4 mt-2 text-lg text-muted-foreground">
                     You have not added any tasks. Add one below.
                   </p>
-                  <AddTaskModal />
+                  {/* <AddTaskModal /> */}
                 </div>
               </>
             )}
