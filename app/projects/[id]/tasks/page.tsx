@@ -9,6 +9,7 @@ import Loading from "@/components/Loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Member } from "@/lib/schema/UserSchema";
 
 export default function Tasks({ params }: { params: { id: string } }) {
   const projectId = params.id;
@@ -19,10 +20,22 @@ export default function Tasks({ params }: { params: { id: string } }) {
     isLoading: tasksIsLoading,
     error: tasksError,
   } = useQuery({
-    queryKey: ["tasks"],
+    queryKey: ["tasks", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
       return data.tasks as Task[];
+    },
+  });
+
+  const {
+    data: membersData,
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["members"],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}/members`);
+      return data.members as Member[];
     },
   });
 
@@ -41,14 +54,16 @@ export default function Tasks({ params }: { params: { id: string } }) {
   const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
 
+  const members = membersData || [];
+
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
-        {isLoading ? (
+        {tasksIsLoading ? (
           <Loading />
         ) : (
           <>
-            {data && data.length > 0 ? (
+            {tasks && tasks.length > 0 ? (
               <>
                 <div className="flex items-center justify-between space-y-2">
                   <div>
@@ -110,7 +125,7 @@ export default function Tasks({ params }: { params: { id: string } }) {
                   <p className="mb-4 mt-2 text-lg text-muted-foreground">
                     You have not added any tasks. Add one below.
                   </p>
-                  {/* <AddTaskModal /> */}
+                  <AddTaskModal projectId={projectId} members={members} />
                 </div>
               </>
             )}
