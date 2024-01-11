@@ -56,9 +56,13 @@ export default function Project({ params }: { params: { projectId: string } }) {
   const members = membersData || [];
   const tasks = tasksData || [];
 
-  if (!members || members.length == 0) {
-    return (
-      <>
+  const isLoading = usersIsLoading || membersIsLoading || tasksIsLoading;
+
+  return (
+    <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
+      {isLoading ? (
+        <Loading />
+      ) : !members || members.length == 0 ? (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
           <FiUserPlus className="h-14 w-14 text-muted-foreground" />
 
@@ -70,38 +74,26 @@ export default function Project({ params }: { params: { projectId: string } }) {
           </p>
           <AddMemberModal projectId={projectId} users={users} />
         </div>
-      </>
-    );
-  }
+      ) : !tasks || tasks.length == 0 ? (
+        <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
+          <MdOutlineAddTask className="h-14 w-14 text-muted-foreground" />
 
-  return (
-    <>
-      <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
-        {tasksIsLoading ? (
-          <Loading />
-        ) : tasks.length > 0 ? (
-          <>
-            <h2 className="text-3xl font-bold tracking-tight pb-2">
-              Dashboard
-            </h2>
-            <TaskOverview tasks={tasks} />
-            <div className="flex space-x-4 items-start pt-5">
-              <TaskChart tasks={tasks} />
-              <LatestTasks projectId={projectId} tasks={tasks} />
-            </div>
-          </>
-        ) : (
-          <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-            <MdOutlineAddTask className="h-14 w-14 text-muted-foreground" />
-
-            <h3 className="mt-4 text-2xl font-semibold">No tasks added</h3>
-            <p className="mb-4 mt-2 text-lg text-muted-foreground">
-              You have not added any tasks. Add one below.
-            </p>
-            <AddTaskModal projectId={projectId} members={members} />
+          <h3 className="mt-4 text-2xl font-semibold">No tasks added</h3>
+          <p className="mb-4 mt-2 text-lg text-muted-foreground">
+            You have not added any tasks. Add one below.
+          </p>
+          <AddTaskModal projectId={projectId} members={members} />
+        </div>
+      ) : (
+        <>
+          <h2 className="text-3xl font-bold tracking-tight pb-2">Dashboard</h2>
+          <TaskOverview tasks={tasks} />
+          <div className="flex space-x-4 items-start pt-5">
+            <TaskChart tasks={tasks} />
+            <LatestTasks projectId={projectId} tasks={tasks} />
           </div>
-        )}
-      </div>
-    </>
+        </>
+      )}
+    </div>
   );
 }
