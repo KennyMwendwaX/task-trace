@@ -32,7 +32,7 @@ export default function Tasks({ params }: { params: { id: string } }) {
     isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({
-    queryKey: ["members"],
+    queryKey: ["members", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/members`);
       return data.members as Member[];

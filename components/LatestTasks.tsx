@@ -7,10 +7,11 @@ import { IoChevronForward } from "react-icons/io5";
 import Link from "next/link";
 
 type Props = {
+  projectId: string;
   tasks: Task[];
 };
 
-export default function LatestTasks({ tasks }: Props) {
+export default function LatestTasks({ projectId, tasks }: Props) {
   const latestTasks = tasks
     .map((task) => ({
       ...task,
@@ -28,7 +29,7 @@ export default function LatestTasks({ tasks }: Props) {
             Latest Tasks
           </div>
           <Link
-            href="/tasks"
+            href={`/projects/${projectId}/tasks`}
             className="flex items-center space-x-1 cursor-pointer text-blue-800 hover:underline">
             <span>See all tasks</span>
             <IoChevronForward className="w-5 h-5" />

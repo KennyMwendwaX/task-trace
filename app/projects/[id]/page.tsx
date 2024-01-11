@@ -33,7 +33,7 @@ export default function Project({ params }: { params: { id: string } }) {
     isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({
-    queryKey: ["members"],
+    queryKey: ["members", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/members`);
       return data.members as Member[];
@@ -45,7 +45,7 @@ export default function Project({ params }: { params: { id: string } }) {
     isLoading: tasksIsLoading,
     error: tasksError,
   } = useQuery({
-    queryKey: ["tasks"],
+    queryKey: ["tasks", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
       return data.tasks as Task[];
@@ -87,7 +87,7 @@ export default function Project({ params }: { params: { id: string } }) {
             <TaskOverview tasks={tasks} />
             <div className="flex space-x-4 items-start pt-5">
               <TaskChart tasks={tasks} />
-              <LatestTasks tasks={tasks} />
+              <LatestTasks projectId={projectId} tasks={tasks} />
             </div>
           </>
         ) : (
