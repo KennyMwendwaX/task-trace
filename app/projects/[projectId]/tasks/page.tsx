@@ -86,17 +86,32 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                   </TabsList>
                   <TabsContent value="all">
                     <div className="pt-4">
-                      <TaskTable data={tasks} columns={TableColumns} />
+                      <TaskTable
+                        data={tasks}
+                        columns={TableColumns}
+                        members={members}
+                        projectId={projectId}
+                      />
                     </div>
                   </TabsContent>
                   <TabsContent value="done">
                     <div className="pt-4">
-                      <TaskTable data={tasksDone} columns={TableColumns} />
+                      <TaskTable
+                        data={tasksDone}
+                        columns={TableColumns}
+                        members={members}
+                        projectId={projectId}
+                      />
                     </div>
                   </TabsContent>
                   <TabsContent value="todo">
                     <div className="pt-4">
-                      <TaskTable data={tasksTodo} columns={TableColumns} />
+                      <TaskTable
+                        data={tasksTodo}
+                        columns={TableColumns}
+                        members={members}
+                        projectId={projectId}
+                      />
                     </div>
                   </TabsContent>
                   <TabsContent value="inprogress">
@@ -104,12 +119,19 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                       <TaskTable
                         data={tasksInProgress}
                         columns={TableColumns}
+                        members={members}
+                        projectId={projectId}
                       />
                     </div>
                   </TabsContent>
                   <TabsContent value="canceled">
                     <div className="pt-4">
-                      <TaskTable data={tasksCanceled} columns={TableColumns} />
+                      <TaskTable
+                        data={tasksCanceled}
+                        columns={TableColumns}
+                        members={members}
+                        projectId={projectId}
+                      />
                     </div>
                   </TabsContent>
                 </Tabs>
@@ -123,7 +145,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     No tasks added
                   </h3>
                   <p className="mb-4 mt-2 text-lg text-muted-foreground">
-                    You have not added any tasks. Add one below.
+                    You have not added any tasks. Add one below.{" "}
                   </p>
                   <AddTaskModal projectId={projectId} members={members} />
                 </div>

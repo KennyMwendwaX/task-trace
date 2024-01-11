@@ -31,15 +31,20 @@ import { Task } from "@/lib/schema/TaskSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
+import { Member } from "@/lib/schema/UserSchema";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  members: Member[];
+  projectId: string;
 }
 
 export default function TaskTable<TData, TValue>({
   columns,
   data,
+  members,
+  projectId,
 }: TaskTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -74,7 +79,7 @@ export default function TaskTable<TData, TValue>({
     name: task.name,
     status: task.status,
     priority: task.priority,
-    assignedTo: task.assignedTo,
+    assignedTo: task.memberId,
     due_date: format(task.due_date, "dd/MM/yyyy"),
   }));
 
@@ -93,7 +98,7 @@ export default function TaskTable<TData, TValue>({
           <TableToolbar table={table} />
 
           <div className="flex items-center space-x-2">
-            <AddTaskModal />
+            <AddTaskModal projectId={projectId} members={members} />
             <CSVLink
               data={csvData}
               headers={headers}

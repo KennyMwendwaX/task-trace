@@ -86,15 +86,13 @@ export default function AddTaskModal({ projectId, members }: Props) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {
       console.log(error);
     },
   });
-
-  console.log(members);
 
   async function onSubmit(values: TaskFormValues) {
     addTask(values);
