@@ -14,10 +14,10 @@ export async function PUT(
 ) {
   const taskId = params.taskId;
 
-  const req = await request.json();
+  const priority = await request.json();
 
   // Parse the request body using the requestSchema
-  const result = requestSchema.safeParse({ req });
+  const result = requestSchema.safeParse({ priority });
 
   if (!result.success)
     return NextResponse.json(
@@ -25,15 +25,13 @@ export async function PUT(
       { status: 400 }
     );
 
-  const { priority } = result.data;
-
   try {
     const updatedTask = await prisma.task.update({
       where: {
         id: taskId,
       },
       data: {
-        priority: priority,
+        priority: result.data.priority,
       },
     });
 

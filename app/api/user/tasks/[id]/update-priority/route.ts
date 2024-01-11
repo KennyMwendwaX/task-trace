@@ -10,16 +10,16 @@ const requestSchema = z.object({
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { taskId: string } }
 ) {
-  const id = params.id;
+  const taskId = params.taskId;
 
   const priority = await request.json();
 
   // Parse the request body using the requestSchema
-  const validatedData = requestSchema.parse({ priority });
+  const result = requestSchema.safeParse({ priority });
 
-  if (!validatedData)
+  if (!result.success)
     return NextResponse.json(
       { message: "Invalid request data" },
       { status: 400 }
@@ -28,10 +28,10 @@ export async function PUT(
   try {
     const updatedTask = await prisma.task.update({
       where: {
-        id: id,
+        id: taskId,
       },
       data: {
-        priority: validatedData.priority,
+        priority: result.data.priority,
       },
     });
 
