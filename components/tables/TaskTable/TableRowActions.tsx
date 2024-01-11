@@ -39,18 +39,21 @@ export default function TableRowActions<TData>({
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async () => {
       const options = {
         method: "DELETE",
       };
-      const response = await fetch(`/api/user/tasks/${id}/delete`, options);
+      const response = await fetch(
+        `/api/projects/${projectId}/tasks/${task.id}/delete`,
+        options
+      );
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {
@@ -114,8 +117,8 @@ export default function TableRowActions<TData>({
     },
   });
 
-  const taskDelete = async (id: string) => {
-    deleteTask(id);
+  const taskDelete = async () => {
+    deleteTask();
   };
 
   const handleStatusChange = async (status: string) => {
@@ -188,7 +191,7 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <button
-              onClick={() => taskDelete(task.id)}
+              onClick={() => taskDelete()}
               className="flex items-center cursor-pointer">
               <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
               Delete
