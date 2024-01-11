@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { projectId: string } }
 ) {
-  const projectId = params.id;
+  const projectId = params.projectId;
 
   if (!projectId)
     return NextResponse.json(
