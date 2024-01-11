@@ -25,10 +25,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
+  projectId: string;
 }
 
 export default function TableRowActions<TData>({
   row,
+  projectId,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
   const task = taskSchema.parse(row.original);
@@ -67,7 +69,7 @@ export default function TableRowActions<TData>({
         body: JSON.stringify(status),
       };
       const response = await fetch(
-        `/api/user/tasks/${task.id}/update-status`,
+        `/api/projects/${projectId}/tasks/${task.id}/update-status`,
         options
       );
       if (!response.ok) {
@@ -76,7 +78,7 @@ export default function TableRowActions<TData>({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {
@@ -95,7 +97,7 @@ export default function TableRowActions<TData>({
         body: JSON.stringify(priority),
       };
       const response = await fetch(
-        `/api/user/tasks/${task.id}/update-priority`,
+        `/api/projects/${projectId}/tasks/${task.id}/update-priority`,
         options
       );
       if (!response.ok) {
@@ -104,7 +106,7 @@ export default function TableRowActions<TData>({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {

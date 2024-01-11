@@ -55,8 +55,6 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
 
   const members = membersData || [];
 
-  console.log(members);
-
   return (
     <>
       <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
@@ -89,7 +87,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     <div className="pt-4">
                       <TaskTable
                         data={tasks}
-                        columns={TableColumns}
+                        columns={TableColumns({ projectId })}
                         members={members}
                         projectId={projectId}
                       />
@@ -99,7 +97,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     <div className="pt-4">
                       <TaskTable
                         data={tasksDone}
-                        columns={TableColumns}
+                        columns={TableColumns({ projectId })}
                         members={members}
                         projectId={projectId}
                       />
@@ -109,7 +107,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     <div className="pt-4">
                       <TaskTable
                         data={tasksTodo}
-                        columns={TableColumns}
+                        columns={TableColumns({ projectId })}
                         members={members}
                         projectId={projectId}
                       />
@@ -119,7 +117,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     <div className="pt-4">
                       <TaskTable
                         data={tasksInProgress}
-                        columns={TableColumns}
+                        columns={TableColumns({ projectId })}
                         members={members}
                         projectId={projectId}
                       />
@@ -129,7 +127,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     <div className="pt-4">
                       <TaskTable
                         data={tasksCanceled}
-                        columns={TableColumns}
+                        columns={TableColumns({ projectId })}
                         members={members}
                         projectId={projectId}
                       />

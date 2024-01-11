@@ -12,7 +12,13 @@ import TableRowActions from "./TableRowActions";
 import format from "date-fns/format";
 import Link from "next/link";
 
-export const TableColumns: ColumnDef<Task>[] = [
+interface TableColumnsProps {
+  projectId: string;
+}
+
+export const TableColumns = ({
+  projectId,
+}: TableColumnsProps): ColumnDef<Task>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -153,6 +159,6 @@ export const TableColumns: ColumnDef<Task>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <TableRowActions row={row} />,
+    cell: ({ row }) => <TableRowActions projectId={projectId} row={row} />,
   },
 ];
