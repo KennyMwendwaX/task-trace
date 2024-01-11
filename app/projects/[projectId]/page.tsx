@@ -58,8 +58,6 @@ export default function Project({ params }: { params: { projectId: string } }) {
 
   const isLoading = usersIsLoading || membersIsLoading || tasksIsLoading;
 
-  console.log(tasks);
-
   return (
     <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
       {isLoading ? (

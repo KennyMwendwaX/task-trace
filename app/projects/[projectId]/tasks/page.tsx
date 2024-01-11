@@ -13,7 +13,6 @@ import { Member } from "@/lib/schema/UserSchema";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
-  console.log(projectId);
 
   const {
     data: tasksData,
@@ -55,6 +54,8 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
 
   const members = membersData || [];
+
+  console.log(members);
 
   return (
     <>

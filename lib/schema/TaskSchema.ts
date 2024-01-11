@@ -50,7 +50,7 @@ export const taskFormSchema = taskSchema.omit({
   createdAt: true,
   updatedAt: true,
   userId: true,
-  memberUsername: true,
+  memberName: true,
 });
 
 export type Task = z.infer<typeof taskSchema>;

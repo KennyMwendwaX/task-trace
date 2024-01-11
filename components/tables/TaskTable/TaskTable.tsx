@@ -91,6 +91,8 @@ export default function TaskTable<TData, TValue>({
     { label: "Due Date", key: "due_date" },
   ];
 
+  console.log(projectId);
+
   return (
     <>
       <div className="space-y-4">

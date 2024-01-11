@@ -285,6 +285,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                             </Command>
                           </PopoverContent>
                         </Popover>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
