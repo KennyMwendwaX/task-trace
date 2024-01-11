@@ -29,7 +29,7 @@ export const taskSchema = z.object({
     required_error: "Member is required",
     invalid_type_error: "Member must be a string",
   }),
-  memberUsername: z.string({
+  memberName: z.string({
     required_error: "Name is required",
     invalid_type_error: "Name must be a string",
   }),
@@ -50,6 +50,7 @@ export const taskFormSchema = taskSchema.omit({
   createdAt: true,
   updatedAt: true,
   userId: true,
+  memberUsername: true,
 });
 
 export type Task = z.infer<typeof taskSchema>;

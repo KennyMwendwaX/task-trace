@@ -79,7 +79,7 @@ export default function TaskTable<TData, TValue>({
     name: task.name,
     status: task.status,
     priority: task.priority,
-    assignedTo: task.memberId,
+    assignedTo: task.memberName,
     due_date: format(task.due_date, "dd/MM/yyyy"),
   }));
 

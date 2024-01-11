@@ -139,7 +139,7 @@ export const TableColumns: ColumnDef<Task>[] = [
     header: () => <TableColumnHeader name="Assigned To" />,
     cell: ({ row }) => {
       const task = taskSchema.parse(row.original);
-      return <div>{task.memberId}</div>;
+      return <div>{task.memberName}</div>;
     },
   },
   {

@@ -85,15 +85,13 @@ export default function AddMemberModal({ projectId, users }: Props) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["members"],
+        queryKey: ["members", projectId],
       });
     },
     onError: (error) => {
       console.log(error);
     },
   });
-
-  console.log(users);
 
   async function onSubmit(values: MemberFormValues) {
     addMember(values);
@@ -173,6 +171,7 @@ export default function AddMemberModal({ projectId, users }: Props) {
                             </Command>
                           </PopoverContent>
                         </Popover>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
