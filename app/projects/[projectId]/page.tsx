@@ -13,8 +13,8 @@ import { Member, User } from "@/lib/schema/UserSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiUserPlus } from "react-icons/fi";
 
-export default function Project({ params }: { params: { id: string } }) {
-  const projectId = params.id;
+export default function Project({ params }: { params: { projectId: string } }) {
+  const projectId = params.projectId;
 
   const {
     data: usersData,

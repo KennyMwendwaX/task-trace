@@ -11,8 +11,8 @@ import { MdOutlineAddTask } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Member } from "@/lib/schema/UserSchema";
 
-export default function Tasks({ params }: { params: { id: string } }) {
-  const projectId = params.id;
+export default function Tasks({ params }: { params: { projectId: string } }) {
+  const projectId = params.projectId;
   console.log(projectId);
 
   const {
