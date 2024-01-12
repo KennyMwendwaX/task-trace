@@ -11,7 +11,8 @@ export default function Task({ params }: { params: { taskId: string } }) {
   const { data, isLoading, error } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/user/tasks/${taskId}`);
+      // ! Add correct api route url
+      const { data } = await axios.get(`/api/projects/${taskId}`);
       return data.task as Task;
     },
   });
@@ -20,7 +21,7 @@ export default function Task({ params }: { params: { taskId: string } }) {
 
   return (
     <>
-      <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:px-6 md:pt-20 pb-4">
         {isLoading ? (
           <Loading />
         ) : (
@@ -34,7 +35,7 @@ export default function Task({ params }: { params: { taskId: string } }) {
             )}
           </>
         )}
-      </div>
+      </main>
     </>
   );
 }

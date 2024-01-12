@@ -57,7 +57,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:px-6 md:pt-20 pb-4">
         {tasksIsLoading ? (
           <Loading />
         ) : (
@@ -152,7 +152,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
             )}
           </>
         )}
-      </div>
+      </main>
     </>
   );
 }
