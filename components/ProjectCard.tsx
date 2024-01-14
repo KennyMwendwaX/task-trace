@@ -14,12 +14,11 @@ import Link from "next/link";
 import { IoChevronForward } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
 import { statuses } from "@/lib/config";
+import format from "date-fns/format";
 
 interface Props {
   project: Project;
 }
-
-// ! add dates
 
 export default function ProjectCard({ project }: Props) {
   const {
@@ -51,7 +50,12 @@ export default function ProjectCard({ project }: Props) {
                 <LuUser2 className="w-5 h-5" />
               </AvatarFallback>
             </Avatar>
-            <div>{owner?.name}</div>
+            <div className="flex flex-col">
+              <div>{owner?.name}</div>
+              <div className="text-xs text-gray-500">
+                {format(new Date(project.createdAt), "dd/MM/yyyy")}
+              </div>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-2">
