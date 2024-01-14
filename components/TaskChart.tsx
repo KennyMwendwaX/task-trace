@@ -75,12 +75,12 @@ export default function TaskChart({ tasks }: Props) {
     <>
       <div
         className="rounded-lg border bg-card text-card-foreground shadow-sm"
-        style={{ width: "40%", height: 412 }}>
+        style={{ width: "40%", height: 360 }}>
         <div className="text-xl font-semibold leading-none tracking-tight p-2">
           Task Analytics Chart
         </div>
-        <ResponsiveContainer>
-          <PieChart>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart style={{ top: 20 }}>
             <Pie
               dataKey="tasks"
               data={statusChartData}
@@ -91,8 +91,7 @@ export default function TaskChart({ tasks }: Props) {
               outerRadius={100}
             />
             <Tooltip />
-            <Legend align="center" layout="centric" />
-            {/* <Legend align="right" verticalAlign="middle" layout="vertical" /> */}
+            <Legend />
           </PieChart>
         </ResponsiveContainer>
       </div>

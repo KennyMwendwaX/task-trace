@@ -19,7 +19,7 @@ export default function LatestTasks({ projectId, tasks }: Props) {
       createdAt: new Date(task.createdAt),
     }))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 6);
+    .slice(0, 5);
 
   return (
     <>
