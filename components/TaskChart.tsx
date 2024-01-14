@@ -91,7 +91,8 @@ export default function TaskChart({ tasks }: Props) {
               outerRadius={100}
             />
             <Tooltip />
-            <Legend align="right" verticalAlign="middle" layout="vertical" />
+            <Legend align="center" layout="centric" />
+            {/* <Legend align="right" verticalAlign="middle" layout="vertical" /> */}
           </PieChart>
         </ResponsiveContainer>
       </div>

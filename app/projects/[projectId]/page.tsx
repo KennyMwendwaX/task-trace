@@ -59,7 +59,7 @@ export default function Project({ params }: { params: { projectId: string } }) {
   const isLoading = usersIsLoading || membersIsLoading || tasksIsLoading;
 
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:px-6 md:pt-20 pb-4">
+    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:px-6 md:pt-20 pb-4">
       {isLoading ? (
         <Loading />
       ) : !members || members.length == 0 ? (
@@ -86,9 +86,9 @@ export default function Project({ params }: { params: { projectId: string } }) {
         </div>
       ) : (
         <>
-          <h2 className="text-3xl font-bold tracking-tight pb-2">Dashboard</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <TaskOverview tasks={tasks} />
-          <div className="flex space-x-4 items-start pt-5">
+          <div className="flex space-x-4 items-start">
             <TaskChart tasks={tasks} />
             <LatestTasks projectId={projectId} tasks={tasks} />
           </div>
