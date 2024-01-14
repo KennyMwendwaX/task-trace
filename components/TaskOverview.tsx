@@ -14,17 +14,28 @@ interface Props {
 
 export default function TaskOverview({ tasks }: Props) {
   const tasksDone = tasks.filter((task) => task.status === "DONE");
-  const tasks_done_percentage = (tasksDone.length / tasks.length) * 100;
+  const tasks_done_percentage = (
+    (tasksDone.length / tasks.length) *
+    100
+  ).toFixed(2);
 
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
-  const tasks_todo_percentage = (tasksTodo.length / tasks.length) * 100;
+  const tasks_todo_percentage = (
+    (tasksTodo.length / tasks.length) *
+    100
+  ).toFixed(2);
 
   const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
-  const tasks_inProgress_percentage =
-    (tasksInProgress.length / tasks.length) * 100;
+  const tasks_inProgress_percentage = (
+    (tasksInProgress.length / tasks.length) *
+    100
+  ).toFixed(2);
 
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
-  const tasks_canceled_percentage = (tasksCanceled.length / tasks.length) * 100;
+  const tasks_canceled_percentage = (
+    (tasksCanceled.length / tasks.length) *
+    100
+  ).toFixed(2);
 
   return (
     <>
