@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { userSchema } from "@/lib/schema/UserSchema";
+import { memberSchema } from "@/lib/schema/UserSchema";
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Row } from "@tanstack/react-table";
@@ -21,7 +21,7 @@ export default function TableRowActions<TData>({
   row,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
-  const user = userSchema.parse(row.original);
+  const user = memberSchema.parse(row.original);
 
   const {
     mutate: removeUser,

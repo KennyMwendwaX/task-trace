@@ -14,7 +14,7 @@ export default function Team({ params }: { params: { projectId: string } }) {
     queryKey: ["members"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/members`);
-      return data.users as Member[];
+      return data.members as Member[];
     },
   });
 
@@ -23,6 +23,7 @@ export default function Team({ params }: { params: { projectId: string } }) {
       ?.map((member) => ({
         ...member,
         createdAt: new Date(member.createdAt),
+        updatedAt: new Date(member.updatedAt),
         tasks: member.tasks.map((task) => ({
           ...task,
           due_date: new Date(task.due_date),

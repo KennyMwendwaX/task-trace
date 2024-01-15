@@ -19,7 +19,11 @@ export async function GET(
         id: projectId,
       },
       include: {
-        members: true,
+        members: {
+          include: {
+            tasks: true,
+          },
+        },
       },
     });
 
