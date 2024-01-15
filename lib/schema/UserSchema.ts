@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { taskSchema } from "./TaskSchema";
 
 export const userSchema = z.object({
   id: z.string(),
@@ -72,6 +73,7 @@ export const memberSchema = userSchema
     userName: z.string(),
     role: z.enum(["MEMBER", "ADMIN"]),
     updatedAt: z.date(),
+    tasks: z.array(taskSchema),
   });
 
 export const memberFormSchema = memberSchema.omit({
@@ -80,6 +82,7 @@ export const memberFormSchema = memberSchema.omit({
   createdAt: true,
   updatedAt: true,
   projectId: true,
+  tasks: true,
 });
 
 export type User = z.infer<typeof userSchema>;
