@@ -4,15 +4,17 @@ import UserTable from "@/components/tables/UserTable/UserTable";
 import { TableColumns } from "@/components/tables/UserTable/TableColumns";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { User } from "@/lib/schema/UserSchema";
+import type { Member, User } from "@/lib/schema/UserSchema";
 import Loading from "@/components/Loading";
 
-export default function Team() {
+export default function Team({ params }: { params: { projectId: string } }) {
+  const projectId = params.projectId;
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["members"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
+      const { data } = await axios.get(`/api/projects/${projectId}/members`);
+      return data.users as Member[];
     },
   });
 
