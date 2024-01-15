@@ -27,7 +27,7 @@ import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
 // import AddMemberModal from "@/components/AddMemberModal";
-import { User } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/UserSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { CSVLink } from "react-csv";
 
@@ -36,7 +36,7 @@ interface UserTableProps<TData, TValue> {
   data: TData[];
 }
 
-export default function UserTable<TData, TValue>({
+export default function TeamTable<TData, TValue>({
   columns,
   data,
 }: UserTableProps<TData, TValue>) {
@@ -67,24 +67,24 @@ export default function UserTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const users = data as User[];
+  const members = data as Member[];
 
   type Status = "TO_DO" | "IN_PROGRESS" | "DONE" | "CANCELED";
 
-  const getTasksByStatus = (user: User, status: Status) => {
+  const getTasksByStatus = (user: Member, status: Status) => {
     const tasks = user.tasks;
     const tasksStatusList = tasks.filter((task) => task.status === status);
     return tasksStatusList.length;
   };
 
-  const csvData = users.map((user) => ({
-    name: user.name,
-    email: user.email,
-    tasks: user.tasks.length,
-    tasksDone: getTasksByStatus(user, "DONE"),
-    tasksTodo: getTasksByStatus(user, "TO_DO"),
-    tasksInProgress: getTasksByStatus(user, "IN_PROGRESS"),
-    tasksCanceled: getTasksByStatus(user, "CANCELED"),
+  const csvData = members.map((member) => ({
+    name: member.userName,
+    email: member.userId,
+    tasks: member.tasks.length,
+    tasksDone: getTasksByStatus(member, "DONE"),
+    tasksTodo: getTasksByStatus(member, "TO_DO"),
+    tasksInProgress: getTasksByStatus(member, "IN_PROGRESS"),
+    tasksCanceled: getTasksByStatus(member, "CANCELED"),
   }));
 
   const headers = [

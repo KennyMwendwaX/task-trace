@@ -1,11 +1,11 @@
 "use client";
 
-import UserTable from "@/components/tables/UserTable/UserTable";
-import { TableColumns } from "@/components/tables/UserTable/TableColumns";
+import { TableColumns } from "@/components/tables/TeamTable/TableColumns";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { Member, User } from "@/lib/schema/UserSchema";
+import type { Member } from "@/lib/schema/UserSchema";
 import Loading from "@/components/Loading";
+import TeamTable from "@/components/tables/TeamTable/TeamTable";
 
 export default function Team({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
@@ -39,7 +39,7 @@ export default function Team({ params }: { params: { projectId: string } }) {
         <div className="text-xl text-muted-foreground">
           Here&apos;s a list of your team!
         </div>
-        <UserTable data={members} columns={TableColumns} />
+        <TeamTable data={members} columns={TableColumns} />
       </div>
     </>
   );
