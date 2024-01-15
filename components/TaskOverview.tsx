@@ -37,6 +37,13 @@ export default function TaskOverview({ tasks }: Props) {
     100
   ).toFixed(2);
 
+  function formatPercentage(value: string): string {
+    const numericValue = parseFloat(value);
+    return Number.isInteger(numericValue)
+      ? numericValue.toString()
+      : numericValue.toFixed(2);
+  }
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -48,7 +55,7 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksDone.length}</div>
             <p className="text-sm text-muted-foreground">
-              {tasks_done_percentage}% of all tasks
+              {formatPercentage(tasks_done_percentage)}% of all tasks
             </p>
           </CardContent>
         </Card>
@@ -60,7 +67,7 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksTodo.length}</div>
             <p className="text-sm text-muted-foreground">
-              {tasks_todo_percentage}% of all tasks
+              {formatPercentage(tasks_todo_percentage)}% of all tasks
             </p>
           </CardContent>
         </Card>
@@ -72,7 +79,7 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksInProgress.length}</div>
             <p className="text-sm text-muted-foreground">
-              {tasks_inProgress_percentage}% of all tasks
+              {formatPercentage(tasks_inProgress_percentage)}% of all tasks
             </p>
           </CardContent>
         </Card>
@@ -84,7 +91,7 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksCanceled.length}</div>
             <p className="text-sm text-muted-foreground">
-              {tasks_canceled_percentage}% of all tasks
+              {formatPercentage(tasks_canceled_percentage)}% of all tasks
             </p>
           </CardContent>
         </Card>
