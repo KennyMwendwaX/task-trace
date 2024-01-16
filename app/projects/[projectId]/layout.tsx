@@ -5,6 +5,19 @@ export const metadata: Metadata = {
   description: "Project page",
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { projectId: string };
+}) {
+  const projectId = params.projectId;
+
+  const project = fetch(`/api/projects/${projectId}`);
+  return (
+    <>
+      <div>{children}</div>;
+    </>
+  );
 }
