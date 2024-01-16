@@ -11,15 +11,12 @@ import { RxDashboard } from "react-icons/rx";
 export default function Sidebar() {
   return (
     <>
-      <aside
-        id="default-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-        aria-label="Sidenav">
-        <div className="flex-1 justify-center pt-[80px] py-2">
-          <nav className="grid items-start px-4 text-sm font-medium">
+      <aside className="flex h-full max-h-screen flex-col gap-2 pt-[70px]">
+        <div className="flex-1 overflow-auto py-2">
+          <nav className="grid gap-2 items-start px-4 text-sm font-medium">
             <Link
               href="/dashboard"
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50">
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-50">
               <RxDashboard className="w-4 h-4" />
               Dashboard
             </Link>
@@ -31,14 +28,14 @@ export default function Sidebar() {
             </Link>
             <Link
               href="/team"
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50">
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-50">
               <LuUsers className="h-4 w-4" />
               Team
             </Link>
             <Link
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#">
-              <LuCalendar className="h-4 w-4" />
+              href="#"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-50">
+              <CalendarIcon className="h-4 w-4" />
               Schedule
             </Link>
             <div className="absolute bottom-2 px-8 flex items-center space-x-2 bg-slate-200 rounded-xl">
