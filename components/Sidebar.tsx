@@ -13,7 +13,7 @@ export default function Sidebar() {
     <>
       <aside className="flex h-full max-h-screen flex-col gap-2 pt-[70px]">
         <div className="flex-1 overflow-auto py-2">
-          <nav className="grid gap-2 items-start px-4 text-sm font-medium">
+          <nav className="grid gap-1 items-start px-4 text-sm font-medium">
             <Link
               href="/dashboard"
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-gray-500 transition-all hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-50">
