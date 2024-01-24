@@ -4,9 +4,9 @@ export default async function Dashboard() {
   const session = await auth();
   return (
     <>
-      <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
+      <main className="p-4 md:ml-64 h-auto pt-20">
         {JSON.stringify(session?.user)}
-      </div>
+      </main>
     </>
   );
 }

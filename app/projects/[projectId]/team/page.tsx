@@ -35,13 +35,13 @@ export default function Team({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <div className="container mx-auto mt-4 px-12 pb-5 pt-12">
+      <main className="p-4 md:ml-64 h-auto pt-20">
         <div className="text-3xl font-bold tracking-tight">Team Members</div>
         <div className="text-xl text-muted-foreground">
           Here&apos;s a list of your team!
         </div>
         <TeamTable data={members} columns={TableColumns} />
-      </div>
+      </main>
     </>
   );
 }

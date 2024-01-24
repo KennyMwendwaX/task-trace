@@ -21,7 +21,7 @@ export default function Task({ params }: { params: { taskId: string } }) {
 
   return (
     <>
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:px-6 md:pt-20 pb-4">
+      <main className="p-4 md:ml-64 h-auto pt-20">
         {isLoading ? (
           <Loading />
         ) : (
