@@ -59,7 +59,7 @@ export default function Project({ params }: { params: { projectId: string } }) {
   const isLoading = usersIsLoading || membersIsLoading || tasksIsLoading;
 
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:px-6 md:pt-20 pb-4">
+    <main className="flex flex-1 flex-col gap-4 p-4 md:px-6 md:pt-20 pb-4">
       {isLoading ? (
         <Loading />
       ) : !members || members.length == 0 ? (
