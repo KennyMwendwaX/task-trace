@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const excludePaths = ["/", "/signup", "/signin", "/ui"];
+  const excludePaths = ["/", "/signup", "/signin"];
 
   const excludedPaths = excludePaths.includes(pathname);
 
