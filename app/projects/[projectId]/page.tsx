@@ -85,14 +85,14 @@ export default function Project({ params }: { params: { projectId: string } }) {
           <AddTaskModal projectId={projectId} members={members} />
         </div>
       ) : (
-        <>
+        <div className="space-y-4">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <TaskOverview tasks={tasks} />
           <div className="flex space-x-4 items-start">
             <TaskChart tasks={tasks} />
             <LatestTasks projectId={projectId} tasks={tasks} />
           </div>
-        </>
+        </div>
       )}
     </main>
   );
