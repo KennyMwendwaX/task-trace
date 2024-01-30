@@ -36,17 +36,22 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import format from "date-fns/format";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { Member } from "@/lib/schema/UserSchema";
+import dynamic from "next/dynamic";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 export default function NewTask({ params }: { params: { projectId: string } }) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
+
   const queryClient = useQueryClient();
 
   const projectId = params.projectId;
@@ -281,7 +286,7 @@ export default function NewTask({ params }: { params: { projectId: string } }) {
                   <FormControl>
                     <SimpleMDE
                       id="description"
-                      className="focus:border-2 focus:border-blue-600"
+                      className="focus:border-2 focus:border-blue-600 z-50"
                       placeholder="Task description"
                       {...field}
                     />
