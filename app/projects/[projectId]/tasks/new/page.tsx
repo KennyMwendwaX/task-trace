@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -105,7 +104,7 @@ export default function NewTask({ params }: { params: { projectId: string } }) {
 
       <Form {...form}>
         <form
-          className="space-y-3 pt-4 px-3"
+          className="space-y-3 pt-4 px-16"
           onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
@@ -286,7 +285,7 @@ export default function NewTask({ params }: { params: { projectId: string } }) {
                   <FormControl>
                     <SimpleMDE
                       id="description"
-                      className="focus:border-2 focus:border-blue-600 z-50"
+                      className="focus:border-2 focus:border-blue-600"
                       placeholder="Task description"
                       {...field}
                     />
