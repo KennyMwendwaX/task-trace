@@ -78,7 +78,9 @@ export const TableColumns = ({
           </Badge>
 
           <span className="max-w-[500px] truncate font-medium">
-            <Link className="hover:underline" href={`/tasks/${task.id}`}>
+            <Link
+              className="hover:underline"
+              href={`/tasks/${projectId}/${task.id}`}>
               {row.getValue("name")}
             </Link>
           </span>
