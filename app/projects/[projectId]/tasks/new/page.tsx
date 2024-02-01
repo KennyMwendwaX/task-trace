@@ -35,12 +35,12 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import "easymde/dist/easymde.min.css";
 import format from "date-fns/format";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { Member } from "@/lib/schema/UserSchema";
 import dynamic from "next/dynamic";
+import "easymde/dist/easymde.min.css";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -95,8 +95,7 @@ export default function NewTask({ params }: { params: { projectId: string } }) {
   const members = membersData || [];
 
   async function onSubmit(values: TaskFormValues) {
-    // addTask(values);
-    console.log(values);
+    addTask(values);
   }
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
@@ -287,6 +286,7 @@ export default function NewTask({ params }: { params: { projectId: string } }) {
                       id="description"
                       className="focus:border-2 focus:border-blue-600"
                       placeholder="Task description"
+                      options={{ maxHeight: "80px" }}
                       {...field}
                     />
                   </FormControl>

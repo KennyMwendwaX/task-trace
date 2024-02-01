@@ -52,6 +52,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Member } from "@/lib/schema/UserSchema";
+import dynamic from "next/dynamic";
+import "easymde/dist/easymde.min.css";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 interface Props {
   projectId: string;
@@ -108,7 +114,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
             <span>New Task</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>New Task</DialogTitle>
             {/* <DialogDescription>
@@ -298,6 +304,26 @@ export default function AddTaskModal({ projectId, members }: Props) {
                       <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
+                          <SimpleMDE
+                            id="description"
+                            className="focus:border-2 focus:border-blue-600"
+                            placeholder="Task description"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* <div>
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
                           <Textarea
                             id="description"
                             className="focus:border-2 focus:border-blue-600"
@@ -310,7 +336,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                       </FormItem>
                     )}
                   />
-                </div>
+                </div> */}
                 <DialogFooter>
                   <Button type="submit">Save Task</Button>
                 </DialogFooter>
