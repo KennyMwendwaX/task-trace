@@ -11,7 +11,7 @@ export async function GET(
   if (!projectId)
     return NextResponse.json(
       { message: "No project Id found" },
-      { status: 200 }
+      { status: 404 }
     );
 
   try {

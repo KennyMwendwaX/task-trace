@@ -5,14 +5,21 @@ import { Task, taskSchema } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export default function Task({ params }: { params: { taskId: string } }) {
+export default function Task({
+  params,
+}: {
+  params: { projectId: string; taskId: string };
+}) {
+  const projectId = params.projectId;
   const taskId = params.taskId;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
       // ! Add correct api route url
-      const { data } = await axios.get(`/api/projects/${taskId}`);
+      const { data } = await axios.get(
+        `/api/projects/${projectId}/tasks/${taskId}`
+      );
       return data.task as Task;
     },
   });

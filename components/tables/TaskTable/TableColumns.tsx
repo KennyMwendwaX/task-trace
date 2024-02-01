@@ -80,7 +80,7 @@ export const TableColumns = ({
           <span className="max-w-[500px] truncate font-medium">
             <Link
               className="hover:underline"
-              href={`/tasks/${projectId}/${task.id}`}>
+              href={`/projects/${projectId}/tasks/${task.id}`}>
               {row.getValue("name")}
             </Link>
           </span>
