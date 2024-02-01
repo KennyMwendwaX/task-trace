@@ -114,7 +114,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
             <span>New Task</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto scrollbar-w-2 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-gray-400 scrollbar-track-white">
           <DialogHeader>
             <DialogTitle>New Task</DialogTitle>
             {/* <DialogDescription>
