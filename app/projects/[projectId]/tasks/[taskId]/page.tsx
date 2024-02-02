@@ -1,7 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { Task, taskSchema } from "@/lib/schema/TaskSchema";
+import { Task } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -16,7 +16,6 @@ export default function Task({
   const { data, isLoading, error } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
-      // ! Add correct api route url
       const { data } = await axios.get(
         `/api/projects/${projectId}/tasks/${taskId}`
       );
@@ -38,7 +37,9 @@ export default function Task({
                 Task was not found
               </div>
             ) : (
-              <div className="text-2xl font-bold tracking-tight">Task</div>
+              <div className="text-2xl font-bold tracking-tight">
+                {task.name}
+              </div>
             )}
           </>
         )}

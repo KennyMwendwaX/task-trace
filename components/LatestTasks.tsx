@@ -62,7 +62,11 @@ export default function LatestTasks({ projectId, tasks }: Props) {
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                      {task.name}
+                      <Link
+                        className="hover:underline"
+                        href={`/projects/${projectId}/tasks/${task.id}`}>
+                        {task.name}
+                      </Link>
                     </th>
                     <td className="px-6 py-4">
                       {format(task.due_date, "dd/MM/yyyy")}
