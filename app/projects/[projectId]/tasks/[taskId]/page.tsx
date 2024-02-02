@@ -6,6 +6,8 @@ import { Task } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import format from "date-fns/format";
+import MarkdownPreview from "@uiw/react-markdown-preview";
+import rehypeSanitize from "rehype-sanitize";
 
 export default function Task({
   params,
@@ -48,11 +50,44 @@ export default function Task({
   const status = statuses.find((status) => status.value === task.status);
   const taskCreatedAt = format(new Date(task.createdAt), "dd/MM/yyyy");
 
+  // Added a plugin to sanitize the markdown
+  const rehypePlugins = [rehypeSanitize];
+
+  const markdown = `
+  # Issue Title
+
+## Description
+Provide a clear and concise description of the issue here.
+
+## Steps to Reproduce
+1. First step to reproduce the issue
+2. Second step to reproduce the issue
+3. ...
+
+## Expected Behavior
+Explain what you expected to happen.
+
+## Actual Behavior
+Explain what actually happened.
+
+## Screenshots
+If applicable, add screenshots to help explain your problem.
+
+## Environment
+- Operating System: [e.g. Windows 10, macOS 12.1, Ubuntu 20.04]
+- Browser (if applicable): [e.g. Chrome 98.0, Firefox 97.0]
+- Application Version/Commit: [e.g. v1.2.3, commit hash]
+
+## Additional Information
+Add any other context about the problem here.
+
+  `;
+
   return (
     <>
       <main className="p-4 md:ml-64 h-auto pt-20">
         <div className="flex items-start space-x-4">
-          <div className="w-2/3">
+          <div className="w-[650px]">
             <div className="text-2xl font-bold tracking-tight">{task.name}</div>
             <div className="flex items-center space-x-3 pt-3">
               {status ? (
@@ -78,6 +113,16 @@ export default function Task({
               ) : null}
 
               <span>Task Created on {taskCreatedAt}</span>
+            </div>
+            <div className="pt-5">
+              <MarkdownPreview
+                className="border border-black rounded-xl p-3"
+                source={markdown}
+                rehypePlugins={rehypePlugins}
+                wrapperElement={{
+                  "data-color-mode": "light",
+                }}
+              />
             </div>
           </div>
           <div>
