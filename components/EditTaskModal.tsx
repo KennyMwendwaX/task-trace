@@ -38,7 +38,6 @@ import { useForm } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
-import { Textarea } from "@/components/ui/textarea";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -49,12 +48,13 @@ import {
 } from "@/components/ui/command";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
+import { Task, TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Member } from "@/lib/schema/UserSchema";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "./ui/scroll-area";
+import { FiEdit } from "react-icons/fi";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -62,12 +62,27 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 
 interface Props {
   projectId: string;
+  memberId: string;
   members: Member[];
+  task: Task;
 }
 
-export default function AddTaskModal({ projectId, members }: Props) {
+export default function EditTaskModal({
+  projectId,
+  memberId,
+  members,
+  task,
+}: Props) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
+    values: {
+      name: task.name,
+      label: task.priority,
+      priority: task.priority,
+      due_date: task.due_date,
+      memberId: memberId,
+      description: task.description,
+    },
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -77,13 +92,13 @@ export default function AddTaskModal({ projectId, members }: Props) {
   };
 
   const {
-    mutate: addTask,
+    mutate: updateTask,
     isPending,
     error,
   } = useMutation({
     mutationFn: async (values: TaskFormValues) => {
       const options = {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify(values),
       };
       const response = await fetch(`/api/projects/${projectId}/tasks`, options);
@@ -102,7 +117,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
   });
 
   async function onSubmit(values: TaskFormValues) {
-    addTask(values);
+    updateTask(values);
     toggleDialog();
   }
 
@@ -110,15 +125,14 @@ export default function AddTaskModal({ projectId, members }: Props) {
     <>
       <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
         <DialogTrigger asChild>
-          <Button className="flex items-center space-x-2 rounded-3xl">
-            <AiOutlinePlus className="w-4 h-4 text-white" />
-            <span>New Task</span>
+          <Button variant="outline" className="flex items-center w-full">
+            <FiEdit className="mr-1" />
+            Edit Task
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>New Task</DialogTitle>
-
+            <DialogTitle>Edit Task</DialogTitle>
             <ScrollArea className="h-[80vh]">
               <Form {...form}>
                 <form
@@ -315,8 +329,29 @@ export default function AddTaskModal({ projectId, members }: Props) {
                       )}
                     />
                   </div>
+                  {/* <div>
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            id="description"
+                            className="focus:border-2 focus:border-blue-600"
+                            placeholder="Task description"
+                            {...field}
+                            required
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div> */}
                   <DialogFooter>
-                    <Button type="submit">Save Task</Button>
+                    <Button type="submit">Update Task</Button>
                   </DialogFooter>
                 </form>
               </Form>

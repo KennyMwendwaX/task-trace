@@ -13,11 +13,12 @@ import rehypeHighlight from "rehype-highlight";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FiEdit, FiTrash } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { Member } from "@/lib/schema/UserSchema";
+import EditTaskModal from "@/components/EditTaskModal";
 
 export default function Task({
   params,
@@ -61,13 +62,30 @@ export default function Task({
   } = useQuery({
     queryKey: ["member", task?.memberId],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `/api/projects/${projectId}/members/${task?.memberId}`
-      );
-      return data.user as Member;
+      if (task?.memberId) {
+        const { data } = await axios.get(
+          `/api/projects/${projectId}/members/${task.memberId}`
+        );
+        return data.member as Member;
+      }
+      return null; // Return null if memberId is not available
     },
-    enabled: !!task?.memberId, // Only fetch when memberId is available
+    enabled: !!task, // Only fetch when task data is available
   });
+
+  const {
+    data: membersData,
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["members", projectId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}/members`);
+      return data.members as Member[];
+    },
+  });
+
+  const members = membersData || [];
 
   const isLoading = taskLoading || memberLoading;
 
@@ -159,10 +177,12 @@ export default function Task({
                   </span>
                 </div>
               </div>
-              <Button variant="outline" className="flex items-center w-full">
-                <FiEdit className="mr-1" />
-                Edit Task
-              </Button>
+              <EditTaskModal
+                projectId={projectId}
+                memberId={task.memberId}
+                members={members}
+                task={task}
+              />
               <Button
                 variant="destructive"
                 className="flex items-center w-full">
