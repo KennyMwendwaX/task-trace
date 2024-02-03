@@ -8,12 +8,20 @@ import axios from "axios";
 import format from "date-fns/format";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import rehypeSanitize from "rehype-sanitize";
+import rehypeStringify from "rehype-stringify";
+import rehypeHighlight from "rehype-highlight";
+import { useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 export default function Task({
   params,
 }: {
   params: { projectId: string; taskId: string };
 }) {
+  const [markdown, setMarkdown] = useState<string | null>(null);
+
   const projectId = params.projectId;
   const taskId = params.taskId;
 
@@ -26,6 +34,15 @@ export default function Task({
       return data.task as Task;
     },
   });
+
+  useEffect(() => {
+    fetch(
+      "https://raw.githubusercontent.com/kenny-mwendwa/go-restapi-crud/master/README.md"
+    )
+      .then((response) => response.text()) // Extract the text content from the response
+      .then((data) => setMarkdown(data)) // Set the Markdown content to state
+      .catch((error) => console.error("Error fetching Markdown:", error));
+  }, []);
 
   const task = data;
 
@@ -51,43 +68,13 @@ export default function Task({
   const taskCreatedAt = format(new Date(task.createdAt), "dd/MM/yyyy");
 
   // Added a plugin to sanitize the markdown
-  const rehypePlugins = [rehypeSanitize];
-
-  const markdown = `
-  # Issue Title
-
-## Description
-Provide a clear and concise description of the issue here.
-
-## Steps to Reproduce
-1. First step to reproduce the issue
-2. Second step to reproduce the issue
-3. ...
-
-## Expected Behavior
-Explain what you expected to happen.
-
-## Actual Behavior
-Explain what actually happened.
-
-## Screenshots
-If applicable, add screenshots to help explain your problem.
-
-## Environment
-- Operating System: [e.g. Windows 10, macOS 12.1, Ubuntu 20.04]
-- Browser (if applicable): [e.g. Chrome 98.0, Firefox 97.0]
-- Application Version/Commit: [e.g. v1.2.3, commit hash]
-
-## Additional Information
-Add any other context about the problem here.
-
-  `;
+  const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
   return (
     <>
       <main className="p-4 md:ml-64 h-auto pt-20">
         <div className="flex items-start space-x-4">
-          <div className="w-[650px]">
+          <div className="w-[850px]">
             <div className="text-2xl font-bold tracking-tight">{task.name}</div>
             <div className="flex items-center space-x-3 pt-3">
               {status ? (
@@ -112,21 +99,34 @@ Add any other context about the problem here.
                 </div>
               ) : null}
 
-              <span>Task Created on {taskCreatedAt}</span>
+              <span className="text-muted-foreground">
+                Task Created on {taskCreatedAt}
+              </span>
             </div>
-            <div className="pt-5">
+            <Card className="mt-5 p-3">
               <MarkdownPreview
-                className="border border-black rounded-xl p-3"
-                source={markdown}
+                // className="p-3"
+                source={markdown as string}
                 rehypePlugins={rehypePlugins}
                 wrapperElement={{
                   "data-color-mode": "light",
                 }}
               />
-            </div>
+            </Card>
           </div>
-          <div>
-            <div>Other div</div>
+          <div className="w-[350px]">
+            <div className="flex flex-col space-y-2">
+              <Button variant="outline" className="flex items-center w-full">
+                <FiEdit className="mr-1" />
+                Edit Task
+              </Button>
+              <Button
+                variant="destructive"
+                className="flex items-center w-full">
+                <FiTrash className="mr-1" />
+                Delete Task
+              </Button>
+            </div>
           </div>
         </div>
       </main>
