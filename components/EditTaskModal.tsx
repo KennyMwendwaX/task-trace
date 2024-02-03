@@ -101,14 +101,17 @@ export default function EditTaskModal({
         method: "PUT",
         body: JSON.stringify(values),
       };
-      const response = await fetch(`/api/projects/${projectId}/tasks`, options);
+      const response = await fetch(
+        `/api/projects/${projectId}/tasks/${task.id}`,
+        options
+      );
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["task", task.id],
       });
     },
     onError: (error) => {
