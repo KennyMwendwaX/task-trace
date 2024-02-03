@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LuUser2 } from "react-icons/lu";
+import { MdAccessTime } from "react-icons/md";
+import { Member } from "@/lib/schema/UserSchema";
 
 export default function Task({
   params,
@@ -27,16 +29,6 @@ export default function Task({
   const projectId = params.projectId;
   const taskId = params.taskId;
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["task", taskId],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        `/api/projects/${projectId}/tasks/${taskId}`
-      );
-      return data.task as Task;
-    },
-  });
-
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/kenny-mwendwa/go-restapi-crud/master/README.md"
@@ -46,7 +38,38 @@ export default function Task({
       .catch((error) => console.error("Error fetching Markdown:", error));
   }, []);
 
+  const {
+    data,
+    isLoading: taskLoading,
+    error,
+  } = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `/api/projects/${projectId}/tasks/${taskId}`
+      );
+      return data.task as Task;
+    },
+  });
+
   const task = data;
+
+  const {
+    data: member,
+    isLoading: memberLoading,
+    error: memberError,
+  } = useQuery({
+    queryKey: ["member", task?.memberId],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `/api/projects/${projectId}/members/${task?.memberId}`
+      );
+      return data.user as Member;
+    },
+    enabled: !!task?.memberId, // Only fetch when memberId is available
+  });
+
+  const isLoading = taskLoading || memberLoading;
 
   if (isLoading) {
     return (
@@ -67,7 +90,10 @@ export default function Task({
   }
 
   const status = statuses.find((status) => status.value === task.status);
-  const taskCreatedAt = format(new Date(task.createdAt), "dd/MM/yyyy");
+  const taskCreatedAt = format(
+    new Date(task.createdAt),
+    "dd MMM, yyyy • hh:ssb"
+  );
 
   // Added a plugin to sanitize the markdown
   const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
@@ -101,8 +127,9 @@ export default function Task({
                 </div>
               ) : null}
 
-              <span className="text-muted-foreground">
-                Task Created on {taskCreatedAt}
+              <span className="flex items-center text-muted-foreground">
+                <MdAccessTime className="mr-1 w-5 h-5" /> Task created on{" "}
+                {taskCreatedAt}
               </span>
             </div>
             <Card className="mt-5 p-3">
@@ -126,9 +153,9 @@ export default function Task({
                   </AvatarFallback>
                 </Avatar>
                 <div className="py-2 space-y-1">
-                  <div className="pt-1">John Doe</div>
+                  <div className="pt-1">{member?.userName}</div>
                   <span className="text-muted-foreground text-sm pb-1">
-                    johndoe@gmail.com
+                    {member?.role}
                   </span>
                 </div>
               </div>
