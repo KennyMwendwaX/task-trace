@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FiEdit, FiTrash } from "react-icons/fi";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LuUser2 } from "react-icons/lu";
 
 export default function Task({
   params,
@@ -116,6 +118,20 @@ export default function Task({
           </div>
           <div className="w-[350px]">
             <div className="flex flex-col space-y-2">
+              <div className="px-6 flex items-center space-x-2 bg-slate-200 rounded-xl">
+                <Avatar>
+                  <AvatarImage src={""} />
+                  <AvatarFallback>
+                    <LuUser2 className="w-5 h-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="py-2 space-y-1">
+                  <div className="pt-1">John Doe</div>
+                  <span className="text-muted-foreground text-sm pb-1">
+                    johndoe@gmail.com
+                  </span>
+                </div>
+              </div>
               <Button variant="outline" className="flex items-center w-full">
                 <FiEdit className="mr-1" />
                 Edit Task
