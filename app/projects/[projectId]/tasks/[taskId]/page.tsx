@@ -1,7 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { statuses } from "@/lib/config";
+import { priorities, statuses } from "@/lib/config";
 import { Task } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -108,6 +108,9 @@ export default function Task({
   }
 
   const status = statuses.find((status) => status.value === task.status);
+  const priority = priorities.find(
+    (priority) => priority.value === task.priority
+  );
   const taskCreatedAt = format(
     new Date(task.createdAt),
     "dd MMM, yyyy • hh:ssb"
@@ -123,9 +126,9 @@ export default function Task({
         <div className="flex items-start space-x-4">
           <div className="w-[850px]">
             <div className="text-2xl font-bold tracking-tight">{task.name}</div>
-            <div className="space-x-3 pt-3">
-              <div className="flex items-center text-muted-foreground">
-                <span className="flex items-center pr-1 border-r-2 border-gray-400">
+            <div className="space-y-3">
+              <div className="flex items-center text-muted-foreground space-x-2">
+                <span className="flex items-center">
                   <MdAccessTime className="mr-1 w-5 h-5" /> Task created on{" "}
                   {taskCreatedAt}
                 </span>
@@ -133,27 +136,60 @@ export default function Task({
                   <LuTimer className="mr-1 w-5 h-5" /> Task due on {taskDueDate}
                 </span>
               </div>
-              {status ? (
-                <div className="flex">
-                  {status.value === "DONE" ? (
-                    <span className="bg-green-100 text-green-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
-                      {status.label}
-                    </span>
-                  ) : status.value === "TO_DO" ? (
-                    <span className="bg-blue-100 text-blue-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
-                      {status.label}
-                    </span>
-                  ) : status.value === "IN_PROGRESS" ? (
-                    <span className="bg-amber-100 text-amber-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
-                      {status.label}
-                    </span>
-                  ) : status.value === "CANCELED" ? (
-                    <span className="bg-red-100 text-red-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
-                      {status.label}
-                    </span>
-                  ) : null}
+              <div className="flex items-center space-x-2">
+                <Avatar>
+                  <AvatarImage src={""} />
+                  <AvatarFallback>
+                    <LuUser2 className="w-5 h-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="py-2 space-y-1">
+                  <div className="pt-1">{member?.userName}</div>
+                  <span className="text-muted-foreground text-sm pb-1">
+                    {member?.role}
+                  </span>
                 </div>
-              ) : null}
+              </div>
+              <div className="flex items-center">
+                {status ? (
+                  <div className="flex">
+                    {status.value === "DONE" ? (
+                      <span className="bg-green-100 text-green-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {status.label}
+                      </span>
+                    ) : status.value === "TO_DO" ? (
+                      <span className="bg-blue-100 text-blue-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {status.label}
+                      </span>
+                    ) : status.value === "IN_PROGRESS" ? (
+                      <span className="bg-amber-100 text-amber-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {status.label}
+                      </span>
+                    ) : status.value === "CANCELED" ? (
+                      <span className="bg-red-100 text-red-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {status.label}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : null}
+                {priority ? (
+                  <div className="flex">
+                    {priority.value === "HIGH" ? (
+                      <span className="bg-green-100 text-green-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {priority.label}
+                      </span>
+                    ) : priority.value === "MEDIUM" ? (
+                      <span className="bg-blue-100 text-blue-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {priority.label}
+                      </span>
+                    ) : priority.value === "LOW" ? (
+                      <span className="bg-amber-100 text-amber-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        {priority.label}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
             </div>
 
             <Card className="mt-5 p-3">
