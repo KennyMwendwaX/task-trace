@@ -175,15 +175,18 @@ export default function Task({
                 {priority ? (
                   <div className="flex">
                     {priority.value === "HIGH" ? (
-                      <span className="bg-green-100 text-green-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                      <span className="flex items-center space-x-1 bg-green-100 text-green-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        <priority.icon />
                         {priority.label}
                       </span>
                     ) : priority.value === "MEDIUM" ? (
-                      <span className="bg-blue-100 text-blue-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                      <span className="flex items-center space-x-1 bg-blue-100 text-blue-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        <priority.icon />
                         {priority.label}
                       </span>
                     ) : priority.value === "LOW" ? (
-                      <span className="bg-amber-100 text-amber-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                      <span className="flex items-center space-x-1 bg-amber-100 text-amber-700 text-sm font-medium me-2 px-2.5 py-0.5 rounded-md">
+                        <priority.icon />
                         {priority.label}
                       </span>
                     ) : null}
