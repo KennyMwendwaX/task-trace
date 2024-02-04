@@ -79,7 +79,7 @@ export default function EditTaskModal({
       name: task.name,
       label: task.label,
       priority: task.priority,
-      due_date: task.due_date,
+      due_date: new Date(task.due_date),
       memberId: memberId,
       description: task.description,
     },
