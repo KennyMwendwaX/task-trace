@@ -77,7 +77,7 @@ export default function EditTaskModal({
     resolver: zodResolver(taskFormSchema),
     values: {
       name: task.name,
-      label: task.priority,
+      label: task.label,
       priority: task.priority,
       due_date: task.due_date,
       memberId: memberId,

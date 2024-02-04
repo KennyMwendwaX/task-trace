@@ -15,7 +15,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FiTrash } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LuUser2 } from "react-icons/lu";
+import { LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { Member } from "@/lib/schema/UserSchema";
 import EditTaskModal from "@/components/EditTaskModal";
@@ -112,6 +112,7 @@ export default function Task({
     new Date(task.createdAt),
     "dd MMM, yyyy • hh:ssb"
   );
+  const taskDueDate = format(new Date(task.due_date), "dd MMM, yyyy");
 
   // Added a plugin to sanitize the markdown
   const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
@@ -122,7 +123,16 @@ export default function Task({
         <div className="flex items-start space-x-4">
           <div className="w-[850px]">
             <div className="text-2xl font-bold tracking-tight">{task.name}</div>
-            <div className="flex items-center space-x-3 pt-3">
+            <div className="space-x-3 pt-3">
+              <div className="flex items-center text-muted-foreground">
+                <span className="flex items-center pr-1 border-r-2 border-gray-400">
+                  <MdAccessTime className="mr-1 w-5 h-5" /> Task created on{" "}
+                  {taskCreatedAt}
+                </span>
+                <span className="flex items-center">
+                  <LuTimer className="mr-1 w-5 h-5" /> Task due on {taskDueDate}
+                </span>
+              </div>
               {status ? (
                 <div className="flex">
                   {status.value === "DONE" ? (
@@ -144,12 +154,8 @@ export default function Task({
                   ) : null}
                 </div>
               ) : null}
-
-              <span className="flex items-center text-muted-foreground">
-                <MdAccessTime className="mr-1 w-5 h-5" /> Task created on{" "}
-                {taskCreatedAt}
-              </span>
             </div>
+
             <Card className="mt-5 p-3">
               <MarkdownPreview
                 // className="p-3"
