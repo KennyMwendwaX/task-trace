@@ -3,7 +3,7 @@
 import Loading from "@/components/Loading";
 import { priorities, statuses } from "@/lib/config";
 import { Task } from "@/lib/schema/TaskSchema";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import format from "date-fns/format";
 import MarkdownPreview from "@uiw/react-markdown-preview";
@@ -19,6 +19,7 @@ import { LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { Member } from "@/lib/schema/UserSchema";
 import EditTaskModal from "@/components/EditTaskModal";
+import { useRouter } from "next/navigation";
 
 export default function Task({
   params,
@@ -29,6 +30,9 @@ export default function Task({
 
   const projectId = params.projectId;
   const taskId = params.taskId;
+
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   useEffect(() => {
     fetch(
@@ -85,6 +89,36 @@ export default function Task({
     },
   });
 
+  const {
+    mutate: deleteTask,
+    isPending: deletePending,
+    error: deleteError,
+  } = useMutation({
+    mutationFn: async () => {
+      if (task?.id) {
+        const options = {
+          method: "DELETE",
+        };
+        const response = await fetch(
+          `/api/projects/${projectId}/tasks/${task?.id}/delete`,
+          options
+        );
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
+      }
+      return null;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", projectId],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const members = membersData || [];
 
   const isLoading = taskLoading || memberLoading;
@@ -119,6 +153,11 @@ export default function Task({
 
   // Added a plugin to sanitize the markdown
   const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
+
+  const taskDelete = async () => {
+    deleteTask();
+    router.push(`/projects/${projectId}/tasks`);
+  };
 
   return (
     <>
@@ -216,7 +255,8 @@ export default function Task({
               />
               <Button
                 variant="destructive"
-                className="flex items-center w-full">
+                className="flex items-center w-full"
+                onClick={() => taskDelete()}>
                 <FiTrash className="mr-1" />
                 Delete Task
               </Button>
