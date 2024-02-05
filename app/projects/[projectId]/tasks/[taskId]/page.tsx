@@ -126,7 +126,7 @@ export default function Task({
         <div className="flex items-start space-x-4">
           <div className="w-[850px]">
             <div className="text-2xl font-bold tracking-tight">{task.name}</div>
-            <div className="space-y-3">
+            <div className="space-y-2 mt-2">
               <div className="flex items-center text-muted-foreground space-x-2">
                 <span className="flex items-center">
                   <MdAccessTime className="mr-1 w-5 h-5" /> Task created on{" "}
