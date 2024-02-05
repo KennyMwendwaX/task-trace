@@ -11,8 +11,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
+import { Session } from "next-auth/types";
 
-export default function Navbar() {
+type Props = {
+  session: Session | null;
+};
+
+export default function Navbar({ session }: Props) {
   return (
     <nav className="bg-gray-50 border-b border-gray-200 px-4 py-[8px] dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
       <div className="flex flex-wrap items-center justify-between mx-auto px-6 py-[6px]">
@@ -38,9 +43,11 @@ export default function Navbar() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-base font-medium leading-none">John Doe</p>
+                  <p className="text-base font-medium leading-none">
+                    {session?.user?.name}
+                  </p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    johndoe@gmail.com
+                    {session?.user?.email}
                   </p>
                 </div>
               </DropdownMenuLabel>

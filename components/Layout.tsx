@@ -23,7 +23,7 @@ export default function Layout({ children, session }: Props) {
         <>{children}</>
       ) : (
         <div className="antialiased">
-          <Navbar />
+          <Navbar session={session} />
           <Sidebar session={session} />
           {children}
         </div>
