@@ -7,8 +7,13 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LuUser2, LuCalendar, LuProjector, LuUsers } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
+import { Session } from "next-auth/types";
 
-export default function Sidebar() {
+type Props = {
+  session: Session | null;
+};
+
+export default function Sidebar({ session }: Props) {
   return (
     <>
       <aside
@@ -60,9 +65,9 @@ export default function Sidebar() {
               </AvatarFallback>
             </Avatar>
             <div className="py-2 space-y-1">
-              <div className="pt-1">John Doe</div>
+              <div className="pt-1">{session?.user?.name}</div>
               <span className="text-muted-foreground text-sm pb-1">
-                johndoe@gmail.com
+                {session?.user?.email}
               </span>
             </div>
           </div>
