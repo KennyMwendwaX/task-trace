@@ -3,6 +3,7 @@
 import TaskOverview from "@/components/TaskOverview";
 import TaskChart from "@/components/TaskChart";
 import LatestTasks from "@/components/LatestTasks";
+import { Project } from "@/lib/schema/ProjectSchema";
 import { Task } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +16,18 @@ import { FiUserPlus } from "react-icons/fi";
 
 export default function Project({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
+
+  const {
+    data: project,
+    isLoading: projectLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}`);
+      return data.project as Project;
+    },
+  });
 
   const {
     data: usersData,
@@ -52,11 +65,22 @@ export default function Project({ params }: { params: { projectId: string } }) {
     },
   });
 
+  if (!project) {
+    return (
+      <main className="p-4 md:ml-64 h-auto pt-20">
+        <div className="text-2xl font-bold tracking-tight">
+          Project was not found
+        </div>
+      </main>
+    );
+  }
+
   const users = usersData || [];
   const members = membersData || [];
   const tasks = tasksData || [];
 
-  const isLoading = usersIsLoading || membersIsLoading || tasksIsLoading;
+  const isLoading =
+    projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
 
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
@@ -86,7 +110,7 @@ export default function Project({ params }: { params: { projectId: string } }) {
         </div>
       ) : (
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{project.name}</h2>
           <TaskOverview tasks={tasks} />
           <div className="flex space-x-4 items-start">
             <TaskChart tasks={tasks} />
