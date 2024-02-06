@@ -1,8 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-
-import { CalendarIcon, HomeIcon, ProjectorIcon, UsersIcon } from "lucide-react";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LuUser2, LuCalendar, LuProjector, LuUsers } from "react-icons/lu";
@@ -15,6 +13,9 @@ type Props = {
 
 export default function Sidebar({ session }: Props) {
   const pathname = usePathname();
+  const params = useParams<{ projectId: string }>();
+  const projectId = params.projectId;
+
   return (
     <>
       <aside
@@ -39,10 +40,10 @@ export default function Sidebar({ session }: Props) {
                 <span className="ml-3">Projects</span>
               </Link>
             </li>
-            {pathname.startsWith("/projects") && (
+            {pathname.startsWith(`/projects/${projectId}`) && (
               <li>
                 <Link
-                  href="/team"
+                  href={`/projects/${projectId}/members`}
                   className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                   <LuUsers className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="ml-3">Members</span>
@@ -53,7 +54,7 @@ export default function Sidebar({ session }: Props) {
               <Link
                 href="#"
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <CalendarIcon className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <LuCalendar className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                 <span className="ml-3"> Schedule</span>
               </Link>
             </li>
