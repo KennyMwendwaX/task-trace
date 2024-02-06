@@ -36,9 +36,9 @@ export default function Team({ params }: { params: { projectId: string } }) {
   return (
     <>
       <main className="p-4 md:ml-64 h-auto pt-20">
-        <div className="text-3xl font-bold tracking-tight">Team Members</div>
+        <div className="text-3xl font-bold tracking-tight">Project Members</div>
         <div className="text-xl text-muted-foreground">
-          Here&apos;s a list of your team!
+          Here&apos;s a list of your project members!
         </div>
         <TeamTable data={members} columns={TableColumns} />
       </main>
