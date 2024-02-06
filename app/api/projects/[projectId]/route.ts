@@ -13,7 +13,7 @@ export async function GET(
       },
     });
 
-    if (project)
+    if (!project)
       return NextResponse.json(
         { message: "Project not found" },
         { status: 404 }
