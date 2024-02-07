@@ -3,17 +3,19 @@
 import { TableColumns } from "@/components/tables/MemberTable/TableColumns";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { Member } from "@/lib/schema/UserSchema";
+import type { Member, User } from "@/lib/schema/UserSchema";
 import Loading from "@/components/Loading";
 import { Project } from "@/lib/schema/ProjectSchema";
 import MemberTable from "@/components/tables/MemberTable/MemberTable";
+import { FiUserPlus } from "react-icons/fi";
+import AddMemberModal from "@/components/AddMemberModal";
 
-export default function Team({ params }: { params: { projectId: string } }) {
+export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
   const {
     data: project,
-    isLoading: projectLoading,
+    isLoading: projectIsLoading,
     error: projectError,
   } = useQuery({
     queryKey: ["project", projectId],
@@ -25,7 +27,7 @@ export default function Team({ params }: { params: { projectId: string } }) {
 
   const {
     data: membersData,
-    isLoading: membersLoading,
+    isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({
     queryKey: ["members", projectId],
@@ -35,7 +37,19 @@ export default function Team({ params }: { params: { projectId: string } }) {
     },
   });
 
-  if (projectLoading || membersLoading) {
+  const {
+    data: usersData,
+    isLoading: usersIsLoading,
+    error: usersError,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/users");
+      return data.users as User[];
+    },
+  });
+
+  if (projectIsLoading || membersIsLoading || usersIsLoading) {
     return (
       <main className="p-4 md:ml-64 h-auto pt-20">
         <Loading />
@@ -53,6 +67,7 @@ export default function Team({ params }: { params: { projectId: string } }) {
     );
   }
 
+  const users = usersData || [];
   const members =
     membersData
       ?.map((member) => ({
@@ -71,13 +86,29 @@ export default function Team({ params }: { params: { projectId: string } }) {
   return (
     <>
       <main className="p-4 md:ml-64 h-auto pt-20">
-        <div className="text-3xl font-bold tracking-tight">
-          {project.name} Project Members
-        </div>
-        <div className="text-xl text-muted-foreground">
-          Here&apos;s a list of your project members!
-        </div>
-        <MemberTable data={members} columns={TableColumns} />
+        {!members || members.length == 0 ? (
+          <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
+            <FiUserPlus className="h-14 w-14 text-muted-foreground" />
+
+            <h3 className="mt-4 text-2xl font-semibold">
+              No members in the project
+            </h3>
+            <p className="mb-4 mt-2 text-lg text-muted-foreground">
+              There are no members in the project. Add one below.
+            </p>
+            <AddMemberModal projectId={projectId} users={users} />
+          </div>
+        ) : (
+          <>
+            <div className="text-3xl font-bold tracking-tight">
+              {project.name} Project Members
+            </div>
+            <div className="text-xl text-muted-foreground">
+              Here&apos;s a list of your project members!
+            </div>
+            <MemberTable data={members} columns={TableColumns} />
+          </>
+        )}
       </main>
     </>
   );
