@@ -15,24 +15,29 @@ import { Row } from "@tanstack/react-table";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
+  projectId: string;
 }
 
 export default function TableRowActions<TData>({
   row,
+  projectId,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
-  const user = memberSchema.parse(row.original);
+  const member = memberSchema.parse(row.original);
 
   const {
     mutate: removeUser,
     isPending,
     error,
   } = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (memberId: string) => {
       const options = {
         method: "DELETE",
       };
-      const response = await fetch(`/api/teams/${id}/delete`, options);
+      const response = await fetch(
+        `/api/projects/${projectId}/members/${memberId}`,
+        options
+      );
       if (!response.ok) throw new Error("Something went wrong");
     },
     onSuccess: () => {
@@ -66,10 +71,10 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <button
-              onClick={() => handleRemoveUser(user.id)}
+              onClick={() => handleRemoveUser(member.id)}
               className="flex items-center cursor-pointer">
               <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
-              Remove user
+              Remove Member
             </button>
           </DropdownMenuItem>
         </DropdownMenuContent>

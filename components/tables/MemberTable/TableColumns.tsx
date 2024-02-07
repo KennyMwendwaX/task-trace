@@ -9,7 +9,13 @@ import TableColumnHeader from "./TableColumnHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./TableRowActions";
 
-export const TableColumns: ColumnDef<Member>[] = [
+interface TableColumnsProps {
+  projectId: string;
+}
+
+export const TableColumns = ({
+  projectId,
+}: TableColumnsProps): ColumnDef<Member>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -101,6 +107,6 @@ export const TableColumns: ColumnDef<Member>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <TableRowActions row={row} />,
+    cell: ({ row }) => <TableRowActions projectId={projectId} row={row} />,
   },
 ];

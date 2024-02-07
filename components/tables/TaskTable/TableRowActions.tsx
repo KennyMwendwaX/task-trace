@@ -20,7 +20,6 @@ import {
 
 import { statuses, priorities } from "@/lib/config";
 import { taskSchema } from "@/lib/schema/TaskSchema";
-import DeleteTaskModal from "../../DeleteTaskModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface TableRowActions<TData> {

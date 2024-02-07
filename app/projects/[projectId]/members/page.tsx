@@ -106,7 +106,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
             <div className="text-xl text-muted-foreground">
               Here&apos;s a list of your project members!
             </div>
-            <MemberTable data={members} columns={TableColumns} />
+            <MemberTable data={members} columns={TableColumns({ projectId })} />
           </>
         )}
       </main>
