@@ -31,15 +31,15 @@ import { Member } from "@/lib/schema/UserSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { CSVLink } from "react-csv";
 
-interface UserTableProps<TData, TValue> {
+interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export default function TeamTable<TData, TValue>({
+export default function MemberTable<TData, TValue>({
   columns,
   data,
-}: UserTableProps<TData, TValue>) {
+}: MemberTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
