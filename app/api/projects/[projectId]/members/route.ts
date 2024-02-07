@@ -45,11 +45,11 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { projectId: string } }
 ) {
   const req = await request.json();
 
-  const projectId = params.id;
+  const projectId = params.projectId;
 
   if (!projectId)
     return NextResponse.json(

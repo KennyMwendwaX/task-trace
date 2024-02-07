@@ -68,13 +68,13 @@ export default function Project({ params }: { params: { projectId: string } }) {
   const isLoading =
     projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
 
-    if (isLoading) {
-      return (
-        <main className="p-4 md:ml-64 h-auto pt-20">
-          <Loading />
-        </main>
-      );
-    }
+  if (isLoading) {
+    return (
+      <main className="p-4 md:ml-64 h-auto pt-20">
+        <Loading />
+      </main>
+    );
+  }
 
   if (!project) {
     return (
@@ -85,12 +85,10 @@ export default function Project({ params }: { params: { projectId: string } }) {
       </main>
     );
   }
-  
 
   const users = usersData || [];
   const members = membersData || [];
   const tasks = tasksData || [];
-
 
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">

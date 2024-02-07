@@ -27,18 +27,23 @@ import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
 // import AddMemberModal from "@/components/AddMemberModal";
-import { Member } from "@/lib/schema/UserSchema";
+import { Member, User } from "@/lib/schema/UserSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { CSVLink } from "react-csv";
+import AddMemberModal from "@/components/AddMemberModal";
 
 interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  projectId: string;
+  users: User[];
 }
 
 export default function MemberTable<TData, TValue>({
   columns,
   data,
+  projectId,
+  users,
 }: MemberTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -103,7 +108,7 @@ export default function MemberTable<TData, TValue>({
           <TableToolbar table={table} />
 
           <div className="flex items-center space-x-2">
-            {/* <AddMemberModal /> */}
+            <AddMemberModal projectId={projectId} users={users} />
             <CSVLink
               data={csvData}
               headers={headers}
