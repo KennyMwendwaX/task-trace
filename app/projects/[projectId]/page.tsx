@@ -65,6 +65,17 @@ export default function Project({ params }: { params: { projectId: string } }) {
     },
   });
 
+  const isLoading =
+    projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
+
+    if (isLoading) {
+      return (
+        <main className="p-4 md:ml-64 h-auto pt-20">
+          <Loading />
+        </main>
+      );
+    }
+
   if (!project) {
     return (
       <main className="p-4 md:ml-64 h-auto pt-20">
@@ -74,19 +85,16 @@ export default function Project({ params }: { params: { projectId: string } }) {
       </main>
     );
   }
+  
 
   const users = usersData || [];
   const members = membersData || [];
   const tasks = tasksData || [];
 
-  const isLoading =
-    projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
 
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
-      {isLoading ? (
-        <Loading />
-      ) : !members || members.length == 0 ? (
+      {!members || members.length == 0 ? (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
           <FiUserPlus className="h-14 w-14 text-muted-foreground" />
 
