@@ -26,7 +26,7 @@ export const labels = [
     value: "ERROR",
     label: "Error",
   },
-];
+] as const;
 
 export const statuses = [
   {
@@ -49,7 +49,7 @@ export const statuses = [
     label: "Canceled",
     icon: CrossCircledIcon,
   },
-];
+] as const;
 
 export const priorities = [
   {
@@ -67,4 +67,8 @@ export const priorities = [
     value: "HIGH",
     icon: ArrowUpIcon,
   },
-];
+] as const;
+
+export type Label = (typeof labels)[number]["value"];
+export type Status = (typeof statuses)[number]["value"];
+export type Priority = (typeof priorities)[number]["value"];

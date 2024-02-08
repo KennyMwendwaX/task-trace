@@ -31,6 +31,7 @@ import { Member, User } from "@/lib/schema/UserSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { CSVLink } from "react-csv";
 import AddMemberModal from "@/components/AddMemberModal";
+import { Status } from "@/lib/config";
 
 interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -73,8 +74,6 @@ export default function MemberTable<TData, TValue>({
   });
 
   const members = data as Member[];
-
-  type Status = "TO_DO" | "IN_PROGRESS" | "DONE" | "CANCELED";
 
   const getTasksByStatus = (user: Member, status: Status) => {
     const tasks = user.tasks;

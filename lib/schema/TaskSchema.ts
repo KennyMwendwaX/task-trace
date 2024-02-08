@@ -15,7 +15,7 @@ export const taskSchema = z.object({
       invalid_type_error: "Label must be a string",
     })
     .min(2, { message: "Label must be greater than 2 characters long" })
-    .max(20, { message: "Label must be less than 20 characters long" }),
+    .max(10, { message: "Label must be less than 10 characters long" }),
   status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED"]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"], {
     required_error: "Priority is required",
@@ -36,8 +36,8 @@ export const taskSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Task description must be at least 1 character long" })
-    .max(2000, {
-      message: "Task description cannot be longer than 2000 characters",
+    .max(200, {
+      message: "Task description cannot be longer than 200 characters",
     }),
   createdAt: z.date(),
   updatedAt: z.date(),
