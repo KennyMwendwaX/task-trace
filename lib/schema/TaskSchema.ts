@@ -36,8 +36,8 @@ export const taskSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Task description must be at least 1 character long" })
-    .max(200, {
-      message: "Task description cannot be longer than 200 characters",
+    .max(2000, {
+      message: "Task description cannot be longer than 2000 characters",
     }),
   createdAt: z.date(),
   updatedAt: z.date(),

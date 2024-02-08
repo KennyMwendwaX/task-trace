@@ -1,7 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { priorities, statuses } from "@/lib/config";
+import { labels, priorities, statuses } from "@/lib/config";
 import { Task } from "@/lib/schema/TaskSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -19,6 +19,7 @@ import { MdAccessTime } from "react-icons/md";
 import { Member } from "@/lib/schema/UserSchema";
 import EditTaskModal from "@/components/EditTaskModal";
 import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 export default function Task({
   params,
@@ -129,6 +130,7 @@ export default function Task({
     );
   }
 
+  const label = labels.find((label) => label.value === task.label);
   const status = statuses.find((status) => status.value === task.status);
   const priority = priorities.find(
     (priority) => priority.value === task.priority
@@ -152,7 +154,32 @@ export default function Task({
       <main className="p-4 md:ml-64 h-auto pt-20">
         <div className="flex items-start space-x-4">
           <div className="w-[850px]">
-            <div className="text-2xl font-bold tracking-tight">{task.name}</div>
+            <div className="flex items-center space-x-2 text-2xl font-bold tracking-tight">
+              {label && (
+                <Badge
+                  className={`border-${
+                    label.value === "FEATURE"
+                      ? "blue"
+                      : label.value === "DOCUMENTATION"
+                      ? "purple"
+                      : label.value === "BUG"
+                      ? "orange"
+                      : ""
+                  }-600 text-${
+                    label.value === "FEATURE"
+                      ? "blue"
+                      : label.value === "DOCUMENTATION"
+                      ? "purple"
+                      : label.value === "BUG"
+                      ? "orange"
+                      : ""
+                  }-600`}
+                  variant="outline">
+                  {label.label}
+                </Badge>
+              )}
+              <div>{task.name}</div>
+            </div>
             <div className="space-y-2 mt-2">
               <div className="flex items-center text-muted-foreground space-x-2">
                 <span className="flex items-center">

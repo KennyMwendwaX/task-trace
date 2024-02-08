@@ -45,38 +45,40 @@ export const TableColumns = ({
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
       const task = taskSchema.parse(row.original);
-      // const label = labels.find((label) => label.value === row.original.label);
+      const label = labels.find((label) => label.value === row.original.label);
 
-      // if (!label) {
-      //   return (
-      //     <span className="max-w-[500px] truncate font-medium">
-      //       {row.getValue("name")}
-      //     </span>
-      //   );
-      // }
+      if (!label) {
+        return (
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("name")}
+          </span>
+        );
+      }
       return (
-        <div className="flex space-x-2">
-          {/* {label.value === "feature" ? (
-            <Badge className="border-blue-600 text-blue-600" variant="outline">
-             {label.label}
-            </Badge>
-          ) : label.value === "documentation" ? (
+        <div className="flex space-x-1">
+          {label && (
             <Badge
-              className="border-purple-600 text-purple-600"
+              className={`border-${
+                label.value === "FEATURE"
+                  ? "blue"
+                  : label.value === "DOCUMENTATION"
+                  ? "purple"
+                  : label.value === "BUG"
+                  ? "orange"
+                  : ""
+              }-600 text-${
+                label.value === "FEATURE"
+                  ? "blue"
+                  : label.value === "DOCUMENTATION"
+                  ? "purple"
+                  : label.value === "BUG"
+                  ? "orange"
+                  : ""
+              }-600`}
               variant="outline">
               {label.label}
             </Badge>
-          ) : label.value === "bug" ? (
-            <Badge
-              className="border-orange-600 text-orange-600"
-              variant="outline">
-              {label.label}
-            </Badge>
-          ) : null}  */}
-          <Badge className="border-blue-600 text-blue-600" variant="outline">
-            {row.original.label}
-          </Badge>
-
+          )}
           <span className="max-w-[500px] truncate font-medium">
             <Link
               className="hover:underline"
