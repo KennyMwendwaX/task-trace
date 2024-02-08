@@ -55,30 +55,28 @@ export const TableColumns = ({
         );
       }
       return (
-        <div className="flex space-x-1">
-          {label && (
+        <div className="flex space-x-2">
+          {label.value === "FEATURE" ? (
+            <Badge className="border-blue-600 text-blue-600" variant="outline">
+              {label.label}
+            </Badge>
+          ) : label.value === "DOCUMENTATION" ? (
             <Badge
-              className={`border-${
-                label.value === "FEATURE"
-                  ? "blue"
-                  : label.value === "DOCUMENTATION"
-                  ? "purple"
-                  : label.value === "BUG"
-                  ? "orange"
-                  : ""
-              }-600 text-${
-                label.value === "FEATURE"
-                  ? "blue"
-                  : label.value === "DOCUMENTATION"
-                  ? "purple"
-                  : label.value === "BUG"
-                  ? "orange"
-                  : ""
-              }-600`}
+              className="border-purple-600 text-purple-600"
               variant="outline">
               {label.label}
             </Badge>
-          )}
+          ) : label.value === "BUG" ? (
+            <Badge
+              className="border-amber-600 text-amber-600"
+              variant="outline">
+              {label.label}
+            </Badge>
+          ) : label.value === "ERROR" ? (
+            <Badge className="border-red-600 text-red-600" variant="outline">
+              {label.label}
+            </Badge>
+          ) : null}
           <span className="max-w-[500px] truncate font-medium">
             <Link
               className="hover:underline"

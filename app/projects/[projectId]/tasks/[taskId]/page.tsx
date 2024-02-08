@@ -156,27 +156,33 @@ export default function Task({
           <div className="w-[850px]">
             <div className="flex items-center space-x-2 text-2xl font-bold tracking-tight">
               {label && (
-                <Badge
-                  className={`border-${
-                    label.value === "FEATURE"
-                      ? "blue"
-                      : label.value === "DOCUMENTATION"
-                      ? "purple"
-                      : label.value === "BUG"
-                      ? "orange"
-                      : ""
-                  }-600 text-${
-                    label.value === "FEATURE"
-                      ? "blue"
-                      : label.value === "DOCUMENTATION"
-                      ? "purple"
-                      : label.value === "BUG"
-                      ? "orange"
-                      : ""
-                  }-600`}
-                  variant="outline">
-                  {label.label}
-                </Badge>
+                <>
+                  {label.value === "FEATURE" ? (
+                    <Badge
+                      className="border-blue-600 text-blue-600"
+                      variant="outline">
+                      {label.label}
+                    </Badge>
+                  ) : label.value === "DOCUMENTATION" ? (
+                    <Badge
+                      className="border-purple-600 text-purple-600"
+                      variant="outline">
+                      {label.label}
+                    </Badge>
+                  ) : label.value === "BUG" ? (
+                    <Badge
+                      className="border-amber-600 text-amber-600"
+                      variant="outline">
+                      {label.label}
+                    </Badge>
+                  ) : label.value === "ERROR" ? (
+                    <Badge
+                      className="border-red-600 text-red-600"
+                      variant="outline">
+                      {label.label}
+                    </Badge>
+                  ) : null}
+                </>
               )}
               <div>{task.name}</div>
             </div>
