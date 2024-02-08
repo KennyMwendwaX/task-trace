@@ -55,6 +55,15 @@ export const TableColumns = ({
     },
   },
   {
+    accessorKey: "role",
+    header: () => <TableColumnHeader name="Role" />,
+    cell: ({ row }) => {
+      const member = memberSchema.parse(row.original);
+      const role = member.role;
+      return <div>{role}</div>;
+    },
+  },
+  {
     accessorKey: "tasks",
     header: () => <TableColumnHeader name="Tasks" />,
     cell: ({ row }) => {
