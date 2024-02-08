@@ -173,16 +173,24 @@ export default function EditTaskModal({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Task Label</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              id="label"
-                              className="focus:border-2 focus:border-blue-600"
-                              placeholder="Task label"
-                              {...field}
-                              required
-                            />
-                          </FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            required>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select label" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="FEATURE">Feature</SelectItem>
+                              <SelectItem value="DOCUMENTATION">
+                                Documentation
+                              </SelectItem>
+                              <SelectItem value="BUG">Bug</SelectItem>
+                              <SelectItem value="ERROR">Error</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -201,7 +209,7 @@ export default function EditTaskModal({
                               required>
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select priority type" />
+                                  <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
