@@ -10,7 +10,6 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
 import rehypeHighlight from "rehype-highlight";
-import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FiTrash } from "react-icons/fi";
@@ -26,22 +25,11 @@ export default function Task({
 }: {
   params: { projectId: string; taskId: string };
 }) {
-  const [markdown, setMarkdown] = useState<string | null>(null);
-
   const projectId = params.projectId;
   const taskId = params.taskId;
 
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  useEffect(() => {
-    fetch(
-      "https://raw.githubusercontent.com/kenny-mwendwa/go-restapi-crud/master/README.md"
-    )
-      .then((response) => response.text()) // Extract the text content from the response
-      .then((data) => setMarkdown(data)) // Set the Markdown content to state
-      .catch((error) => console.error("Error fetching Markdown:", error));
-  }, []);
 
   const {
     data,
@@ -237,7 +225,7 @@ export default function Task({
             <Card className="mt-5 p-3">
               <MarkdownPreview
                 // className="p-3"
-                source={markdown as string}
+                source={task.description}
                 rehypePlugins={rehypePlugins}
                 wrapperElement={{
                   "data-color-mode": "light",
