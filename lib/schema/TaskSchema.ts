@@ -9,17 +9,17 @@ export const taskSchema = z.object({
     })
     .min(2, { message: "Name must be greater than 2 characters long" })
     .max(50, { message: "Name must be less than 20 characters long" }),
-  label: z
-    .string({
-      required_error: "Label is required",
-      invalid_type_error: "Label must be a string",
-    })
-    .min(2, { message: "Label must be greater than 2 characters long" })
-    .max(10, { message: "Label must be less than 10 characters long" }),
-  status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED"]),
+  label: z.enum(["FEATURE", "DOCUMENTATION", "BUG", "ERROR"], {
+    required_error: "Label is required",
+    invalid_type_error: "Label must be Feature, Documentation, Bug or Error",
+  }),
+  status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED"], {
+    required_error: "Status is required",
+    invalid_type_error: "Status must be Todo, In Progress, Done or Canceled",
+  }),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"], {
     required_error: "Priority is required",
-    invalid_type_error: "Priority must be a Low, Medium or High",
+    invalid_type_error: "Priority must be Low, Medium or High",
   }),
   due_date: z.date({
     required_error: "Please select a date and time",
