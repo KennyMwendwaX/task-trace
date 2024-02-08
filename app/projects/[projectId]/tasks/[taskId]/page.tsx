@@ -100,7 +100,7 @@ export default function Task({
           method: "DELETE",
         };
         const response = await fetch(
-          `/api/projects/${projectId}/tasks/${task?.id}/delete`,
+          `/api/projects/${projectId}/tasks/${task?.id}`,
           options
         );
         if (!response.ok) {

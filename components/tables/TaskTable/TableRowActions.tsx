@@ -43,7 +43,7 @@ export default function TableRowActions<TData>({
         method: "DELETE",
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/delete`,
+        `/api/projects/${projectId}/tasks/${task.id}`,
         options
       );
       if (!response.ok) {
