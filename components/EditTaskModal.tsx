@@ -55,6 +55,7 @@ import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "./ui/scroll-area";
 import { FiEdit } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -73,6 +74,8 @@ export default function EditTaskModal({
   members,
   task,
 }: Props) {
+  const router = useRouter();
+
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     values: {
@@ -122,6 +125,7 @@ export default function EditTaskModal({
   async function onSubmit(values: TaskFormValues) {
     updateTask(values);
     toggleDialog();
+    router.refresh();
   }
 
   return (
