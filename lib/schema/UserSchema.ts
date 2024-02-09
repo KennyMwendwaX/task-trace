@@ -70,7 +70,6 @@ export const memberSchema = userSchema
   .extend({
     projectId: z.string(),
     userId: z.string(),
-    userName: z.string(),
     role: z.enum(["MEMBER", "ADMIN"]),
     updatedAt: z.date(),
     tasks: z.array(taskSchema),
