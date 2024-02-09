@@ -50,14 +50,16 @@ export default function Sidebar({ session }: Props) {
                 </Link>
               </li>
             )}
-            <li>
-              <Link
-                href="#"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <LuCalendar className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                <span className="ml-3"> Schedule</span>
-              </Link>
-            </li>
+            {pathname.startsWith(`/projects/${projectId}`) && (
+              <li>
+                <Link
+                  href="#"
+                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <LuCalendar className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="ml-3"> Schedule</span>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
         <div className="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex z-20">
