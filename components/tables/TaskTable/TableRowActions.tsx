@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { statuses, priorities } from "@/lib/config";
+import { statuses, priorities, labels } from "@/lib/config";
 import { taskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -33,17 +33,19 @@ export default function TableRowActions<TData>({
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
   const task = taskSchema.parse(row.original);
+
   const {
-    mutate: deleteTask,
-    isPending,
-    error,
+    mutate: changeLabel,
+    isPending: labelIsPending,
+    error: labelChangeError,
   } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (label: string) => {
       const options = {
-        method: "DELETE",
+        method: "PUT",
+        body: JSON.stringify(label),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}`,
+        `/api/projects/${projectId}/tasks/${task.id}/update-label`,
         options
       );
       if (!response.ok) {
@@ -62,7 +64,7 @@ export default function TableRowActions<TData>({
 
   const {
     mutate: changeStatus,
-    isPending: isStatusLoading,
+    isPending: statusIsPending,
     error: statusChangeError,
   } = useMutation({
     mutationFn: async (status: string) => {
@@ -90,7 +92,7 @@ export default function TableRowActions<TData>({
 
   const {
     mutate: changePriority,
-    isPending: isPriorityLoading,
+    isPending: priorityIsPending,
     error: priorityChangeError,
   } = useMutation({
     mutationFn: async (priority: string) => {
@@ -116,8 +118,35 @@ export default function TableRowActions<TData>({
     },
   });
 
-  const taskDelete = async () => {
-    deleteTask();
+  const {
+    mutate: deleteTask,
+    isPending: deleteIsPending,
+    error: deleteTaskError,
+  } = useMutation({
+    mutationFn: async () => {
+      const options = {
+        method: "DELETE",
+      };
+      const response = await fetch(
+        `/api/projects/${projectId}/tasks/${task.id}`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", projectId],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleLabelChange = async (label: string) => {
+    changeLabel(label);
   };
 
   const handleStatusChange = async (status: string) => {
@@ -126,6 +155,10 @@ export default function TableRowActions<TData>({
 
   const handlePriorityChange = async (priority: string) => {
     changePriority(priority);
+  };
+
+  const taskDelete = async () => {
+    deleteTask();
   };
 
   return (
@@ -141,6 +174,21 @@ export default function TableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={task.label}>
+                {labels.map((label) => (
+                  <DropdownMenuRadioItem
+                    onClick={() => handleLabelChange(label.value)}
+                    key={label.value}
+                    value={label.value}>
+                    {label.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
