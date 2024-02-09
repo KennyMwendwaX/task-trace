@@ -29,6 +29,10 @@ export const projectSchema = z.object({
     required_error: "Owner is required",
     invalid_type_error: "Owner must be a string",
   }),
+  ownerName: z.string({
+    required_error: "Owner is required",
+    invalid_type_error: "Owner must be a string",
+  }),
   description: z
     .string()
     .min(1, { message: "Description must be at least 1 character long" })
@@ -46,6 +50,7 @@ export const projectFormSchema = projectSchema.omit({
   createdAt: true,
   updatedAt: true,
   ownerId: true,
+  ownerName: true,
 });
 
 export type Project = z.infer<typeof projectSchema>;

@@ -37,6 +37,7 @@ import {
 } from "@/lib/schema/ProjectSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -44,6 +45,7 @@ export default function AddProjectModal() {
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
@@ -77,6 +79,7 @@ export default function AddProjectModal() {
   async function onSubmit(values: ProjectFormValues) {
     addTask(values);
     toggleDialog();
+    router.refresh();
   }
   return (
     <>

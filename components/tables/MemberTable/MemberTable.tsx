@@ -83,8 +83,7 @@ export default function MemberTable<TData, TValue>({
 
   const csvData = members.map((member) => ({
     name: member.userName,
-    email: member.email,
-    role: member.role,
+    email: member.userId,
     tasks: member.tasks.length,
     tasksDone: getTasksByStatus(member, "DONE"),
     tasksTodo: getTasksByStatus(member, "TO_DO"),
@@ -95,7 +94,6 @@ export default function MemberTable<TData, TValue>({
   const headers = [
     { label: "Member", key: "name" },
     { label: "Email", key: "email" },
-    { label: "Role", key: "role" },
     { label: "Tasks Done", key: "tasksDone" },
     { label: "Tasks Todo", key: "tasksTodo" },
     { label: "Tasks In Progress", key: "tasksInProgress" },

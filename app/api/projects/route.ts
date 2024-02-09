@@ -28,6 +28,15 @@ export async function POST(request: Request) {
   if (!session || session.user.role !== "ADMIN")
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!user)
+    return NextResponse.json({ message: "User not found" }, { status: 404 });
+
   const req = await request.json();
 
   const requestData = {
@@ -55,9 +64,8 @@ export async function POST(request: Request) {
         end_date,
         description,
         status: "TO_DO",
-        owner: {
-          connect: { id: session.user.id },
-        },
+        ownerId: user.id,
+        ownerName: user.name,
       },
     });
 

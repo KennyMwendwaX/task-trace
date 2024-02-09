@@ -21,19 +21,6 @@ interface Props {
 }
 
 export default function ProjectCard({ project }: Props) {
-  const {
-    data: owner,
-    isLoading: ownerLoading,
-    error: ownerError,
-  } = useQuery({
-    queryKey: ["user", project.ownerId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/users/${project.ownerId}`);
-      return data.user as User;
-    },
-    enabled: !!project.ownerId, // Only fetch when ownerId is available
-  });
-
   const projectStatus = statuses.find(
     (status) => status.value === project.status
   );
@@ -51,7 +38,7 @@ export default function ProjectCard({ project }: Props) {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <div>{owner?.name}</div>
+              <div>{project.ownerName}</div>
               <div className="text-xs text-gray-500">
                 {format(new Date(project.createdAt), "dd/MM/yyyy")}
               </div>
