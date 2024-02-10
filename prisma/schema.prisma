@@ -115,7 +115,6 @@ model Task {
   updatedAt   DateTime @updatedAt
   member      Member   @relation(fields: [memberId], references: [id])
   memberId    String
-  memberName  String
   projectId   String
   project     Project  @relation(fields: [projectId], references: [id])
 }

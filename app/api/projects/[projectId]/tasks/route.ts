@@ -101,9 +101,9 @@ export async function POST(
         due_date,
         description,
         status: "TO_DO",
-        memberId: member.id,
-        memberName: member.userName,
-        projectId: projectId,
+        memberId: memberId, // Connect the task with the member object
+        member: { connect: { id: member.id } }, // Connect the task with the member object
+        project: { connect: { id: projectId } },
       },
     });
 
