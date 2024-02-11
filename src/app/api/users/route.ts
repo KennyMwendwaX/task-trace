@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const users = await prisma.user.findMany();
 
-    if (users.length === 0)
+    if (!users)
       return NextResponse.json(
         { message: "Failed to return users" },
         { status: 404 }
