@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { Member, memberSchema } from "@/lib/schema/UserSchema";
+import { Member, memberSchema } from "@/lib/schema/MemberSchema";
 import TableColumnHeader from "./TableColumnHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./TableRowActions";
@@ -42,7 +42,7 @@ export const TableColumns = ({
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
       const member = memberSchema.parse(row.original);
-      const memberName = member.userName;
+      const memberName = member.user.name;
       return (
         <div className="flex items-center space-x-2">
           <Avatar className="h-9 w-9">

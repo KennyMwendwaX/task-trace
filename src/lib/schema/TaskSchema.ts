@@ -39,8 +39,10 @@ export const taskSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   member: z.object({
-    name: z.string(),
-    email: z.string(),
+    user: z.object({
+      name: z.string(),
+      email: z.string(),
+    }),
     role: z.enum(["MEMBER", "ADMIN"]),
   }),
 });

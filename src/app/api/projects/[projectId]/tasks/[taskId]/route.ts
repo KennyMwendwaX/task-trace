@@ -16,6 +16,21 @@ export async function GET(
       where: {
         id: taskId,
       },
+      include: {
+        member: {
+          select: {
+            role: true,
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!task)

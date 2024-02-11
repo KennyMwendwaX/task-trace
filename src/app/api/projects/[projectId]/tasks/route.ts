@@ -19,9 +19,6 @@ export async function GET(
       where: {
         id: projectId,
       },
-      include: {
-        tasks: true,
-      },
     });
 
     if (!project)
@@ -30,7 +27,23 @@ export async function GET(
         { status: 404 }
       );
 
-    const tasks = project.tasks;
+    const tasks = await prisma.task.findMany({
+      include: {
+        member: {
+          select: {
+            role: true,
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
     return NextResponse.json({ tasks }, { status: 200 });
   } catch (error) {

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { userSchema } from "./UserSchema";
 
 export const projectSchema = z.object({
   id: z.string(),
@@ -38,12 +37,10 @@ export const projectSchema = z.object({
     }),
   createdAt: z.date(),
   updatedAt: z.date(),
-  owner: userSchema.omit({
-    emailVerified: true,
-    password: true,
-    role: true,
-    image: true,
-    createdAt: true,
+  owner: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string(),
   }),
 });
 

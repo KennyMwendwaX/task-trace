@@ -3,7 +3,8 @@
 import { TableColumns } from "@/components/tables/MemberTable/TableColumns";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { Member, User } from "@/lib/schema/UserSchema";
+import type { User } from "@/lib/schema/UserSchema";
+import type { Member } from "@/lib/schema/MemberSchema";
 import Loading from "@/components/Loading";
 import { Project } from "@/lib/schema/ProjectSchema";
 import MemberTable from "@/components/tables/MemberTable/MemberTable";
