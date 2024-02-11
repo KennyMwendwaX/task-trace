@@ -1,5 +1,5 @@
 import { memberFormSchema } from "@/lib/schema/UserSchema";
-import prisma from "../../../../../../prisma/db";
+import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET(
