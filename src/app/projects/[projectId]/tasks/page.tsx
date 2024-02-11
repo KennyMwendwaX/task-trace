@@ -9,7 +9,7 @@ import Loading from "@/components/Loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Member } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/MemberSchema";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;

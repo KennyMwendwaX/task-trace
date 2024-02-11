@@ -16,7 +16,7 @@ import { FiTrash } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
-import { Member } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/MemberSchema";
 import EditTaskModal from "@/components/EditTaskModal";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,7 @@ export default function Task({
 
   const {
     data,
-    isLoading: taskLoading,
+    isLoading: taskIsLoading,
     error,
   } = useQuery({
     queryKey: ["task", taskId],
@@ -47,24 +47,6 @@ export default function Task({
   });
 
   const task = data;
-
-  const {
-    data: member,
-    isLoading: memberLoading,
-    error: memberError,
-  } = useQuery({
-    queryKey: ["member", task?.memberId],
-    queryFn: async () => {
-      if (task?.memberId) {
-        const { data } = await axios.get(
-          `/api/projects/${projectId}/members/${task.memberId}`
-        );
-        return data.member as Member;
-      }
-      return null; // Return null if memberId is not available
-    },
-    enabled: !!task, // Only fetch when task data is available
-  });
 
   const {
     data: membersData,
@@ -110,7 +92,7 @@ export default function Task({
 
   const members = membersData || [];
 
-  const isLoading = taskLoading || memberLoading;
+  const isLoading = taskIsLoading || membersIsLoading;
 
   if (isLoading) {
     return (
@@ -204,9 +186,9 @@ export default function Task({
                   </AvatarFallback>
                 </Avatar>
                 <div className="py-2 space-y-1">
-                  <div className="pt-1">{member?.userName}</div>
+                  <div className="pt-1">{task.member.user.name}</div>
                   <span className="text-muted-foreground text-sm pb-1">
-                    {member?.role}
+                    {task.member.role}
                   </span>
                 </div>
               </div>
