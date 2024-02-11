@@ -8,9 +8,8 @@ export const memberSchema = z.object({
   userId: z.string(),
   userName: z.string(),
   role: z.enum(["MEMBER", "ADMIN"]),
-  updatedAt: z.date(),
   createdAt: z.date(),
-  updateAt: z.date(),
+  updatedAt: z.date(),
   user: userSchema.omit({
     id: true,
     password: true,
@@ -29,6 +28,7 @@ export const memberFormSchema = memberSchema.omit({
   createdAt: true,
   updatedAt: true,
   projectId: true,
+  user: true,
   tasks: true,
 });
 

@@ -1,4 +1,4 @@
-import { memberFormSchema } from "@/lib/schema/UserSchema";
+import { memberFormSchema } from "@/lib/schema/MemberSchema";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -18,13 +18,6 @@ export async function GET(
       where: {
         id: projectId,
       },
-      include: {
-        members: {
-          include: {
-            tasks: true,
-          },
-        },
-      },
     });
 
     if (!project)
@@ -32,7 +25,18 @@ export async function GET(
         { message: "Project not found" },
         { status: 404 }
       );
-    const members = project.members;
+
+    const members = await prisma.member.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        tasks: true,
+      },
+    });
 
     return NextResponse.json({ members }, { status: 200 });
   } catch (error) {
@@ -90,7 +94,6 @@ export async function POST(
       data: {
         role: role,
         userId: user.id,
-        userName: user.name,
         projectId: project.id,
       },
     });
