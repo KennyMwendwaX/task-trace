@@ -119,7 +119,7 @@ export default function Task({
   );
   const taskCreatedAt = format(
     new Date(task.createdAt),
-    "dd MMM, yyyy • hh:ssb"
+    "dd MMM, yyyy • hh:ss"
   );
   const taskDueDate = format(new Date(task.due_date), "dd MMM, yyyy");
 

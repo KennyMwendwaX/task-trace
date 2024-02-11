@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import TanstackProvider from "@/providers/TanstackProvider";
 import Layout from "@/components/Layout";
-import { auth } from "../../auth";
+import { auth } from "../auth";
 
 export const metadata: Metadata = {
   title: "Task Tracker",

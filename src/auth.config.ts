@@ -4,7 +4,7 @@ import Github from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "@/lib/db";
 import { compare } from "bcryptjs";
-import { signinSchema } from "./src/lib/schema/UserSchema";
+import { signinSchema } from "./lib/schema/UserSchema";
 
 export const authConfig: NextAuthConfig = {
   providers: [

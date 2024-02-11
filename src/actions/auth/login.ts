@@ -1,8 +1,8 @@
 "use server";
 
-import { signIn } from "../../../auth";
+import { signIn } from "../../auth";
 import { SigninValues, signinSchema } from "@/lib/schema/UserSchema";
-import { DEFAULT_ROUTE_REDIRECT } from "../../../routes";
+import { DEFAULT_ROUTE_REDIRECT } from "../../routes";
 import { AuthError } from "next-auth";
 
 export const credentialsLogin = async (values: SigninValues) => {
