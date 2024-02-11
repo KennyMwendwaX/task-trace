@@ -7,9 +7,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Project } from "@/lib/schema/ProjectSchema";
-import { User } from "@/lib/schema/UserSchema";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Link from "next/link";
 import { IoChevronForward } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
@@ -38,7 +35,7 @@ export default function ProjectCard({ project }: Props) {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <div>{project.ownerName}</div>
+              <div>{project.owner.name}</div>
               <div className="text-xs text-gray-500">
                 {format(new Date(project.createdAt), "dd/MM/yyyy")}
               </div>

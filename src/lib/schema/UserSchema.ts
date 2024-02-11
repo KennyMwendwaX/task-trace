@@ -28,6 +28,7 @@ export const userSchema = z.object({
   role: z.enum(["USER", "ADMIN"]),
   image: z.string().nullable(),
   createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
 export const signupSchema = userSchema
@@ -58,35 +59,6 @@ export const signinSchema = userSchema.omit({
   createdAt: true,
 });
 
-export const memberSchema = userSchema
-  .omit({
-    name: true,
-    email: true,
-    emailVerified: true,
-    role: true,
-    image: true,
-    password: true,
-  })
-  .extend({
-    projectId: z.string(),
-    userId: z.string(),
-    userName: z.string(),
-    role: z.enum(["MEMBER", "ADMIN"]),
-    updatedAt: z.date(),
-    tasks: z.array(taskSchema),
-  });
-
-export const memberFormSchema = memberSchema.omit({
-  id: true,
-  userName: true,
-  createdAt: true,
-  updatedAt: true,
-  projectId: true,
-  tasks: true,
-});
-
 export type User = z.infer<typeof userSchema>;
 export type SignupValues = z.infer<typeof signupSchema>;
 export type SigninValues = z.infer<typeof signinSchema>;
-export type Member = z.infer<typeof memberSchema>;
-export type MemberFormValues = z.infer<typeof memberFormSchema>;

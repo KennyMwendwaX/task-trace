@@ -11,6 +11,15 @@ export async function GET(
       where: {
         id: projectId,
       },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
 
     if (!project)
