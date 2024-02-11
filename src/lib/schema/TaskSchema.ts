@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { memberSchema } from "./MemberSchema";
 
 export const taskSchema = z.object({
   id: z.string(),
@@ -37,6 +38,11 @@ export const taskSchema = z.object({
     }),
   createdAt: z.date(),
   updatedAt: z.date(),
+  member: z.object({
+    name: z.string(),
+    email: z.string(),
+    role: z.enum(["MEMBER", "ADMIN"]),
+  }),
 });
 
 // Omitted schema for client-side form validation

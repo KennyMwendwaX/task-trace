@@ -18,6 +18,14 @@ export async function GET(
       where: {
         id: memberId,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
 
     if (!member)
