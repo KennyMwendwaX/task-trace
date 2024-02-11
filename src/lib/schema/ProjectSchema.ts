@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { userSchema } from "./UserSchema";
 
 export const projectSchema = z.object({
   id: z.string(),
@@ -29,10 +30,6 @@ export const projectSchema = z.object({
     required_error: "Owner is required",
     invalid_type_error: "Owner must be a string",
   }),
-  ownerName: z.string({
-    required_error: "Owner is required",
-    invalid_type_error: "Owner must be a string",
-  }),
   description: z
     .string()
     .min(1, { message: "Description must be at least 1 character long" })
@@ -41,6 +38,13 @@ export const projectSchema = z.object({
     }),
   createdAt: z.date(),
   updatedAt: z.date(),
+  owner: userSchema.omit({
+    emailVerified: true,
+    password: true,
+    role: true,
+    image: true,
+    createdAt: true,
+  }),
 });
 
 // Omitted schema for client-side form validation
@@ -50,7 +54,6 @@ export const projectFormSchema = projectSchema.omit({
   createdAt: true,
   updatedAt: true,
   ownerId: true,
-  ownerName: true,
 });
 
 export type Project = z.infer<typeof projectSchema>;

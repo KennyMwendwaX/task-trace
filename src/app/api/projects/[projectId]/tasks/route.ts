@@ -102,7 +102,6 @@ export async function POST(
         description,
         status: "TO_DO",
         memberId: memberId,
-        memberName: member.userName,
         projectId: projectId,
       },
     });

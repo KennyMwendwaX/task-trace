@@ -5,9 +5,19 @@ import { auth } from "../../../../auth";
 
 export async function GET() {
   try {
-    const projects = await prisma.project.findMany();
+    const projects = await prisma.project.findMany({
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
 
-    if (projects.length === 0)
+    if (!projects)
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
@@ -65,7 +75,6 @@ export async function POST(request: Request) {
         description,
         status: "TO_DO",
         ownerId: user.id,
-        ownerName: user.name,
       },
     });
 
