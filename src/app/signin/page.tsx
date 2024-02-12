@@ -39,6 +39,7 @@ export default function Signin() {
   const errors = form.formState.errors;
 
   async function onSubmit(values: SigninValues) {
+    console.log(values);
     startTransition(() => {
       credentialsLogin(values).then((data) => {
         setServerError(data?.error);

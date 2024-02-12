@@ -33,6 +33,7 @@ export default function Signup() {
   const errors = form.formState.errors;
 
   async function onSubmit(values: SignupValues) {
+    console.log(values);
     const payload = {
       name: values.name,
       email: values.email,
