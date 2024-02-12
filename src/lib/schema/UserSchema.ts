@@ -38,6 +38,7 @@ export const signupSchema = userSchema
     role: true,
     image: true,
     createdAt: true,
+    updatedAt: true,
   })
   .extend({
     confirm_password: z.string({
@@ -57,6 +58,7 @@ export const signinSchema = userSchema.omit({
   role: true,
   image: true,
   createdAt: true,
+  updatedAt: true,
 });
 
 export type User = z.infer<typeof userSchema>;
