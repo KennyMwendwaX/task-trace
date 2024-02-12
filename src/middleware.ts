@@ -1,17 +1,16 @@
-import NextAuth from "next-auth";
-import { authConfig } from "./auth.config";
 import {
   DEFAULT_ROUTE_REDIRECT,
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
 } from "./routes";
+import { auth } from "./auth";
+import { NextRequest } from "next/server";
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+export default async function middleware(request: NextRequest) {
+  const { nextUrl } = request;
+  const session = await auth();
+  const isLoggedIn = !!session;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -32,7 +31,7 @@ export default auth((req) => {
   }
 
   return null;
-});
+}
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {

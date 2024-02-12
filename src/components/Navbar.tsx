@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
-import { Session } from "next-auth/types";
+import { Session } from "next-auth";
 
 type Props = {
   session: Session | null;
