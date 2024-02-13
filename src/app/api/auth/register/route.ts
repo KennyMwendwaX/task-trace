@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     emailVerified: true,
     image: true,
     createdAt: true,
+    updatedAt: true,
   });
 
   const result = requestSchema.safeParse(req);

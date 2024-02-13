@@ -33,7 +33,7 @@ export const {
     async jwt({ token }) {
       if (!token.sub) return token;
 
-      const existingUser = await prisma.user.findUnique({
+      const existingUser = await prisma.user.findFirst({
         where: {
           id: token.sub,
         },
@@ -46,6 +46,7 @@ export const {
     },
   },
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   ...authConfig,
 });
