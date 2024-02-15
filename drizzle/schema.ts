@@ -29,7 +29,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const accounts = pgTable(
   "account",
   {
-    userId: serial("user_id")
+    userId: integer("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
@@ -52,7 +52,7 @@ export const accounts = pgTable(
 
 export const sessions = pgTable("session", {
   sessionToken: text("session_token").notNull().primaryKey(),
-  userId: text("user_id")
+  userId: integer("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
@@ -80,7 +80,7 @@ export const projects = pgTable("project", {
   endDate: timestamp("end_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
-  ownerId: text("owner_id")
+  ownerId: integer("owner_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
 });
@@ -98,10 +98,10 @@ export const members = pgTable("member", {
   role: text("role").$type<"ADMIN" | "MEMBER">().default("MEMBER").notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
-  userId: text("user_id")
+  userId: integer("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
-  projectId: text("project_id")
+  projectId: integer("project_id")
     .notNull()
     .references(() => projects.id, {
       onDelete: "restrict",
@@ -131,13 +131,13 @@ export const tasks = pgTable("task", {
   dueDate: timestamp("due_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
-  memberId: text("member_id")
+  memberId: integer("member_id")
     .notNull()
     .references(() => members.id, {
       onDelete: "restrict",
       onUpdate: "cascade",
     }),
-  projectId: text("project_id")
+  projectId: integer("project_id")
     .notNull()
     .references(() => projects.id, {
       onDelete: "restrict",
