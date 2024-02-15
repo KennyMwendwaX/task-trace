@@ -8,6 +8,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
+import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
@@ -20,6 +21,10 @@ export const users = pgTable("user", {
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  projects: many(projects),
+}));
 
 export const accounts = pgTable(
   "account",
@@ -64,6 +69,28 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export const projects = pgTable("project", {
+  id: text("id").primaryKey().notNull(),
+  name: text("name").notNull(),
+  label: text("label").notNull(),
+  status: text("status").notNull(),
+  description: text("description").notNull(),
+  startDate: timestamp("start_date", { mode: "date" }).notNull(),
+  endDate: timestamp("end_date", { mode: "date" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
+  ownerId: text("ownerId")
+    .notNull()
+    .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
+});
+
+export const projectsRelations = relations(projects, ({ one }) => ({
+  owner: one(users, {
+    fields: [projects.ownerId],
+    references: [users.id],
+  }),
+}));
 
 // import { pgTable, pgEnum, varchar, timestamp, text, integer, uniqueIndex, foreignKey } from "drizzle-orm/pg-core"
 //   import { sql } from "drizzle-orm"
