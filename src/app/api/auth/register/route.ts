@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
 import { userSchema } from "@/lib/schema/UserSchema";
+import { db } from "@/db/db";
 
 export async function POST(request: Request) {
   const req = await request.json();
