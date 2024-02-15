@@ -5,29 +5,26 @@ import {
   primaryKey,
   integer,
   pgEnum,
+  uuid,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 
-export const userRole = pgEnum("UserRole", ["ADMIN", "USER"]);
-
 export const users = pgTable("user", {
-  id: text("id").notNull().primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name"),
-  email: text("email").notNull(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  email: text("email").unique().notNull(),
+  emailVerified: timestamp("email_verified", { mode: "date" }),
   password: text("password"),
-  role: userRole("role").default("USER").notNull(),
+  role: text("role").$type<"ADMIN" | "USER">().default("USER").notNull(),
   image: text("image"),
-  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updatedAt", { precision: 3, mode: "string" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
 });
 
 export const accounts = pgTable(
   "account",
   {
-    userId: text("userId")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
@@ -49,8 +46,8 @@ export const accounts = pgTable(
 );
 
 export const sessions = pgTable("session", {
-  sessionToken: text("sessionToken").notNull().primaryKey(),
-  userId: text("userId")
+  sessionToken: text("session_token").notNull().primaryKey(),
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
