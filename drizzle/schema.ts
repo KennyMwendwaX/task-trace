@@ -24,6 +24,7 @@ export const users = pgTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   projects: many(projects),
+  members: many(members),
 }));
 
 export const accounts = pgTable(
@@ -71,7 +72,7 @@ export const verificationTokens = pgTable(
 );
 
 export const projects = pgTable("project", {
-  id: text("id").primaryKey().notNull(),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
   label: text("label").notNull(),
   status: text("status").notNull(),
@@ -80,15 +81,43 @@ export const projects = pgTable("project", {
   endDate: timestamp("end_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
-  ownerId: text("ownerId")
+  ownerId: text("owner_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
 });
 
-export const projectsRelations = relations(projects, ({ one }) => ({
+export const projectsRelations = relations(projects, ({ one, many }) => ({
   owner: one(users, {
     fields: [projects.ownerId],
     references: [users.id],
+  }),
+  members: many(members),
+}));
+
+export const members = pgTable("member", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  role: text("role").$type<"ADMIN" | "MEMBER">().default("MEMBER").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+});
+
+export const membersRelations = relations(members, ({ one }) => ({
+  user: one(users, {
+    fields: [members.userId],
+    references: [users.id],
+  }),
+  project: one(projects, {
+    fields: [members.projectId],
+    references: [projects.id],
   }),
 }));
 
