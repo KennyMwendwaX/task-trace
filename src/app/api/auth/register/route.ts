@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
 import { userSchema } from "@/lib/schema/UserSchema";
 import db from "@/db/db";
+import { users } from "@/db/schema";
 
 export async function POST(request: Request) {
   const req = await request.json();
@@ -28,32 +29,24 @@ export async function POST(request: Request) {
 
   try {
     // Check if the email is already registered
-    // const userExists = await prisma.user.findUnique({
-    //   where: { email },
-    // });
-
     const userExists = await db.query.users.findFirst({
-      where: {
-        email: email,
-      },
+      where: (fields, operators) => operators.eq(fields.email, email),
     });
 
-    // if (userExists)
-    //   return NextResponse.json(
-    //     { message: "Email already registered" },
-    //     { status: 409 }
-    //   );
+    if (userExists)
+      return NextResponse.json(
+        { message: "Email already registered" },
+        { status: 409 }
+      );
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the user an account
-    const user = await prisma.user.create({
-      data: {
-        name: name,
-        email: email,
-        password: hashedPassword,
-      },
+    const user = await db.insert(users).values({
+      name: name,
+      email: email,
+      password: hashedPassword,
     });
 
     // Return success message
