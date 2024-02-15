@@ -4,7 +4,6 @@ import {
   text,
   primaryKey,
   integer,
-  pgEnum,
   uuid,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
@@ -110,13 +109,49 @@ export const members = pgTable("member", {
     }),
 });
 
-export const membersRelations = relations(members, ({ one }) => ({
+export const membersRelations = relations(members, ({ one, many }) => ({
   user: one(users, {
     fields: [members.userId],
     references: [users.id],
   }),
   project: one(projects, {
     fields: [members.projectId],
+    references: [projects.id],
+  }),
+  tasks: many(tasks),
+}));
+
+export const tasks = pgTable("task", {
+  id: text("id").primaryKey().notNull(),
+  name: text("name").notNull(),
+  label: text("label").notNull(),
+  status: text("status").notNull(),
+  priority: text("priority").notNull(),
+  description: text("description").notNull(),
+  dueDate: timestamp("due_date", { mode: "date" }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
+  memberId: text("member_id")
+    .notNull()
+    .references(() => members.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+});
+
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  member: one(members, {
+    fields: [tasks.memberId],
+    references: [members.id],
+  }),
+  project: one(projects, {
+    fields: [tasks.projectId],
     references: [projects.id],
   }),
 }));
