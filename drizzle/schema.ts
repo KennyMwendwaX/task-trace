@@ -4,13 +4,13 @@ import {
   text,
   primaryKey,
   integer,
-  uuid,
+  serial,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  id: serial("id").primaryKey().notNull(),
   name: text("name"),
   email: text("email").unique().notNull(),
   emailVerified: timestamp("email_verified", { mode: "date" }),
@@ -29,7 +29,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const accounts = pgTable(
   "account",
   {
-    userId: uuid("user_id")
+    userId: serial("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
@@ -71,7 +71,7 @@ export const verificationTokens = pgTable(
 );
 
 export const projects = pgTable("project", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  id: serial("id").primaryKey().notNull(),
   name: text("name").notNull(),
   label: text("label").notNull(),
   status: text("status").notNull(),
@@ -94,7 +94,7 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 }));
 
 export const members = pgTable("member", {
-  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  id: serial("id").primaryKey().notNull(),
   role: text("role").$type<"ADMIN" | "MEMBER">().default("MEMBER").notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
