@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS "member" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"role" text DEFAULT 'MEMBER' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
 	"user_id" uuid NOT NULL,
 	"project_id" uuid NOT NULL
 );
@@ -31,7 +30,6 @@ CREATE TABLE IF NOT EXISTS "project" (
 	"start_date" timestamp NOT NULL,
 	"end_date" timestamp NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
 	"owner_id" uuid NOT NULL
 );
 --> statement-breakpoint
@@ -50,21 +48,19 @@ CREATE TABLE IF NOT EXISTS "task" (
 	"description" text NOT NULL,
 	"due_date" timestamp NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
 	"member_id" uuid NOT NULL,
 	"project_id" uuid NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" text,
+	"name" text NOT NULL,
 	"email" text NOT NULL,
 	"email_verified" timestamp,
 	"password" text,
 	"role" text DEFAULT 'USER' NOT NULL,
 	"image" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

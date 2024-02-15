@@ -11,14 +11,13 @@ import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
-  name: text("name"),
+  name: text("name").notNull(),
   email: text("email").unique().notNull(),
   emailVerified: timestamp("email_verified", { mode: "date" }),
   password: text("password"),
   role: text("role").$type<"ADMIN" | "USER">().default("USER").notNull(),
   image: text("image"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -79,7 +78,6 @@ export const projects = pgTable("project", {
   startDate: timestamp("start_date", { mode: "date" }).notNull(),
   endDate: timestamp("end_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
   ownerId: uuid("owner_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
@@ -97,7 +95,6 @@ export const members = pgTable("member", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   role: text("role").$type<"ADMIN" | "MEMBER">().default("MEMBER").notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
@@ -130,7 +127,6 @@ export const tasks = pgTable("task", {
   description: text("description").notNull(),
   dueDate: timestamp("due_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
   memberId: uuid("member_id")
     .notNull()
     .references(() => members.id, {
