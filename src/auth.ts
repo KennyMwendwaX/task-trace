@@ -2,7 +2,6 @@ import NextAuth, { DefaultSession } from "next-auth";
 import { authConfig } from "./auth.config";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import db from "@/database/db";
-import prisma from "@/lib/db";
 
 declare module "next-auth" {
   interface Session {

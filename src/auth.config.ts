@@ -5,6 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import prisma from "@/lib/db";
 import { compare } from "bcryptjs";
 import { signinSchema } from "./lib/schema/UserSchema";
+import db from "./database/db";
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -32,10 +33,8 @@ export const authConfig: NextAuthConfig = {
           const { email, password } = result.data;
 
           // Check user exists
-          const user = await prisma.user.findUnique({
-            where: {
-              email,
-            },
+          const user = await db.query.users.findFirst({
+            where: (fields, operators) => operators.eq(fields.email, email),
           });
 
           if (!user) return null;
