@@ -5,12 +5,11 @@ import {
   authRoutes,
 } from "./routes";
 import { auth } from "./auth";
-import { NextRequest } from "next/server";
 
-export default async function middleware(request: NextRequest) {
-  const { nextUrl } = request;
-  const session = await auth();
-  const isLoggedIn = !!session;
+export default auth((req) => {
+  const { nextUrl } = req;
+
+  const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -31,7 +30,7 @@ export default async function middleware(request: NextRequest) {
   }
 
   return null;
-}
+});
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
