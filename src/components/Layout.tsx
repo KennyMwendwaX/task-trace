@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { ReactNode } from "react";
-import { Session } from "next-auth/types";
+import { Session } from "next-auth";
 
 type Props = {
   children: ReactNode;

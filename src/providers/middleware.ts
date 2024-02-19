@@ -3,8 +3,8 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
-} from "./routes";
-import { auth } from "./auth";
+} from "../routes";
+import { auth } from "../auth";
 import { NextRequest } from "next/server";
 import { Session } from "next-auth";
 
