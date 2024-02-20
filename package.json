@@ -33,6 +33,7 @@
     "@tanstack/react-table": "^8.10.7",
     "@types/bcryptjs": "^2.4.6",
     "@uiw/react-markdown-preview": "^5.0.7",
+    "@vercel/postgres": "^0.7.2",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
