@@ -1,8 +1,6 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import { migrate } from "drizzle-orm/postgres-js/migrator";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/vercel-postgres";
+import { migrate } from "drizzle-orm/vercel-postgres/migrator";
+import { sql } from "@vercel/postgres";
 
-const migrationClient = postgres(process.env.DATABASE_URL!, { max: 1 });
-const db = drizzle(migrationClient);
+const db = drizzle(sql);
 migrate(db, { migrationsFolder: "drizzle/migrations" });
-migrationClient.end();
