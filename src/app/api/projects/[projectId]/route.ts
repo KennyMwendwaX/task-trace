@@ -1,3 +1,4 @@
+import db from "@/database/db";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -7,13 +8,11 @@ export async function GET(
 ) {
   const projectId = params.projectId;
   try {
-    const project = await prisma.project.findFirst({
-      where: {
-        id: projectId,
-      },
-      include: {
+    const project = await db.query.projects.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, projectId),
+      with: {
         owner: {
-          select: {
+          columns: {
             id: true,
             name: true,
             email: true,
