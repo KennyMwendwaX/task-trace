@@ -1,4 +1,7 @@
+import db from "@/database/db";
+import { members } from "@/database/schema";
 import prisma from "@/lib/db";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -14,13 +17,11 @@ export async function GET(
     );
 
   try {
-    const member = await prisma.member.findUnique({
-      where: {
-        id: memberId,
-      },
-      include: {
+    const member = await db.query.members.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, memberId),
+      with: {
         user: {
-          select: {
+          columns: {
             name: true,
             email: true,
           },
@@ -56,11 +57,9 @@ export async function DELETE(
     );
 
   try {
-    const deletedMember = await prisma.member.delete({
-      where: {
-        id: memberId,
-      },
-    });
+    const deletedMember = await db
+      .delete(members)
+      .where(eq(members.id, memberId));
 
     if (!deletedMember)
       return NextResponse.json(
