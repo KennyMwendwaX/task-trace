@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LuUser2, LuCalendar, LuProjector, LuUsers } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
-import { Session } from "next-auth/types";
+import { Session } from "next-auth";
 
 type Props = {
   session: Session | null;
