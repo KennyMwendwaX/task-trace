@@ -33,13 +33,8 @@ export const authConfig: NextAuthConfig = {
           const { email, password } = result.data;
 
           // Check user exists
-          // const user = await db.query.users.findFirst({
-          //   where: (fields, operators) => operators.eq(fields.email, email),
-          // });
-          const user = await prisma.user.findUnique({
-            where: {
-              email,
-            },
+          const user = await db.query.users.findFirst({
+            where: (fields, operators) => operators.eq(fields.email, email),
           });
 
           if (!user) return null;

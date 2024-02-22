@@ -1,9 +1,7 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import { authConfig } from "./auth.config";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@/database/db";
-import prisma from "@/lib/db";
 
 declare module "next-auth" {
   interface Session {
@@ -37,14 +35,8 @@ export const {
 
       if (token.sub == undefined) return token;
 
-      // const existingUser = await db.query.users.findFirst({
-      //   where: (fields, operators) => operators.eq(fields.id, token.sub!),
-      // });
-
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          id: token.sub,
-        },
+      const existingUser = await db.query.users.findFirst({
+        where: (fields, operators) => operators.eq(fields.id, token.sub!),
       });
 
       if (!existingUser) return token;
@@ -53,8 +45,7 @@ export const {
       return token;
     },
   },
-  // adapter: DrizzleAdapter(db),
-  adapter: PrismaAdapter(prisma),
+  adapter: DrizzleAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   ...authConfig,
