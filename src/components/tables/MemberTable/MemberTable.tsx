@@ -83,7 +83,7 @@ export default function MemberTable<TData, TValue>({
   };
 
   const csvData = members.map((member) => ({
-    name: member.userName,
+    name: member.user.name,
     role: member.role,
     tasks: member.tasks.length,
     tasksDone: getTasksByStatus(member, "DONE"),

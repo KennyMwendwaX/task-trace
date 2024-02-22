@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { memberSchema } from "@/lib/schema/UserSchema";
+import { memberSchema } from "@/lib/schema/MemberSchema";
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Row } from "@tanstack/react-table";
