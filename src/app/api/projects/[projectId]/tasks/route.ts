@@ -1,5 +1,4 @@
 import { taskFormSchema } from "@/lib/schema/TaskSchema";
-import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import db from "@/database/db";
 import { tasks } from "@/database/schema";

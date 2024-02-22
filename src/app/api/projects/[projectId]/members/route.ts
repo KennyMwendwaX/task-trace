@@ -1,5 +1,4 @@
 import { memberFormSchema } from "@/lib/schema/MemberSchema";
-import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import db from "@/database/db";
 import { members } from "@/database/schema";

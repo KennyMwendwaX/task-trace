@@ -1,6 +1,5 @@
 import db from "@/database/db";
 import { members } from "@/database/schema";
-import prisma from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 

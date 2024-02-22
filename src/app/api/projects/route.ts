@@ -1,4 +1,3 @@
-import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "../../../auth";
