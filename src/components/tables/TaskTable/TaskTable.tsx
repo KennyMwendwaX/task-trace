@@ -31,7 +31,7 @@ import { Task } from "@/lib/schema/TaskSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
-import { Member } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/MemberSchema";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -79,7 +79,7 @@ export default function TaskTable<TData, TValue>({
     name: task.name,
     status: task.status,
     priority: task.priority,
-    assignedTo: task.memberName,
+    assignedTo: task.member.user.name,
     due_date: format(task.due_date, "dd/MM/yyyy"),
   }));
 
