@@ -50,7 +50,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Task, TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Member } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/MemberSchema";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "./ui/scroll-area";
@@ -286,7 +286,7 @@ export default function EditTaskModal({
                                   {field.value
                                     ? members.find(
                                         (member) => member.id === field.value
-                                      )?.userName
+                                      )?.user.name
                                     : "Select member"}
                                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
@@ -299,7 +299,7 @@ export default function EditTaskModal({
                                 <CommandGroup>
                                   {members.map((member) => (
                                     <CommandItem
-                                      value={member.userName}
+                                      value={member.user.name}
                                       key={member.id}
                                       onSelect={() => {
                                         form.setValue("memberId", member.id);
@@ -312,7 +312,7 @@ export default function EditTaskModal({
                                             : "opacity-0"
                                         )}
                                       />
-                                      {member.userName}
+                                      {member.user.name}
                                     </CommandItem>
                                   ))}
                                 </CommandGroup>
@@ -344,27 +344,6 @@ export default function EditTaskModal({
                       )}
                     />
                   </div>
-                  {/* <div>
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            id="description"
-                            className="focus:border-2 focus:border-blue-600"
-                            placeholder="Task description"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div> */}
                   <DialogFooter>
                     <Button type="submit">Update Task</Button>
                   </DialogFooter>

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { memberSchema } from "./MemberSchema";
 
 export const taskSchema = z.object({
   id: z.string(),
@@ -54,6 +53,7 @@ export const taskFormSchema = taskSchema.omit({
   createdAt: true,
   updatedAt: true,
   userId: true,
+  member: true,
 });
 
 export type Task = z.infer<typeof taskSchema>;
