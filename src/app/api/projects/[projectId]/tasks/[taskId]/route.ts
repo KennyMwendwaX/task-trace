@@ -1,6 +1,9 @@
 import { taskFormSchema } from "@/lib/schema/TaskSchema";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
+import db from "@/database/db";
+import { eq } from "drizzle-orm";
+import { tasks } from "@/database/schema";
 
 export async function GET(
   request: Request,
@@ -12,18 +15,16 @@ export async function GET(
     return NextResponse.json({ message: "No task Id found" }, { status: 404 });
 
   try {
-    const task = await prisma.task.findUnique({
-      where: {
-        id: taskId,
-      },
-      include: {
+    const task = await db.query.tasks.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, taskId),
+      with: {
         member: {
-          select: {
+          columns: {
             role: true,
           },
-          include: {
+          with: {
             user: {
-              select: {
+              columns: {
                 name: true,
                 email: true,
               },
@@ -57,10 +58,8 @@ export async function PUT(
     return NextResponse.json({ message: "No task Id found" }, { status: 404 });
 
   try {
-    const task = await prisma.task.findUnique({
-      where: {
-        id: taskId,
-      },
+    const task = await db.query.tasks.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, taskId),
     });
 
     if (!task)
@@ -79,10 +78,8 @@ export async function PUT(
     const { name, label, priority, due_date, memberId, description } =
       result.data;
 
-    const member = await prisma.member.findUnique({
-      where: {
-        id: memberId,
-      },
+    const member = await db.query.members.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, memberId),
     });
 
     if (!member)
@@ -91,19 +88,17 @@ export async function PUT(
         { status: 400 }
       );
 
-    const updatedTask = await prisma.task.update({
-      where: {
-        id: taskId,
-      },
-      data: {
-        name,
-        label,
-        priority,
-        due_date,
-        memberId,
-        description,
-      },
-    });
+    const updatedTask = await db
+      .update(tasks)
+      .set({
+        name: name,
+        label: label,
+        priority: priority,
+        dueDate: due_date,
+        memberId: memberId,
+        description: description,
+      })
+      .where(eq(tasks.id, taskId));
 
     if (!updatedTask)
       return NextResponse.json({ message: "Failed to update task" });
@@ -130,11 +125,7 @@ export async function DELETE(
     return NextResponse.json({ message: "No id provided" }, { status: 400 });
 
   try {
-    const deletedTask = await prisma.task.delete({
-      where: {
-        id: taskId,
-      },
-    });
+    const deletedTask = await db.delete(tasks).where(eq(tasks.id, taskId));
 
     if (!deletedTask)
       return NextResponse.json(
