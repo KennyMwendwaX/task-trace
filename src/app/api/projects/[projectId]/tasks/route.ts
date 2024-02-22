@@ -1,6 +1,8 @@
 import { taskFormSchema } from "@/lib/schema/TaskSchema";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
+import db from "@/database/db";
+import { tasks } from "@/database/schema";
 
 export async function GET(
   request: Request,
@@ -15,10 +17,8 @@ export async function GET(
     );
 
   try {
-    const project = await prisma.project.findUnique({
-      where: {
-        id: projectId,
-      },
+    const project = await db.query.projects.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, projectId),
     });
 
     if (!project)
@@ -27,15 +27,15 @@ export async function GET(
         { status: 404 }
       );
 
-    const tasks = await prisma.task.findMany({
-      include: {
+    const tasks = await db.query.tasks.findMany({
+      with: {
         member: {
-          select: {
+          columns: {
             role: true,
           },
-          include: {
+          with: {
             user: {
-              select: {
+              columns: {
                 name: true,
                 email: true,
               },
@@ -69,10 +69,8 @@ export async function POST(
     );
 
   try {
-    const project = await prisma.project.findUnique({
-      where: {
-        id: projectId,
-      },
+    const project = await db.query.projects.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, projectId),
     });
 
     if (!project)
@@ -94,10 +92,8 @@ export async function POST(
     const { name, label, priority, due_date, memberId, description } =
       result.data;
 
-    const member = await prisma.member.findUnique({
-      where: {
-        id: memberId,
-      },
+    const member = await db.query.members.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, memberId),
     });
 
     if (!member)
@@ -106,17 +102,15 @@ export async function POST(
         { status: 400 }
       );
 
-    const task = await prisma.task.create({
-      data: {
-        name,
-        label,
-        priority,
-        due_date,
-        description,
-        status: "TO_DO",
-        memberId: memberId,
-        projectId: projectId,
-      },
+    const task = await db.insert(tasks).values({
+      name: name,
+      label: label,
+      priority: priority,
+      dueDate: due_date,
+      description: description,
+      status: "TO_DO",
+      memberId: memberId,
+      projectId: projectId,
     });
 
     if (!task)

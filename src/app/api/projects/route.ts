@@ -40,10 +40,8 @@ export async function POST(request: Request) {
   if (!session || session.user.role !== "ADMIN")
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
+  const user = await db.query.users.findFirst({
+    where: (fields, operators) => operators.eq(fields.id, session.user.id),
   });
 
   if (!user)
