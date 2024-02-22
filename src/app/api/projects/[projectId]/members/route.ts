@@ -1,6 +1,8 @@
 import { memberFormSchema } from "@/lib/schema/MemberSchema";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
+import db from "@/database/db";
+import { members } from "@/database/schema";
 
 export async function GET(
   request: Request,
@@ -14,10 +16,8 @@ export async function GET(
       { status: 404 }
     );
   try {
-    const project = await prisma.project.findUnique({
-      where: {
-        id: projectId,
-      },
+    const project = await db.query.projects.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, projectId),
     });
 
     if (!project)
@@ -26,10 +26,10 @@ export async function GET(
         { status: 404 }
       );
 
-    const members = await prisma.member.findMany({
-      include: {
+    const members = await db.query.members.findMany({
+      with: {
         user: {
-          select: {
+          columns: {
             name: true,
             email: true,
           },
@@ -62,10 +62,8 @@ export async function POST(
     );
 
   try {
-    const project = await prisma.project.findUnique({
-      where: {
-        id: projectId,
-      },
+    const project = await db.query.projects.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, projectId),
     });
 
     if (!project)
@@ -81,21 +79,17 @@ export async function POST(
 
     const { userId, role } = result.data;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
+    const user = await db.query.users.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, userId),
     });
 
     if (!user)
       return NextResponse.json({ message: "User not found" }, { status: 400 });
 
-    const member = await prisma.member.create({
-      data: {
-        role: role,
-        userId: user.id,
-        projectId: project.id,
-      },
+    const member = await db.insert(members).values({
+      role: role,
+      userId: userId,
+      projectId: projectId,
     });
 
     if (!member)
