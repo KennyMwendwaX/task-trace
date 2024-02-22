@@ -10,7 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { MdOutlineAddTask } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
-import { Member, User } from "@/lib/schema/UserSchema";
+import { User } from "@/lib/schema/UserSchema";
+import { Member } from "@/lib/schema/MemberSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiUserPlus } from "react-icons/fi";
 

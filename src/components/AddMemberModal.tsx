@@ -29,11 +29,8 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  User,
-  MemberFormValues,
-  memberFormSchema,
-} from "@/lib/schema/UserSchema";
+import { User } from "@/lib/schema/UserSchema";
+import { memberFormSchema, MemberFormValues } from "@/lib/schema/MemberSchema";
 import {
   Command,
   CommandInput,
