@@ -2,13 +2,15 @@ import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "../../../auth";
+import db from "@/database/db";
+import { projects } from "@/database/schema";
 
 export async function GET() {
   try {
-    const projects = await prisma.project.findMany({
-      include: {
+    const projects = await db.query.projects.findMany({
+      with: {
         owner: {
-          select: {
+          columns: {
             id: true,
             name: true,
             email: true,
@@ -66,16 +68,14 @@ export async function POST(request: Request) {
   const { name, label, start_date, end_date, description } = result.data;
 
   try {
-    const project = await prisma.project.create({
-      data: {
-        name,
-        label,
-        start_date,
-        end_date,
-        description,
-        status: "TO_DO",
-        ownerId: user.id,
-      },
+    const project = await db.insert(projects).values({
+      name: name,
+      label: label,
+      startDate: start_date,
+      endDate: end_date,
+      description: description,
+      status: "TO_DO",
+      ownerId: user.id,
     });
 
     if (!project)
