@@ -1,9 +1,10 @@
+import db from "@/database/db";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const users = await prisma.user.findMany();
+    const users = await db.query.users.findMany();
 
     if (!users)
       return NextResponse.json(

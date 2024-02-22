@@ -1,3 +1,4 @@
+import db from "@/database/db";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -11,10 +12,8 @@ export async function GET(
     return NextResponse.json({ message: "No user Id found" }, { status: 404 });
 
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
+    const user = await db.query.users.findFirst({
+      where: (fields, operators) => operators.eq(fields.id, id),
     });
 
     if (!user)
