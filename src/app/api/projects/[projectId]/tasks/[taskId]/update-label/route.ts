@@ -2,6 +2,8 @@ import { taskSchema } from "@/lib/schema/TaskSchema";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import db from "@/database/db";
+import { tasks } from "@/database/schema";
 
 // Define a request schema using Zod for type safety
 const requestSchema = z.object({
@@ -26,13 +28,8 @@ export async function PUT(
     );
 
   try {
-    const updatedTask = await prisma.task.update({
-      where: {
-        id: taskId,
-      },
-      data: {
-        label: result.data.label,
-      },
+    const updatedTask = await db.update(tasks).set({
+      label: result.data.label,
     });
 
     if (!updatedTask)
