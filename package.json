@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:pg",
     "db:introspect": "drizzle-kit introspect:pg",
-    "db:migrate": "drizzle-kit push:pg"
+    "db:migrate": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.7.0",
