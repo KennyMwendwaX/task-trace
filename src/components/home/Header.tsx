@@ -4,12 +4,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Button } from "@/components/ui/button";
-import { signOut, useSession } from "next-auth/react";
 import { MdLogout } from "react-icons/md";
+import { logout } from "@/actions/auth/logout";
+import { Session } from "next-auth";
 
-export default function Header() {
+interface Props {
+  session: Session | null;
+}
+
+export default function Header({ session }: Props) {
   const [top, setTop] = useState<boolean>(true);
-  const { data: session, status } = useSession();
 
   // detect whether user has scrolled the page down by 10px
   const scrollHandler = () => {
@@ -21,7 +25,7 @@ export default function Header() {
     window.addEventListener("scroll", scrollHandler);
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [top]);
-  
+
   return (
     <>
       <header
@@ -44,7 +48,7 @@ export default function Header() {
             <nav className="hidden md:flex md:grow">
               {/* Desktop sign in links */}
 
-              {session && status === "authenticated" ? (
+              {session != null ? (
                 <ul className="flex grow justify-end flex-wrap items-center space-x-2">
                   <li>
                     <Link href="/dashboard">
@@ -58,7 +62,7 @@ export default function Header() {
                   </li>
                   <li>
                     <Button
-                      onClick={() => signOut()}
+                      onClick={() => logout()}
                       size="lg"
                       className="flex items-center rounded-full">
                       <MdLogout className="mr-1 w-5 h-5" />

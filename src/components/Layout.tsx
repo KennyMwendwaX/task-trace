@@ -13,7 +13,7 @@ type Props = {
 
 export default function Layout({ children, session }: Props) {
   const pathname = usePathname();
-  const excludePaths = ["/", "/signup", "/signin"];
+  const excludePaths = ["/", "/signup", "/signin", "/home"];
 
   const excludedPaths = excludePaths.includes(pathname);
 
