@@ -40,7 +40,7 @@ export default function Header({ session }: Props) {
               <Link
                 href="/"
                 className="self-center text-3xl font-semibold whitespace-nowrap text-slate-800">
-                PesaIQ
+                TaskTrace
               </Link>
             </div>
 

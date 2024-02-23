@@ -40,9 +40,9 @@ export default function Hero() {
             <h1
               className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4"
               data-aos="zoom-y-out">
-              Unlock Your Financial Potential with &nbsp;
+              Streamline Your Task Management and Boost Productivity with &nbsp;
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                PesaIQ
+                TaskTrace
               </span>
             </h1>
             <div className="max-w-3xl mx-auto">
@@ -50,9 +50,9 @@ export default function Hero() {
                 className="text-xl text-gray-600 mb-8"
                 data-aos="zoom-y-out"
                 data-aos-delay="150">
-                Empower your journey to financial wellness and prosperity with
-                personalized guidance tailored to your unique goals and
-                aspirations.
+                Empowering Teams to Achieve Seamless Workflow Coordination,
+                Superior Task Management, and Unmatched Productivity in your
+                All-in-One Solution.
               </p>
               <div
                 className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center"

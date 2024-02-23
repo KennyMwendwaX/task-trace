@@ -10,7 +10,7 @@ export default function Footer() {
           {/* 1st block */}
           <div className="sm:col-span-12 lg:col-span-3">
             <div className="mb-2 self-center text-3xl font-semibold whitespace-nowrap text-slate-800">
-              PesaIQ
+              TaskTrace
             </div>
           </div>
 
@@ -175,7 +175,7 @@ export default function Footer() {
 
           {/* Copyrights note */}
           <div className="text-sm text-gray-600 mr-4">
-            &copy; PesaIQ.com. All rights reserved.
+            &copy; tasktrace.vercel.app All rights reserved.
           </div>
         </div>
       </div>
