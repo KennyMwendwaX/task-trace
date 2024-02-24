@@ -25,7 +25,7 @@ export default function Navbar({ session }: Props) {
           <div className="space-x-3 items-center">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                TaskTracker
+                TaskTrace
               </span>
             </Link>
           </div>
