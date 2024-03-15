@@ -5,4 +5,5 @@ import { migrate } from "drizzle-orm/neon-http/migrator";
 const sql = neon(process.env.DATABASE_URL!);
 
 const db = drizzle(sql);
+
 migrate(db, { migrationsFolder: "drizzle/migrations" });
