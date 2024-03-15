@@ -36,7 +36,7 @@ export const {
       if (token.sub == undefined) return token;
 
       const existingUser = await db.query.users.findFirst({
-        where: (fields, operators) => operators.eq(fields.id, token.sub!),
+        where: (existingUser, { eq }) => eq(existingUser.id, token.sub!),
       });
 
       if (!existingUser) return token;

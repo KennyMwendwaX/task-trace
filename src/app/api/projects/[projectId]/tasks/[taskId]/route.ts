@@ -15,7 +15,7 @@ export async function GET(
 
   try {
     const task = await db.query.tasks.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, taskId),
+      where: (task, { eq }) => eq(task.id, taskId),
       with: {
         member: {
           columns: {
@@ -58,7 +58,7 @@ export async function PUT(
 
   try {
     const task = await db.query.tasks.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, taskId),
+      where: (task, { eq }) => eq(task.id, taskId),
     });
 
     if (!task)
@@ -78,7 +78,7 @@ export async function PUT(
       result.data;
 
     const member = await db.query.members.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, memberId),
+      where: (member, { eq }) => eq(member.id, memberId),
     });
 
     if (!member)

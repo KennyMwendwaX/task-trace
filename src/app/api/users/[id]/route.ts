@@ -12,7 +12,7 @@ export async function GET(
 
   try {
     const user = await db.query.users.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, id),
+      where: (user, { eq }) => eq(user.id, id),
     });
 
     if (!user)

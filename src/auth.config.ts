@@ -33,7 +33,7 @@ export const authConfig: NextAuthConfig = {
 
           // Check user exists
           const user = await db.query.users.findFirst({
-            where: (fields, operators) => operators.eq(fields.email, email),
+            where: (user, { eq }) => eq(user.email, email),
           });
 
           if (!user) return null;

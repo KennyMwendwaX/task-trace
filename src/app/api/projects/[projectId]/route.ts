@@ -8,7 +8,7 @@ export async function GET(
   const projectId = params.projectId;
   try {
     const project = await db.query.projects.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, projectId),
+      where: (project, { eq }) => eq(project.id, projectId),
       with: {
         owner: {
           columns: {

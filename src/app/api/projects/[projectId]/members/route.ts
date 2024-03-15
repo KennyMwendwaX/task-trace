@@ -16,7 +16,7 @@ export async function GET(
     );
   try {
     const project = await db.query.projects.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, projectId),
+      where: (project, { eq }) => eq(project.id, projectId),
     });
 
     if (!project)
@@ -62,7 +62,7 @@ export async function POST(
 
   try {
     const project = await db.query.projects.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, projectId),
+      where: (project, { eq }) => eq(project.id, projectId),
     });
 
     if (!project)
@@ -79,7 +79,7 @@ export async function POST(
     const { userId, role } = result.data;
 
     const user = await db.query.users.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, userId),
+      where: (user, { eq }) => eq(user.id, userId),
     });
 
     if (!user)

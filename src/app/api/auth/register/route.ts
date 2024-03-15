@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   try {
     // Check if the email is already registered
     const userExists = await db.query.users.findFirst({
-      where: (fields, operators) => operators.eq(fields.email, email),
+      where: (userExists, { eq }) => eq(userExists.email, email),
     });
 
     if (userExists)

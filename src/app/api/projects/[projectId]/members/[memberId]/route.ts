@@ -17,7 +17,7 @@ export async function GET(
 
   try {
     const member = await db.query.members.findFirst({
-      where: (fields, operators) => operators.eq(fields.id, memberId),
+      where: (member, { eq }) => eq(member.id, memberId),
       with: {
         user: {
           columns: {
