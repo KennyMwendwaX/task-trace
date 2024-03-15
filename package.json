@@ -40,7 +40,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
-    "drizzle-orm": "^0.29.3",
+    "drizzle-orm": "^0.29.5",
     "easymde": "^2.18.0",
     "geist": "^1.2.0",
     "lucide-react": "^0.294.0",
