@@ -41,14 +41,6 @@ export default function Dashboard3() {
       {/* Navbar */}
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-muted px-4 md:px-6 z-50">
         <nav className="hidden flex-col gap-6 text-lg font-medium lg:flex lg:flex-row lg:items-center lg:text-sm lg:gap-6">
-          {/* <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Package2 className="h-6 w-6" />
-            <span className="">Acme Inc</span>
-          </Link>
-          <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-            <Bell className="h-4 w-4" />
-            <span className="sr-only">Toggle notifications</span>
-          </Button> */}
           <Link
             href="#"
             className="flex items-center gap-2 font-semibold whitespace-nowrap">
@@ -119,13 +111,13 @@ export default function Dashboard3() {
                 href="#"
                 className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground">
                 <Package className="h-5 w-5" />
-                Products
+                Tasks
               </Link>
               <Link
                 href="#"
                 className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground">
                 <Users className="h-5 w-5" />
-                Customers
+                Members
               </Link>
               <Link
                 href="#"
@@ -205,6 +197,13 @@ export default function Dashboard3() {
                 <Home className="h-4 w-4" />
                 Dashboard
               </Link>
+              {/* Arrow Home*/}
+              <Link
+                href="#"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
+                <Home className="h-4 w-4" />
+                Overview
+              </Link>
               <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
@@ -218,13 +217,13 @@ export default function Dashboard3() {
                 href="#"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2.5 text-primary transition-all hover:text-primary">
                 <Package className="h-4 w-4" />
-                Products{" "}
+                Tasks{" "}
               </Link>
               <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
                 <Users className="h-4 w-4" />
-                Customers
+                Members
               </Link>
               <Link
                 href="#"
