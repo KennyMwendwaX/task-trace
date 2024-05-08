@@ -31,30 +31,6 @@ export default function TestDashboard2() {
     <>
       {/* Navbar */}
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-muted px-4 md:px-6 z-50">
-        <Link
-          href="#"
-          className="flex items-center gap-1 font-semibold whitespace-nowrap">
-          <Image src={Logo} width={32} height={28} alt="" />
-          <span className="text-lg">TaskTrace</span>
-          <span className="sr-only">Acme Inc</span>
-        </Link>
-        <nav className="hidden flex-1 justify-center flex-col gap-6 text-lg font-medium lg:flex lg:flex-row lg:items-center lg:text-sm lg:gap-6">
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground">
-            Dashboard
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground">
-            Projects
-          </Link>
-          <Link
-            href="#"
-            className="text-foreground transition-colors hover:text-foreground">
-            Settings
-          </Link>
-        </nav>
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -66,13 +42,14 @@ export default function TestDashboard2() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
+            <Link
+              href="#"
+              className="flex items-center gap-1 font-semibold whitespace-nowrap">
+              <Image src={Logo} width={32} height={28} alt="" />
+              <span className="text-lg tracking-tighter">TaskTrace</span>
+              <span className="sr-only">Logo</span>
+            </Link>
             <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-semibold">
-                <Package2 className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
-              </Link>
               <Link
                 href="#"
                 className="text-muted-foreground hover:text-foreground">
@@ -99,6 +76,31 @@ export default function TestDashboard2() {
             </nav>
           </SheetContent>
         </Sheet>
+        <Link
+          href="#"
+          className="flex items-center gap-1 font-semibold whitespace-nowrap">
+          <Image src={Logo} width={32} height={28} alt="" />
+          <span className="text-lg tracking-tighter">TaskTrace</span>
+          <span className="sr-only">Logo</span>
+        </Link>
+        <nav className="hidden flex-1 justify-center flex-col gap-6 text-3xl font-medium lg:flex lg:flex-row lg:items-center lg:text-sm lg:gap-6">
+          <Link
+            href="#"
+            className="text-muted-foreground transition-colors hover:text-foreground">
+            Dashboard
+          </Link>
+          <Link
+            href="#"
+            className="text-muted-foreground transition-colors hover:text-foreground">
+            Projects
+          </Link>
+          <Link
+            href="#"
+            className="text-foreground transition-colors hover:text-foreground">
+            Settings
+          </Link>
+        </nav>
+
         <div className="items-center ml-auto">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
