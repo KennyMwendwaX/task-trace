@@ -20,7 +20,8 @@ export default async function RootLayout({
     <html lang="en">
       <body className={GeistSans.className}>
         <TanstackProvider>
-          <Layout session={session}>{children}</Layout>
+          {/* <Layout session={session}>{children}</Layout> */}
+          {children}
         </TanstackProvider>
       </body>
     </html>
