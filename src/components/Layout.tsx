@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
 import { ReactNode } from "react";
 import { Session } from "next-auth";
 
@@ -13,8 +12,7 @@ type Props = {
 
 export default function Layout({ children, session }: Props) {
   const pathname = usePathname();
-  const excludePaths = ["/", "/signup", "/signin", "/home"];
-
+  const excludePaths = ["/", "/signup", "/signin", "/projects"];
   const excludedPaths = excludePaths.includes(pathname);
 
   return (
@@ -24,7 +22,6 @@ export default function Layout({ children, session }: Props) {
       ) : (
         <div className="antialiased">
           <Navbar session={session} />
-          <Sidebar session={session} />
           {children}
         </div>
       )}

@@ -36,6 +36,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import Logo from "../../../public/logo.png";
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdLogout } from "react-icons/md";
 
 export default function Dashboard3() {
   return (
@@ -131,13 +133,27 @@ export default function Dashboard3() {
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-base font-medium leading-none">
+                    Kennedy Mwendwa
+                  </p>
+                  <p className="text-xs leading-none text-gray-500">
+                    kennymwendwa67@gmail.com
+                  </p>
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center">
+                <IoSettingsOutline className="mr-2 w-5 h-5" /> Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {}}
+                className="flex items-center hover:bg-red-100">
+                <MdLogout className="mr-2 w-5 h-5" />
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

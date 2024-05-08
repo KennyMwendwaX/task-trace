@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 import { auth } from "../auth";
 
 export const metadata: Metadata = {
-  title: "Task Tracker",
+  title: "TaskTrace",
   description: "Track tasks in your project",
 };
 
@@ -20,8 +20,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={GeistSans.className}>
         <TanstackProvider>
-          {/* <Layout session={session}>{children}</Layout> */}
-          {children}
+          <Layout session={session}>{children}</Layout>
         </TanstackProvider>
       </body>
     </html>
