@@ -26,7 +26,9 @@ export default function Layout({ children, session }: Props) {
         // )
         <div className="antialiased">
           <Navbar session={session} />
-          <main className="container mx-auto px-14 py-4">{children}</main>
+          <main className="container mx-auto px-8 py-4 md:px-10 lg:px-14">
+            {children}
+          </main>
         </div>
       )}
     </>

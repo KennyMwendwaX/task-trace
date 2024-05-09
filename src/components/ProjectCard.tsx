@@ -121,6 +121,7 @@ export default function ProjectCard() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <DropdownMenuItem>Pin</DropdownMenuItem>
                   <DropdownMenuItem>Edit</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Trash</DropdownMenuItem>
