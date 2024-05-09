@@ -15,7 +15,7 @@ import { Member } from "@/lib/schema/MemberSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiUserPlus } from "react-icons/fi";
 
-export default function Project({ params }: { params: { projectId: string } }) {
+export default function ProjectPage({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
   const {

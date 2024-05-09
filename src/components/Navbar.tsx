@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -18,12 +20,14 @@ import { Session } from "next-auth";
 import { LuMenu } from "react-icons/lu";
 import Logo from "../../public/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
+import { usePathname } from "next/navigation";
 
 type Props = {
   session: Session | null;
 };
 
 export default function Navbar({ session }: Props) {
+  const pathname = usePathname();
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-muted px-4 md:px-6 z-50">
       <Sheet>
@@ -43,26 +47,30 @@ export default function Navbar({ session }: Props) {
           </Link>
           <nav className="grid gap-6 text-lg font-medium">
             <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground">
+              href="/dashboard"
+              className={`${
+                pathname === "/dashboard"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
+              } transition-colors hover:text-foreground`}>
               Dashboard
             </Link>
             <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground">
-              Orders
+              href="/projects"
+              className={`${
+                pathname === "/projects"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
+              } transition-colors hover:text-foreground`}>
+              Projects
             </Link>
             <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground">
-              Products
-            </Link>
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground">
-              Customers
-            </Link>
-            <Link href="#" className="hover:text-foreground">
+              href="/settings"
+              className={`${
+                pathname === "/settings"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
+              } transition-colors hover:text-foreground`}>
               Settings
             </Link>
           </nav>
@@ -77,18 +85,30 @@ export default function Navbar({ session }: Props) {
       </Link>
       <nav className="hidden flex-1 justify-center flex-col gap-6 text-base font-medium lg:flex lg:flex-row lg:items-center lg:gap-6">
         <Link
-          href="#"
-          className="text-muted-foreground transition-colors hover:text-foreground">
+          href="/dashboard"
+          className={`${
+            pathname === "/dashboard"
+              ? "text-foreground"
+              : "text-muted-foreground"
+          } transition-colors hover:text-foreground`}>
           Dashboard
         </Link>
         <Link
-          href="#"
-          className="text-muted-foreground transition-colors hover:text-foreground">
+          href="/projects"
+          className={`${
+            pathname === "/project"
+              ? "text-foreground"
+              : "text-muted-foreground"
+          } transition-colors hover:text-foreground`}>
           Projects
         </Link>
         <Link
-          href="#"
-          className="text-foreground transition-colors hover:text-foreground">
+          href="/settings"
+          className={`${
+            pathname === "/settings"
+              ? "text-foreground"
+              : "text-muted-foreground"
+          } transition-colors hover:text-foreground`}>
           Settings
         </Link>
       </nav>

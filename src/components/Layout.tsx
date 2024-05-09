@@ -12,13 +12,16 @@ type Props = {
 
 export default function Layout({ children, session }: Props) {
   const pathname = usePathname();
-  const excludePaths = ["/", "/signup", "/signin", "/projects"];
+  const isProjectsRoute = pathname.startsWith("/projects");
+  const excludePaths = ["/", "/signup", "/signin", "/home"];
   const excludedPaths = excludePaths.includes(pathname);
 
   return (
     <>
       {excludedPaths ? (
         <>{children}</>
+      ) : isProjectsRoute ? (
+        <div className="antialiased"> {children}</div>
       ) : (
         <div className="antialiased">
           <Navbar session={session} />
