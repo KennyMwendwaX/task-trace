@@ -96,7 +96,7 @@ export default function Navbar({ session }: Props) {
         <Link
           href="/projects"
           className={`${
-            pathname === "/project"
+            pathname === "/projects"
               ? "text-foreground"
               : "text-muted-foreground"
           } transition-colors hover:text-foreground`}>

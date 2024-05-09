@@ -1,30 +1,43 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { Project } from "@/lib/schema/ProjectSchema";
 import Link from "next/link";
 import { IoChevronForward } from "react-icons/io5";
-import { LuUser2 } from "react-icons/lu";
+import { LuMoreVertical, LuTruck, LuUser2 } from "react-icons/lu";
 import { statuses } from "@/lib/config";
 import format from "date-fns/format";
+import Image from "next/image";
+import Logo from "../../public/logo.png";
 
 interface Props {
   project: Project;
 }
 
-export default function ProjectCard({ project }: Props) {
-  const projectStatus = statuses.find(
-    (status) => status.value === project.status
-  );
-
+// export default function ProjectCard({ project }: Props) {
+// const projectStatus = statuses.find(
+//   (status) => status.value === project.status
+// );
+export default function ProjectCard() {
   return (
     <>
-      <Card>
+      {/* <Card>
         <CardHeader className="space-y-2">
           <h2 className="font-semibold text-lg">{project.name}</h2>
           <div className="flex items-center space-x-1">
@@ -84,6 +97,48 @@ export default function ProjectCard({ project }: Props) {
             <IoChevronForward className="w-3 h-3" />
           </Link>
         </CardFooter>
+      </Card> */}
+      <Card>
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-2">
+            <Image src={Logo} width={32} height={32} alt="Project logo" />
+            <div>
+              <CardTitle className="text-lg hover:underline cursor-pointer">
+                GO CLI Interface
+              </CardTitle>
+              <Badge
+                variant="outline"
+                className="border-green-600 text-green-500">
+                Live
+              </Badge>
+            </div>
+            <div className="ml-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="icon" variant="outline" className="h-8 w-8">
+                    <LuMoreVertical className="h-3.5 w-3.5" />
+                    <span className="sr-only">More</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Trash</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-between">
+            <div className="text-sm text-gray-500">70% Complete</div>
+            <div className="text-sm text-gray-500">17/25 tasks</div>
+          </div>
+          <Progress value={12} aria-label="12% increase" />
+          <div className="text-sm text-gray-500 font-semibold">
+            Last updated 3 days ago
+          </div>
+        </CardContent>
       </Card>
     </>
   );

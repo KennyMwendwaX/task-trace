@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,17 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Bell,
   CircleUser,
@@ -34,16 +22,11 @@ import {
   Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PersonIcon } from "@radix-ui/react-icons";
-import Logo from "../../../public/logo.png";
-import { IoSettingsOutline } from "react-icons/io5";
-import { MdLogout } from "react-icons/md";
 import ProjectNavbar from "@/components/ProjectNavbar";
 
 export const metadata: Metadata = {
-  title: "Projects",
-  description: "Projects page",
+  title: "Project",
+  description: "Project page",
 };
 
 export default function ProjectLayout({
