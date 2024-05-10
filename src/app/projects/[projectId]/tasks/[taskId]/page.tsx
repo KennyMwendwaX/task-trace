@@ -21,7 +21,7 @@ import EditTaskModal from "@/components/EditTaskModal";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 
-export default function Task({
+export default function TaskPage({
   params,
 }: {
   params: { projectId: string; taskId: string };

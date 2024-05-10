@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { LuPin, LuSearch } from "react-icons/lu";
+import { LuFolders, LuPin, LuSearch } from "react-icons/lu";
 import { HiMiniRectangleStack } from "react-icons/hi2";
 import { MdOutlineAddTask } from "react-icons/md";
 
@@ -49,22 +49,19 @@ export default function Projects() {
           <AddProjectModal />
         </div>
       )} */}
-      <div className="flex items-center justify-between">
-        {/* <h1 className="font-semibold text-2xl">Projects</h1> */}
-        <div className="flex ml-auto gap-3">
-          <div className="relative md:grow-0">
-            <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-            />
-          </div>
-          <AddProjectModal />
+      <div className="flex items-center justify-between sm:gap-2">
+        <div className="relative md:grow-0">
+          <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search projects..."
+            className="w-[200px] rounded-lg bg-background pl-8 md:w-[345px] lg:w-[400px]"
+          />
         </div>
+        <AddProjectModal />
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center mt-5">
         <LuPin className="mr-2 w-7 h-7" />
         <span className="text-xl font-semibold">Pinned Projects</span>
       </div>
@@ -75,7 +72,7 @@ export default function Projects() {
 
       <div className="mt-6">
         <div className="flex items-center">
-          <HiMiniRectangleStack className="mr-2 w-7 h-7" />
+          <LuFolders className="mr-2 w-7 h-7" />
           <span className="text-xl font-semibold">Other Projects</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
