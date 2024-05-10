@@ -12,7 +12,7 @@ type Props = {
 
 export default function Layout({ children, session }: Props) {
   const pathname = usePathname();
-  // const isProjectsRoute = pathname.startsWith("/projects");
+  const isProjectsRoute = pathname.startsWith("/projects/");
   const excludePaths = ["/", "/signup", "/signin", "/home"];
   const excludedPaths = excludePaths.includes(pathname);
 
@@ -20,16 +20,15 @@ export default function Layout({ children, session }: Props) {
     <>
       {excludedPaths ? (
         <>{children}</>
+      ) : isProjectsRoute ? (
+        <> {children}</>
       ) : (
-        // : isProjectsRoute ? (
-        //   <div className="antialiased"> {children}</div>
-        // )
-        <div className="antialiased">
+        <>
           <Navbar session={session} />
           <main className="container mx-auto px-8 py-4 md:px-10 lg:px-14">
             {children}
           </main>
-        </div>
+        </>
       )}
     </>
   );

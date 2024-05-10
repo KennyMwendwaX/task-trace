@@ -5,19 +5,13 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Bell,
-  CircleUser,
   Home,
   LineChart,
-  Menu,
   Package,
-  Package2,
-  Search,
   ShoppingCart,
   Users,
 } from "lucide-react";
