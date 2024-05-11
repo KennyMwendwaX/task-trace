@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Form,
   FormControl,
@@ -20,6 +21,7 @@ import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { credentialsLogin, providerLogin } from "@/actions/auth/login";
+import Logo from "../../../public/logo.png";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -57,12 +59,13 @@ export default function Signin() {
   return (
     <>
       <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 bg-gray-100 md:h-screen lg:py-0">
-        <a
-          href="#"
-          className="p-4 flex items-center text-2xl font-semibold text-black">
-          {/* <Image className="mr-2 h-8 w-8" src={Img} alt="logo" /> */}
-          TaskTrace
-        </a>
+        <Link
+          href="/"
+          className="flex items-center gap-1 font-semibold whitespace-nowrap">
+          <Image src={Logo} width={32} height={28} alt="" />
+          <span className="text-xl tracking-tighter">TaskTrace</span>
+          <span className="sr-only">Logo</span>
+        </Link>
         <div className="w-full rounded-lg bg-white shadow sm:max-w-md md:mt-0 xl:p-0">
           <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl">

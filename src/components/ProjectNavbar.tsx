@@ -56,7 +56,7 @@ export default function ProjectNavbar() {
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col">
             <Link
-              href="#"
+              href="/"
               className="flex items-center gap-1 font-semibold whitespace-nowrap">
               <Image src={Logo} width={32} height={28} alt="" />
               <span className="text-lg tracking-tighter">TaskTrace</span>
