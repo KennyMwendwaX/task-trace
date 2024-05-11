@@ -58,7 +58,7 @@ export default function Sidebar() {
           </div>
           <div className="mt-auto p-4">
             <Card x-chunk="dashboard-02-chunk-0">
-              <CardHeader className="p-2 pt-0 md:p-4">
+              <CardHeader className="p-4 pt-0">
                 <CardTitle>Upgrade to Pro</CardTitle>
                 <CardDescription>
                   Unlock all features and get unlimited access to our support

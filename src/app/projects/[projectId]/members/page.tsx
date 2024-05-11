@@ -52,7 +52,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   if (projectIsLoading || membersIsLoading || usersIsLoading) {
     return (
-      <main className="p-4 md:ml-64 h-auto pt-20">
+      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         <Loading />
       </main>
     );
@@ -60,7 +60,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   if (!project) {
     return (
-      <main className="p-4 md:ml-64 h-auto pt-20">
+      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         <div className="text-2xl font-bold tracking-tight">
           Project was not found
         </div>
@@ -86,7 +86,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <main className="p-4 md:ml-64 h-auto pt-20">
+      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         {!members || members.length == 0 ? (
           <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
             <FiUserPlus className="h-14 w-14 text-muted-foreground" />

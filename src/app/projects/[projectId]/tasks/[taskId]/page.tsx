@@ -96,7 +96,7 @@ export default function TaskPage({
 
   if (isLoading) {
     return (
-      <main className="p-4 md:ml-64 h-auto pt-20">
+      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         <Loading />
       </main>
     );
@@ -104,7 +104,7 @@ export default function TaskPage({
 
   if (!task) {
     return (
-      <main className="p-4 md:ml-64 h-auto pt-20">
+      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         <div className="text-2xl font-bold tracking-tight">
           Task was not found
         </div>
@@ -133,7 +133,7 @@ export default function TaskPage({
 
   return (
     <>
-      <main className="p-4 md:ml-64 h-auto pt-20">
+      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         <div className="flex items-start space-x-4">
           <div className="w-[850px]">
             <div className="flex items-center space-x-2 text-2xl font-bold tracking-tight">
