@@ -21,6 +21,12 @@ CREATE TABLE IF NOT EXISTS "member" (
 	"project_id" uuid NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "pinned_projects" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"project_id" uuid NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "project" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
@@ -89,6 +95,18 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "pinned_projects" ADD CONSTRAINT "pinned_projects_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE cascade ON UPDATE cascade;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "pinned_projects" ADD CONSTRAINT "pinned_projects_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE cascade ON UPDATE cascade;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "project" ADD CONSTRAINT "project_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "user"("id") ON DELETE restrict ON UPDATE cascade;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -112,29 +130,3 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 
-DO $$ 
-BEGIN
-    ALTER TABLE "account" ALTER COLUMN "user_id" TYPE uuid USING "user_id"::uuid;
-END $$;
-
-DO $$ 
-BEGIN
-    ALTER TABLE "member" ALTER COLUMN "user_id" TYPE uuid USING "user_id"::uuid;
-    ALTER TABLE "member" ALTER COLUMN "project_id" TYPE uuid USING "project_id"::uuid;
-END $$;
-
-DO $$ 
-BEGIN
-    ALTER TABLE "project" ALTER COLUMN "owner_id" TYPE uuid USING "user_id"::uuid;
-END $$;
-
-DO $$ 
-BEGIN
-    ALTER TABLE "session" ALTER COLUMN "user_id" TYPE uuid USING "user_id"::uuid;
-END $$;
-
-DO $$ 
-BEGIN
-    ALTER TABLE "task" ALTER COLUMN "member_id" TYPE uuid USING "member_id"::uuid;
-    ALTER TABLE "task" ALTER COLUMN "project_id" TYPE uuid USING "project_id"::uuid;
-END $$;

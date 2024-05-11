@@ -1,5 +1,5 @@
 {
-  "id": "bdb48d58-efbe-4abe-9c09-479765021237",
+  "id": "3daad3eb-ff58-475e-9262-d9eba6316c4c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -158,6 +158,62 @@
         "member_project_id_project_id_fk": {
           "name": "member_project_id_project_id_fk",
           "tableFrom": "member",
+          "tableTo": "project",
+          "columnsFrom": [
+            "project_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "pinned_projects": {
+      "name": "pinned_projects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_id": {
+          "name": "project_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pinned_projects_user_id_user_id_fk": {
+          "name": "pinned_projects_user_id_user_id_fk",
+          "tableFrom": "pinned_projects",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "pinned_projects_project_id_project_id_fk": {
+          "name": "pinned_projects_project_id_project_id_fk",
+          "tableFrom": "pinned_projects",
           "tableTo": "project",
           "columnsFrom": [
             "project_id"
