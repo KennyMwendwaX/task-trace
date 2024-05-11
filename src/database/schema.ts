@@ -92,7 +92,10 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 
 export const members = pgTable("member", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
-  role: text("role").$type<"ADMIN" | "MEMBER">().default("MEMBER").notNull(),
+  role: text("role")
+    .$type<"OWNER" | "ADMIN" | "MEMBER">()
+    .default("MEMBER")
+    .notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   userId: uuid("user_id")
     .notNull()
