@@ -22,6 +22,7 @@ export const users = pgTable("user", {
 export const usersRelations = relations(users, ({ many }) => ({
   projects: many(projects),
   members: many(members),
+  pinnedProjects: many(pinnedProjects),
 }));
 
 export const accounts = pgTable(
@@ -89,6 +90,19 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
   }),
   members: many(members),
 }));
+
+export const pinnedProjects = pgTable("pinned_projects", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+});
 
 export const members = pgTable("member", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
