@@ -99,11 +99,11 @@ export const members = pgTable("member", {
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
   projectId: uuid("project_id")
     .notNull()
     .references(() => projects.id, {
-      onDelete: "restrict",
+      onDelete: "cascade",
       onUpdate: "cascade",
     }),
 });
@@ -129,16 +129,14 @@ export const tasks = pgTable("task", {
   description: text("description").notNull(),
   dueDate: timestamp("due_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  memberId: uuid("member_id")
-    .notNull()
-    .references(() => members.id, {
-      onDelete: "restrict",
-      onUpdate: "cascade",
-    }),
+  memberId: uuid("member_id").references(() => members.id, {
+    onDelete: "set null",
+    onUpdate: "cascade",
+  }),
   projectId: uuid("project_id")
     .notNull()
     .references(() => projects.id, {
-      onDelete: "restrict",
+      onDelete: "cascade",
       onUpdate: "cascade",
     }),
 });

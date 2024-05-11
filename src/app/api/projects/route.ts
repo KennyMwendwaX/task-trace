@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     const projectId = projectResult[0].id;
 
     await db.insert(members).values({
-      role: "ADMIN",
+      role: "OWNER",
       userId: user.id,
       projectId: projectId,
     });

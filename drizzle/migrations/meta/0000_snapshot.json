@@ -1,5 +1,5 @@
 {
-  "id": "d3e7ce53-faf2-4b3d-8054-8b068eb79925",
+  "id": "bdb48d58-efbe-4abe-9c09-479765021237",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -152,7 +152,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "cascade"
         },
         "member_project_id_project_id_fk": {
@@ -165,7 +165,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "cascade"
         }
       },
@@ -352,7 +352,7 @@
           "name": "member_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "project_id": {
           "name": "project_id",
@@ -373,7 +373,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "set null",
           "onUpdate": "cascade"
         },
         "task_project_id_project_id_fk": {
@@ -386,7 +386,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "cascade"
         }
       },
@@ -427,13 +427,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'USER'"
         },
         "image": {
           "name": "image",
