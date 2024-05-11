@@ -24,7 +24,6 @@ export const userSchema = z.object({
     })
     .min(8, { message: "Password must be greater than 8 characters long" })
     .refine((value) => !/\s/.test(value), "Invalid Password"),
-  role: z.enum(["USER", "ADMIN"]),
   image: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),

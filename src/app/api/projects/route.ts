@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "../../../auth";
 import db from "@/database/db";
-import { projects } from "@/database/schema";
+import { members, projects } from "@/database/schema";
 
 export async function GET() {
   try {
@@ -36,7 +36,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const session = await auth();
 
-  if (!session || session.user.role !== "ADMIN")
+  if (!session)
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
 
   const user = await db.query.users.findFirst({
@@ -65,21 +65,33 @@ export async function POST(request: Request) {
   const { name, label, start_date, end_date, description } = result.data;
 
   try {
-    const project = await db.insert(projects).values({
-      name: name,
-      label: label,
-      startDate: start_date,
-      endDate: end_date,
-      description: description,
-      status: "TO_DO",
-      ownerId: user.id,
-    });
+    const projectResult = await db
+      .insert(projects)
+      .values({
+        name,
+        label,
+        startDate: start_date,
+        endDate: end_date,
+        description,
+        status: "TO_DO",
+        ownerId: user.id,
+      })
+      .returning({ id: projects.id });
 
-    if (!project)
+    if (projectResult.length === 0) {
       return NextResponse.json(
         { message: "Failed to create project" },
         { status: 500 }
       );
+    }
+
+    const projectId = projectResult[0].id;
+
+    await db.insert(members).values({
+      role: "ADMIN",
+      userId: user.id,
+      projectId: projectId,
+    });
 
     return NextResponse.json(
       { message: "Project created successfully" },
