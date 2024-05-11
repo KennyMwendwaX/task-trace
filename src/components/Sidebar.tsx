@@ -1,84 +1,79 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { LuUser2, LuCalendar, LuProjector, LuUsers } from "react-icons/lu";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { LuHome, LuLineChart, LuUsers } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
-import { Session } from "next-auth";
+import { GoTasklist } from "react-icons/go";
+import { useParams } from "next/navigation";
 
-type Props = {
-  session: Session | null;
-};
-
-export default function Sidebar({ session }: Props) {
-  const pathname = usePathname();
+export default function Sidebar() {
   const params = useParams<{ projectId: string }>();
   const projectId = params.projectId;
-
   return (
     <>
-      <aside
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-gray-50 border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Sidenav"
-        id="drawer-navigation">
-        <div className="overflow-y-auto py-5 px-3 h-full">
-          <ul className="space-y-2">
-            <li>
+      <div className="fixed top-0 left-0 w-[260px] h-full border-r bg-muted/40 hidden lg:block">
+        <div className="flex h-full max-h-screen flex-col gap-2">
+          <div className="flex-1 mt-[72px]">
+            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
-                href="/dashboard"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <RxDashboard className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                <span className="ml-3">Dashboard</span>
+                href="#"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
+                <LuHome className="h-4 w-4" />
+                Dashboard
               </Link>
-            </li>
-            <li>
+              {/* Arrow Home*/}
               <Link
-                href="/projects"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <LuProjector className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                <span className="ml-3">Projects</span>
+                href={`/projects/${projectId}`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
+                <RxDashboard className="h-4 w-4" />
+                Overview
               </Link>
-            </li>
-            {pathname.startsWith(`/projects/${projectId}`) && (
-              <li>
-                <Link
-                  href={`/projects/${projectId}/members`}
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <LuUsers className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="ml-3">Members</span>
-                </Link>
-              </li>
-            )}
-            {pathname.startsWith(`/projects/${projectId}`) && (
-              <li>
-                <Link
-                  href="#"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <LuCalendar className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="ml-3"> Schedule</span>
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-        <div className="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex z-20">
-          <div className="px-6 flex items-center space-x-2 bg-slate-200 rounded-xl">
-            <Avatar>
-              <AvatarImage src={""} />
-              <AvatarFallback>
-                <LuUser2 className="w-5 h-5" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="py-2 space-y-1">
-              <div className="pt-1">{session?.user?.name}</div>
-              <span className="text-muted-foreground text-sm pb-1">
-                {session?.user?.email}
-              </span>
-            </div>
+              <Link
+                href={`/projects/${projectId}/tasks`}
+                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2.5 text-primary transition-all hover:text-primary">
+                <GoTasklist className="h-5 w-5" />
+                Tasks
+              </Link>
+              <Link
+                href={`/projects/${projectId}/members`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
+                <LuUsers className="h-4 w-4" />
+                Members
+              </Link>
+              <Link
+                href={`/projects/${projectId}/analytics`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary">
+                <LuLineChart className="h-4 w-4" />
+                Analytics
+              </Link>
+            </nav>
+          </div>
+          <div className="mt-auto p-4">
+            <Card x-chunk="dashboard-02-chunk-0">
+              <CardHeader className="p-2 pt-0 md:p-4">
+                <CardTitle>Upgrade to Pro</CardTitle>
+                <CardDescription>
+                  Unlock all features and get unlimited access to our support
+                  team.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
+                <Button size="sm" className="w-full">
+                  Upgrade
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </aside>
+      </div>
     </>
   );
 }
