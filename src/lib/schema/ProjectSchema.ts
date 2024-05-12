@@ -16,7 +16,7 @@ export const projectSchema = z.object({
     })
     .min(2, { message: "Label must be greater than 2 characters long" })
     .max(10, { message: "Label must be less than 10 characters long" }),
-  status: z.enum(["TO_DO", "IN_PROGRESS", "DONE", "CANCELED"]),
+  status: z.enum(["BUILDING", "LIVE"]),
   start_date: z.date({
     required_error: "Please select a date and time",
     invalid_type_error: "That's not a date!",
