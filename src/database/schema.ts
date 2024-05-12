@@ -104,6 +104,13 @@ export const pinnedProjects = pgTable("pinned_projects", {
     }),
 });
 
+export const pinnedProjectsRelations = relations(pinnedProjects, ({ one }) => ({
+  project: one(projects, {
+    fields: [pinnedProjects.projectId],
+    references: [projects.id],
+  }),
+}));
+
 export const members = pgTable("member", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   role: text("role")

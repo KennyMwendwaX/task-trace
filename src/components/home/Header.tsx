@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { MdLogout } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
 import { Session } from "next-auth";
+import Logo from "../../../public/logo.png";
 
 interface Props {
   session: Session | null;
@@ -36,17 +38,18 @@ export default function Header({ session }: Props) {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Site branding */}
             <div className="shrink-0 mr-4">
-              {/* <Logo /> */}
               <Link
                 href="/"
-                className="self-center text-3xl font-semibold whitespace-nowrap text-slate-800">
-                TaskTrace
+                className="flex items-center gap-1 font-semibold whitespace-nowrap p-2">
+                <Image src={Logo} width={34} height={30} alt="" />
+                <span className="text-2xl tracking-tighter">TaskTrace</span>
+                <span className="sr-only">Logo</span>
               </Link>
             </div>
 
-            {/* Desktop navigation */}
+            {/* Large screens navigation */}
             <nav className="hidden md:flex md:grow">
-              {/* Desktop sign in links */}
+              {/* Large screens sign in links */}
 
               {session != null ? (
                 <ul className="flex grow justify-end flex-wrap items-center space-x-2">

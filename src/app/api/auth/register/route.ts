@@ -9,11 +9,9 @@ export async function POST(request: Request) {
 
   const requestSchema = userSchema.omit({
     id: true,
-    role: true,
     emailVerified: true,
     image: true,
     createdAt: true,
-    updatedAt: true,
   });
 
   const result = requestSchema.safeParse(req);

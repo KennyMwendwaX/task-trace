@@ -6,25 +6,50 @@ import { members, projects } from "@/database/schema";
 
 export async function GET() {
   try {
-    const projects = await db.query.projects.findMany({
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    }
+
+    const userId = session.user.id;
+
+    const user = await db.query.users.findFirst({
+      where: (user, { eq }) => eq(user.id, userId),
       with: {
-        owner: {
-          columns: {
-            id: true,
-            name: true,
-            email: true,
+        projects: true,
+        pinnedProjects: {
+          with: {
+            project: true,
           },
         },
       },
     });
 
-    if (!projects)
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    const projectsData = user.projects;
+    if (!projectsData)
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
       );
 
-    return NextResponse.json({ projects }, { status: 200 });
+    const pinnedProjects = user.pinnedProjects.map((pp) => pp.project);
+
+    const otherProjects = projectsData.filter((project) => {
+      // Filter out the projects that are also pinned
+      return !pinnedProjects.some((pinnedProject) => {
+        return pinnedProject.id === project.id;
+      });
+    });
+
+    return NextResponse.json(
+      { pinnedProjects, otherProjects },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },
@@ -36,11 +61,14 @@ export async function GET() {
 export async function POST(request: Request) {
   const session = await auth();
 
-  if (!session)
+  if (!session || !session.user || !session.user.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+  }
+
+  const userId = session.user.id;
 
   const user = await db.query.users.findFirst({
-    where: (user, { eq }) => eq(user.id, session.user.id),
+    where: (user, { eq }) => eq(user.id, userId),
   });
 
   if (!user)
@@ -73,7 +101,7 @@ export async function POST(request: Request) {
         startDate: start_date,
         endDate: end_date,
         description,
-        status: "TO_DO",
+        status: "BUILDING",
         ownerId: user.id,
       })
       .returning({ id: projects.id });
