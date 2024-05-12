@@ -5,7 +5,7 @@ export const memberSchema = z.object({
   id: z.string(),
   projectId: z.string(),
   userId: z.string(),
-  role: z.enum(["MEMBER", "ADMIN"]),
+  role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
   createdAt: z.date(),
   updatedAt: z.date(),
   user: z.object({
