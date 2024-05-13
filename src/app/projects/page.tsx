@@ -15,14 +15,14 @@ export default function Projects() {
     queryFn: async () => {
       const { data } = await axios.get("/api/projects");
       return data.projects as {
-        pinnedProjects: Project[];
-        otherProjects: Project[];
+        userProjects: Project[];
+        memberProjects: Project[];
       };
     },
   });
 
-  const pinnedProjects = data?.pinnedProjects || [];
-  const otherProjects = data?.otherProjects || [];
+  const userProjects = data?.userProjects || [];
+  const memberProjects = data?.userProjects || [];
 
   if (isLoading) {
     return (
@@ -34,7 +34,7 @@ export default function Projects() {
 
   return (
     <>
-      {pinnedProjects.length > 0 || otherProjects.length > 0 ? (
+      {userProjects.length > 0 || memberProjects.length > 0 ? (
         <>
           <div className="flex items-center justify-between sm:gap-2">
             <div className="relative md:grow-0">
@@ -47,27 +47,27 @@ export default function Projects() {
             </div>
             <AddProjectModal />
           </div>
-          {pinnedProjects.length > 0 ? (
+          {userProjects.length > 0 ? (
             <>
               <div className="flex items-center mt-5">
                 <LuPin className="mr-2 w-7 h-7" />
-                <span className="text-xl font-semibold">Pinned Projects</span>
+                <span className="text-xl font-semibold">My Projects</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
-                {pinnedProjects.map((project) => (
+                {userProjects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
                 ))}
               </div>
-              {otherProjects.length > 0 ? (
+              {memberProjects.length > 0 ? (
                 <div className="mt-6">
                   <div className="flex items-center">
                     <LuFolders className="mr-2 w-7 h-7" />
                     <span className="text-xl font-semibold">
-                      Other Projects
+                      Member Projects
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
-                    {otherProjects.map((project) => (
+                    {memberProjects.map((project) => (
                       <ProjectCard key={project.id} project={project} />
                     ))}
                   </div>
@@ -87,14 +87,14 @@ export default function Projects() {
                 </div>
                 <AddProjectModal />
               </div>
-              {otherProjects.length > 0 ? (
+              {memberProjects.length > 0 ? (
                 <>
                   <div className="flex items-center mt-5">
                     <LuPin className="mr-2 w-7 h-7" />
                     <span className="text-xl font-semibold">Projects</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
-                    {otherProjects.map((project) => (
+                    {memberProjects.map((project) => (
                       <ProjectCard key={project.id} project={project} />
                     ))}
                   </div>
