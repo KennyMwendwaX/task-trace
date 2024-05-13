@@ -16,11 +16,23 @@ export default function Projects() {
     queryKey: ["projects"],
     queryFn: async () => {
       const { data } = await axios.get("/api/projects");
-      return data.projects as Project[];
+      return data.projects as {
+        pinnedProjects: Project[];
+        otherProjects: Project[];
+      };
     },
   });
 
-  const projects = data || [];
+  const pinnedProjects = data?.pinnedProjects || [];
+  const otherProjects = data?.otherProjects || [];
+
+  if (isLoading) {
+    return (
+      <main>
+        <Loading />
+      </main>
+    );
+  }
 
   return (
     <>

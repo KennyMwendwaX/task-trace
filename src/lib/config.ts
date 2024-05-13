@@ -69,6 +69,18 @@ export const priorities = [
   },
 ] as const;
 
+export const projectStatuses = [
+  {
+    label: "Live",
+    value: "LIVE",
+  },
+  {
+    label: "Building",
+    value: "BUILDING",
+  },
+] as const;
+
 export type Label = (typeof labels)[number]["value"];
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];
+export type ProjectStatus = (typeof projectStatuses)[number]["value"];

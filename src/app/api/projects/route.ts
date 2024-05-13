@@ -38,13 +38,12 @@ export async function GET() {
       );
 
     const pinnedProjects = user.pinnedProjects.map((pp) => pp.project);
+    const pinnedProjectIds = pinnedProjects.map((pp) => pp.id);
 
-    const otherProjects = projectsData.filter((project) => {
-      // Filter out the projects that are also pinned
-      return !pinnedProjects.some((pinnedProject) => {
-        return pinnedProject.id === project.id;
-      });
-    });
+    // Filter pinned projects
+    const otherProjects = projectsData.filter(
+      (project) => !pinnedProjectIds.includes(project.id)
+    );
 
     return NextResponse.json(
       { pinnedProjects, otherProjects },
