@@ -88,6 +88,10 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
     references: [users.id],
   }),
   members: many(members),
+  invitationCode: one(invitationCodes, {
+    fields: [projects.id],
+    references: [invitationCodes.projectId],
+  }),
 }));
 
 export const members = pgTable("member", {

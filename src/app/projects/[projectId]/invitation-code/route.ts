@@ -4,7 +4,48 @@ import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { invitationCodes } from "@/database/schema";
 
-export async function GET(req: Request) {}
+export async function GET(
+  req: Request,
+  { params }: { params: { projectId: string } }
+) {
+  try {
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    }
+
+    const projectId = params.projectId;
+
+    const project = await db.query.projects.findFirst({
+      where: (project, { eq }) => eq(project.id, projectId),
+      with: {
+        invitationCode: {
+          columns: {
+            code: true,
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      return NextResponse.json(
+        { message: "No project found" },
+        { status: 404 }
+      );
+    }
+
+    const code = project.invitationCode.code;
+
+    return NextResponse.json({ code }, { status: 200 });
+  } catch (error) {
+    console.log("Error getting invitation code:", error);
+    return NextResponse.json(
+      { message: "Failed to get invitation code" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(
   req: Request,
