@@ -151,3 +151,22 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     references: [projects.id],
   }),
 }));
+
+export const invitationCodes = pgTable("invitation_code", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  code: text("code").notNull().unique(),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+});
+
+export const invitationCodesRelations = relations(
+  invitationCodes,
+  ({ one }) => ({
+    project: one(projects, {
+      fields: [invitationCodes.projectId],
+      references: [projects.id],
+    }),
+  })
+);
