@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { LuFolders, LuPin, LuSearch } from "react-icons/lu";
+import { LuFolders, LuPin, LuSearch, LuFolderPlus } from "react-icons/lu";
 
 export default function Projects() {
   const { data, isLoading, error } = useQuery({
@@ -26,9 +26,9 @@ export default function Projects() {
 
   if (isLoading) {
     return (
-      <main>
+      <>
         <Loading />
-      </main>
+      </>
     );
   }
 
@@ -104,7 +104,15 @@ export default function Projects() {
           )}
         </>
       ) : (
-        <div>No project found</div>
+        <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
+          <LuFolderPlus className="h-14 w-14 text-muted-foreground" />
+
+          <h3 className="mt-4 text-2xl font-semibold">No projects found</h3>
+          <p className="mb-4 mt-2 text-lg text-muted-foreground">
+            You do not have any project. Add one below.
+          </p>
+          <AddProjectModal />
+        </div>
       )}
     </>
   );

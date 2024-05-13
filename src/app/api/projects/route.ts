@@ -3,6 +3,7 @@ import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "../../../auth";
 import db from "@/database/db";
 import { members, projects } from "@/database/schema";
+import { ProjectStatus } from "@/lib/config";
 
 export async function GET() {
   try {
@@ -100,7 +101,7 @@ export async function POST(request: Request) {
         startDate: start_date,
         endDate: end_date,
         description,
-        status: "BUILDING",
+        status: "BUILDING" as ProjectStatus,
         ownerId: user.id,
       })
       .returning({ id: projects.id });
