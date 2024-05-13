@@ -14,7 +14,7 @@ export default function Projects() {
     queryKey: ["projects"],
     queryFn: async () => {
       const { data } = await axios.get("/api/projects");
-      return data.projects as {
+      return data as {
         userProjects: Project[];
         memberProjects: Project[];
       };
@@ -90,7 +90,7 @@ export default function Projects() {
               {memberProjects.length > 0 ? (
                 <>
                   <div className="flex items-center mt-5">
-                    <LuPin className="mr-2 w-7 h-7" />
+                    <LuFolders className="mr-2 w-7 h-7" />
                     <span className="text-xl font-semibold">Projects</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
