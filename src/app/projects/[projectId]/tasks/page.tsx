@@ -144,7 +144,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                     No tasks added
                   </h3>
                   <p className="mb-4 mt-2 text-lg text-muted-foreground">
-                    You have not added any tasks. Add one below.{" "}
+                    You have not added any tasks. Add one below.
                   </p>
                   <AddTaskModal projectId={projectId} members={members} />
                 </div>

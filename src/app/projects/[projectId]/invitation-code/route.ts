@@ -17,25 +17,18 @@ export async function GET(
 
     const projectId = params.projectId;
 
-    const project = await db.query.projects.findFirst({
+    const invitationCode = await db.query.invitationCodes.findFirst({
       where: (project, { eq }) => eq(project.id, projectId),
-      with: {
-        invitationCode: {
-          columns: {
-            code: true,
-          },
-        },
-      },
     });
 
-    if (!project) {
+    if (!invitationCode) {
       return NextResponse.json(
-        { message: "No project found" },
+        { message: "No invitation code found for this project" },
         { status: 404 }
       );
     }
 
-    const code = project.invitationCode.code;
+    const code = invitationCode.code;
 
     return NextResponse.json({ code }, { status: 200 });
   } catch (error) {
@@ -74,7 +67,6 @@ export async function POST(
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
-    // Check if the user is a member of the project
     const userMembership = user.members.find(
       (member) => member.projectId === projectId
     )?.role;
