@@ -95,18 +95,6 @@ export default function TaskOverview({ tasks }: Props) {
             </p>
           </CardContent>
         </Card>
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-base font-medium">Backlog</CardTitle>
-            <QuestionMarkCircledIcon className="h-5 w-5 text-gray-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{tasksBacklogged.length}</div>
-            <p className="text-sm text-muted-foreground">
-              {tasks_backlogged_percentage}% of all tasks
-            </p>
-          </CardContent>
-        </Card> */}
       </div>
     </>
   );
