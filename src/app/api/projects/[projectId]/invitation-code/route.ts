@@ -3,6 +3,7 @@ import db from "@/database/db";
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { invitationCodes } from "@/database/schema";
+import add from "date-fns/add";
 
 export async function GET(
   req: Request,
@@ -77,10 +78,9 @@ export async function POST(
 
     const code = nanoid(10);
 
-    await db.insert(invitationCodes).values({
-      code,
-      projectId,
-    });
+    const expiresAt = add(new Date(), { days: 7 });
+
+    await db.insert(invitationCodes).values({ code, projectId, expiresAt });
 
     return NextResponse.json({ code }, { status: 201 });
   } catch (error) {
