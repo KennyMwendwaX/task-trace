@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS "invitation_code" (
 	"code" text NOT NULL,
 	"project_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
+	"expires_at" timestamp,
 	CONSTRAINT "invitation_code_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
