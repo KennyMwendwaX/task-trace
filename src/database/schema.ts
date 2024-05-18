@@ -163,6 +163,7 @@ export const invitationCodes = pgTable("invitation_code", {
     .notNull()
     .references(() => projects.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  expiresAt: timestamp("expires_at", { mode: "date" }),
 });
 
 export const invitationCodesRelations = relations(
