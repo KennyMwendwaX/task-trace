@@ -38,6 +38,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { LuFolderPlus } from "react-icons/lu";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -85,8 +86,8 @@ export default function AddProjectModal() {
     <>
       <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
         <DialogTrigger asChild>
-          <Button className="flex items-center space-x-2 rounded-3xl">
-            <AiOutlinePlus className="w-4 h-4 text-white" />
+          <Button size="sm" className="flex items-center space-x-2 rounded-3xl">
+            <LuFolderPlus className="w-5 h-5 text-white" />
             <span>New Project</span>
           </Button>
         </DialogTrigger>
