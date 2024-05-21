@@ -112,6 +112,13 @@ export default function Navbar({ session }: Props) {
           Projects
         </Link>
         <Link
+          href="/tasks"
+          className={`${
+            pathname === "/tasks" ? "text-foreground" : "text-muted-foreground"
+          } transition-colors hover:text-foreground`}>
+          Tasks
+        </Link>
+        <Link
           href="/settings"
           className={`${
             pathname === "/settings"
