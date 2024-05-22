@@ -10,13 +10,7 @@ import TableRowActions from "./TableRowActions";
 import format from "date-fns/format";
 import Link from "next/link";
 
-interface TableColumnsProps {
-  projectId: string;
-}
-
-export const TableColumns = ({
-  projectId,
-}: TableColumnsProps): ColumnDef<UserTask>[] => [
+export const TableColumns: ColumnDef<UserTask>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -78,7 +72,7 @@ export const TableColumns = ({
           <span className="max-w-[500px] truncate font-medium">
             <Link
               className="hover:underline"
-              href={`/projects/${projectId}/tasks/${task.id}`}>
+              href={`/projects/${task.projectId}/tasks/${task.id}`}>
               {row.getValue("name")}
             </Link>
           </span>
@@ -151,6 +145,9 @@ export const TableColumns = ({
   },
   {
     id: "actions",
-    cell: ({ row }) => <TableRowActions projectId={projectId} row={row} />,
+    cell: ({ row }) => {
+      const task = userTaskSchema.parse(row.original);
+      return <TableRowActions projectId={task.projectId} row={row} />;
+    },
   },
 ];

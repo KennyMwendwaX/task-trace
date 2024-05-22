@@ -25,6 +25,10 @@ export const taskSchema = z.object({
     required_error: "Please select a date and time",
     invalid_type_error: "That's not a date!",
   }),
+  projectId: z.string({
+    required_error: "Project id is required",
+    invalid_type_error: "Project id must be a string",
+  }),
   memberId: z.string({
     required_error: "Member is required",
     invalid_type_error: "Member must be a string",
@@ -36,7 +40,6 @@ export const taskSchema = z.object({
       message: "Task description cannot be longer than 2000 characters",
     }),
   createdAt: z.date(),
-  updatedAt: z.date(),
   member: z.object({
     user: z.object({
       name: z.string(),
@@ -54,8 +57,8 @@ export const taskFormSchema = taskSchema.omit({
   id: true,
   status: true,
   createdAt: true,
-  updatedAt: true,
   userId: true,
+  projectId: true,
   member: true,
 });
 

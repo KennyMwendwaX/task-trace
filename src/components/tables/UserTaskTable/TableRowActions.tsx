@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { statuses, priorities, labels } from "@/lib/config";
-import { taskSchema } from "@/lib/schema/TaskSchema";
+import { userTaskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface TableRowActions<TData> {
@@ -32,7 +32,7 @@ export default function TableRowActions<TData>({
   projectId,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
-  const task = taskSchema.parse(row.original);
+  const task = userTaskSchema.parse(row.original);
 
   const {
     mutate: changeLabel,
