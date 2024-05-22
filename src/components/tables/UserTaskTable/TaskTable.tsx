@@ -26,25 +26,17 @@ import {
 import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
-import AddTaskModal from "@/components/AddTaskModal";
-import { Task } from "@/lib/schema/TaskSchema";
-import { IoDownloadOutline } from "react-icons/io5";
+import { UserTask } from "@/lib/schema/TaskSchema";
 import format from "date-fns/format";
-import { CSVLink } from "react-csv";
-import { Member } from "@/lib/schema/MemberSchema";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  members: Member[];
-  projectId: string;
 }
 
 export default function TaskTable<TData, TValue>({
   columns,
   data,
-  members,
-  projectId,
 }: TaskTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -73,13 +65,12 @@ export default function TaskTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const tasks = data as Task[];
+  const tasks = data as UserTask[];
 
   const csvData = tasks.map((task) => ({
     name: task.name,
     status: task.status,
     priority: task.priority,
-    assignedTo: task.member.user.name,
     due_date: format(task.due_date, "dd/MM/yyyy"),
   }));
 
@@ -87,7 +78,6 @@ export default function TaskTable<TData, TValue>({
     { label: "Task", key: "name" },
     { label: "Status", key: "status" },
     { label: "Priority", key: "priority" },
-    { label: "Assigned To", key: "assignedTo" },
     { label: "Due Date", key: "due_date" },
   ];
 
@@ -96,18 +86,6 @@ export default function TaskTable<TData, TValue>({
       <div className="space-y-4">
         <div className="flex justify-between">
           <TableToolbar table={table} />
-
-          <div className="flex items-center space-x-2">
-            <AddTaskModal projectId={projectId} members={members} />
-            <CSVLink
-              data={csvData}
-              headers={headers}
-              filename="tasks"
-              className="inline-flex bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer">
-              <IoDownloadOutline className="mr-1 w-5 h-5 text-white" />
-              <span>Export CSV/Excel</span>
-            </CSVLink>
-          </div>
         </div>
         <div className="rounded-md border">
           <Table>

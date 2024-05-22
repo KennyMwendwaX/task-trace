@@ -46,7 +46,10 @@ export const taskSchema = z.object({
   }),
 });
 
-// Omitted schema for client-side form validation
+export const userTaskSchema = taskSchema.omit({
+  member: true,
+});
+
 export const taskFormSchema = taskSchema.omit({
   id: true,
   status: true,
@@ -56,5 +59,6 @@ export const taskFormSchema = taskSchema.omit({
   member: true,
 });
 
-export type Task = z.infer<typeof taskSchema>;
+export type ProjectTask = z.infer<typeof taskSchema>;
+export type UserTask = z.infer<typeof userTaskSchema>;
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
