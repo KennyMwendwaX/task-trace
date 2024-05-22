@@ -70,7 +70,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
                       Welcome back!
                     </div>
                     <div className="text-xl text-muted-foreground">
-                      Here&apos;s a list of your tasks!
+                      Here&apos;s a list of tasks in the project!
                     </div>
                   </div>
                 </div>
