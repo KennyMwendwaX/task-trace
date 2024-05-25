@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import TanstackProvider from "@/providers/TanstackProvider";
+import SessionProvider from "@/providers/SessionProvider";
 import Layout from "@/components/Layout";
 import { auth } from "../auth";
 
@@ -19,9 +20,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={GeistSans.className}>
-        <TanstackProvider>
-          <Layout session={session}>{children}</Layout>
-        </TanstackProvider>
+        <SessionProvider session={session}>
+          <TanstackProvider>
+            <Layout session={session}>{children}</Layout>
+          </TanstackProvider>
+        </SessionProvider>
       </body>
     </html>
   );
