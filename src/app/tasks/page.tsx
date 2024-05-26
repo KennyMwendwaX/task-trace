@@ -8,8 +8,13 @@ import { UserTask } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import { auth } from "@/auth";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 export default function UserTasks() {
+  const session = useSession();
+
+  const userId = session.data?.user?.id;
+
   const {
     data: tasksData,
     isLoading: tasksIsLoading,
@@ -17,7 +22,7 @@ export default function UserTasks() {
   } = useQuery({
     queryKey: ["user-tasks"],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/users/tasks`);
+      const { data } = await axios.get(`/api/users/${userId}/tasks`);
       return data.tasks as UserTask[];
     },
   });
