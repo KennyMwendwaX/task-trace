@@ -8,7 +8,7 @@ export async function GET(
   const id = params.id;
 
   if (!id)
-    return NextResponse.json({ message: "No user Id found" }, { status: 404 });
+    return NextResponse.json({ message: "No user Id found" }, { status: 400 });
 
   try {
     const user = await db.query.users.findFirst({
@@ -25,7 +25,7 @@ export async function GET(
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, Try again later" },
-      { status: 200 }
+      { status: 500 }
     );
   }
 }
