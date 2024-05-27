@@ -31,7 +31,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
     isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({
-    queryKey: ["members", projectId],
+    queryKey: ["project-members", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/members`);
       return data.members as Member[];

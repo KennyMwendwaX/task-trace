@@ -2,7 +2,7 @@
 
 import Loading from "@/components/Loading";
 import { labels, priorities, statuses } from "@/lib/config";
-import { Task } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import format from "date-fns/format";
@@ -42,7 +42,7 @@ export default function TaskPage({
       const { data } = await axios.get(
         `/api/projects/${projectId}/tasks/${taskId}`
       );
-      return data.task as Task;
+      return data.task as ProjectTask;
     },
   });
 

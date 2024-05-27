@@ -19,7 +19,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
     isLoading: tasksIsLoading,
     error: tasksError,
   } = useQuery({
-    queryKey: ["tasks", projectId],
+    queryKey: ["project-tasks", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
       return data.tasks as ProjectTask[];
@@ -31,7 +31,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
     isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({
-    queryKey: ["members", projectId],
+    queryKey: ["project-members", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/members`);
       return data.members as Member[];
