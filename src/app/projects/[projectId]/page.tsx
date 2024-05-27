@@ -4,7 +4,7 @@ import TaskOverview from "@/components/TaskOverview";
 import TaskChart from "@/components/TaskChart";
 import LatestTasks from "@/components/LatestTasks";
 import { Project } from "@/lib/schema/ProjectSchema";
-import { Task } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
@@ -66,7 +66,7 @@ export default function ProjectPage({
     queryKey: ["tasks", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
-      return data.tasks as Task[];
+      return data.tasks as ProjectTask[];
     },
   });
 

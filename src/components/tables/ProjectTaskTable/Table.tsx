@@ -27,7 +27,7 @@ import { useState } from "react";
 import TableToolbar from "./TableToolbar";
 import TablePagination from "./TablePagination";
 import AddTaskModal from "@/components/AddTaskModal";
-import { Task } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
@@ -73,7 +73,7 @@ export default function TaskTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const tasks = data as Task[];
+  const tasks = data as ProjectTask[];
 
   const csvData = tasks.map((task) => ({
     name: task.name,

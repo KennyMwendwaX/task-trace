@@ -1,10 +1,10 @@
 "use client";
 
-import TaskTable from "@/components/tables/TaskTable/TaskTable";
-import { TableColumns } from "@/components/tables/TaskTable/TableColumns";
+import TaskTable from "@/components/tables/ProjectTaskTable/Table";
+import { TableColumns } from "@/components/tables/ProjectTaskTable/TableColumns";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { Task } from "@/lib/schema/TaskSchema";
+import type { ProjectTask } from "@/lib/schema/TaskSchema";
 import Loading from "@/components/Loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
@@ -22,7 +22,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
     queryKey: ["tasks", projectId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
-      return data.tasks as Task[];
+      return data.tasks as ProjectTask[];
     },
   });
 
@@ -44,7 +44,6 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
         ...task,
         due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
 

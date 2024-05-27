@@ -8,12 +8,10 @@ export const memberSchema = z.object({
   role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
   createdAt: z.date(),
   updatedAt: z.date(),
-  user: z
-    .object({
-      name: z.string(),
-      email: z.string(),
-    })
-    .nullable(),
+  user: z.object({
+    name: z.string(),
+    email: z.string(),
+  }),
   tasks: z.array(taskSchema),
 });
 

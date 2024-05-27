@@ -7,7 +7,7 @@ import type { User } from "@/lib/schema/UserSchema";
 import type { Member } from "@/lib/schema/MemberSchema";
 import Loading from "@/components/Loading";
 import { Project } from "@/lib/schema/ProjectSchema";
-import MemberTable from "@/components/tables/MemberTable/MemberTable";
+import MemberTable from "@/components/tables/MemberTable/Table";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/AddMemberModal";
 
@@ -79,7 +79,6 @@ export default function Members({ params }: { params: { projectId: string } }) {
           ...task,
           due_date: new Date(task.due_date),
           createdAt: new Date(task.createdAt),
-          updatedAt: new Date(task.updatedAt),
         })),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];

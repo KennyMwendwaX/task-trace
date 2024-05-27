@@ -1,6 +1,6 @@
 "use client";
 
-import TaskTable from "@/components/tables/UserTaskTable/TaskTable";
+import TaskTable from "@/components/tables/UserTaskTable/Table";
 import tasksData from "./tasks.json";
 import { TableColumns } from "@/components/tables/UserTaskTable/TableColumns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
