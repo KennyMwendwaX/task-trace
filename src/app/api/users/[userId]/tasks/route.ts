@@ -3,19 +3,19 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { userId: string } }
 ) {
   try {
-    const id = params.id;
+    const userId = params.userId;
 
-    if (!id)
+    if (!userId)
       return NextResponse.json(
         { message: "No user Id found" },
         { status: 400 }
       );
 
     const tasks = await db.query.tasks.findMany({
-      where: (users, { eq }) => eq(users.id, id),
+      where: (users, { eq }) => eq(users.id, userId),
     });
 
     if (!tasks)
