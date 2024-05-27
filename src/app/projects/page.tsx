@@ -3,11 +3,18 @@
 import AddProjectModal from "@/components/AddProjectModal";
 import Loading from "@/components/Loading";
 import ProjectCard from "@/components/ProjectCard";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { LuFolders, LuPin, LuSearch, LuFolderPlus } from "react-icons/lu";
+import {
+  LuFolders,
+  LuPin,
+  LuSearch,
+  LuFolderPlus,
+  LuUserPlus2,
+} from "react-icons/lu";
 
 export default function Projects() {
   const { data, isLoading, error } = useQuery({
@@ -109,9 +116,15 @@ export default function Projects() {
 
           <h3 className="mt-4 text-2xl font-semibold">No projects found</h3>
           <p className="mb-4 mt-2 text-lg text-muted-foreground">
-            You do not have any project. Add one below.
+            You do not have any project. Add one below or join a project.
           </p>
-          <AddProjectModal />
+          <div className="flex items-center gap-2">
+            <AddProjectModal />
+            <Button size="sm" variant="outline" className="gap-1">
+              <LuUserPlus2 className="w-5 h-5" />
+              <span>Join Project</span>
+            </Button>
+          </div>
         </div>
       )}
     </>

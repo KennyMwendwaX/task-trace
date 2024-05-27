@@ -20,7 +20,7 @@ export default function UserTasks() {
     isLoading: tasksIsLoading,
     error: tasksError,
   } = useQuery({
-    queryKey: ["user-tasks"],
+    queryKey: ["user-tasks", userId],
     queryFn: async () => {
       const { data } = await axios.get(`/api/users/${userId}/tasks`);
       return data.tasks as UserTask[];
