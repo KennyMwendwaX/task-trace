@@ -44,7 +44,6 @@ export default function UserTasks() {
     <>
       {tasks.length > 0 ? (
         <>
-          {" "}
           <div className="text-2xl font-bold tracking-tight">Tasks Page</div>
           <div className="text-lg text-muted-foreground">
             Here&apos;s a list of your tasks from your member projects!
