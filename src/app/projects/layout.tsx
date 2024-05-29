@@ -10,5 +10,9 @@ export default function ProjectsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
+      {children}
+    </main>
+  );
 }
