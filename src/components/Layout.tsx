@@ -7,10 +7,9 @@ import { Session } from "next-auth";
 
 type Props = {
   children: ReactNode;
-  session: Session | null;
 };
 
-export default function Layout({ children, session }: Props) {
+export default function Layout({ children }: Props) {
   const pathname = usePathname();
   const isProjectsRoute = pathname.startsWith("/projects/");
   const excludePaths = ["/", "/signup", "/signin", "/home"];
@@ -24,7 +23,7 @@ export default function Layout({ children, session }: Props) {
         <> {children}</>
       ) : (
         <>
-          <Navbar session={session} />
+          <Navbar />
           {children}
         </>
       )}

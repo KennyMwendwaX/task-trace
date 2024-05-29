@@ -22,12 +22,9 @@ import Logo from "../../public/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 
-type Props = {
-  session: Session | null;
-};
-
-export default function Navbar({ session }: Props) {
+export default function Navbar() {
   const pathname = usePathname();
+
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-white px-4 md:px-6 z-50">
       <Sheet>
