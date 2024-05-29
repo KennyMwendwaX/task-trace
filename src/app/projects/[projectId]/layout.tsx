@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProjectNavbar from "@/components/ProjectNavbar";
-import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
   title: "Project",
