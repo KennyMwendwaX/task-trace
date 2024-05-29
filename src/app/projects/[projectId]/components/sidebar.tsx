@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -52,31 +52,33 @@ export function SideNav({ className, items, ...props }: SidebarNavProps) {
   );
 }
 
-// Example usage
 export default function Sidebar() {
+  const params = useParams<{ projectId: string }>();
+  const projectId = params.projectId;
+
   const items = [
     {
-      href: "/",
+      href: `/home`,
       title: "Dashboard",
       icon: <LuHome className="h-4 w-4" />,
     },
     {
-      href: "/projects/1",
+      href: `/projects/${projectId}`,
       title: "Overview",
       icon: <RxDashboard className="h-4 w-4" />,
     },
     {
-      href: "/projects/1/tasks",
+      href: `/projects/${projectId}/tasks`,
       title: "Tasks",
       icon: <GoTasklist className="h-5 w-5" />,
     },
     {
-      href: "/projects/1/members",
+      href: `/projects/${projectId}/members`,
       title: "Members",
       icon: <LuUsers className="h-4 w-4" />,
     },
     {
-      href: "/projects/1/analytics",
+      href: `/projects/${projectId}/analytics`,
       title: "Analytics",
       icon: <LuLineChart className="h-4 w-4" />,
     },
