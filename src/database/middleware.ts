@@ -3,10 +3,10 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
-} from "./src/routes";
-import { auth } from "./src/auth";
+} from "../routes";
+import { auth } from "../auth";
 
-export default auth((req) => {
+export default auth(async function middleware(req) {
   const { nextUrl } = req;
 
   const isLoggedIn = !!req.auth;
