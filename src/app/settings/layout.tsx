@@ -24,14 +24,6 @@ const sidebarNavItems = [
     title: "Appearance",
     href: "/settings/appearance",
   },
-  {
-    title: "Notifications",
-    href: "/settings/notifications",
-  },
-  {
-    title: "Display",
-    href: "/settings/display",
-  },
 ];
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
