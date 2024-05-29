@@ -3,8 +3,8 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
-} from "./src/routes";
-import { auth } from "./src/auth";
+} from "../routes";
+import { auth } from "../auth";
 
 export default auth((req) => {
   const { nextUrl } = req;

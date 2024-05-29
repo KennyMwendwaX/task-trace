@@ -48,7 +48,11 @@ import {
 } from "@/components/ui/command";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Task, TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
+import {
+  ProjectTask,
+  TaskFormValues,
+  taskFormSchema,
+} from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Member } from "@/lib/schema/MemberSchema";
 import dynamic from "next/dynamic";
@@ -65,7 +69,7 @@ interface Props {
   projectId: string;
   memberId: string;
   members: Member[];
-  task: Task;
+  task: ProjectTask;
 }
 
 export default function EditTaskModal({

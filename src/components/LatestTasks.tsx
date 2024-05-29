@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Card } from "@/components/ui/card";
 import format from "date-fns/format";
 import { IoChevronForward } from "react-icons/io5";
@@ -8,7 +8,7 @@ import Link from "next/link";
 
 type Props = {
   projectId: string;
-  tasks: Task[];
+  tasks: ProjectTask[];
 };
 
 export default function LatestTasks({ projectId, tasks }: Props) {

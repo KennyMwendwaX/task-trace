@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "@/lib/config";
-import { Task, taskSchema } from "@/lib/schema/TaskSchema";
+import { ProjectTask, taskSchema } from "@/lib/schema/TaskSchema";
 import TableColumnHeader from "./TableColumnHeader";
 import TableRowActions from "./TableRowActions";
 import format from "date-fns/format";
@@ -18,7 +18,7 @@ interface TableColumnsProps {
 
 export const TableColumns = ({
   projectId,
-}: TableColumnsProps): ColumnDef<Task>[] => [
+}: TableColumnsProps): ColumnDef<ProjectTask>[] => [
   {
     id: "select",
     header: ({ table }) => (

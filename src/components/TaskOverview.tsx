@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Task } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import {
   CheckCircledIcon,
   CircleIcon,
@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/react-icons";
 
 interface Props {
-  tasks: Task[];
+  tasks: ProjectTask[];
 }
 
 export default function TaskOverview({ tasks }: Props) {

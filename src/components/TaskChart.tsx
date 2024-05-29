@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import React from "react";
 import {
   ResponsiveContainer,
@@ -16,7 +16,7 @@ import {
 } from "recharts/types/component/DefaultTooltipContent";
 
 interface Props {
-  tasks: Task[];
+  tasks: ProjectTask[];
 }
 
 interface StatusCounts {
