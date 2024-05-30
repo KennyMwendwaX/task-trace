@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { labels, priorities, statuses } from "@/lib/config";
 import { UserTask, userTaskSchema } from "@/lib/schema/TaskSchema";
-import TableColumnHeader from "./TableColumnHeader";
-import TableRowActions from "./TableRowActions";
+import TableColumnHeader from "./table-column-header";
+import TableRowActions from "./table-row-actions";
 import format from "date-fns/format";
 import Link from "next/link";
 

@@ -1,8 +1,7 @@
 "use client";
 
-import TaskTable from "@/components/tables/UserTaskTable/Table";
-import tasksData from "./tasks.json";
-import { TableColumns } from "@/components/tables/UserTaskTable/TableColumns";
+import TaskTable from "./components/task-table/table";
+import { TableColumns } from "./components/task-table/table-columns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";

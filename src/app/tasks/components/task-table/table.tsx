@@ -24,8 +24,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import TableToolbar from "./TableToolbar";
-import TablePagination from "./TablePagination";
+import TableToolbar from "./table-toolbar";
+import TablePagination from "./table-pagination";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import format from "date-fns/format";
 
