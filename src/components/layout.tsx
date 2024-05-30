@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Navbar from "./Navbar";
+import Navbar from "./navbar";
 import { ReactNode } from "react";
 import { Session } from "next-auth";
 

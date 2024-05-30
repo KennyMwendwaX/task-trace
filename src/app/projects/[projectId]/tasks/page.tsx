@@ -5,7 +5,7 @@ import { TableColumns } from "./components/task-table/table-columns";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { ProjectTask } from "@/lib/schema/TaskSchema";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import { MdOutlineAddTask } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

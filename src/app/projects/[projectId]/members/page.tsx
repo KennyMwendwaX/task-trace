@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { User } from "@/lib/schema/UserSchema";
 import type { Member } from "@/lib/schema/MemberSchema";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/AddMemberModal";

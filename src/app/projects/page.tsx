@@ -1,7 +1,7 @@
 "use client";
 
 import AddProjectModal from "@/components/AddProjectModal";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import ProjectCard from "./components/project-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

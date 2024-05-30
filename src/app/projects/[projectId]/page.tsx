@@ -7,7 +7,7 @@ import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import { MdOutlineAddTask } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
 import { User } from "@/lib/schema/UserSchema";

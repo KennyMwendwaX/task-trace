@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import { labels, priorities, statuses } from "@/lib/config";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
