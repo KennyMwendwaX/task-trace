@@ -52,7 +52,7 @@ export default function AddProjectModal() {
   };
 
   const {
-    mutate: addTask,
+    mutate: addProject,
     isPending,
     error,
   } = useMutation({
@@ -77,7 +77,7 @@ export default function AddProjectModal() {
   });
 
   async function onSubmit(values: ProjectFormValues) {
-    addTask(values);
+    addProject(values);
     toggleDialog();
     router.refresh();
   }
