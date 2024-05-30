@@ -1,8 +1,8 @@
 "use client";
 
-import TaskOverview from "@/components/TaskOverview";
-import TaskChart from "@/components/TaskChart";
-import LatestTasks from "@/components/LatestTasks";
+import TaskOverview from "./components/task-overview";
+import TaskChart from "./components/task-chart";
+import LatestTasks from "./components/latest-tasks";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
