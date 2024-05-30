@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { LuArrowUpRight, LuUserPlus, LuUserPlus2 } from "react-icons/lu";
+import { LuArrowUpRight } from "react-icons/lu";
 import {
   Table,
   TableBody,
@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AddProjectModal from "@/components/AddProjectModal";
+import JoinProjectModal from "@/components/join-project-modal";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -87,10 +88,7 @@ export default async function Dashboard() {
             <CardTitle>Projects</CardTitle>
             <div className="ml-auto flex items-center gap-2">
               <AddProjectModal />
-              <Button size="sm" variant="outline" className="gap-1">
-                <LuUserPlus2 className="w-5 h-5" />
-                <span>Join Project</span>
-              </Button>
+              <JoinProjectModal />
             </div>
           </CardHeader>
           <CardContent className="grid gap-4">

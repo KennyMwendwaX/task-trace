@@ -23,7 +23,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { AiOutlinePlus } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";

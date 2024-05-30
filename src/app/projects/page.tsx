@@ -15,6 +15,7 @@ import {
   LuFolderPlus,
   LuUserPlus2,
 } from "react-icons/lu";
+import JoinProjectModal from "@/components/join-project-modal";
 
 export default function Projects() {
   const { data, isLoading, error } = useQuery({
@@ -120,10 +121,7 @@ export default function Projects() {
           </p>
           <div className="flex items-center gap-2">
             <AddProjectModal />
-            <Button size="sm" variant="outline" className="gap-1">
-              <LuUserPlus2 className="w-5 h-5" />
-              <span>Join Project</span>
-            </Button>
+            <JoinProjectModal />
           </div>
         </div>
       )}
