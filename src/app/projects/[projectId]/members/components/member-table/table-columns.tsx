@@ -5,9 +5,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { Member, memberSchema } from "@/lib/schema/MemberSchema";
-import TableColumnHeader from "./TableColumnHeader";
+import TableColumnHeader from "./table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import TableRowActions from "./TableRowActions";
+import TableRowActions from "./table-row-actions";
 
 interface TableColumnsProps {
   projectId: string;
