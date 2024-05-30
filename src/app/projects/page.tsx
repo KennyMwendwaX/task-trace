@@ -2,7 +2,7 @@
 
 import AddProjectModal from "@/components/AddProjectModal";
 import Loading from "@/components/Loading";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "./components/project-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Project } from "@/lib/schema/ProjectSchema";
