@@ -56,15 +56,20 @@ export default function JoinProjectModal() {
         method: "POST",
         body: JSON.stringify(values),
       };
-      const response = await fetch("/api/projects", options);
+      const response = await fetch("/api/projects/join", options);
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
+
+      return await response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const { projectId } = data;
+      router.push(`/projects/${projectId}`);
       queryClient.invalidateQueries({
         queryKey: ["projects"],
       });
+      toggleDialog();
     },
     onError: (error) => {
       console.log(error);
@@ -73,8 +78,6 @@ export default function JoinProjectModal() {
 
   async function onSubmit(values: InvitationCode) {
     joinProject(values);
-    toggleDialog();
-    router.push(`/projects/`);
   }
 
   return (
