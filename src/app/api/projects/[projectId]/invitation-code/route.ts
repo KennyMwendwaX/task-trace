@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { invitationCodes } from "@/database/schema";
 import add from "date-fns/add";
+import { eq } from "drizzle-orm/sql";
 
 export async function GET(
   req: Request,
@@ -88,12 +89,24 @@ export async function POST(
     }
 
     const code = nanoid(10);
-
     const expiresAt = add(new Date(), { days: 7 });
 
-    await db.insert(invitationCodes).values({ code, projectId, expiresAt });
+    const existingCode = await db.query.invitationCodes.findFirst({
+      where: (invitationCodes, { eq }) =>
+        eq(invitationCodes.projectId, projectId),
+    });
 
-    return NextResponse.json({ code }, { status: 201 });
+    if (!existingCode) {
+      await db.insert(invitationCodes).values({ code, projectId, expiresAt });
+      return NextResponse.json({ code }, { status: 201 });
+    }
+
+    await db
+      .update(invitationCodes)
+      .set({ code, expiresAt })
+      .where(eq(invitationCodes.projectId, projectId));
+
+    return NextResponse.json({ code }, { status: 200 });
   } catch (error) {
     console.log("Error generating invitation code:", error);
     return NextResponse.json(
