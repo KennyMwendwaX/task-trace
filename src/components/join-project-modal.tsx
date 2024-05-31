@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { LuUserPlus2 } from "react-icons/lu";
+import { LuAlertCircle, LuUserPlus2 } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,6 +39,7 @@ export default function JoinProjectModal() {
   });
 
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -72,7 +73,15 @@ export default function JoinProjectModal() {
       toggleDialog();
     },
     onError: (error) => {
-      console.log(error);
+      if (error.message === "Invalid invitation code") {
+        setServerError("Invalid or Expired invitation code");
+      } else if (error.message === "Invitation code expired") {
+        setServerError("Invalid or Expired invitation code");
+      } else {
+        setServerError(
+          "An error occurred while joining the project. Please try again later."
+        );
+      }
     },
   });
 
@@ -96,6 +105,15 @@ export default function JoinProjectModal() {
               Enter the invitation code you received to join the project.
             </DialogDescription>
           </DialogHeader>
+          {serverError && (
+            <div
+              className="flex items-center p-4 gap-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              role="alert">
+              <LuAlertCircle className="h-5 w-5" />
+              <span className="sr-only">Error</span>
+              <div className="font-medium">{serverError}</div>
+            </div>
+          )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex w-full items-end space-x-2">
