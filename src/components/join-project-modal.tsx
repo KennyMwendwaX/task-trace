@@ -21,6 +21,9 @@ import {
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const invitationCodeSchema = z.object({
   code: z
@@ -33,18 +36,50 @@ type InvitationCode = z.infer<typeof invitationCodeSchema>;
 export default function JoinProjectModal() {
   const form = useForm<z.infer<typeof invitationCodeSchema>>({
     resolver: zodResolver(invitationCodeSchema),
-    defaultValues: {
-      code: "",
+  });
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const toggleDialog = () => {
+    setDialogOpen(!isDialogOpen);
+  };
+
+  const {
+    mutate: joinProject,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async (values: InvitationCode) => {
+      const options = {
+        method: "POST",
+        body: JSON.stringify(values),
+      };
+      const response = await fetch("/api/projects", options);
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["projects"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
   async function onSubmit(values: InvitationCode) {
-    console.log(values);
+    joinProject(values);
+    toggleDialog();
+    router.push(`/projects/`);
   }
 
   return (
     <>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
         <DialogTrigger asChild>
           <Button size="sm" variant="outline" className="gap-1">
             <LuUserPlus2 className="w-5 h-5" />

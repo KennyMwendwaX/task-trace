@@ -29,6 +29,17 @@ export async function GET(
       );
     }
 
+    const currentDateTime = new Date();
+    if (
+      invitationCode.expiresAt &&
+      invitationCode.expiresAt < currentDateTime
+    ) {
+      return NextResponse.json(
+        { message: "Invitation code expired. Please regenerate." },
+        { status: 410 }
+      );
+    }
+
     const code = invitationCode.code;
 
     return NextResponse.json({ code }, { status: 200 });
