@@ -32,6 +32,7 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
+import { priorities } from "@/lib/config";
 
 export default function Dashboard() {
   const session = useSession();
@@ -56,7 +57,8 @@ export default function Dashboard() {
         due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
       }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, 7) || [];
   return (
     <>
       <div className="text-2xl font-bold tracking-tight">
@@ -208,83 +210,31 @@ export default function Dashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <LuArrowUpRight className="mr-1 h-5 w-5 text-red-500" />
-                      <span>High</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                {tasks.map((task) => {
+                  const priority = priorities.find(
+                    (priority) => priority.value === task.priority
+                  );
+                  if (!priority) return null;
+                  return (
+                    <TableRow key={task.id}>
+                      <TableCell className="font-medium hover:underline cursor-pointer">
+                        {task.name}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end">
+                          {priority.value === "HIGH" ? (
+                            <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-red-600" />
+                          ) : priority.value === "MEDIUM" ? (
+                            <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-orange-500" />
+                          ) : priority.value === "LOW" ? (
+                            <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-blue-600" />
+                          ) : null}
+                          <span>{task.priority}</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </CardContent>
