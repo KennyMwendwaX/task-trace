@@ -5,7 +5,6 @@ import { TableColumns } from "./components/task-table/table-columns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
-import { auth } from "@/auth";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { GoTasklist } from "react-icons/go";

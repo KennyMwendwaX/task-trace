@@ -1,3 +1,5 @@
+"use client";
+
 import {
   CheckCircledIcon,
   CircleIcon,
@@ -26,13 +28,39 @@ import {
 } from "@/components/ui/table";
 import AddProjectModal from "@/components/AddProjectModal";
 import JoinProjectModal from "@/components/join-project-modal";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { UserTask } from "@/lib/schema/TaskSchema";
+import axios from "axios";
 
-export default async function Dashboard() {
-  const session = await auth();
+export default function Dashboard() {
+  const session = useSession();
+
+  const userId = session.data?.user?.id;
+
+  const {
+    data: tasksData,
+    isLoading: tasksIsLoading,
+    error: tasksError,
+  } = useQuery({
+    queryKey: ["user-tasks", userId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/users/${userId}/tasks`);
+      return data.tasks as UserTask[];
+    },
+  });
+  const tasks =
+    tasksData
+      ?.map((task) => ({
+        ...task,
+        due_date: new Date(task.due_date),
+        createdAt: new Date(task.createdAt),
+      }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
   return (
     <>
       <div className="text-2xl font-bold tracking-tight">
-        Welcome, {session?.user?.name}!
+        Welcome, {session.data?.user?.name}!
       </div>
 
       <div className="mt-2">
