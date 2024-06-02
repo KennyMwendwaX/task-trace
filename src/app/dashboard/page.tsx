@@ -84,17 +84,10 @@ export default function Dashboard() {
     CANCELED: "Canceled",
   };
 
-  const statusChartDatad = Object.keys(statusCounts).map((status) => ({
+  const statusChartData = Object.keys(statusCounts).map((status) => ({
     status: statusText[status],
     tasks: statusCounts[status],
   }));
-
-  const statusChartData = [
-    { status: "Done", tasks: 10 },
-    { status: "Todo", tasks: 5 },
-    { status: "In Progress", tasks: 7 },
-    { status: "Canceled", tasks: 2 },
-  ];
 
   if (tasksIsLoading) {
     return <Loading />;
@@ -125,7 +118,9 @@ export default function Dashboard() {
               <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
                 <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
 
-                <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>
+                <h3 className="mt-4 text-xl font-semibold">
+                  Tasks chart not available
+                </h3>
                 <p className="mb-4 mt-2 text-base text-muted-foreground">
                   You do not have any tasks.
                 </p>

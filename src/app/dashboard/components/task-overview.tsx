@@ -14,8 +14,11 @@ interface Props {
 }
 
 export default function TaskOverview({ tasks }: Props) {
-  const tasksDone = [1, 2, 3, 6, 5, 5];
-  const tasks_done_percentage = ((tasksDone.length / 9) * 100).toFixed(2);
+  const tasksDone = tasks.filter((task) => task.status === "DONE");
+  const tasks_done_percentage = (
+    (tasksDone.length / tasks.length) *
+    100
+  ).toFixed(2);
 
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
   const tasks_todo_percentage = (
