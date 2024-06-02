@@ -34,6 +34,22 @@ import axios from "axios";
 import { priorities } from "@/lib/config";
 import { GoTasklist } from "react-icons/go";
 import TaskOverview from "./components/task-overview";
+import {
+  Bar,
+  BarChart,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+interface StatusCounts {
+  [key: string]: number;
+}
+interface StatusColors {
+  [key: string]: string;
+}
 
 export default function Dashboard() {
   const session = useSession();
@@ -52,6 +68,31 @@ export default function Dashboard() {
     },
   });
   const tasks = tasksData || [];
+
+  const statusCounts: StatusCounts = {};
+  tasks.forEach((task) => {
+    const status = task.status;
+    statusCounts[status] = (statusCounts[status] || 0) + 1;
+  });
+
+  const statusText: Record<string, string> = {
+    DONE: "Done",
+    TO_DO: "Todo",
+    IN_PROGRESS: "In Progress",
+    CANCELED: "Canceled",
+  };
+
+  const statusChartDatad = Object.keys(statusCounts).map((status) => ({
+    status: statusText[status],
+    tasks: statusCounts[status],
+  }));
+
+  const statusChartData = [
+    { status: "Done", tasks: 10 },
+    { status: "Todo", tasks: 5 },
+    { status: "In Progress", tasks: 7 },
+    { status: "Canceled", tasks: 2 },
+  ];
 
   return (
     <>
@@ -85,7 +126,32 @@ export default function Dashboard() {
                 </Link>
               </Button>
             </div>
-            <Table>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={statusChartData}>
+                <XAxis
+                  dataKey="status"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Bar
+                  dataKey="tasks"
+                  fill="currentColor"
+                  radius={[4, 4, 0, 0]}
+                  className="fill-primary"
+                />
+                <Legend />
+                {/* <Tooltip /> */}
+              </BarChart>
+            </ResponsiveContainer>
+            {/* <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Project</TableHead>
@@ -134,7 +200,7 @@ export default function Dashboard() {
                   </TableCell>
                 </TableRow>
               </TableBody>
-            </Table>
+            </Table> */}
           </CardContent>
         </Card>
         <Card>
