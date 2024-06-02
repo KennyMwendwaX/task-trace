@@ -33,6 +33,7 @@ import { UserTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { priorities } from "@/lib/config";
 import { GoTasklist } from "react-icons/go";
+import TaskOverview from "./components/task-overview";
 
 export default function Dashboard() {
   const session = useSession();
@@ -50,15 +51,8 @@ export default function Dashboard() {
       return data.tasks as UserTask[];
     },
   });
-  const tasks =
-    tasksData
-      ?.map((task) => ({
-        ...task,
-        due_date: new Date(task.due_date),
-        createdAt: new Date(task.createdAt),
-      }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice(0, 7) || [];
+  const tasks = tasksData || [];
+
   return (
     <>
       <div className="text-2xl font-bold tracking-tight">
@@ -67,50 +61,7 @@ export default function Dashboard() {
 
       <div className="mt-2">
         <div className="text-lg text-muted-foreground">Your Tasks Overview</div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-base font-medium">Done</CardTitle>
-              <CheckCircledIcon className="h-5 w-5 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">23</div>
-              <p className="text-sm text-muted-foreground">13% of all tasks</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-base font-medium">Todo</CardTitle>
-              <CircleIcon className="h-5 w-5 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">23</div>
-              <p className="text-sm text-muted-foreground">13% of all tasks</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-base font-medium">
-                In Progress
-              </CardTitle>
-              <StopwatchIcon className="h-5 w-5 text-orange-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">23</div>
-              <p className="text-sm text-muted-foreground">13% of all tasks</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-base font-medium">Canceled</CardTitle>
-              <CrossCircledIcon className="h-5 w-5 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">23</div>
-              <p className="text-sm text-muted-foreground">13% of all tasks</p>
-            </CardContent>
-          </Card>
-        </div>
+        <TaskOverview tasks={tasks} />
       </div>
       <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
         <Card>
