@@ -6,7 +6,6 @@ import {
   CrossCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
-import { auth } from "../../auth";
 import {
   Card,
   CardContent,
@@ -33,6 +32,7 @@ import { useQuery } from "@tanstack/react-query";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { priorities } from "@/lib/config";
+import { GoTasklist } from "react-icons/go";
 
 export default function Dashboard() {
   const session = useSession();
@@ -202,41 +202,52 @@ export default function Dashboard() {
             </Button>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Task</TableHead>
-                  <TableHead className="text-right">Priority</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tasks.map((task) => {
-                  const priority = priorities.find(
-                    (priority) => priority.value === task.priority
-                  );
-                  if (!priority) return null;
-                  return (
-                    <TableRow key={task.id}>
-                      <TableCell className="font-medium hover:underline cursor-pointer">
-                        {task.name}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-end">
-                          {priority.value === "HIGH" ? (
-                            <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-red-600" />
-                          ) : priority.value === "MEDIUM" ? (
-                            <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-orange-500" />
-                          ) : priority.value === "LOW" ? (
-                            <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-blue-600" />
-                          ) : null}
-                          <span>{task.priority}</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+            {tasks.length === 0 ? (
+              <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
+                <GoTasklist className="h-12 w-12 text-muted-foreground" />
+
+                <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>
+                <p className="mb-4 mt-2 text-base text-muted-foreground">
+                  You do not have any tasks.
+                </p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Task</TableHead>
+                    <TableHead className="text-right">Priority</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {tasks.map((task) => {
+                    const priority = priorities.find(
+                      (priority) => priority.value === task.priority
+                    );
+                    if (!priority) return null;
+                    return (
+                      <TableRow key={task.id}>
+                        <TableCell className="font-medium hover:underline cursor-pointer">
+                          {task.name}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center justify-end">
+                            {priority.value === "HIGH" ? (
+                              <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-red-600" />
+                            ) : priority.value === "MEDIUM" ? (
+                              <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-orange-500" />
+                            ) : priority.value === "LOW" ? (
+                              <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-blue-600" />
+                            ) : null}
+                            <span>{task.priority}</span>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
