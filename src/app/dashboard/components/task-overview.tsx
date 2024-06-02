@@ -1,11 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import {
   CheckCircledIcon,
   CircleIcon,
   CrossCircledIcon,
-  QuestionMarkCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
 

@@ -111,7 +111,7 @@ export default function Dashboard() {
       <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
         <Card>
           <CardHeader className="flex flex-row items-center">
-            <CardTitle className="text-xl">Task Overview</CardTitle>
+            <CardTitle className="text-xl">Tasks Overview</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             {tasks.length === 0 ? (

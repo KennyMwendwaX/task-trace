@@ -8,13 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  LuFolders,
-  LuPin,
-  LuSearch,
-  LuFolderPlus,
-  LuUserPlus2,
-} from "react-icons/lu";
+import { LuFolders, LuPin, LuSearch, LuFolderPlus } from "react-icons/lu";
+import { MdOutlineFolderOff } from "react-icons/md";
 import JoinProjectModal from "@/components/join-project-modal";
 
 export default function Projects() {
@@ -33,11 +28,7 @@ export default function Projects() {
   const memberProjects = data?.userProjects || [];
 
   if (isLoading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
+    return <Loading />;
   }
 
   return (
@@ -113,15 +104,15 @@ export default function Projects() {
         </>
       ) : (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-          <LuFolderPlus className="h-14 w-14 text-muted-foreground" />
+          <MdOutlineFolderOff className="h-14 w-14 text-muted-foreground" />
 
           <h3 className="mt-4 text-2xl font-semibold">No projects found</h3>
           <p className="mb-4 mt-2 text-lg text-muted-foreground">
             You do not have any project. Add one below or join a project.
           </p>
           <div className="flex items-center gap-2">
-            <AddProjectModal />
             <JoinProjectModal />
+            <AddProjectModal />
           </div>
         </div>
       )}
