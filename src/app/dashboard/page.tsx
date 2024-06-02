@@ -43,6 +43,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import Loading from "./components/loading";
+import { TbChartBarOff } from "react-icons/tb";
 
 interface StatusCounts {
   [key: string]: number;
@@ -94,119 +96,72 @@ export default function Dashboard() {
     { status: "Canceled", tasks: 2 },
   ];
 
+  if (tasksIsLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <div className="text-2xl font-bold tracking-tight">
-        Welcome, {session.data?.user?.name}!
+      <div className="flex items-center">
+        <div className="text-2xl font-bold tracking-tight">
+          Welcome, {session.data?.user?.name}!
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <JoinProjectModal />
+          <AddProjectModal />
+        </div>
       </div>
 
-      <div className="mt-2">
-        <div className="text-lg text-muted-foreground">Your Tasks Overview</div>
+      <div className="mt-4">
         <TaskOverview tasks={tasks} />
       </div>
       <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
         <Card>
           <CardHeader className="flex flex-row items-center">
-            <CardTitle>Projects</CardTitle>
-            <div className="ml-auto flex items-center gap-2">
-              <AddProjectModal />
-              <JoinProjectModal />
-            </div>
+            <CardTitle className="text-xl">Task Overview</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className="flex flex-row items-center">
-              <div className="grid gap-2">
-                <CardTitle className="text-lg">Active Projects</CardTitle>
-                <CardDescription>Projects with the most tasks.</CardDescription>
+            {tasks.length === 0 ? (
+              <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
+                <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
+
+                <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>
+                <p className="mb-4 mt-2 text-base text-muted-foreground">
+                  You do not have any tasks.
+                </p>
               </div>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <Link href="/projects">
-                  View All
-                  <LuArrowUpRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={statusChartData}>
-                <XAxis
-                  dataKey="status"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Bar
-                  dataKey="tasks"
-                  fill="currentColor"
-                  radius={[4, 4, 0, 0]}
-                  className="fill-primary"
-                />
-                <Legend />
-                {/* <Tooltip /> */}
-              </BarChart>
-            </ResponsiveContainer>
-            {/* <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Project</TableHead>
-                  <TableHead className="text-right">Tasks</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="default">50</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="default">50</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="default">50</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="default">50</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium hover:underline cursor-pointer">
-                    Golang Command Line Interface tool
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Badge variant="default">50</Badge>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table> */}
+            ) : (
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={statusChartData}>
+                  <XAxis
+                    dataKey="status"
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Bar
+                    dataKey="tasks"
+                    fill="currentColor"
+                    radius={[4, 4, 0, 0]}
+                    className="fill-primary"
+                  />
+                  <Legend />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
-              <CardTitle>Recent Tasks</CardTitle>
+              <CardTitle className="text-xl">Recent Tasks</CardTitle>
               <CardDescription>
                 Recent tasks assigned to you from your projects.
               </CardDescription>
