@@ -45,6 +45,7 @@ import {
 } from "recharts";
 import Loading from "./components/loading";
 import { TbChartBarOff } from "react-icons/tb";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface StatusCounts {
   [key: string]: number;
