@@ -1,14 +1,5 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
-import { LuArrowUpRight } from "react-icons/lu";
 
 export default function Loading() {
   return (

@@ -1,12 +1,6 @@
 "use client";
 
 import {
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  StopwatchIcon,
-} from "@radix-ui/react-icons";
-import {
   Card,
   CardContent,
   CardDescription,
@@ -14,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { LuArrowUpRight } from "react-icons/lu";
 import {
@@ -45,13 +38,9 @@ import {
 } from "recharts";
 import Loading from "./components/loading";
 import { TbChartBarOff } from "react-icons/tb";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface StatusCounts {
   [key: string]: number;
-}
-interface StatusColors {
-  [key: string]: string;
 }
 
 export default function Dashboard() {
