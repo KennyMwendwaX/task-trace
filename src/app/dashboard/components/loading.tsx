@@ -8,8 +8,8 @@ export default function Loading() {
         <Skeleton className="h-9 w-[600px]" />
 
         <div className="ml-auto flex items-center gap-2">
-          <Skeleton className="h-9 w-[150px]" />
-          <Skeleton className="h-9 w-[150px]" />
+          <Skeleton className="h-8 w-[132px]" />
+          <Skeleton className="h-8 w-[132px]" />
         </div>
       </div>
 

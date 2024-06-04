@@ -10,6 +10,7 @@ import axios from "axios";
 import { LuFolders, LuPin, LuSearch } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
 import JoinProjectModal from "@/components/join-project-modal";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Projects() {
   const { data, isLoading, error } = useQuery({
@@ -44,6 +45,14 @@ export default function Projects() {
         <div className="flex items-center gap-2">
           <JoinProjectModal />
           <AddProjectModal />
+        </div>
+      </div>
+      <div className="flex items-center">
+        <Skeleton className="h-9 w-[400px]" />
+
+        <div className="ml-auto flex items-center gap-2">
+          <Skeleton className="h-8 w-[132px]" />
+          <Skeleton className="h-8 w-[132px]" />
         </div>
       </div>
       {/* {userProjects.length > 0 || memberProjects.length > 0 ? (
