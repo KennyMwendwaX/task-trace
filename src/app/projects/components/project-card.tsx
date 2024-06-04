@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,20 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Project } from "@/lib/schema/ProjectSchema";
-import Link from "next/link";
-import { IoChevronForward } from "react-icons/io5";
-import { LuMoreVertical, LuTruck, LuUser2 } from "react-icons/lu";
+import { LuMoreVertical } from "react-icons/lu";
 import { projectStatuses } from "@/lib/config";
-import format from "date-fns/format";
 import Image from "next/image";
 import Logo from "../../../../public/logo.png";
 
