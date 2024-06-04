@@ -3,12 +3,11 @@
 import AddProjectModal from "@/components/AddProjectModal";
 import Loading from "@/components/loading";
 import ProjectCard from "./components/project-card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { LuFolders, LuPin, LuSearch, LuFolderPlus } from "react-icons/lu";
+import { LuFolders, LuPin, LuSearch } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
 import JoinProjectModal from "@/components/join-project-modal";
 
@@ -33,7 +32,21 @@ export default function Projects() {
 
   return (
     <>
-      {userProjects.length > 0 || memberProjects.length > 0 ? (
+      <div className="flex items-center justify-between sm:gap-2">
+        <div className="relative md:grow-0">
+          <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search projects..."
+            className="w-[200px] rounded-lg bg-background pl-8 md:w-[345px] lg:w-[400px]"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <JoinProjectModal />
+          <AddProjectModal />
+        </div>
+      </div>
+      {/* {userProjects.length > 0 || memberProjects.length > 0 ? (
         <>
           <div className="flex items-center justify-between sm:gap-2">
             <div className="relative md:grow-0">
@@ -115,7 +128,7 @@ export default function Projects() {
             <AddProjectModal />
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }
