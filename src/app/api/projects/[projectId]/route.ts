@@ -12,7 +12,6 @@ export async function GET(
       with: {
         owner: {
           columns: {
-            id: true,
             name: true,
             email: true,
           },

@@ -36,9 +36,7 @@ export const projectSchema = z.object({
       message: "Description cannot be longer than 200 characters",
     }),
   createdAt: z.date(),
-  updatedAt: z.date(),
   owner: z.object({
-    id: z.string(),
     name: z.string(),
     email: z.string(),
   }),
@@ -51,6 +49,7 @@ export const projectFormSchema = projectSchema.omit({
   createdAt: true,
   updatedAt: true,
   ownerId: true,
+  owner: true,
 });
 
 export type Project = z.infer<typeof projectSchema>;

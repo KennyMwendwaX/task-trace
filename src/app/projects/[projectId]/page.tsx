@@ -14,6 +14,10 @@ import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiUserPlus } from "react-icons/fi";
+import { projectData } from "./components/project";
+import { usersData } from "./components/users";
+import { membersData } from "./components/members";
+import { tasksData } from "./components/tasks";
 
 export default function ProjectPage({
   params,
@@ -22,80 +26,96 @@ export default function ProjectPage({
 }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}`);
-      return data.project as Project;
-    },
-  });
+  // const {
+  //   data: project,
+  //   isLoading: projectLoading,
+  //   error: projectError,
+  // } = useQuery({
+  //   queryKey: ["project", projectId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/projects/${projectId}`);
+  //     return data.project as Project;
+  //   },
+  // });
 
-  const {
-    data: usersData,
-    isLoading: usersIsLoading,
-    error: usersError,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
-    },
-  });
+  // const {
+  //   data: usersData,
+  //   isLoading: usersIsLoading,
+  //   error: usersError,
+  // } = useQuery({
+  //   queryKey: ["users"],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get("/api/users");
+  //     return data.users as User[];
+  //   },
+  // });
 
-  const {
-    data: membersData,
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}/members`);
-      return data.members as Member[];
-    },
-  });
+  // const {
+  //   data: membersData,
+  //   isLoading: membersIsLoading,
+  //   error: membersError,
+  // } = useQuery({
+  //   queryKey: ["project-members", projectId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/projects/${projectId}/members`);
+  //     return data.members as Member[];
+  //   },
+  // });
 
-  const {
-    data: tasksData,
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["project-tasks", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
-      return data.tasks as ProjectTask[];
-    },
-  });
+  // const {
+  //   data: tasksData,
+  //   isLoading: tasksIsLoading,
+  //   error: tasksError,
+  // } = useQuery({
+  //   queryKey: ["project-tasks", projectId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
+  //     return data.tasks as ProjectTask[];
+  //   },
+  // });
 
-  const isLoading =
-    projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
+  // const isLoading =
+  //   projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
 
-  if (isLoading) {
-    return (
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-        <Loading />
-      </main>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+  //       <Loading />
+  //     </main>
+  //   );
+  // }
 
-  if (!project) {
-    return (
-      <main className="mx-auto flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-        <div className="mx-auto flex flex-col items-center justify-center text-center pt-36">
-          <MdOutlineFolderOff className="h-16 w-16 text-muted-foreground" />
+  // if (!project) {
+  //   return (
+  //     <main className="mx-auto flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+  //       <div className="mx-auto flex flex-col items-center justify-center text-center pt-36">
+  //         <MdOutlineFolderOff className="h-16 w-16 text-muted-foreground" />
 
-          <h3 className="mt-4 text-2xl font-semibold">Project was not found</h3>
-        </div>
-      </main>
-    );
-  }
-
-  const users = usersData || [];
-  const members = membersData || [];
-  const tasks = tasksData || [];
+  //         <h3 className="mt-4 text-2xl font-semibold">Project was not found</h3>
+  //       </div>
+  //     </main>
+  //   );
+  // }
+  const project = projectData;
+  const users = usersData.map((user) => ({
+    ...user,
+    emailVerified: new Date(user.emailVerified),
+    createdAt: new Date(user.createdAt),
+  })) as User[];
+  const members = membersData.map((member) => ({
+    ...member,
+    createdAt: new Date(member.createdAt),
+    tasks: member.tasks.map((task) => ({
+      ...task,
+      createdAt: new Date(task.createdAt),
+      due_date: new Date(task.due_date),
+    })),
+  })) as Member[];
+  const tasks = tasksData.map((task) => ({
+    ...task,
+    due_date: new Date(task.due_date),
+    createdAt: new Date(task.createdAt),
+  })) as ProjectTask[];
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">

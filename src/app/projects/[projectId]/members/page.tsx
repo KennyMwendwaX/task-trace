@@ -74,7 +74,6 @@ export default function Members({ params }: { params: { projectId: string } }) {
       ?.map((member) => ({
         ...member,
         createdAt: new Date(member.createdAt),
-        updatedAt: new Date(member.updatedAt),
         tasks: member.tasks.map((task) => ({
           ...task,
           due_date: new Date(task.due_date),
