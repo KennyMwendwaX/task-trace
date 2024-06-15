@@ -39,7 +39,7 @@ export default function ProjectPage({
     isLoading: usersIsLoading,
     error: usersError,
   } = useQuery({
-    queryKey: ["project-users"],
+    queryKey: ["users"],
     queryFn: async () => {
       const { data } = await axios.get("/api/users");
       return data.users as User[];

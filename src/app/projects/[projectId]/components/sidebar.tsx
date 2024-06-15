@@ -29,7 +29,7 @@ export function SideNav({ className, items, ...props }: SidebarNavProps) {
   return (
     <nav
       className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 px-1",
         className
       )}
       {...props}>
@@ -41,8 +41,8 @@ export function SideNav({ className, items, ...props }: SidebarNavProps) {
             buttonVariants({ variant: "ghost" }),
             pathname === item.href
               ? "bg-muted hover:bg-muted text-primary"
-              : "hover:bg-transparent hover:underline text-muted-foreground",
-            "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all"
+              : "hover:bg-muted hover:text-primary text-muted-foreground",
+            "flex items-center justify-start gap-3 rounded-lg px-6 py-2.5 transition-all"
           )}>
           {item.icon}
           {item.title}

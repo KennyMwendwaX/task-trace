@@ -31,7 +31,7 @@ export default function Projects() {
   }
 
   return (
-    <>
+    <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
       {userProjects.length > 0 || memberProjects.length > 0 ? (
         <>
           <div className="flex items-center justify-between sm:gap-2">
@@ -115,6 +115,6 @@ export default function Projects() {
           </div>
         </div>
       )}
-    </>
+    </main>
   );
 }
