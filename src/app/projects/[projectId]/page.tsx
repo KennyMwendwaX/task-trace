@@ -8,7 +8,7 @@ import { ProjectTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/loading";
-import { MdOutlineAddTask } from "react-icons/md";
+import { MdOutlineAddTask, MdOutlineFolderOff } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
 import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
@@ -83,9 +83,11 @@ export default function ProjectPage({
 
   if (!project) {
     return (
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-        <div className="text-2xl font-bold tracking-tight">
-          Project was not found
+      <main className="mx-auto flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+        <div className="mx-auto flex flex-col items-center justify-center text-center pt-36">
+          <MdOutlineFolderOff className="h-16 w-16 text-muted-foreground" />
+
+          <h3 className="mt-4 text-2xl font-semibold">Project was not found</h3>
         </div>
       </main>
     );
