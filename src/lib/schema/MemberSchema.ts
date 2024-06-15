@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { taskSchema } from "./TaskSchema";
+import { userTaskSchema } from "./TaskSchema";
 
 export const memberSchema = z.object({
   id: z.string(),
@@ -7,12 +7,11 @@ export const memberSchema = z.object({
   userId: z.string(),
   role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
   createdAt: z.date(),
-  updatedAt: z.date(),
   user: z.object({
     name: z.string(),
     email: z.string(),
   }),
-  tasks: z.array(taskSchema),
+  tasks: z.array(userTaskSchema),
 });
 
 export const memberFormSchema = memberSchema.omit({
