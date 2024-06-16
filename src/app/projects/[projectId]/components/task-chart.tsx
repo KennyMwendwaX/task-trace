@@ -1,19 +1,21 @@
 "use client";
 
 import { ProjectTask } from "@/lib/schema/TaskSchema";
-import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ResponsiveContainer,
-  Tooltip,
   Legend,
-  PieChart,
-  Pie,
   TooltipProps,
+  BarChart,
+  XAxis,
+  YAxis,
+  Bar,
 } from "recharts";
 import {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
+import { TbChartBarOff } from "react-icons/tb";
 
 interface Props {
   tasks: ProjectTask[];
@@ -41,18 +43,10 @@ export default function TaskChart({ tasks }: Props) {
     CANCELED: "Canceled",
   };
 
-  const statusColors: StatusColors = {
-    DONE: "#16a34a",
-    TO_DO: "#2563eb",
-    IN_PROGRESS: "#FFA500CC",
-    CANCELED: "#dc2626",
-  };
-
   // Convert the counts into an array of objects suitable for Recharts
   const statusChartData = Object.keys(statusCounts).map((status) => ({
-    name: statusText[status],
+    status: statusText[status],
     tasks: statusCounts[status],
-    fill: statusColors[status],
   }));
 
   const CustomTooltip = ({
@@ -73,26 +67,50 @@ export default function TaskChart({ tasks }: Props) {
 
   return (
     <>
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-        <div className="text-xl font-semibold leading-none tracking-tight p-2">
-          Task Analytics Chart
-        </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart style={{ top: 20 }}>
-            <Pie
-              dataKey="tasks"
-              data={statusChartData}
-              fill="#8884d8"
-              cx="50%"
-              cy="40%"
-              innerRadius={70}
-              outerRadius={100}
-            />
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
+      <Card>
+        <CardHeader className="flex flex-row items-center">
+          <CardTitle className="text-xl">Tasks Analytics Chart</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          {tasks.length === 0 ? (
+            <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
+              <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
+
+              <h3 className="mt-4 text-xl font-semibold">
+                Tasks chart not available
+              </h3>
+              <p className="mb-4 mt-2 text-base text-muted-foreground">
+                You do not have any tasks.
+              </p>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={statusChartData}>
+                <XAxis
+                  dataKey="status"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Bar
+                  dataKey="tasks"
+                  fill="currentColor"
+                  radius={[4, 4, 0, 0]}
+                  className="fill-primary"
+                />
+                <Legend />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </CardContent>
+      </Card>
     </>
   );
 }

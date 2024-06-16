@@ -145,7 +145,7 @@ export default function ProjectPage({
         <div className="space-y-4">
           <h2 className="text-3xl font-bold tracking-tight">{project.name}</h2>
           <TaskOverview tasks={tasks} />
-          <div className="flex space-x-4 items-start">
+          <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
             <TaskChart tasks={tasks} />
             <LatestTasks projectId={projectId} tasks={tasks} />
           </div>
