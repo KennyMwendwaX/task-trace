@@ -2,7 +2,7 @@
 
 import TaskOverview from "./components/task-overview";
 import TaskChart from "./components/task-chart";
-import LatestTasks from "./components/latest-tasks";
+import RecentTasks from "./components/recent-tasks";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
@@ -147,7 +147,7 @@ export default function ProjectPage({
           <TaskOverview tasks={tasks} />
           <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
             <TaskChart tasks={tasks} />
-            <LatestTasks projectId={projectId} tasks={tasks} />
+            <RecentTasks projectId={projectId} tasks={tasks} />
           </div>
         </div>
       )}

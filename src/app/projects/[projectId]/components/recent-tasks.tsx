@@ -29,7 +29,7 @@ type Props = {
   tasks: ProjectTask[];
 };
 
-export default function LatestTasks({ projectId, tasks }: Props) {
+export default function RecentTasks({ projectId, tasks }: Props) {
   const latestTasks = tasks
     .map((task) => ({
       ...task,
