@@ -54,8 +54,11 @@ export default function TaskOverview({ tasks }: Props) {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{tasksDone.length}</div>
+
             <p className="text-sm text-muted-foreground">
-              {formatPercentage(tasks_done_percentage)}% of all tasks
+              {tasksDone.length
+                ? `${formatPercentage(tasks_done_percentage)} % of all tasks`
+                : null}
             </p>
           </CardContent>
         </Card>
@@ -67,7 +70,9 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksTodo.length}</div>
             <p className="text-sm text-muted-foreground">
-              {formatPercentage(tasks_todo_percentage)}% of all tasks
+              {tasksTodo.length
+                ? `${formatPercentage(tasks_todo_percentage)} % of all tasks`
+                : null}
             </p>
           </CardContent>
         </Card>
@@ -79,7 +84,11 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksInProgress.length}</div>
             <p className="text-sm text-muted-foreground">
-              {formatPercentage(tasks_inProgress_percentage)}% of all tasks
+              {tasksInProgress.length
+                ? `${formatPercentage(
+                    tasks_inProgress_percentage
+                  )} % of all tasks`
+                : null}
             </p>
           </CardContent>
         </Card>
@@ -91,7 +100,11 @@ export default function TaskOverview({ tasks }: Props) {
           <CardContent>
             <div className="text-3xl font-bold">{tasksCanceled.length}</div>
             <p className="text-sm text-muted-foreground">
-              {formatPercentage(tasks_canceled_percentage)}% of all tasks
+              {tasksCanceled.length
+                ? `${formatPercentage(
+                    tasks_canceled_percentage
+                  )} % of all tasks`
+                : null}
             </p>
           </CardContent>
         </Card>

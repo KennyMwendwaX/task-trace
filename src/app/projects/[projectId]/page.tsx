@@ -111,11 +111,12 @@ export default function ProjectPage({
       due_date: new Date(task.due_date),
     })),
   })) as Member[];
-  const tasks = tasksData.map((task) => ({
-    ...task,
-    due_date: new Date(task.due_date),
-    createdAt: new Date(task.createdAt),
-  })) as ProjectTask[];
+  // const tasks = tasksData.map((task) => ({
+  //   ...task,
+  //   due_date: new Date(task.due_date),
+  //   createdAt: new Date(task.createdAt),
+  // })) as ProjectTask[];
+  const tasks = [] as ProjectTask[];
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
@@ -131,7 +132,7 @@ export default function ProjectPage({
           </p>
           <AddMemberModal projectId={projectId} users={users} />
         </div>
-      ) : !tasks || tasks.length == 0 ? (
+      ) : !tasks ? (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
           <MdOutlineAddTask className="h-14 w-14 text-muted-foreground" />
 
