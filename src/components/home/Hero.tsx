@@ -58,11 +58,13 @@ export default function Hero() {
                 className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center"
                 data-aos="zoom-y-out"
                 data-aos-delay="300">
-                <Button
-                  size="lg"
-                  className="rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
-                  <Link href="/dashboard">Get Started</Link>
-                </Button>
+                <Link href="/dashboard">
+                  <Button
+                    size="lg"
+                    className="rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
+                    Get Started
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
