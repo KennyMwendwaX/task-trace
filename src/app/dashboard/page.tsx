@@ -160,7 +160,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             {tasks.length === 0 ? (
-              <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
+              <div className="mx-auto flex flex-col items-center justify-center text-center py-14">
                 <GoTasklist className="h-12 w-12 text-muted-foreground" />
 
                 <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>

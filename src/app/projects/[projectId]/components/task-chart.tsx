@@ -73,7 +73,7 @@ export default function TaskChart({ tasks }: Props) {
         </CardHeader>
         <CardContent className="grid gap-4">
           {tasks.length === 0 ? (
-            <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
+            <div className="mx-auto flex flex-col items-center justify-center text-center py-16">
               <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
 
               <h3 className="mt-4 text-xl font-semibold">
