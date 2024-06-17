@@ -58,7 +58,7 @@ export default function Sidebar() {
 
   const items = [
     {
-      href: `/home`,
+      href: `/dashboard`,
       title: "Dashboard",
       icon: <LuHome className="h-4 w-4" />,
     },
