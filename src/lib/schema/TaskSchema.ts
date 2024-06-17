@@ -45,7 +45,7 @@ export const taskSchema = z.object({
       name: z.string(),
       email: z.string(),
     }),
-    role: z.enum(["OWNER", "ADMIN", "OWNER"]),
+    role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
   }),
 });
 
