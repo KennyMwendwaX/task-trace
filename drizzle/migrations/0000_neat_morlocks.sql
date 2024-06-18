@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS "member" (
 CREATE TABLE IF NOT EXISTS "project" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
-	"label" text NOT NULL,
 	"status" text NOT NULL,
 	"description" text NOT NULL,
 	"start_date" timestamp NOT NULL,
@@ -72,11 +71,11 @@ CREATE TABLE IF NOT EXISTS "user" (
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "verificationToken" (
+CREATE TABLE IF NOT EXISTS "verification_token" (
 	"identifier" text NOT NULL,
 	"token" text NOT NULL,
 	"expires" timestamp NOT NULL,
-	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
+	CONSTRAINT "verification_token_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
 --> statement-breakpoint
 DO $$ BEGIN

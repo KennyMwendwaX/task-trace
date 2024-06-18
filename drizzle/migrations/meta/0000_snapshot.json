@@ -1,5 +1,5 @@
 {
-  "id": "1a6d7f76-6641-45d8-92d7-36dcde7d2dab",
+  "id": "66a345dd-e8a8-4f98-85d9-a7294f1bd55b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -249,12 +249,6 @@
         },
         "name": {
           "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "label": {
-          "name": "label",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -519,8 +513,8 @@
         }
       }
     },
-    "verificationToken": {
-      "name": "verificationToken",
+    "verification_token": {
+      "name": "verification_token",
       "schema": "",
       "columns": {
         "identifier": {
@@ -545,8 +539,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "verificationToken_identifier_token_pk": {
-          "name": "verificationToken_identifier_token_pk",
+        "verification_token_identifier_token_pk": {
+          "name": "verification_token_identifier_token_pk",
           "columns": [
             "identifier",
             "token"
