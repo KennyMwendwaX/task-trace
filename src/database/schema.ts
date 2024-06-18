@@ -71,7 +71,6 @@ export const verificationTokens = pgTable(
 export const projects = pgTable("project", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
-  label: text("label").notNull(),
   status: text("status").notNull(),
   description: text("description").notNull(),
   startDate: timestamp("start_date", { mode: "date" }).notNull(),
