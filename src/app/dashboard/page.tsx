@@ -37,7 +37,7 @@ import {
   YAxis,
 } from "recharts";
 import Loading from "./components/loading";
-import { TbChartBarOff } from "react-icons/tb";
+import { TbChartBarOff, TbPlaylistX } from "react-icons/tb";
 
 interface StatusCounts {
   [key: string]: number;
@@ -161,7 +161,7 @@ export default function Dashboard() {
           <CardContent>
             {tasks.length === 0 ? (
               <div className="mx-auto flex flex-col items-center justify-center text-center py-14">
-                <GoTasklist className="h-12 w-12 text-muted-foreground" />
+                <TbPlaylistX className="h-14 w-14 text-muted-foreground" />
 
                 <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>
                 <p className="mb-4 mt-2 text-base text-muted-foreground">

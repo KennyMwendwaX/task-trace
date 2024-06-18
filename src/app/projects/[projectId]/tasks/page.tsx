@@ -91,17 +91,6 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
       <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
         {tasks && tasks.length > 0 ? (
           <>
-            <div className="flex items-center justify-between space-y-2">
-              <div>
-                <div className="text-3xl font-bold tracking-tight">
-                  Welcome back!
-                </div>
-                <div className="text-xl text-muted-foreground">
-                  Here&apos;s a list of tasks in the project!
-                </div>
-              </div>
-            </div>
-
             <Tabs defaultValue="all" className="pt-2">
               <TabsList className="grid grid-cols-5 w-[600px]">
                 <TabsTrigger value="all">All</TabsTrigger>

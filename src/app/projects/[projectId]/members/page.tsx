@@ -10,77 +10,83 @@ import Loading from "@/components/loading";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/AddMemberModal";
+import { usersData } from "../components/users";
+import { membersData } from "../components/members";
+import { projectData } from "../components/project";
 
 export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}`);
-      return data.project as Project;
-    },
-  });
+  // const {
+  //   data: project,
+  //   isLoading: projectIsLoading,
+  //   error: projectError,
+  // } = useQuery({
+  //   queryKey: ["project", projectId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/projects/${projectId}`);
+  //     return data.project as Project;
+  //   },
+  // });
 
-  const {
-    data: membersData,
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}/members`);
-      return data.members as Member[];
-    },
-  });
+  // const {
+  //   data: membersData,
+  //   isLoading: membersIsLoading,
+  //   error: membersError,
+  // } = useQuery({
+  //   queryKey: ["project-members", projectId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/projects/${projectId}/members`);
+  //     return data.members as Member[];
+  //   },
+  // });
 
-  const {
-    data: usersData,
-    isLoading: usersIsLoading,
-    error: usersError,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
-    },
-  });
+  // const {
+  //   data: usersData,
+  //   isLoading: usersIsLoading,
+  //   error: usersError,
+  // } = useQuery({
+  //   queryKey: ["users"],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get("/api/users");
+  //     return data.users as User[];
+  //   },
+  // });
 
-  if (projectIsLoading || membersIsLoading || usersIsLoading) {
-    return (
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-        <Loading />
-      </main>
-    );
-  }
+  // if (projectIsLoading || membersIsLoading || usersIsLoading) {
+  //   return (
+  //     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+  //       <Loading />
+  //     </main>
+  //   );
+  // }
 
-  if (!project) {
-    return (
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-        <div className="text-2xl font-bold tracking-tight">
-          Project was not found
-        </div>
-      </main>
-    );
-  }
-
-  const users = usersData || [];
-  const members =
-    membersData
-      ?.map((member) => ({
-        ...member,
-        createdAt: new Date(member.createdAt),
-        tasks: member.tasks.map((task) => ({
-          ...task,
-          due_date: new Date(task.due_date),
-          createdAt: new Date(task.createdAt),
-        })),
-      }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
+  // if (!project) {
+  //   return (
+  //     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+  //       <div className="text-2xl font-bold tracking-tight">
+  //         Project was not found
+  //       </div>
+  //     </main>
+  //   );
+  // }
+  const project = projectData;
+  const users = usersData.map((user) => ({
+    ...user,
+    emailVerified: new Date(user.emailVerified),
+    createdAt: new Date(user.createdAt),
+  })) as User[];
+  const members = membersData
+    ?.map((member) => ({
+      ...member,
+      createdAt: new Date(member.createdAt),
+      tasks: member.tasks.map((task) => ({
+        ...task,
+        due_date: new Date(task.due_date),
+        createdAt: new Date(task.createdAt),
+      })),
+    }))
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Member[];
 
   return (
     <>
