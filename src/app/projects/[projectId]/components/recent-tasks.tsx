@@ -2,7 +2,6 @@
 
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import format from "date-fns/format";
-import { IoChevronForward } from "react-icons/io5";
 import Link from "next/link";
 import {
   Card,
@@ -21,8 +20,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { LuArrowUpRight } from "react-icons/lu";
-import { GoTasklist } from "react-icons/go";
 import { priorities } from "@/lib/config";
+import { TbPlaylistX } from "react-icons/tb";
 
 type Props = {
   projectId: string;
@@ -102,7 +101,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
             </Table>
           ) : (
             <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
-              <GoTasklist className="h-12 w-12 text-muted-foreground" />
+              <TbPlaylistX className="h-14 w-14 text-muted-foreground" />
 
               <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>
               <p className="mb-4 mt-2 text-base text-muted-foreground">

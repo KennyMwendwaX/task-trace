@@ -7,7 +7,7 @@ import axios from "axios";
 import type { ProjectTask } from "@/lib/schema/TaskSchema";
 import Loading from "@/components/loading";
 import AddTaskModal from "@/components/AddTaskModal";
-import { MdOutlineAddTask } from "react-icons/md";
+import { TbPlaylistX } from "react-icons/tb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Member } from "@/lib/schema/MemberSchema";
 import { membersData } from "../components/members";
@@ -154,7 +154,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
         ) : (
           <>
             <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-              <MdOutlineAddTask className="h-14 w-14 text-muted-foreground" />
+              <TbPlaylistX className="h-14 w-14 text-muted-foreground" />
 
               <h3 className="mt-4 text-2xl font-semibold">No tasks added</h3>
               <p className="mb-4 mt-2 text-lg text-muted-foreground">

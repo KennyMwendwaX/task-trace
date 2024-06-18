@@ -7,7 +7,7 @@ import { UserTask } from "@/lib/schema/TaskSchema";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { GoTasklist } from "react-icons/go";
+import { TbPlaylistX } from "react-icons/tb";
 import Loading from "./components/loading";
 
 export default function UserTasks() {
@@ -88,7 +88,7 @@ export default function UserTasks() {
         </>
       ) : (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-          <GoTasklist className="h-14 w-14 text-muted-foreground" />
+          <TbPlaylistX className="h-14 w-14 text-muted-foreground" />
 
           <h3 className="mt-4 text-2xl font-semibold">No tasks found</h3>
           <p className="mb-4 mt-2 text-lg text-muted-foreground">

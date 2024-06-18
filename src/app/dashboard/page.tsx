@@ -25,7 +25,6 @@ import { useQuery } from "@tanstack/react-query";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { priorities } from "@/lib/config";
-import { GoTasklist } from "react-icons/go";
 import TaskOverview from "./components/task-overview";
 import {
   Bar,
