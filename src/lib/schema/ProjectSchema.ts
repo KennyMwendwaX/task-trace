@@ -9,13 +9,6 @@ export const projectSchema = z.object({
     })
     .min(2, { message: "Name must be greater than 2 characters long" })
     .max(50, { message: "Name must be less than 20 characters long" }),
-  label: z
-    .string({
-      required_error: "Label is required",
-      invalid_type_error: "Label must be a string",
-    })
-    .min(2, { message: "Label must be greater than 2 characters long" })
-    .max(10, { message: "Label must be less than 10 characters long" }),
   status: z.enum(["BUILDING", "LIVE"]),
   start_date: z.date({
     required_error: "Please select a date and time",
