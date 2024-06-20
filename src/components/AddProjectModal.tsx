@@ -38,6 +38,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { LuFolderPlus } from "react-icons/lu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -77,7 +84,8 @@ export default function AddProjectModal() {
   });
 
   async function onSubmit(values: ProjectFormValues) {
-    addProject(values);
+    // addProject(values);
+    console.log(values);
     toggleDialog();
     router.refresh();
   }
@@ -127,20 +135,24 @@ export default function AddProjectModal() {
                   <div className="relative">
                     <FormField
                       control={form.control}
-                      name="label"
+                      name="status"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Project Label</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              id="label"
-                              className="focus:border-2 focus:border-blue-600"
-                              placeholder="Project label"
-                              {...field}
-                              required
-                            />
-                          </FormControl>
+                          <FormLabel>Project Status</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            required>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="LIVE">Live</SelectItem>
+                              <SelectItem value="BUILDING">Building</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}

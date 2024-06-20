@@ -38,7 +38,6 @@ export const projectSchema = z.object({
 // Omitted schema for client-side form validation
 export const projectFormSchema = projectSchema.omit({
   id: true,
-  status: true,
   createdAt: true,
   updatedAt: true,
   ownerId: true,

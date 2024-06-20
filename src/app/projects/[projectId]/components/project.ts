@@ -4,7 +4,6 @@ export const projectData = {
   status: "LIVE",
   start_date: "2024-06-15T10:43:47.726Z",
   end_date: "2024-09-23T19:04:02.039Z",
-  label: "LIVE",
   description: "Doloremque communis cunae ago denuncio.",
   ownerId: "8cd42652-cd63-4e3d-90b6-26d9285075cd",
   owner: {
