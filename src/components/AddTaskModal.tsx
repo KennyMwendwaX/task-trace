@@ -54,7 +54,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Member } from "@/lib/schema/MemberSchema";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,

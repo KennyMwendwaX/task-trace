@@ -46,7 +46,7 @@ export default function TaskChart({ tasks }: Props) {
     Tasks: statusCounts[status],
   }));
 
-  // Define the desired order of statuses
+  // Order of statuses
   const statusOrder = ["Done", "Todo", "In Progress", "Canceled"];
 
   // Sort the statusChartData based on the desired order

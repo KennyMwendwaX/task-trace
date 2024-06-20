@@ -45,6 +45,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Props {
   projectId: string;
@@ -146,24 +147,26 @@ export default function AddMemberModal({ projectId, users }: Props) {
                               <CommandInput placeholder="Search name" />
                               <CommandEmpty>No user found.</CommandEmpty>
                               <CommandGroup>
-                                {users.map((user) => (
-                                  <CommandItem
-                                    value={user.name}
-                                    key={user.id}
-                                    onSelect={() => {
-                                      form.setValue("userId", user.id);
-                                    }}>
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        user.id === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {user.name}
-                                  </CommandItem>
-                                ))}
+                                <ScrollArea className="h-[200px]">
+                                  {users.map((user) => (
+                                    <CommandItem
+                                      value={user.name}
+                                      key={user.id}
+                                      onSelect={() => {
+                                        form.setValue("userId", user.id);
+                                      }}>
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          user.id === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {user.name}
+                                    </CommandItem>
+                                  ))}
+                                </ScrollArea>
                               </CommandGroup>
                             </Command>
                           </PopoverContent>
