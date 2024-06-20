@@ -17,16 +17,13 @@ import {
 } from "recharts/types/component/DefaultTooltipContent";
 import { TbChartBarOff } from "react-icons/tb";
 
-interface Props {
+type Props = {
   tasks: ProjectTask[];
-}
+};
 
-interface StatusCounts {
+type StatusCounts = {
   [key: string]: number;
-}
-interface StatusColors {
-  [key: string]: string;
-}
+};
 
 export default function TaskChart({ tasks }: Props) {
   // Count the number of tasks for each status
@@ -44,10 +41,18 @@ export default function TaskChart({ tasks }: Props) {
   };
 
   // Convert the counts into an array of objects suitable for Recharts
-  const statusChartData = Object.keys(statusCounts).map((status) => ({
-    status: statusText[status],
-    tasks: statusCounts[status],
+  let statusChartData = Object.keys(statusCounts).map((status) => ({
+    Status: statusText[status],
+    Tasks: statusCounts[status],
   }));
+
+  // Define the desired order of statuses
+  const statusOrder = ["Done", "Todo", "In Progress", "Canceled"];
+
+  // Sort the statusChartData based on the desired order
+  statusChartData = statusChartData.sort(
+    (a, b) => statusOrder.indexOf(a.Status) - statusOrder.indexOf(b.Status)
+  );
 
   const CustomTooltip = ({
     active,
@@ -87,7 +92,7 @@ export default function TaskChart({ tasks }: Props) {
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={statusChartData}>
                 <XAxis
-                  dataKey="status"
+                  dataKey="Status"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
@@ -100,7 +105,7 @@ export default function TaskChart({ tasks }: Props) {
                   axisLine={false}
                 />
                 <Bar
-                  dataKey="tasks"
+                  dataKey="Tasks"
                   fill="currentColor"
                   radius={[4, 4, 0, 0]}
                   className="fill-primary"

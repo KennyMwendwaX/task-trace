@@ -84,8 +84,7 @@ export default function AddProjectModal() {
   });
 
   async function onSubmit(values: ProjectFormValues) {
-    // addProject(values);
-    console.log(values);
+    addProject(values);
     toggleDialog();
     router.refresh();
   }
