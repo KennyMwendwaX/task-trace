@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Member } from "@/lib/schema/MemberSchema";
 import { membersData } from "../components/members";
 import { tasksData } from "../components/tasks";
+import { projectData } from "../components/project";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
@@ -67,6 +68,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   //   );
   // }
 
+  const project = projectData;
   const members = membersData.map((member) => ({
     ...member,
     createdAt: new Date(member.createdAt),
@@ -85,12 +87,19 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
   const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
+  console.log(members.length);
 
   return (
     <>
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+      <main className="flex flex-1 flex-col p-4 lg:p-6 lg:ml-[260px]">
         {tasks && tasks.length > 0 ? (
           <>
+            <div className="text-2xl font-bold tracking-tight">
+              {project.name} Tasks
+            </div>
+            <div className="text-lg text-muted-foreground">
+              Here&apos;s a list of your project members!
+            </div>
             <Tabs defaultValue="all" className="pt-2">
               <TabsList className="grid grid-cols-5 w-[600px]">
                 <TabsTrigger value="all">All</TabsTrigger>

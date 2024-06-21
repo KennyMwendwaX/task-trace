@@ -147,7 +147,7 @@ export default function AddMemberModal({ projectId, users }: Props) {
                               <CommandInput placeholder="Search name" />
                               <CommandEmpty>No user found.</CommandEmpty>
                               <CommandGroup>
-                                <ScrollArea className="h-[200px]">
+                                <ScrollArea className="max-h-[200px]">
                                   {users.map((user) => (
                                     <CommandItem
                                       value={user.name}

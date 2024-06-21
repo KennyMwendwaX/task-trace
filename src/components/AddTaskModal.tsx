@@ -54,7 +54,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Member } from "@/lib/schema/MemberSchema";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -276,24 +276,26 @@ export default function AddTaskModal({ projectId, members }: Props) {
                                 <CommandInput placeholder="Search member" />
                                 <CommandEmpty>No member found.</CommandEmpty>
                                 <CommandGroup>
-                                  {members.map((member) => (
-                                    <CommandItem
-                                      value={member.user.name}
-                                      key={member.id}
-                                      onSelect={() => {
-                                        form.setValue("memberId", member.id);
-                                      }}>
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          member.id === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                      {member.user.name}
-                                    </CommandItem>
-                                  ))}
+                                  <ScrollArea className="h-[200px]">
+                                    {members.map((member) => (
+                                      <CommandItem
+                                        value={member.user.name}
+                                        key={member.id}
+                                        onSelect={() => {
+                                          form.setValue("memberId", member.id);
+                                        }}>
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            member.id === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                        {member.user.name}
+                                      </CommandItem>
+                                    ))}
+                                  </ScrollArea>
                                 </CommandGroup>
                               </Command>
                             </PopoverContent>

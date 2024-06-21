@@ -90,7 +90,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
+      <main className="flex flex-1 flex-col p-4 lg:p-6 lg:ml-[260px]">
         {!members || members.length == 0 ? (
           <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
             <FiUserPlus className="h-14 w-14 text-muted-foreground" />
@@ -105,10 +105,10 @@ export default function Members({ params }: { params: { projectId: string } }) {
           </div>
         ) : (
           <>
-            <div className="text-3xl font-bold tracking-tight">
-              {project.name} Project Members
+            <div className="text-2xl font-bold tracking-tight">
+              {project.name} Members
             </div>
-            <div className="text-xl text-muted-foreground">
+            <div className="text-lg text-muted-foreground">
               Here&apos;s a list of your project members!
             </div>
             <MemberTable

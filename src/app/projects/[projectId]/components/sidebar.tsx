@@ -14,6 +14,7 @@ import {
 import { LuHome, LuLineChart, LuUsers } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoTasklist } from "react-icons/go";
+import { HiOutlineCog } from "react-icons/hi";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -81,6 +82,11 @@ export default function Sidebar() {
       href: `/projects/${projectId}/analytics`,
       title: "Analytics",
       icon: <LuLineChart className="h-4 w-4" />,
+    },
+    {
+      href: `/projects/${projectId}/settings`,
+      title: "Settings",
+      icon: <HiOutlineCog className="h-5 w-5" />,
     },
   ];
 
