@@ -17,14 +17,14 @@ import { GoTasklist } from "react-icons/go";
 import { HiOutlineCog } from "react-icons/hi";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
+  links: {
     href: string;
     title: string;
     icon: JSX.Element;
   }[];
 }
 
-export function SideNav({ className, items, ...props }: SidebarNavProps) {
+export function SideNav({ className, links, ...props }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
@@ -34,7 +34,7 @@ export function SideNav({ className, items, ...props }: SidebarNavProps) {
         className
       )}
       {...props}>
-      {items.map((item) => (
+      {links.map((item) => (
         <Link
           key={item.href}
           href={item.href}
@@ -57,7 +57,7 @@ export default function Sidebar() {
   const params = useParams<{ projectId: string }>();
   const projectId = params.projectId;
 
-  const items = [
+  const links = [
     {
       href: `/dashboard`,
       title: "Dashboard",
@@ -95,7 +95,7 @@ export default function Sidebar() {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex-1 mt-[72px]">
           {/* Arrow Home */}
-          <SideNav items={items} />
+          <SideNav links={links} />
         </div>
         <div className="mt-auto p-4">
           <Card>
