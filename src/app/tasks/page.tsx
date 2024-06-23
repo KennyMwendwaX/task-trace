@@ -9,40 +9,43 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { TbPlaylistX } from "react-icons/tb";
 import Loading from "./components/loading";
+import { tasksData } from "./components/tasks";
 
 export default function UserTasks() {
   const session = useSession();
 
   const userId = session.data?.user?.id;
 
-  const {
-    data: tasksData,
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["user-tasks", userId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/users/${userId}/tasks`);
-      return data.tasks as UserTask[];
-    },
-  });
+  // const {
+  //   data: tasksData,
+  //   isLoading: tasksIsLoading,
+  //   error: tasksError,
+  // } = useQuery({
+  //   queryKey: ["user-tasks", userId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/users/${userId}/tasks`);
+  //     return data.tasks as UserTask[];
+  //   },
+  // });
   const tasks =
-    tasksData
+    (tasksData
       ?.map((task) => ({
         ...task,
         due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
       }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) || [];
+      .sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      ) as UserTask[]) || [];
 
   const tasksDone = tasks.filter((task) => task.status === "DONE");
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
   const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
 
-  if (tasksIsLoading) {
-    return <Loading />;
-  }
+  // if (tasksIsLoading) {
+  //   return <Loading />;
+  // }
   return (
     <>
       {tasks.length > 0 ? (
