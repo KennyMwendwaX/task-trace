@@ -37,6 +37,7 @@ import {
 } from "recharts";
 import Loading from "./components/loading";
 import { TbChartBarOff, TbPlaylistX } from "react-icons/tb";
+import { tasksData } from "./components/tasks";
 
 interface StatusCounts {
   [key: string]: number;
@@ -47,18 +48,27 @@ export default function Dashboard() {
 
   const userId = session.data?.user?.id;
 
-  const {
-    data: tasksData,
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["user-tasks", userId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/users/${userId}/tasks`);
-      return data.tasks as UserTask[];
-    },
-  });
-  const tasks = tasksData || [];
+  // const {
+  //   data: tasksData,
+  //   isLoading: tasksIsLoading,
+  //   error: tasksError,
+  // } = useQuery({
+  //   queryKey: ["user-tasks", userId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(`/api/users/${userId}/tasks`);
+  //     return data.tasks as UserTask[];
+  //   },
+  // });
+  const tasks =
+    (tasksData
+      ?.map((task) => ({
+        ...task,
+        due_date: new Date(task.due_date),
+        createdAt: new Date(task.createdAt),
+      }))
+      .sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      ) as UserTask[]) || [];
 
   const statusCounts: StatusCounts = {};
   tasks.forEach((task) => {
@@ -78,9 +88,9 @@ export default function Dashboard() {
     tasks: statusCounts[status],
   }));
 
-  if (tasksIsLoading) {
-    return <Loading />;
-  }
+  // if (tasksIsLoading) {
+  //   return <Loading />;
+  // }
 
   return (
     <>
