@@ -29,7 +29,7 @@ type Props = {
 };
 
 export default function RecentTasks({ projectId, tasks }: Props) {
-  const latestTasks = tasks
+  const recentTasks = tasks
     .map((task) => ({
       ...task,
       due_date: new Date(task.due_date),
@@ -56,7 +56,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
           </Button>
         </CardHeader>
         <CardContent>
-          {latestTasks.length > 0 ? (
+          {recentTasks.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -66,7 +66,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {latestTasks.map((task) => {
+                {recentTasks.map((task) => {
                   const priority = priorities.find(
                     (priority) => priority.value === task.priority
                   );
