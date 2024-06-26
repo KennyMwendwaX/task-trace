@@ -3,7 +3,6 @@ import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "../../../auth";
 import db from "@/database/db";
 import { members, projects } from "@/database/schema";
-import { ProjectStatus } from "@/lib/config";
 
 export async function GET() {
   try {
@@ -88,18 +87,17 @@ export async function POST(request: Request) {
       { status: 400 }
     );
 
-  const { name, label, start_date, end_date, description } = result.data;
+  const { name, status, start_date, end_date, description } = result.data;
 
   try {
     const projectResult = await db
       .insert(projects)
       .values({
-        name,
-        label,
+        name: name,
         startDate: start_date,
         endDate: end_date,
         description,
-        status: "BUILDING" as ProjectStatus,
+        status: status,
         ownerId: user.id,
       })
       .returning({ id: projects.id });
