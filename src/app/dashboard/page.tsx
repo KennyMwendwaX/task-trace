@@ -1,23 +1,5 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { LuArrowUpRight } from "react-icons/lu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import AddProjectModal from "@/components/AddProjectModal";
 import JoinProjectModal from "@/components/join-project-modal";
 import { useSession } from "next-auth/react";
@@ -36,9 +18,9 @@ import {
   YAxis,
 } from "recharts";
 import Loading from "./components/loading";
-import { TbChartBarOff, TbPlaylistX } from "react-icons/tb";
 import { tasksData } from "./components/tasks";
 import RecentTasks from "./components/recent-tasks";
+import TaskChart from "./components/task-chart";
 
 interface StatusCounts {
   [key: string]: number;
@@ -109,50 +91,7 @@ export default function Dashboard() {
         <TaskOverview tasks={tasks} />
       </div>
       <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center">
-            <CardTitle className="text-xl">Tasks Overview</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            {tasks.length === 0 ? (
-              <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
-                <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
-
-                <h3 className="mt-4 text-xl font-semibold">
-                  Tasks chart not available
-                </h3>
-                <p className="mb-4 mt-2 text-base text-muted-foreground">
-                  You do not have any tasks.
-                </p>
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={statusChartData}>
-                  <XAxis
-                    dataKey="status"
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Bar
-                    dataKey="tasks"
-                    fill="currentColor"
-                    radius={[4, 4, 0, 0]}
-                    className="fill-primary"
-                  />
-                  <Legend />
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
+        <TaskChart tasks={tasks} />
         <RecentTasks tasks={tasks} />
       </div>
     </>

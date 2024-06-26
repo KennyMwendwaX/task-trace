@@ -105,7 +105,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
 
               <h3 className="mt-4 text-xl font-semibold">No tasks found</h3>
               <p className="mb-4 mt-2 text-base text-muted-foreground">
-                You do not have any tasks.
+                There are no tasks in the project.
               </p>
             </div>
           )}
