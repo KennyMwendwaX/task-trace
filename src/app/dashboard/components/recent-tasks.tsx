@@ -29,11 +29,6 @@ type Props = {
 
 export default function RecentTasks({ tasks }: Props) {
   const recentTasks = tasks
-    .map((task) => ({
-      ...task,
-      due_date: new Date(task.due_date),
-      createdAt: new Date(task.createdAt),
-    }))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .slice(0, 5);
 
@@ -69,11 +64,11 @@ export default function RecentTasks({ tasks }: Props) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Task</TableHead>
-                  <TableHead className="text-right">Priority</TableHead>
+                  <TableHead>Priority</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tasks.map((task) => {
+                {recentTasks.map((task) => {
                   const priority = priorities.find(
                     (priority) => priority.value === task.priority
                   );
@@ -84,7 +79,7 @@ export default function RecentTasks({ tasks }: Props) {
                         {task.name}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center justify-end">
+                        <div className="flex items-center">
                           {priority.value === "HIGH" ? (
                             <priority.icon className="mr-1 h-5 w-5 text-muted-foreground text-red-600" />
                           ) : priority.value === "MEDIUM" ? (

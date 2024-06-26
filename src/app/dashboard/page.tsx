@@ -8,15 +8,6 @@ import { UserTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { priorities } from "@/lib/config";
 import TaskOverview from "./components/task-overview";
-import {
-  Bar,
-  BarChart,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import Loading from "./components/loading";
 import { tasksData } from "./components/tasks";
 import RecentTasks from "./components/recent-tasks";
@@ -52,24 +43,6 @@ export default function Dashboard() {
       .sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       ) as UserTask[]) || [];
-
-  const statusCounts: StatusCounts = {};
-  tasks.forEach((task) => {
-    const status = task.status;
-    statusCounts[status] = (statusCounts[status] || 0) + 1;
-  });
-
-  const statusText: Record<string, string> = {
-    DONE: "Done",
-    TO_DO: "Todo",
-    IN_PROGRESS: "In Progress",
-    CANCELED: "Canceled",
-  };
-
-  const statusChartData = Object.keys(statusCounts).map((status) => ({
-    status: statusText[status],
-    tasks: statusCounts[status],
-  }));
 
   // if (tasksIsLoading) {
   //   return <Loading />;
