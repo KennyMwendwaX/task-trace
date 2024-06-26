@@ -92,7 +92,7 @@ export default function TaskChart({ tasks }: Props) {
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={statusChartData}>
                 <XAxis
-                  dataKey="status"
+                  dataKey="Status"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
@@ -105,7 +105,7 @@ export default function TaskChart({ tasks }: Props) {
                   axisLine={false}
                 />
                 <Bar
-                  dataKey="tasks"
+                  dataKey="Tasks"
                   fill="currentColor"
                   radius={[4, 4, 0, 0]}
                   className="fill-primary"
