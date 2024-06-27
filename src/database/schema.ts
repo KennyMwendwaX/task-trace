@@ -13,10 +13,15 @@ export const users = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
   email: text("email").unique().notNull(),
-  emailVerified: timestamp("email_verified", { mode: "date" }),
+  emailVerified: timestamp("email_verified", { mode: "date", precision: 3 }),
   password: text("password"),
   image: text("image"),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -73,7 +78,12 @@ export const projects = pgTable("project", {
   name: text("name").notNull(),
   status: text("status").notNull(),
   description: text("description").notNull(),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
   ownerId: uuid("owner_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
@@ -97,7 +107,12 @@ export const members = pgTable("member", {
     .$type<"OWNER" | "ADMIN" | "MEMBER">()
     .default("MEMBER")
     .notNull(),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -128,8 +143,13 @@ export const tasks = pgTable("task", {
   status: text("status").notNull(),
   priority: text("priority").notNull(),
   description: text("description").notNull(),
-  dueDate: timestamp("due_date", { mode: "date" }).notNull(),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  dueDate: timestamp("due_date", { mode: "date", precision: 3 }).notNull(),
+  createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
   memberId: uuid("member_id").references(() => members.id, {
     onDelete: "set null",
     onUpdate: "cascade",
@@ -159,8 +179,13 @@ export const invitationCodes = pgTable("invitation_code", {
   projectId: uuid("project_id")
     .notNull()
     .references(() => projects.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  expiresAt: timestamp("expires_at", { mode: "date" }),
+  expiresAt: timestamp("expires_at", { mode: "date", precision: 3 }),
+  createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
 });
 
 export const invitationCodesRelations = relations(
