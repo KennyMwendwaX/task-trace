@@ -91,7 +91,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:pt-4 lg:ml-[260px]">
+      <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
         {tasks && tasks.length > 0 ? (
           <>
             <div className="text-2xl font-bold tracking-tight">
