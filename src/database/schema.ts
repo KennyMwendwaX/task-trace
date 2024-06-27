@@ -73,8 +73,6 @@ export const projects = pgTable("project", {
   name: text("name").notNull(),
   status: text("status").notNull(),
   description: text("description").notNull(),
-  startDate: timestamp("start_date", { mode: "date" }).notNull(),
-  endDate: timestamp("end_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   ownerId: uuid("owner_id")
     .notNull()

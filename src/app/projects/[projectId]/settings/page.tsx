@@ -37,48 +37,51 @@ export default function Settings({
   return (
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Project Invite</CardTitle>
-            <CardDescription>
-              Share this code to invite new members to your project.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center gap-3 pt-3">
-            <div className="rounded-md bg-primary px-6 py-3 text-3xl font-bold text-primary-foreground">
-              {code}
-            </div>
+        <div className="flex flex-col lg:flex-row gap-4 items-start">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Update Project Name</CardTitle>
+              <CardDescription>
+                Only the owner or admins can update the project name.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <Input placeholder={project.name} />
+              </form>
+            </CardContent>
+            <CardFooter className="border-t px-6 py-4">
+              <Button>Update</Button>
+            </CardFooter>
+          </Card>
 
-            <p className="text-sm text-muted-foreground">
-              This code will expire in 7 days.
-            </p>
-          </CardContent>
-          <CardFooter className="border-t flex items-center justify-between py-2">
-            <Button className="flex items-center gap-1" onClick={handleCopy}>
-              <LuClipboard className="w-4 h-4" />
-              Copy
-            </Button>
-            <Button variant="outline" className="text-red-500">
-              Regenerate Code
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Update Project Name</CardTitle>
-            <CardDescription>
-              Only the owner or admins can update the project name.{" "}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form>
-              <Input placeholder={project.name} />
-            </form>
-          </CardContent>
-          <CardFooter className="border-t px-6 py-4">
-            <Button>Update</Button>
-          </CardFooter>
-        </Card>
+          <Card className="w-full lg:max-w-sm">
+            <CardHeader>
+              <CardTitle>Project Invite</CardTitle>
+              <CardDescription>
+                Share this code to invite new members to your project.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center gap-3 pt-3">
+              <div className="rounded-md bg-primary px-6 py-3 text-3xl font-bold text-primary-foreground">
+                {code}
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                This code will expire in 7 days.
+              </p>
+            </CardContent>
+            <CardFooter className="border-t flex items-center justify-between py-2.5">
+              <Button className="flex items-center gap-1" onClick={handleCopy}>
+                <LuClipboard className="w-4 h-4" />
+                Copy
+              </Button>
+              <Button variant="outline" className="text-red-500">
+                Regenerate Code
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
       </main>
     </>
   );
