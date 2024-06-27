@@ -32,7 +32,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
 import { projectData } from "../components/project";
 import {
   Project,
@@ -107,7 +106,7 @@ export default function Settings({
   return (
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
-        <div className="flex flex-col lg:flex-row gap-4 items-start">
+        <div className="flex flex-col-reverse lg:flex-row gap-4 items-start">
           <div className="w-full flex flex-col gap-4">
             <Card className="w-full">
               <CardHeader>

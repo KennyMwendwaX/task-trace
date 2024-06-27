@@ -87,16 +87,14 @@ export async function POST(request: Request) {
       { status: 400 }
     );
 
-  const { name, status, start_date, end_date, description } = result.data;
+  const { name, status, description } = result.data;
 
   try {
     const projectResult = await db
       .insert(projects)
       .values({
         name: name,
-        startDate: start_date,
-        endDate: end_date,
-        description,
+        description: description,
         status: status,
         ownerId: user.id,
       })
