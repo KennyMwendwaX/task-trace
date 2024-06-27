@@ -27,7 +27,7 @@ export default function Settings({
     navigator.clipboard
       .writeText(code)
       .then(() => {
-        alert("Invitation code copied to clipboard!");
+        toast.success("Invitation code copied to clipboard!");
       })
       .catch((err) => {
         console.error("Failed to copy text: ", err);
@@ -55,7 +55,7 @@ export default function Settings({
           </CardContent>
           <CardFooter className="border-t flex items-center justify-between py-2">
             <Button className="flex items-center gap-1" onClick={handleCopy}>
-              <LuClipboard className="w-5 h-5" />
+              <LuClipboard className="w-4 h-4" />
               Copy
             </Button>
             <Button variant="outline" className="text-red-500">
