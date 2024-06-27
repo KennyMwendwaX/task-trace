@@ -57,7 +57,7 @@ export default function TaskOverview({ tasks }: Props) {
 
             <p className="text-sm text-muted-foreground">
               {tasksDone.length
-                ? `${formatPercentage(tasks_done_percentage)} % of all tasks`
+                ? `${formatPercentage(tasks_done_percentage)}% of all tasks`
                 : null}
             </p>
           </CardContent>
@@ -71,7 +71,7 @@ export default function TaskOverview({ tasks }: Props) {
             <div className="text-3xl font-bold">{tasksTodo.length}</div>
             <p className="text-sm text-muted-foreground">
               {tasksTodo.length
-                ? `${formatPercentage(tasks_todo_percentage)} % of all tasks`
+                ? `${formatPercentage(tasks_todo_percentage)}% of all tasks`
                 : null}
             </p>
           </CardContent>
@@ -87,7 +87,7 @@ export default function TaskOverview({ tasks }: Props) {
               {tasksInProgress.length
                 ? `${formatPercentage(
                     tasks_inProgress_percentage
-                  )} % of all tasks`
+                  )}% of all tasks`
                 : null}
             </p>
           </CardContent>
@@ -101,9 +101,7 @@ export default function TaskOverview({ tasks }: Props) {
             <div className="text-3xl font-bold">{tasksCanceled.length}</div>
             <p className="text-sm text-muted-foreground">
               {tasksCanceled.length
-                ? `${formatPercentage(
-                    tasks_canceled_percentage
-                  )} % of all tasks`
+                ? `${formatPercentage(tasks_canceled_percentage)}% of all tasks`
                 : null}
             </p>
           </CardContent>

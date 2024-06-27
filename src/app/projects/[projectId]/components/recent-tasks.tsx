@@ -70,8 +70,8 @@ export default function RecentTasks({ projectId, tasks }: Props) {
                   const priority = priorities.find(
                     (priority) => priority.value === task.priority
                   );
-                  const dueDate = format(task.due_date, "dd/MM/yyyy");
                   if (!priority) return null;
+                  const dueDate = format(task.due_date, "dd/MM/yyyy");
                   return (
                     <TableRow key={task.id}>
                       <TableCell className="font-medium hover:underline cursor-pointer">

@@ -64,6 +64,7 @@ export default function RecentTasks({ tasks }: Props) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Task</TableHead>
+                  <TableHead>Due Date</TableHead>
                   <TableHead>Priority</TableHead>
                 </TableRow>
               </TableHeader>
@@ -73,11 +74,13 @@ export default function RecentTasks({ tasks }: Props) {
                     (priority) => priority.value === task.priority
                   );
                   if (!priority) return null;
+                  const dueDate = format(task.due_date, "dd/MM/yyyy");
                   return (
                     <TableRow key={task.id}>
                       <TableCell className="font-medium hover:underline cursor-pointer">
                         {task.name}
                       </TableCell>
+                      <TableCell>{dueDate}</TableCell>
                       <TableCell>
                         <div className="flex items-center">
                           {priority.value === "HIGH" ? (
