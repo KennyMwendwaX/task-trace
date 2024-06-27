@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { LuClipboard } from "react-icons/lu";
+import { toast } from "sonner";
 
 export default function Settings({
   params,
