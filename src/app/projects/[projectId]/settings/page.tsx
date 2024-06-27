@@ -108,32 +108,82 @@ export default function Settings({
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
         <div className="flex flex-col lg:flex-row gap-4 items-start">
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle>Update Project Details</CardTitle>
-              <CardDescription>
-                Only the owner or admins can update the project details.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form
-                  className="space-y-3 pt-2 px-3"
-                  onSubmit={form.handleSubmit(onSubmit)}>
-                  <div className="grid md:grid-cols-2 md:gap-6">
-                    <div className="relative">
+          <div className="w-full flex flex-col gap-4">
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle>Update Project Details</CardTitle>
+                <CardDescription>
+                  Only the owner or admins can update the project details.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    className="space-y-3 pt-2 px-3"
+                    onSubmit={form.handleSubmit(onSubmit)}>
+                    <div className="grid md:grid-cols-2 md:gap-6">
+                      <div className="relative">
+                        <FormField
+                          control={form.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Project Name</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="text"
+                                  id="name"
+                                  className="focus:border-2 focus:border-blue-600"
+                                  placeholder="Project name"
+                                  {...field}
+                                  value={field.value || ""}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="relative">
+                        <FormField
+                          control={form.control}
+                          name="status"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Project Status</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value || undefined}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="LIVE">Live</SelectItem>
+                                  <SelectItem value="BUILDING">
+                                    Building
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div>
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="description"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Project Name</FormLabel>
+                            <FormLabel>Description</FormLabel>
                             <FormControl>
-                              <Input
-                                type="text"
-                                id="name"
+                              <Textarea
+                                id="description"
                                 className="focus:border-2 focus:border-blue-600"
-                                placeholder="Project name"
+                                placeholder="Project description"
                                 {...field}
                                 value={field.value || ""}
                               />
@@ -143,66 +193,35 @@ export default function Settings({
                         )}
                       />
                     </div>
-                    <div className="relative">
-                      <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Project Status</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value || undefined}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="LIVE">Live</SelectItem>
-                                <SelectItem value="BUILDING">
-                                  Building
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              id="description"
-                              className="focus:border-2 focus:border-blue-600"
-                              placeholder="Project description"
-                              {...field}
-                              value={field.value || ""}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button type="submit">Update Project</Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
+                    <Button size="sm" type="submit">
+                      Update Project
+                    </Button>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+            <Card className="w-full border-destructive">
+              <CardHeader>
+                <CardTitle>Delete Project</CardTitle>
+                <CardDescription>
+                  The project will be permanently deleted. This action is
+                  irreversible and can not be undone.
+                </CardDescription>
+              </CardHeader>
+              <CardContent></CardContent>
+              <CardFooter className="bg-red-50 border-t border-t-destructive flex justify-between py-2.5 rounded-b-lg">
+                <Button variant="destructive" size="sm" onClick={handleCopy}>
+                  Delete
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
 
           <Card className="w-full lg:max-w-sm">
             <CardHeader>
               <CardTitle>Project Invite</CardTitle>
               <CardDescription>
-                Share this code to invite new members to your project.
+                Share this code to invite new members to the project.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center gap-3 pt-3">
@@ -215,11 +234,14 @@ export default function Settings({
               </p>
             </CardContent>
             <CardFooter className="border-t flex items-center justify-between py-2.5">
-              <Button className="flex items-center gap-1" onClick={handleCopy}>
+              <Button
+                className="flex items-center gap-1"
+                size="sm"
+                onClick={handleCopy}>
                 <LuClipboard className="w-4 h-4" />
                 Copy
               </Button>
-              <Button variant="outline" className="text-red-500">
+              <Button variant="outline" size="sm" className="text-red-500">
                 Regenerate Code
               </Button>
             </CardFooter>
