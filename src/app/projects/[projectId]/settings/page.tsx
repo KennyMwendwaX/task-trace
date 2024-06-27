@@ -111,7 +111,9 @@ export default function Settings({
           <div className="w-full flex flex-col gap-4">
             <Card className="w-full">
               <CardHeader>
-                <CardTitle>Update Project Details</CardTitle>
+                <CardTitle className="text-xl">
+                  Update Project Details
+                </CardTitle>
                 <CardDescription>
                   Only the owner or admins can update the project details.
                 </CardDescription>
@@ -202,13 +204,12 @@ export default function Settings({
             </Card>
             <Card className="w-full border-destructive">
               <CardHeader>
-                <CardTitle>Delete Project</CardTitle>
+                <CardTitle className="text-xl">Delete Project</CardTitle>
                 <CardDescription>
                   The project will be permanently deleted. This action is
                   irreversible and can not be undone.
                 </CardDescription>
               </CardHeader>
-              <CardContent></CardContent>
               <CardFooter className="bg-red-50 border-t border-t-destructive flex justify-between py-2.5 rounded-b-lg">
                 <Button variant="destructive" size="sm" onClick={handleCopy}>
                   Delete
@@ -219,7 +220,7 @@ export default function Settings({
 
           <Card className="w-full lg:max-w-sm">
             <CardHeader>
-              <CardTitle>Project Invite</CardTitle>
+              <CardTitle className="text-xl">Project Invite</CardTitle>
               <CardDescription>
                 Share this code to invite new members to the project.
               </CardDescription>
