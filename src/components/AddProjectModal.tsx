@@ -16,17 +16,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import format from "date-fns/format";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -38,13 +36,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { LuFolderPlus } from "react-icons/lu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({

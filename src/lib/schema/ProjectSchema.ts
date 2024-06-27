@@ -8,7 +8,7 @@ export const projectSchema = z.object({
       invalid_type_error: "Name must be a string",
     })
     .min(2, { message: "Name must be greater than 2 characters long" })
-    .max(50, { message: "Name must be less than 20 characters long" }),
+    .max(50, { message: "Name must be less than 50 characters long" }),
   status: z.enum(["BUILDING", "LIVE"]),
   ownerId: z.string({
     required_error: "Owner is required",
