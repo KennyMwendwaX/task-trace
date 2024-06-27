@@ -26,6 +26,7 @@ export const userSchema = z.object({
     .refine((value) => !/\s/.test(value), "Invalid Password"),
   image: z.string().nullable(),
   createdAt: z.date(),
+  updatedAt: z.date().nullable(),
 });
 
 export const signupSchema = userSchema
@@ -34,6 +35,7 @@ export const signupSchema = userSchema
     emailVerified: true,
     image: true,
     createdAt: true,
+    updatedAt: true,
   })
   .extend({
     confirm_password: z.string({
@@ -53,6 +55,7 @@ export const signinSchema = userSchema.omit({
   role: true,
   image: true,
   createdAt: true,
+  updatedAt: true,
 });
 
 export type User = z.infer<typeof userSchema>;

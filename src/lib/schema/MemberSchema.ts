@@ -7,6 +7,7 @@ export const memberSchema = z.object({
   userId: z.string(),
   role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
   createdAt: z.date(),
+  updatedAt: z.date().nullable(),
   user: z.object({
     name: z.string(),
     email: z.string(),

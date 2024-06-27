@@ -40,6 +40,7 @@ export const taskSchema = z.object({
       message: "Task description cannot be longer than 2000 characters",
     }),
   createdAt: z.date(),
+  updatedAt: z.date().nullable(),
   member: z.object({
     user: z.object({
       name: z.string(),
@@ -57,6 +58,7 @@ export const taskFormSchema = taskSchema.omit({
   id: true,
   status: true,
   createdAt: true,
+  updatedAt: true,
   userId: true,
   projectId: true,
   member: true,

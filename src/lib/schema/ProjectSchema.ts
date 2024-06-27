@@ -21,6 +21,7 @@ export const projectSchema = z.object({
       message: "Description cannot be longer than 200 characters",
     }),
   createdAt: z.date(),
+  updatedAt: z.date().nullable(),
   owner: z.object({
     name: z.string(),
     email: z.string(),
