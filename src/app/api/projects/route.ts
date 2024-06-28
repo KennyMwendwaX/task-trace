@@ -73,13 +73,7 @@ export async function POST(request: Request) {
 
   const req = await request.json();
 
-  const requestData = {
-    ...req,
-    start_date: new Date(req.start_date),
-    end_date: new Date(req.end_date),
-  };
-
-  const result = projectFormSchema.safeParse(requestData);
+  const result = projectFormSchema.safeParse(req);
 
   if (!result.success)
     return NextResponse.json(
