@@ -6,10 +6,10 @@ import { DEFAULT_ROUTE_REDIRECT } from "../../routes";
 import { AuthError } from "next-auth";
 
 export const credentialsLogin = async (values: SigninValues) => {
-  const result = signinSchema.safeParse(values);
-  if (!result.success) return { error: "Invalid credentials" };
-  const { email, password } = result.data;
   try {
+    const validation = signinSchema.safeParse(values);
+    if (!validation.success) return { error: "Invalid credentials" };
+    const { email, password } = validation.data;
     const result = await signIn("credentials", {
       email: email,
       password: password,

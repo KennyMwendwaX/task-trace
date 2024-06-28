@@ -17,10 +17,9 @@ export async function PUT(
 
   const status = await request.json();
 
-  // Parse the request body using the requestSchema
-  const result = requestSchema.safeParse({ status });
+  const validation = requestSchema.safeParse({ status });
 
-  if (!result.success)
+  if (!validation.success)
     return NextResponse.json(
       { message: "Invalid request data" },
       { status: 400 }
@@ -28,7 +27,7 @@ export async function PUT(
 
   try {
     const updatedTask = await db.update(tasks).set({
-      status: result.data.status,
+      status: validation.data.status,
     });
 
     if (!updatedTask)

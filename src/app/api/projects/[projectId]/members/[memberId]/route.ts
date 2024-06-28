@@ -7,15 +7,15 @@ export async function GET(
   request: Request,
   { params }: { params: { memberId: string } }
 ) {
-  const memberId = params.memberId;
-
-  if (!memberId)
-    return NextResponse.json(
-      { message: "No member Id found" },
-      { status: 404 }
-    );
-
   try {
+    const memberId = params.memberId;
+
+    if (!memberId)
+      return NextResponse.json(
+        { message: "No member Id found" },
+        { status: 404 }
+      );
+
     const member = await db.query.members.findFirst({
       where: (member, { eq }) => eq(member.id, memberId),
       with: {
@@ -47,15 +47,15 @@ export async function DELETE(
   request: Request,
   { params }: { params: { memberId: string } }
 ) {
-  const memberId = params.memberId;
-
-  if (!memberId)
-    return NextResponse.json(
-      { message: "No memberId provided" },
-      { status: 400 }
-    );
-
   try {
+    const memberId = params.memberId;
+
+    if (!memberId)
+      return NextResponse.json(
+        { message: "No memberId provided" },
+        { status: 400 }
+      );
+
     const deletedMember = await db
       .delete(members)
       .where(eq(members.id, memberId));

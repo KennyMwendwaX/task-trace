@@ -26,10 +26,10 @@ export const authConfig: NextAuthConfig = {
         // Check if credentials are present
         if (!credentials) throw new Error("Credentials are required");
 
-        const result = signinSchema.safeParse(credentials);
+        const validation = signinSchema.safeParse(credentials);
 
-        if (result.success) {
-          const { email, password } = result.data;
+        if (validation.success) {
+          const { email, password } = validation.data;
 
           // Check user exists
           const user = await db.query.users.findFirst({

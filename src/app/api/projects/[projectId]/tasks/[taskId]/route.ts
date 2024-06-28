@@ -8,12 +8,15 @@ export async function GET(
   request: Request,
   { params }: { params: { taskId: string } }
 ) {
-  const taskId = params.taskId;
-
-  if (!taskId)
-    return NextResponse.json({ message: "No task Id found" }, { status: 404 });
-
   try {
+    const taskId = params.taskId;
+
+    if (!taskId)
+      return NextResponse.json(
+        { message: "No task Id found" },
+        { status: 404 }
+      );
+
     const task = await db.query.tasks.findFirst({
       where: (task, { eq }) => eq(task.id, taskId),
       with: {
@@ -69,13 +72,13 @@ export async function PUT(
       due_date: new Date(req.due_date),
     };
 
-    const result = taskFormSchema.safeParse(requestData);
+    const validation = taskFormSchema.safeParse(requestData);
 
-    if (!result.success)
+    if (!validation.success)
       return NextResponse.json({ message: "Invalid data" }, { status: 400 });
 
     const { name, label, priority, due_date, memberId, description } =
-      result.data;
+      validation.data;
 
     const member = await db.query.members.findFirst({
       where: (member, { eq }) => eq(member.id, memberId),

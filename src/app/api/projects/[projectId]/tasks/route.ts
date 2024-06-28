@@ -7,15 +7,15 @@ export async function GET(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
-  const projectId = params.projectId;
-
-  if (!projectId)
-    return NextResponse.json(
-      { message: "No project Id found" },
-      { status: 404 }
-    );
-
   try {
+    const projectId = params.projectId;
+
+    if (!projectId)
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
+
     const project = await db.query.projects.findFirst({
       where: (project, { eq }) => eq(project.id, projectId),
     });
@@ -83,13 +83,13 @@ export async function POST(
       due_date: new Date(req.due_date),
     };
 
-    const result = taskFormSchema.safeParse(requestData);
+    const validation = taskFormSchema.safeParse(requestData);
 
-    if (!result.success)
+    if (!validation.success)
       return NextResponse.json({ message: "Invalid data" }, { status: 400 });
 
     const { name, label, priority, due_date, memberId, description } =
-      result.data;
+      validation.data;
 
     const member = await db.query.members.findFirst({
       where: (member, { eq }) => eq(member.id, memberId),

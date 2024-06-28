@@ -13,22 +13,21 @@ export async function PUT(
   request: Request,
   { params }: { params: { taskId: string } }
 ) {
-  const taskId = params.taskId;
-
-  const label = await request.json();
-
-  // Parse the request body using the requestSchema
-  const result = requestSchema.safeParse({ label });
-
-  if (!result.success)
-    return NextResponse.json(
-      { message: "Invalid request data" },
-      { status: 400 }
-    );
-
   try {
+    const taskId = params.taskId;
+
+    const label = await request.json();
+
+    const validation = requestSchema.safeParse({ label });
+
+    if (!validation.success)
+      return NextResponse.json(
+        { message: "Invalid request data" },
+        { status: 400 }
+      );
+
     const updatedTask = await db.update(tasks).set({
-      label: result.data.label,
+      label: validation.data.label,
     });
 
     if (!updatedTask)

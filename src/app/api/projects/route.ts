@@ -74,15 +74,15 @@ export async function POST(request: Request) {
 
     const req = await request.json();
 
-    const result = projectFormSchema.safeParse(req);
+    const validation = projectFormSchema.safeParse(req);
 
-    if (!result.success)
+    if (!validation.success)
       return NextResponse.json(
         { message: "Invalid request data" },
         { status: 400 }
       );
 
-    const { name, status, description } = result.data;
+    const { name, status, description } = validation.data;
 
     const projectResult = await db
       .insert(projects)

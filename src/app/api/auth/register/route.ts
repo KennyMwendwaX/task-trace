@@ -1,31 +1,31 @@
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
-import { userSchema } from "@/lib/schema/UserSchema";
+import { userSchema, signupSchema } from "@/lib/schema/UserSchema";
 import db from "@/database/db";
 import { users } from "@/database/schema";
 
+const requestSchema = userSchema.omit({
+  id: true,
+  emailVerified: true,
+  image: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export async function POST(request: Request) {
-  const req = await request.json();
-
-  const requestSchema = userSchema.omit({
-    id: true,
-    emailVerified: true,
-    image: true,
-    createdAt: true,
-  });
-
-  const result = requestSchema.safeParse(req);
-
-  if (!result.success)
-    return NextResponse.json(
-      { message: "Invalid request data" },
-      { status: 400 }
-    );
-
-  const { name, email, password } = result.data;
-
   try {
-    // Check if the email is already registered
+    const req = await request.json();
+
+    const validation = requestSchema.safeParse(req);
+
+    if (!validation.success)
+      return NextResponse.json(
+        { message: "Invalid request data" },
+        { status: 400 }
+      );
+
+    const { name, email, password } = validation.data;
+
     const userExists = await db.query.users.findFirst({
       where: (userExists, { eq }) => eq(userExists.email, email),
     });
@@ -36,17 +36,14 @@ export async function POST(request: Request) {
         { status: 409 }
       );
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user an account
     const user = await db.insert(users).values({
       name: name,
       email: email,
       password: hashedPassword,
     });
 
-    // Return success message
     if (!user)
       return NextResponse.json(
         { message: "Failed to register user" },
