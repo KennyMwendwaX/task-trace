@@ -56,34 +56,34 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await auth();
-
-  if (!session || !session.user || !session.user.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
-  }
-
-  const userId = session.user.id;
-
-  const user = await db.query.users.findFirst({
-    where: (user, { eq }) => eq(user.id, userId),
-  });
-
-  if (!user)
-    return NextResponse.json({ message: "User not found" }, { status: 404 });
-
-  const req = await request.json();
-
-  const result = projectFormSchema.safeParse(req);
-
-  if (!result.success)
-    return NextResponse.json(
-      { message: "Invalid request data" },
-      { status: 400 }
-    );
-
-  const { name, status, description } = result.data;
-
   try {
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    }
+
+    const userId = session.user.id;
+
+    const user = await db.query.users.findFirst({
+      where: (user, { eq }) => eq(user.id, userId),
+    });
+
+    if (!user)
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+
+    const req = await request.json();
+
+    const result = projectFormSchema.safeParse(req);
+
+    if (!result.success)
+      return NextResponse.json(
+        { message: "Invalid request data" },
+        { status: 400 }
+      );
+
+    const { name, status, description } = result.data;
+
     const projectResult = await db
       .insert(projects)
       .values({

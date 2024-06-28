@@ -49,14 +49,14 @@ export async function PUT(
   request: Request,
   { params }: { params: { taskId: string } }
 ) {
-  const req = await request.json();
-
-  const taskId = params.taskId;
-
-  if (!taskId)
-    return NextResponse.json({ message: "No task Id found" }, { status: 404 });
-
   try {
+    const req = await request.json();
+
+    const taskId = params.taskId;
+
+    if (!taskId)
+      return NextResponse.json({ message: "No task Id" }, { status: 404 });
+
     const task = await db.query.tasks.findFirst({
       where: (task, { eq }) => eq(task.id, taskId),
     });
@@ -118,12 +118,12 @@ export async function DELETE(
   request: Request,
   { params }: { params: { taskId: string } }
 ) {
-  const taskId = params.taskId;
-
-  if (!taskId)
-    return NextResponse.json({ message: "No id provided" }, { status: 400 });
-
   try {
+    const taskId = params.taskId;
+
+    if (!taskId)
+      return NextResponse.json({ message: "No id provided" }, { status: 400 });
+
     const deletedTask = await db.delete(tasks).where(eq(tasks.id, taskId));
 
     if (!deletedTask)
