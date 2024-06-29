@@ -49,6 +49,10 @@ export default function Settings({
     status: projectData.status as "BUILDING" | "LIVE",
     createdAt: new Date(projectData.createdAt),
     updatedAt: new Date(projectData.updatedAt),
+    invitationCode: {
+      ...projectData.invitationCode,
+      expiresAt: new Date(projectData.invitationCode.expiresAt),
+    },
   };
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -90,7 +94,7 @@ export default function Settings({
     updateProject(values);
   }
   const projectId = params.projectId;
-  const code = "ABCD1234FEDF";
+  const code = project.invitationCode.code;
 
   const handleCopy = () => {
     navigator.clipboard

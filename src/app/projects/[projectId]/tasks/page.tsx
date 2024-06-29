@@ -72,22 +72,26 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   const members = membersData.map((member) => ({
     ...member,
     createdAt: new Date(member.createdAt),
+    updatedAt: new Date(member.updatedAt),
     tasks: member.tasks.map((task) => ({
       ...task,
-      createdAt: new Date(task.createdAt),
       due_date: new Date(task.due_date),
+      createdAt: new Date(task.createdAt),
+      updatedAt: new Date(task.updatedAt),
     })),
   })) as Member[];
+
   const tasks = tasksData.map((task) => ({
     ...task,
     due_date: new Date(task.due_date),
     createdAt: new Date(task.createdAt),
+    updatedAt: new Date(task.updatedAt),
   })) as ProjectTask[];
+
   const tasksDone = tasks.filter((task) => task.status === "DONE");
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
   const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
   const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
-  console.log(members.length);
 
   return (
     <>

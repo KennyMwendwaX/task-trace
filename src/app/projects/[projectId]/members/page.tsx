@@ -75,15 +75,18 @@ export default function Members({ params }: { params: { projectId: string } }) {
     ...user,
     emailVerified: new Date(user.emailVerified),
     createdAt: new Date(user.createdAt),
+    updatedAt: new Date(user.updatedAt),
   })) as User[];
   const members = membersData
     ?.map((member) => ({
       ...member,
       createdAt: new Date(member.createdAt),
+      updatedAt: new Date(member.updatedAt),
       tasks: member.tasks.map((task) => ({
         ...task,
         due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
+        updatedAt: new Date(task.updatedAt),
       })),
     }))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Member[];
