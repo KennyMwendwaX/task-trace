@@ -39,6 +39,7 @@ export default function Dashboard() {
         ...task,
         due_date: new Date(task.due_date),
         createdAt: new Date(task.createdAt),
+        updatedAt: new Date(task.updatedAt),
       }))
       .sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
