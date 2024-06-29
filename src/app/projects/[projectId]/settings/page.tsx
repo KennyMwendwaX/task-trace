@@ -109,7 +109,7 @@ export default function Settings({
         <div className="text-2xl font-bold tracking-tight">
           {project.name} Settings
         </div>
-        <div className="flex flex-col-reverse lg:flex-row gap-4 items-start">
+        <div className="flex flex-col-reverse lg:flex-row gap-4 items-start mt-2">
           <div className="w-full flex flex-col gap-4">
             <Card className="w-full">
               <CardHeader>
