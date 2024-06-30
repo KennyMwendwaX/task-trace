@@ -11,33 +11,47 @@ import { LuFolders, LuPin, LuSearch } from "react-icons/lu";
 import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import { projectsData } from "./components/projects";
+import { ProjectStatus } from "@/lib/config";
 
 export default function Projects() {
   const session = useSession();
 
   const userId = session.data?.user?.id;
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["projects", userId],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/projects");
-      return data as {
-        userProjects: Project[];
-        memberProjects: Project[];
-      };
+  // const { data, isLoading, error } = useQuery({
+  //   queryKey: ["projects", userId],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get("/api/projects");
+  //     return data as {
+  //       userProjects: Project[];
+  //       memberProjects: Project[];
+  //     };
+  //   },
+  // });
+
+  // const userProjects = data?.userProjects || [];
+  // const memberProjects = data?.memberProjects || [];
+
+  // if (isLoading) {
+  //   return (
+  //     <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
+  //       <Loading />
+  //     </main>
+  //   );
+  // }
+
+  const userProjects = [] as Project[];
+  const memberProjects = projectsData.map((project) => ({
+    ...project,
+    status: project.status as ProjectStatus,
+    createdAt: new Date(project.createdAt),
+    updatedAt: new Date(project.updatedAt),
+    invitationCode: {
+      ...project.invitationCode,
+      expiresAt: new Date(project.invitationCode.expiresAt),
     },
-  });
-
-  const userProjects = data?.userProjects || [];
-  const memberProjects = data?.memberProjects || [];
-
-  if (isLoading) {
-    return (
-      <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
-        <Loading />
-      </main>
-    );
-  }
+  }));
 
   return (
     <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
@@ -83,17 +97,6 @@ export default function Projects() {
             </>
           ) : (
             <>
-              <div className="flex items-center justify-between sm:gap-2">
-                <div className="relative md:grow-0">
-                  <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search projects..."
-                    className="w-[200px] rounded-lg bg-background pl-8 md:w-[345px] lg:w-[400px]"
-                  />
-                </div>
-                <AddProjectModal />
-              </div>
               {memberProjects.length > 0 ? (
                 <>
                   <div className="flex items-center mt-5">

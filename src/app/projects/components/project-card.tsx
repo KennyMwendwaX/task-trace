@@ -14,6 +14,7 @@ import { LuMoreVertical } from "react-icons/lu";
 import { projectStatuses } from "@/lib/config";
 import Image from "next/image";
 import Logo from "../../../../public/logo.png";
+import Link from "next/link";
 
 interface Props {
   project: Project;
@@ -30,9 +31,11 @@ export default function ProjectCard({ project }: Props) {
           <div className="flex items-center gap-2">
             <Image src={Logo} width={32} height={32} alt="Project logo" />
             <div>
-              <CardTitle className="text-lg hover:underline cursor-pointer">
-                {project.name}
-              </CardTitle>
+              <Link href={`/projects/${project.id}`}>
+                <CardTitle className="text-lg hover:underline cursor-pointer">
+                  {project.name}
+                </CardTitle>
+              </Link>
               {projectStatus?.value === "LIVE" ? (
                 <Badge
                   variant="outline"
