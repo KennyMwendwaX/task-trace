@@ -13,10 +13,6 @@ import { tasksData } from "./components/tasks";
 import RecentTasks from "./components/recent-tasks";
 import TaskChart from "./components/task-chart";
 
-interface StatusCounts {
-  [key: string]: number;
-}
-
 export default function Dashboard() {
   const session = useSession();
 
