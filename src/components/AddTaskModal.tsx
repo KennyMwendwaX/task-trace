@@ -207,7 +207,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                       {/* Use flex to align label and popover content */}
                       <FormField
                         control={form.control}
-                        name="due_date"
+                        name="dueDate"
                         render={({ field }) => (
                           <FormItem className="flex flex-col">
                             <FormLabel>Due Date</FormLabel>

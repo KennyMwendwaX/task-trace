@@ -80,7 +80,7 @@ export async function POST(
 
     const requestData = {
       ...req,
-      due_date: new Date(req.due_date),
+      dueDate: new Date(req.dueDate),
     };
 
     const validation = taskFormSchema.safeParse(requestData);
@@ -88,7 +88,7 @@ export async function POST(
     if (!validation.success)
       return NextResponse.json({ message: "Invalid data" }, { status: 400 });
 
-    const { name, label, priority, due_date, memberId, description } =
+    const { name, label, priority, dueDate, memberId, description } =
       validation.data;
 
     const member = await db.query.members.findFirst({
@@ -105,7 +105,7 @@ export async function POST(
       name: name,
       label: label,
       priority: priority,
-      dueDate: due_date,
+      dueDate: dueDate,
       description: description,
       status: "TO_DO",
       memberId: memberId,

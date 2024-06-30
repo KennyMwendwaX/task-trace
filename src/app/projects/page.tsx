@@ -10,10 +10,15 @@ import axios from "axios";
 import { LuFolders, LuPin, LuSearch } from "react-icons/lu";
 import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
+import { useSession } from "next-auth/react";
 
 export default function Projects() {
+  const session = useSession();
+
+  const userId = session.data?.user?.id;
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["projects"],
+    queryKey: ["projects", userId],
     queryFn: async () => {
       const { data } = await axios.get("/api/projects");
       return data as {
@@ -24,7 +29,7 @@ export default function Projects() {
   });
 
   const userProjects = data?.userProjects || [];
-  const memberProjects = data?.userProjects || [];
+  const memberProjects = data?.memberProjects || [];
 
   if (isLoading) {
     return (

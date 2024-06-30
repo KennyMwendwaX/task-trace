@@ -33,7 +33,7 @@ export default function TaskPage({
   const router = useRouter();
 
   const {
-    data,
+    data: taskData,
     isLoading: taskIsLoading,
     error,
   } = useQuery({
@@ -46,7 +46,7 @@ export default function TaskPage({
     },
   });
 
-  const task = data;
+  const task = taskData;
 
   const {
     data: membersData,
@@ -66,19 +66,17 @@ export default function TaskPage({
     error: deleteError,
   } = useMutation({
     mutationFn: async () => {
-      if (task?.id) {
-        const options = {
-          method: "DELETE",
-        };
-        const response = await fetch(
-          `/api/projects/${projectId}/tasks/${task?.id}`,
-          options
-        );
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
+      if (!task) return;
+      const options = {
+        method: "DELETE",
+      };
+      const response = await fetch(
+        `/api/projects/${projectId}/tasks/${task.id}`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
       }
-      return null;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -121,7 +119,7 @@ export default function TaskPage({
     new Date(task.createdAt),
     "dd MMM, yyyy • hh:ss"
   );
-  const taskDueDate = format(new Date(task.due_date), "dd MMM, yyyy");
+  const taskDueDate = format(new Date(task.dueDate), "dd MMM, yyyy");
 
   // Added a plugin to sanitize the markdown
   const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];

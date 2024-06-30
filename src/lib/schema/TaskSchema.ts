@@ -21,7 +21,7 @@ export const taskSchema = z.object({
     required_error: "Priority is required",
     invalid_type_error: "Priority must be Low, Medium or High",
   }),
-  due_date: z.date({
+  dueDate: z.date({
     required_error: "Please select a date and time",
     invalid_type_error: "That's not a date!",
   }),

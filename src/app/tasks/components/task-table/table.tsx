@@ -71,14 +71,14 @@ export default function TaskTable<TData, TValue>({
     name: task.name,
     status: task.status,
     priority: task.priority,
-    due_date: format(task.due_date, "dd/MM/yyyy"),
+    dueDate: format(task.dueDate, "dd/MM/yyyy"),
   }));
 
   const headers = [
     { label: "Task", key: "name" },
     { label: "Status", key: "status" },
     { label: "Priority", key: "priority" },
-    { label: "Due Date", key: "due_date" },
+    { label: "Due Date", key: "dueDate" },
   ];
 
   return (

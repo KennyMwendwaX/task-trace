@@ -37,7 +37,7 @@ export default function Dashboard() {
     (tasksData
       ?.map((task) => ({
         ...task,
-        due_date: new Date(task.due_date),
+        dueDate: new Date(task.dueDate),
         createdAt: new Date(task.createdAt),
         updatedAt: new Date(task.updatedAt),
       }))

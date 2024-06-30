@@ -86,7 +86,7 @@ export default function EditTaskModal({
       name: task.name,
       label: task.label,
       priority: task.priority,
-      due_date: new Date(task.due_date),
+      dueDate: new Date(task.dueDate),
       memberId: memberId,
       description: task.description,
     },
@@ -232,7 +232,7 @@ export default function EditTaskModal({
                       {/* Use flex to align label and popover content */}
                       <FormField
                         control={form.control}
-                        name="due_date"
+                        name="dueDate"
                         render={({ field }) => (
                           <FormItem className="flex flex-col">
                             <FormLabel>Due Date</FormLabel>

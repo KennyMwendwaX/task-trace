@@ -32,7 +32,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
   const recentTasks = tasks
     .map((task) => ({
       ...task,
-      due_date: new Date(task.due_date),
+      dueDate: new Date(task.dueDate),
       createdAt: new Date(task.createdAt),
     }))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -71,7 +71,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
                     (priority) => priority.value === task.priority
                   );
                   if (!priority) return null;
-                  const dueDate = format(task.due_date, "dd/MM/yyyy");
+                  const dueDate = format(task.dueDate, "dd/MM/yyyy");
                   return (
                     <TableRow key={task.id}>
                       <TableCell className="font-medium hover:underline cursor-pointer">

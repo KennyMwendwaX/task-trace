@@ -151,11 +151,11 @@ export const TableColumns = ({
     },
   },
   {
-    accessorKey: "due_date",
+    accessorKey: "dueDate",
     header: () => <TableColumnHeader name="Due Date" />,
     cell: ({ row }) => {
       const task = taskSchema.parse(row.original);
-      const date = format(task.due_date, "dd/MM/yyyy");
+      const date = format(task.dueDate, "dd/MM/yyyy");
       return <div>{date}</div>;
     },
   },
