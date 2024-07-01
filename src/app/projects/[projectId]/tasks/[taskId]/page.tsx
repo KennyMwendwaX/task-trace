@@ -20,6 +20,7 @@ import { Member } from "@/lib/schema/MemberSchema";
 import EditTaskModal from "@/components/EditTaskModal";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
 
 export default function TaskPage({
   params,
@@ -31,6 +32,23 @@ export default function TaskPage({
 
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const [markdown, setMarkdown] = useState("");
+
+  useEffect(() => {
+    const fetchMarkdown = async () => {
+      try {
+        const response = await axios.get(
+          "https://github.com/KennyMwendwaX/kenny-mwendwa/blob/main/README.md"
+        );
+        setMarkdown(response.data);
+      } catch (error) {
+        console.error("Error fetching markdown:", error);
+      }
+    };
+
+    fetchMarkdown();
+  }, []);
 
   const {
     data: taskData,
@@ -238,7 +256,7 @@ export default function TaskPage({
             <Card className="mt-5 p-3">
               <MarkdownPreview
                 // className="p-3"
-                source={task.description}
+                source={markdown}
                 rehypePlugins={rehypePlugins}
                 wrapperElement={{
                   "data-color-mode": "light",
