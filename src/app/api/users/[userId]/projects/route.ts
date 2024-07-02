@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
-import { auth } from "../../../auth";
+import { auth } from "@/auth";
 import db from "@/database/db";
-import { members, projects } from "@/database/schema";
+import { users, members, projects } from "@/database/schema";
+import { eq } from "drizzle-orm";
 
 export async function GET() {
   try {
@@ -15,7 +16,7 @@ export async function GET() {
     const userId = session.user.id;
 
     const user = await db.query.users.findFirst({
-      where: (user, { eq }) => eq(user.id, userId),
+      where: eq(users.id, userId),
       with: {
         projects: true,
         members: {
@@ -30,24 +31,31 @@ export async function GET() {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const projectsData = user.projects || [];
-    if (!projectsData)
+    const ownedProjects = user.projects || [];
+
+    const memberProjects = user.members
+      .filter((member) => member.role !== "OWNER")
+      .map((member) => ({
+        ...member.project,
+        role: member.role,
+      }));
+
+    if (ownedProjects.length === 0 && memberProjects.length === 0) {
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
       );
+    }
 
-    const userProjects = user.projects;
-    const memberProjectsData = user.members.map((mp) => mp.project);
-    const userProjectsIds = userProjects.map((up) => up.id);
-
-    // Filter user created projects from member projects
-    const memberProjects = memberProjectsData.filter(
-      (project) => !userProjectsIds.includes(project.id)
+    return NextResponse.json(
+      {
+        ownedProjects,
+        memberProjects,
+      },
+      { status: 200 }
     );
-
-    return NextResponse.json({ userProjects, memberProjects }, { status: 200 });
   } catch (error) {
+    console.error("Error fetching user projects:", error);
     return NextResponse.json(
       { message: "Server error, try again later" },
       { status: 500 }
