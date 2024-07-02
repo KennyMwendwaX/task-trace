@@ -9,8 +9,8 @@ export async function GET() {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user.id;
@@ -18,7 +18,6 @@ export async function GET() {
     const user = await db.query.users.findFirst({
       where: eq(users.id, userId),
       with: {
-        projects: true,
         members: {
           with: {
             project: true,
@@ -31,29 +30,19 @@ export async function GET() {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const ownedProjects = user.projects || [];
+    const projects = user.members.map((member) => ({
+      ...member.project,
+      role: member.role,
+    }));
 
-    const memberProjects = user.members
-      .filter((member) => member.role !== "OWNER")
-      .map((member) => ({
-        ...member.project,
-        role: member.role,
-      }));
-
-    if (ownedProjects.length === 0 && memberProjects.length === 0) {
+    if (projects.length === 0) {
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(
-      {
-        ownedProjects,
-        memberProjects,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ projects }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user projects:", error);
     return NextResponse.json(

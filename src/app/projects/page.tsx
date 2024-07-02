@@ -24,13 +24,13 @@ export default function Projects() {
   //   queryFn: async () => {
   //     const { data } = await axios.get("/api/projects");
   //     return data as {
-  //       userProjects: Project[];
+  //       ownedProjects: Project[];
   //       memberProjects: Project[];
   //     };
   //   },
   // });
 
-  // const userProjects = data?.userProjects || [];
+  // const ownedProjects = data?.ownedProjects || [];
   // const memberProjects = data?.memberProjects || [];
 
   // if (isLoading) {
