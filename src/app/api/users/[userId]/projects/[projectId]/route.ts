@@ -1,41 +1,72 @@
 import db from "@/database/db";
-import { projects } from "@/database/schema";
+import { members, projects } from "@/database/schema";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { auth } from "@/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = session.user.id;
     const projectId = params.projectId;
-    const project = await db.query.projects.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+
+    if (!projectId) {
+      return NextResponse.json(
+        { message: "Project ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const projectData = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
       with: {
         owner: {
           columns: {
+            id: true,
             name: true,
-            email: true,
-          },
-        },
-        invitationCode: {
-          columns: {
-            code: true,
-            expiresAt: true,
           },
         },
       },
     });
 
-    if (!project)
+    if (!projectData) {
       return NextResponse.json(
         { message: "Project not found" },
         { status: 404 }
       );
+    }
 
-    return NextResponse.json({ project }, { status: 200 });
+    const member = await db.query.members.findFirst({
+      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
+      columns: {
+        role: true,
+      },
+    });
+
+    if (!member) {
+      return NextResponse.json(
+        { message: "User is not a member of this project" },
+        { status: 403 }
+      );
+    }
+
+    const project = {
+      ...projectData,
+      memberRole: member.role,
+    };
+
+    return NextResponse.json(project, { status: 200 });
   } catch (error) {
+    console.error("Error fetching project:", error);
     return NextResponse.json(
       { message: "Server error, try again later" },
       { status: 500 }
