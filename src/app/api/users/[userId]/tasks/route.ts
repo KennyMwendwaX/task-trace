@@ -1,4 +1,6 @@
 import db from "@/database/db";
+import { members } from "@/database/schema";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -14,12 +16,18 @@ export async function GET(
         { status: 400 }
       );
 
-    const tasks = await db.query.tasks.findMany({
-      where: (users, { eq }) => eq(users.id, userId),
+    const userTasks = await db.query.members.findMany({
+      where: eq(members.userId, userId),
+      with: {
+        tasks: true,
+      },
     });
 
-    if (!tasks)
+    if (!userTasks || userTasks.length === 0) {
       return NextResponse.json({ message: "No tasks found" }, { status: 404 });
+    }
+
+    const tasks = userTasks.flatMap((member) => member.tasks);
 
     return NextResponse.json({ tasks }, { status: 200 });
   } catch (error) {
