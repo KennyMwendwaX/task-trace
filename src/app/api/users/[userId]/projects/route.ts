@@ -32,7 +32,6 @@ export async function GET() {
 
     const projects = user.members.map((member) => ({
       ...member.project,
-      role: member.role,
     }));
 
     if (projects.length === 0) {

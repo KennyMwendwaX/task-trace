@@ -61,7 +61,7 @@ export async function GET(
 
     const project = {
       ...projectData,
-      memberRole: member.role,
+      role: member.role,
     };
 
     return NextResponse.json(project, { status: 200 });
