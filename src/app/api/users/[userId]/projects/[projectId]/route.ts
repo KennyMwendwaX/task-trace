@@ -26,7 +26,7 @@ export async function GET(
       );
     }
 
-    const projectData = await db.query.projects.findFirst({
+    const project = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
       with: {
         owner: {
@@ -38,31 +38,12 @@ export async function GET(
       },
     });
 
-    if (!projectData) {
+    if (!project) {
       return NextResponse.json(
         { message: "Project not found" },
         { status: 404 }
       );
     }
-
-    const member = await db.query.members.findFirst({
-      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
-      columns: {
-        role: true,
-      },
-    });
-
-    if (!member) {
-      return NextResponse.json(
-        { message: "User is not a member of this project" },
-        { status: 403 }
-      );
-    }
-
-    const project = {
-      ...projectData,
-      role: member.role,
-    };
 
     return NextResponse.json(project, { status: 200 });
   } catch (error) {
