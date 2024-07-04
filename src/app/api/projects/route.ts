@@ -14,39 +14,15 @@ export async function GET() {
 
     const userId = session.user.id;
 
-    const user = await db.query.users.findFirst({
-      where: (user, { eq }) => eq(user.id, userId),
-      with: {
-        projects: true,
-        members: {
-          with: {
-            project: true,
-          },
-        },
-      },
-    });
+    const projects = await db.query.projects.findMany();
 
-    if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
-
-    const projectsData = user.projects || [];
-    if (!projectsData)
+    if (projects.length === 0)
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
       );
 
-    const userProjects = user.projects;
-    const memberProjectsData = user.members.map((mp) => mp.project);
-    const userProjectsIds = userProjects.map((up) => up.id);
-
-    // Filter user created projects from member projects
-    const memberProjects = memberProjectsData.filter(
-      (project) => !userProjectsIds.includes(project.id)
-    );
-
-    return NextResponse.json({ userProjects, memberProjects }, { status: 200 });
+    return NextResponse.json(projects, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },
