@@ -12,8 +12,6 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
-    const userId = session.user.id;
-
     const projects = await db.query.projects.findMany();
 
     if (projects.length === 0)
