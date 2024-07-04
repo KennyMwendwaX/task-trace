@@ -1,8 +1,8 @@
 import db from "@/database/db";
-import { members, projects } from "@/database/schema";
+import { projects } from "@/database/schema";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
 
 export async function GET(
