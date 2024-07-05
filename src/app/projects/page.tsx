@@ -24,7 +24,6 @@ export default function Projects() {
   //   queryFn: async () => {
   //     const { data } = await axios.get("/api/projects");
   //     return data.projects as Project[];
-  //     // ! add role to project type
   //   },
   // });
 

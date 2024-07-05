@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "@/auth";
 import db from "@/database/db";
-import { users, members, projects } from "@/database/schema";
+import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
 export async function GET() {
@@ -32,6 +31,7 @@ export async function GET() {
 
     const projects = user.members.map((member) => ({
       ...member.project,
+      role: member.role,
     }));
 
     if (projects.length === 0) {
