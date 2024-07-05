@@ -80,7 +80,23 @@ export const projectStatuses = [
   },
 ] as const;
 
+export const projectRoles = [
+  {
+    label: "Owner",
+    value: "OWNER",
+  },
+  {
+    label: "Admin",
+    value: "ADMIN",
+  },
+  {
+    label: "Member",
+    value: "MEMBER",
+  },
+] as const;
+
 export type Label = (typeof labels)[number]["value"];
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];
 export type ProjectStatus = (typeof projectStatuses)[number]["value"];
+export type ProjectRole = (typeof projectRoles)[number]["value"];
