@@ -12,7 +12,11 @@ import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { projectsData } from "./components/projects";
-import { ProjectStatus } from "@/lib/config";
+import { ProjectRole, ProjectStatus } from "@/lib/config";
+
+type UserProject = Project & {
+  userRole: ProjectRole;
+};
 
 export default function Projects() {
   const session = useSession();
