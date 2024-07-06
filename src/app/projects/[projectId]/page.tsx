@@ -20,6 +20,7 @@ import { tasksData } from "./components/tasks";
 import { TbPlaylistX } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { IoMdExit } from "react-icons/io";
+import ProjectOverview from "./components/project-overview";
 
 export default function ProjectPage({
   params,
@@ -163,7 +164,8 @@ export default function ProjectPage({
         </div>
       ) : (
         <div className="space-y-4">
-          <TaskOverview tasks={tasks} />
+          <ProjectOverview />
+          {/* <TaskOverview tasks={tasks} /> */}
           <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
             <TaskChart tasks={tasks} />
             <RecentTasks projectId={projectId} tasks={tasks} />
