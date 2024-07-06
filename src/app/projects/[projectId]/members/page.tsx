@@ -94,23 +94,25 @@ export default function Members({ params }: { params: { projectId: string } }) {
   return (
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
+        <div className="text-2xl font-bold tracking-tight">
+          {project.name} Members
+        </div>
         {!members || members.length == 0 ? (
-          <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-            <FiUserPlus className="h-14 w-14 text-muted-foreground" />
+          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+            <div className="flex flex-col items-center gap-1 text-center">
+              <FiUserPlus className="h-12 w-12 text-muted-foreground" />
 
-            <h3 className="mt-4 text-2xl font-semibold">
-              No members in the project
-            </h3>
-            <p className="mb-4 mt-2 text-lg text-muted-foreground">
-              There are no members in the project. Add one below.
-            </p>
-            <AddMemberModal projectId={projectId} users={users} />
+              <h3 className="mt-4 text-xl font-semibold">
+                No members in the project
+              </h3>
+              <p className="mb-4 mt-2 text-base text-muted-foreground">
+                There are no members in the project. Add one below.
+              </p>
+              <AddMemberModal projectId={projectId} users={users} />
+            </div>
           </div>
         ) : (
           <>
-            <div className="text-2xl font-bold tracking-tight">
-              {project.name} Members
-            </div>
             <div className="text-lg text-muted-foreground">
               Here&apos;s a list of your project members!
             </div>

@@ -102,7 +102,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
         {tasks && tasks.length > 0 ? (
           <>
             <div className="text-lg text-muted-foreground">
-              Here&apos;s a list of your project members!
+              Here&apos;s a list of your project tasks!
             </div>
             <Tabs defaultValue="all" className="pt-2">
               <TabsList className="grid grid-cols-5 w-[600px]">
