@@ -31,7 +31,7 @@ export async function GET() {
 
     const projects = user.members.map((member) => ({
       ...member.project,
-      userRole: member.role,
+      memberRole: member.role,
     }));
 
     if (projects.length === 0) {

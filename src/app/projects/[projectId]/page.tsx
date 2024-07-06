@@ -105,6 +105,8 @@ export default function ProjectPage({
     updatedAt: new Date(user.updatedAt),
   })) as User[];
 
+  // const members = [] as Member[];
+
   const members = membersData.map((member) => ({
     ...member,
     createdAt: new Date(member.createdAt),
@@ -117,40 +119,48 @@ export default function ProjectPage({
     })),
   })) as Member[];
 
-  const tasks = tasksData.map((task) => ({
-    ...task,
-    dueDate: new Date(task.dueDate),
-    createdAt: new Date(task.createdAt),
-    updatedAt: new Date(task.updatedAt),
-  })) as ProjectTask[];
+  const tasks = [] as ProjectTask[];
+
+  // const tasks = tasksData.map((task) => ({
+  //   ...task,
+  //   dueDate: new Date(task.dueDate),
+  //   createdAt: new Date(task.createdAt),
+  //   updatedAt: new Date(task.updatedAt),
+  // })) as ProjectTask[];
 
   return (
     <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
-      {!members || members.length == 0 ? (
-        <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-          <FiUserPlus className="h-14 w-14 text-muted-foreground" />
+      <div className="flex items-center">
+        <h2 className="text-2xl font-bold tracking-tight">{project.name}</h2>
+      </div>
 
-          <h3 className="mt-4 text-2xl font-semibold">
-            No members in the project
-          </h3>
-          <p className="mb-4 mt-2 text-lg text-muted-foreground">
-            There are no members in the project. Add one below.
-          </p>
-          <AddMemberModal projectId={projectId} users={users} />
+      {!members || members.length == 0 ? (
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+          <div className="flex flex-col items-center gap-1 text-center">
+            <FiUserPlus className="h-12 w-12 text-muted-foreground" />
+
+            <h3 className="mt-4 text-xl font-semibold">
+              No members in the project
+            </h3>
+            <p className="mb-4 mt-2 text-base text-muted-foreground">
+              There are no members in the project. Add one below.
+            </p>
+            <AddMemberModal projectId={projectId} users={users} />
+          </div>
         </div>
       ) : !tasks || tasks.length == 0 ? (
-        <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-          <MdOutlineAddTask className="h-14 w-14 text-muted-foreground" />
-
-          <h3 className="mt-4 text-2xl font-semibold">No tasks added</h3>
-          <p className="mb-4 mt-2 text-lg text-muted-foreground">
-            You have not added any tasks. Add one below.
-          </p>
-          <AddTaskModal projectId={projectId} members={members} />
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+          <div className="flex flex-col items-center gap-1 text-center">
+            <MdOutlineAddTask className="h-12 w-12 text-muted-foreground" />
+            <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
+            <p className="mb-4 mt-2 text-base text-muted-foreground">
+              You have not added any tasks. Add one below.
+            </p>
+            <AddTaskModal projectId={projectId} members={members} />
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold tracking-tight">{project.name}</h2>
           <TaskOverview tasks={tasks} />
           <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
             <TaskChart tasks={tasks} />

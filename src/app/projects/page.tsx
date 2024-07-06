@@ -15,7 +15,7 @@ import { projectsData } from "./components/projects";
 import { ProjectRole, ProjectStatus } from "@/lib/config";
 
 type UserProject = Project & {
-  userRole: ProjectRole;
+  memberRole: ProjectRole;
 };
 
 export default function Projects() {
@@ -49,7 +49,7 @@ export default function Projects() {
     createdAt: new Date(project.createdAt),
     updatedAt: new Date(project.updatedAt),
     invitationCode: {
-      ...project.invitationCode,
+      code: project.invitationCode.code,
       expiresAt: new Date(project.invitationCode.expiresAt),
     },
   }));
