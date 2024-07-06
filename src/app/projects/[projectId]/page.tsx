@@ -1,6 +1,6 @@
 "use client";
 
-import TaskOverview from "./components/task-overview";
+import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
 import { Project } from "@/lib/schema/ProjectSchema";
@@ -20,7 +20,6 @@ import { tasksData } from "./components/tasks";
 import { TbPlaylistX } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { IoMdExit } from "react-icons/io";
-import ProjectOverview from "./components/project-overview";
 import { ProjectStatus } from "@/lib/config";
 
 export default function ProjectPage({
