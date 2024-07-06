@@ -18,6 +18,8 @@ import { usersData } from "./components/users";
 import { membersData } from "./components/members";
 import { tasksData } from "./components/tasks";
 import { TbPlaylistX } from "react-icons/tb";
+import { Button } from "@/components/ui/button";
+import { IoMdExit } from "react-icons/io";
 
 export default function ProjectPage({
   params,
@@ -125,9 +127,13 @@ export default function ProjectPage({
   })) as ProjectTask[];
 
   return (
-    <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
-      <div className="flex items-center">
+    <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
+      <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">{project.name}</h2>
+        <Button variant="destructive" size="sm">
+          <IoMdExit className="mr-1 h-5 w-5" />
+          Leave Project
+        </Button>
       </div>
 
       {!members || members.length == 0 ? (

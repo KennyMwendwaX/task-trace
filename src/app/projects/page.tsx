@@ -49,7 +49,7 @@ export default function Projects() {
     createdAt: new Date(project.createdAt),
     updatedAt: new Date(project.updatedAt),
     invitationCode: {
-      code: project.invitationCode.code,
+      ...project.invitationCode,
       expiresAt: new Date(project.invitationCode.expiresAt),
     },
   }));
