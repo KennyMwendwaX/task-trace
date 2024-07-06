@@ -96,11 +96,11 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   return (
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
+        <div className="text-2xl font-bold tracking-tight">
+          {project.name} Tasks
+        </div>
         {tasks && tasks.length > 0 ? (
           <>
-            <div className="text-2xl font-bold tracking-tight">
-              {project.name} Tasks
-            </div>
             <div className="text-lg text-muted-foreground">
               Here&apos;s a list of your project members!
             </div>
@@ -165,17 +165,16 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
             </Tabs>
           </>
         ) : (
-          <>
-            <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
-              <TbPlaylistX className="h-14 w-14 text-muted-foreground" />
-
-              <h3 className="mt-4 text-2xl font-semibold">No tasks added</h3>
-              <p className="mb-4 mt-2 text-lg text-muted-foreground">
+          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+            <div className="flex flex-col items-center gap-1 text-center">
+              <TbPlaylistX className="h-12 w-12 text-muted-foreground" />
+              <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
+              <p className="mb-4 mt-2 text-base text-muted-foreground">
                 You have not added any tasks. Add one below.
               </p>
               <AddTaskModal projectId={projectId} members={members} />
             </div>
-          </>
+          </div>
         )}
       </main>
     </>

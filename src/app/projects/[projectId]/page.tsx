@@ -8,7 +8,6 @@ import { ProjectTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/loading";
-import { MdOutlineAddTask, MdOutlineFolderOff } from "react-icons/md";
 import AddTaskModal from "@/components/AddTaskModal";
 import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
@@ -18,6 +17,7 @@ import { projectData } from "./components/project";
 import { usersData } from "./components/users";
 import { membersData } from "./components/members";
 import { tasksData } from "./components/tasks";
+import { TbPlaylistX } from "react-icons/tb";
 
 export default function ProjectPage({
   params,
@@ -105,8 +105,6 @@ export default function ProjectPage({
     updatedAt: new Date(user.updatedAt),
   })) as User[];
 
-  // const members = [] as Member[];
-
   const members = membersData.map((member) => ({
     ...member,
     createdAt: new Date(member.createdAt),
@@ -119,14 +117,12 @@ export default function ProjectPage({
     })),
   })) as Member[];
 
-  const tasks = [] as ProjectTask[];
-
-  // const tasks = tasksData.map((task) => ({
-  //   ...task,
-  //   dueDate: new Date(task.dueDate),
-  //   createdAt: new Date(task.createdAt),
-  //   updatedAt: new Date(task.updatedAt),
-  // })) as ProjectTask[];
+  const tasks = tasksData.map((task) => ({
+    ...task,
+    dueDate: new Date(task.dueDate),
+    createdAt: new Date(task.createdAt),
+    updatedAt: new Date(task.updatedAt),
+  })) as ProjectTask[];
 
   return (
     <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
@@ -151,7 +147,7 @@ export default function ProjectPage({
       ) : !tasks || tasks.length == 0 ? (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
           <div className="flex flex-col items-center gap-1 text-center">
-            <MdOutlineAddTask className="h-12 w-12 text-muted-foreground" />
+            <TbPlaylistX className="h-12 w-12 text-muted-foreground" />
             <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
             <p className="mb-4 mt-2 text-base text-muted-foreground">
               You have not added any tasks. Add one below.
