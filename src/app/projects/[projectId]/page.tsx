@@ -164,8 +164,7 @@ export default function ProjectPage({
         </div>
       ) : (
         <div className="space-y-4">
-          <ProjectOverview />
-          {/* <TaskOverview tasks={tasks} /> */}
+          <ProjectOverview tasks={tasks} />
           <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
             <TaskChart tasks={tasks} />
             <RecentTasks projectId={projectId} tasks={tasks} />

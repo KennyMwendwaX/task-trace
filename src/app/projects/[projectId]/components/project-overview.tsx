@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import {
   LuUsers,
   LuCheckCircle,
@@ -9,7 +10,47 @@ import {
   LuUser,
 } from "react-icons/lu";
 
-export default function ProjectOverview() {
+type Props = {
+  tasks: ProjectTask[];
+};
+
+export default function ProjectOverview({ tasks }: Props) {
+  const tasksDone = tasks.filter((task) => task.status === "DONE").length;
+  const tasksTodo = tasks.filter((task) => task.status === "TO_DO").length;
+  const tasksInProgress = tasks.filter(
+    (task) => task.status === "IN_PROGRESS"
+  ).length;
+  const tasksCanceled = tasks.filter(
+    (task) => task.status === "CANCELED"
+  ).length;
+
+  const cardData = [
+    {
+      title: "Done",
+      icon: LuCheckCircle,
+      color: "text-green-500",
+      count: tasksDone,
+    },
+    {
+      title: "Todo",
+      icon: LuCircle,
+      color: "text-blue-500",
+      count: tasksTodo,
+    },
+    {
+      title: "In Progress",
+      icon: LuClock,
+      color: "text-orange-500",
+      count: tasksInProgress,
+    },
+    {
+      title: "Canceled",
+      icon: LuXCircle,
+      color: "text-red-500",
+      count: tasksCanceled,
+    },
+  ];
+
   return (
     <Card className="rounded-xl overflow-hidden">
       <div className="p-6 space-y-6">
@@ -51,32 +92,7 @@ export default function ProjectOverview() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            {
-              title: "Done",
-              icon: LuCheckCircle,
-              color: "text-green-500",
-              count: 15,
-            },
-            {
-              title: "Todo",
-              icon: LuCircle,
-              color: "text-blue-500",
-              count: 16,
-            },
-            {
-              title: "In Progress",
-              icon: LuClock,
-              color: "text-orange-500",
-              count: 17,
-            },
-            {
-              title: "Canceled",
-              icon: LuXCircle,
-              color: "text-red-500",
-              count: 20,
-            },
-          ].map((item, index) => (
+          {cardData.map((item, index) => (
             <Card key={index} className="bg-gray-50 border-none shadow-sm">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
