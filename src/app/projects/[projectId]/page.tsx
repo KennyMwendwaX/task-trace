@@ -21,6 +21,7 @@ import { TbPlaylistX } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { IoMdExit } from "react-icons/io";
 import ProjectOverview from "./components/project-overview";
+import { ProjectStatus } from "@/lib/config";
 
 export default function ProjectPage({
   params,
@@ -99,7 +100,16 @@ export default function ProjectPage({
   //     </main>
   //   );
   // }
-  const project = projectData;
+  const project = {
+    ...projectData,
+    status: projectData.status as ProjectStatus,
+    createdAt: new Date(projectData.createdAt),
+    updatedAt: new Date(projectData.updatedAt),
+    invitationCode: {
+      ...projectData.invitationCode,
+      expiresAt: new Date(projectData.invitationCode.expiresAt),
+    },
+  };
 
   const users = usersData.map((user) => ({
     ...user,
@@ -164,7 +174,7 @@ export default function ProjectPage({
         </div>
       ) : (
         <div className="space-y-4">
-          <ProjectOverview tasks={tasks} />
+          <ProjectOverview project={project} tasks={tasks} members={members} />
           <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
             <TaskChart tasks={tasks} />
             <RecentTasks projectId={projectId} tasks={tasks} />
