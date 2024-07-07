@@ -4,13 +4,15 @@ import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import {
   LuUsers,
-  LuCheckCircle,
-  LuCircle,
-  LuClock,
-  LuXCircle,
   LuCalendar,
   LuUser,
 } from "react-icons/lu";
+import {
+  CheckCircledIcon,
+  CircleIcon,
+  StopwatchIcon,
+  CrossCircledIcon,
+} from "@radix-ui/react-icons";
 
 type Props = {
   project: Project;
@@ -31,25 +33,25 @@ export default function ProjectOverview({ project, tasks, members }: Props) {
   const cardData = [
     {
       title: "Done",
-      icon: LuCheckCircle,
+      icon: CheckCircledIcon,
       color: "text-green-500",
       count: tasksDone,
     },
     {
       title: "Todo",
-      icon: LuCircle,
+      icon: CircleIcon,
       color: "text-blue-500",
       count: tasksTodo,
     },
     {
       title: "In Progress",
-      icon: LuClock,
+      icon: StopwatchIcon,
       color: "text-orange-500",
       count: tasksInProgress,
     },
     {
       title: "Canceled",
-      icon: LuXCircle,
+      icon: CrossCircledIcon,
       color: "text-red-500",
       count: tasksCanceled,
     },
@@ -80,7 +82,9 @@ export default function ProjectOverview({ project, tasks, members }: Props) {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-600">Owner</p>
-                  <p className="text-sm font-bold text-gray-800">John Doe</p>
+                  <p className="text-sm font-bold text-gray-800">
+                    Johnny Billionz
+                  </p>
                 </div>
               </div>
               <div className="flex items-center bg-gray-100 rounded-full px-3 py-1">
