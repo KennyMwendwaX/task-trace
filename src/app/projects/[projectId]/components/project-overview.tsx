@@ -2,7 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Member } from "@/lib/schema/MemberSchema";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { LuUsers, LuCalendar, LuUser, LuCheckSquare } from "react-icons/lu";
+import { LuUsers, LuCalendar, LuUser2, LuCheckSquare } from "react-icons/lu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   CheckCircledIcon,
   CircleIcon,
@@ -84,9 +85,12 @@ export default function ProjectOverview({ project, tasks, members }: Props) {
               </div>
             </div>
             <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
-              <div className="bg-white rounded-full p-1">
-                <LuUser className="w-5 h-5 text-gray-600" />
-              </div>
+              <Avatar className="w-10 h-10 bg-white">
+                <AvatarImage src={""} />
+                <AvatarFallback className="bg-white">
+                  <LuUser2 className="w-5 h-5 text-gray-600" />
+                </AvatarFallback>
+              </Avatar>
               <div>
                 <p className="text-xs text-gray-500">Owner</p>
                 <p className="text-sm font-semibold text-gray-800">
