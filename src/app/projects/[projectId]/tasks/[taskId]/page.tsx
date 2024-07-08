@@ -9,7 +9,7 @@ import rehypeStringify from "rehype-stringify";
 import rehypeHighlight from "rehype-highlight";
 import { LuCalendar, LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
-import { FiTrash, FiEdit3 } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
