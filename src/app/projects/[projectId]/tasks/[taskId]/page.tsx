@@ -134,9 +134,9 @@ export default function TaskPage({ params }: TaskPageProps) {
   const status = statuses.find((s) => s.value === task.status);
   const priority = priorities.find((p) => p.value === task.priority);
 
-  const taskCreatedAt = format(task.createdAt, "dd MMM, yyyy • hh:mm:ss a..aa");
+  const taskCreatedAt = format(task.createdAt, "dd MMM, yyyy • hh:mm:ss a");
   const taskUpdatedAt = task.updatedAt
-    ? format(task.updatedAt, "dd MMM, yyyy • hh:mm:ss a..aa")
+    ? format(task.updatedAt, "dd MMM, yyyy • hh:mm:ss a")
     : null;
   const taskDueDate = format(task.dueDate, "dd MMM, yyyy");
 
