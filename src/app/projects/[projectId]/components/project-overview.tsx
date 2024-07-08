@@ -96,7 +96,9 @@ export default function ProjectOverview({ project, tasks, members }: Props) {
             </div>
             <div className="flex items-center text-gray-600 bg-gray-100 rounded-full px-3 py-1.5">
               <LuCalendar className="w-4 h-4 mr-2" />
-              <span className="text-sm">Updated: 2024-07-06</span>
+              <span className="text-sm font-semibold text-gray-800">
+                Updated: 2024-07-06
+              </span>
             </div>
           </div>
         </div>
