@@ -1,6 +1,7 @@
+import { auth } from "@/auth";
 import db from "@/database/db";
-import { members } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { members, projects } from "@/database/schema";
+import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -45,29 +46,71 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { memberId: string } }
+  { params }: { params: { projectId: string; memberId: string } }
 ) {
   try {
-    const memberId = params.memberId;
+    const session = await auth();
 
-    if (!memberId)
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId, memberId } = params;
+
+    if (!projectId || !memberId) {
       return NextResponse.json(
-        { message: "No memberId provided" },
+        { message: "Project ID and Member ID are required" },
         { status: 400 }
       );
+    }
 
-    const deletedMember = await db
-      .delete(members)
-      .where(eq(members.id, memberId));
+    const member = await db.query.members.findFirst({
+      where: and(
+        eq(members.id, memberId),
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
 
-    if (!deletedMember)
+    if (!member) {
       return NextResponse.json(
-        { message: "Failed to delete member" },
-        { status: 500 }
+        {
+          message: "You are not a member of this project",
+        },
+        { status: 403 }
+      );
+    }
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (project?.ownerId === session.user.id) {
+      return NextResponse.json(
+        {
+          message:
+            "Project owner cannot leave the project. Transfer ownership first.",
+        },
+        { status: 403 }
+      );
+    }
+
+    await db
+      .delete(members)
+      .where(
+        and(
+          eq(members.id, memberId),
+          eq(members.projectId, projectId),
+          eq(members.userId, session.user.id)
+        )
       );
 
-    return NextResponse.json({ message: "Member deleted" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Successfully left the project" },
+      { status: 200 }
+    );
   } catch (error) {
+    console.error("Error leaving project:", error);
     return NextResponse.json(
       { message: "Server error, try again later" },
       { status: 500 }
