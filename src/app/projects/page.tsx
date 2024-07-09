@@ -13,13 +13,17 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { projectsData } from "./components/projects";
 import { ProjectRole, ProjectStatus } from "@/lib/config";
+import { useSearchParams, useRouter } from "next/navigation";
 
-type UserProject = Project & {
+interface UserProject extends Project {
   memberRole: ProjectRole;
-};
+}
 
 export default function Projects() {
   const session = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const search = searchParams.get("search") || "";
 
   const userId = session.data?.user?.id;
 
@@ -54,9 +58,28 @@ export default function Projects() {
     },
   }));
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchQuery = e.target.value;
+    router.push(`/projects?search=${encodeURIComponent(searchQuery)}`, {
+      scroll: false,
+    });
+  };
+
+  const filteredUserProjects = userProjects.filter((project) =>
+    project.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredMemberProjects = memberProjects.filter((project) =>
+    project.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const hasProjects = userProjects.length > 0 || memberProjects.length > 0;
+  const hasFilteredProjects =
+    filteredUserProjects.length > 0 || filteredMemberProjects.length > 0;
+
   return (
     <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
-      {userProjects.length > 0 || memberProjects.length > 0 ? (
+      {hasProjects || search ? (
         <>
           <div className="flex items-center justify-between sm:gap-2">
             <div className="relative md:grow-0">
@@ -65,59 +88,56 @@ export default function Projects() {
                 type="search"
                 placeholder="Search projects..."
                 className="w-[200px] rounded-lg bg-background pl-8 md:w-[345px] lg:w-[400px]"
+                value={search}
+                onChange={handleSearch}
               />
             </div>
             <AddProjectModal />
           </div>
-          {userProjects.length > 0 ? (
+
+          {hasFilteredProjects ? (
             <>
-              <div className="flex items-center mt-5">
-                <LuPin className="mr-2 w-7 h-7" />
-                <span className="text-xl font-semibold">My Projects</span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
-                {userProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-              {memberProjects.length > 0 ? (
-                <div className="mt-6">
-                  <div className="flex items-center">
-                    <LuFolders className="mr-2 w-7 h-7" />
-                    <span className="text-xl font-semibold">
-                      Member Projects
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
-                    {memberProjects.map((project) => (
-                      <ProjectCard key={project.id} project={project} />
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </>
-          ) : (
-            <>
-              {memberProjects.length > 0 ? (
+              {filteredUserProjects.length > 0 && (
                 <>
                   <div className="flex items-center mt-5">
-                    <LuFolders className="mr-2 w-7 h-7" />
-                    <span className="text-xl font-semibold">Projects</span>
+                    <LuPin className="mr-2 w-7 h-7" />
+                    <span className="text-xl font-semibold">My Projects</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
-                    {memberProjects.map((project) => (
+                    {filteredUserProjects.map((project) => (
                       <ProjectCard key={project.id} project={project} />
                     ))}
                   </div>
                 </>
-              ) : null}
+              )}
+
+              {filteredMemberProjects.length > 0 && (
+                <div className="mt-6">
+                  <div className="flex items-center">
+                    <LuFolders className="mr-2 w-7 h-7" />
+                    <span className="text-xl font-semibold">
+                      {filteredUserProjects.length > 0
+                        ? "Member Projects"
+                        : "Projects"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
+                    {filteredMemberProjects.map((project) => (
+                      <ProjectCard key={project.id} project={project} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
+          ) : (
+            <div className="text-center mt-8">
+              <p>No projects found matching &quot;{search}&quot;</p>
+            </div>
           )}
         </>
       ) : (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
           <MdOutlineFolderOff className="h-14 w-14 text-muted-foreground" />
-
           <h3 className="mt-4 text-2xl font-semibold">No projects found</h3>
           <p className="mb-4 mt-2 text-lg text-muted-foreground">
             You do not have any project. Add one below or join a project.

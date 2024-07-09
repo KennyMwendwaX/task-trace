@@ -11,7 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Project } from "@/lib/schema/ProjectSchema";
 import { LuMoreVertical, LuCalendar, LuCheckCircle2 } from "react-icons/lu";
-import { projectStatuses } from "@/lib/config";
+import { ProjectRole, projectStatuses } from "@/lib/config";
 import Image from "next/image";
 import Logo from "../../../../public/logo.png";
 import Link from "next/link";
