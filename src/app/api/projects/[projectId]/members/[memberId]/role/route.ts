@@ -34,14 +34,17 @@ export async function PATCH(
       );
     }
 
-    const currentMember = await db.query.members.findFirst({
+    const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
         eq(members.userId, session.user.id)
       ),
     });
 
-    if (!currentMember || !["OWNER", "ADMIN"].includes(currentMember.role)) {
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
       return NextResponse.json(
         { message: "You don't have permission to change member roles" },
         { status: 403 }
