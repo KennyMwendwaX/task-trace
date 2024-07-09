@@ -6,19 +6,26 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { memberId: string } }
+  { params }: { params: { projectId: string; memberId: string } }
 ) {
   try {
-    const memberId = params.memberId;
+    const session = await auth();
 
-    if (!memberId)
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId, memberId } = params;
+
+    if (!projectId || !memberId) {
       return NextResponse.json(
-        { message: "No member Id found" },
-        { status: 404 }
+        { message: "Project ID and Member ID are required" },
+        { status: 400 }
       );
+    }
 
     const member = await db.query.members.findFirst({
-      where: (member, { eq }) => eq(member.id, memberId),
+      where: and(eq(members.id, memberId), eq(projects.id, projectId)),
       with: {
         user: {
           columns: {
