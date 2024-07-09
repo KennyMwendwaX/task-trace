@@ -135,7 +135,7 @@ export async function POST(
         { status: 400 }
       );
 
-    const task = await db.insert(tasks).values({
+    await db.insert(tasks).values({
       name: name,
       label: label,
       priority: priority,
@@ -145,12 +145,6 @@ export async function POST(
       memberId: memberId,
       projectId: projectId,
     });
-
-    if (!task)
-      return NextResponse.json(
-        { message: "Failed to add task" },
-        { status: 500 }
-      );
 
     return NextResponse.json(
       { message: "Task added to project" },

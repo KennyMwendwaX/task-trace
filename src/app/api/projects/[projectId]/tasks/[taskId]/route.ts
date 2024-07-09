@@ -3,12 +3,19 @@ import { NextResponse } from "next/server";
 import db from "@/database/db";
 import { eq } from "drizzle-orm";
 import { tasks } from "@/database/schema";
+import { auth } from "@/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { taskId: string } }
 ) {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const taskId = params.taskId;
 
     if (!taskId)
