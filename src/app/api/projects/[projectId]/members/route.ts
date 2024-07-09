@@ -1,13 +1,21 @@
 import { memberFormSchema } from "@/lib/schema/MemberSchema";
 import { NextResponse } from "next/server";
 import db from "@/database/db";
-import { members } from "@/database/schema";
+import { members, projects } from "@/database/schema";
+import { eq } from "drizzle-orm";
+import { auth } from "@/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const projectId = params.projectId;
 
     if (!projectId)
@@ -16,7 +24,7 @@ export async function GET(
         { status: 404 }
       );
     const project = await db.query.projects.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+      where: eq(projects.id, projectId),
     });
 
     if (!project)

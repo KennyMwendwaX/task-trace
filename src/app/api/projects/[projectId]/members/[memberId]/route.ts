@@ -92,6 +92,16 @@ export async function DELETE(
       where: eq(projects.id, projectId),
     });
 
+    if (project?.ownerId === session.user.id) {
+      return NextResponse.json(
+        {
+          message:
+            "Project owner cannot leave the project. Transfer ownership first.",
+        },
+        { status: 403 }
+      );
+    }
+
     await db
       .delete(members)
       .where(
