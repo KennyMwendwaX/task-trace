@@ -1,14 +1,22 @@
 import { taskFormSchema } from "@/lib/schema/TaskSchema";
 import { NextResponse } from "next/server";
 import db from "@/database/db";
-import { tasks } from "@/database/schema";
+import { members, projects, tasks } from "@/database/schema";
+import { and, eq } from "drizzle-orm";
+import { auth } from "@/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
   try {
-    const projectId = params.projectId;
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId } = params;
 
     if (!projectId)
       return NextResponse.json(
@@ -17,7 +25,7 @@ export async function GET(
       );
 
     const project = await db.query.projects.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+      where: eq(projects.id, projectId),
     });
 
     if (!project)
@@ -57,19 +65,25 @@ export async function POST(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
-  const req = await request.json();
-
-  const projectId = params.projectId;
-
-  if (!projectId)
-    return NextResponse.json(
-      { message: "No project Id found" },
-      { status: 404 }
-    );
-
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId } = params;
+
+    if (!projectId)
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
+
+    const req = await request.json();
+
     const project = await db.query.projects.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+      where: eq(projects.id, projectId),
     });
 
     if (!project)
@@ -77,6 +91,23 @@ export async function POST(
         { message: "Project not found" },
         { status: 400 }
       );
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return NextResponse.json(
+        { message: "You don't have permission to add tasks to this project" },
+        { status: 403 }
+      );
+    }
 
     const requestData = {
       ...req,
@@ -86,13 +117,16 @@ export async function POST(
     const validation = taskFormSchema.safeParse(requestData);
 
     if (!validation.success)
-      return NextResponse.json({ message: "Invalid data" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid data", errors: validation.error.errors },
+        { status: 400 }
+      );
 
     const { name, label, priority, dueDate, memberId, description } =
       validation.data;
 
     const member = await db.query.members.findFirst({
-      where: (member, { eq }) => eq(member.id, memberId),
+      where: eq(members.id, memberId),
     });
 
     if (!member)
