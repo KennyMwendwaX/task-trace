@@ -1,8 +1,15 @@
+import { auth } from "@/auth";
 import db from "@/database/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const users = await db.query.users.findMany();
 
     if (!users)
