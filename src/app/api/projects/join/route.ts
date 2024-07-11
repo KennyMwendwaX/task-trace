@@ -1,21 +1,36 @@
 import { auth } from "@/auth";
 import db from "@/database/db";
-import { members } from "@/database/schema";
+import { invitationCodes, members } from "@/database/schema";
+import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const requestSchema = z.object({
+  code: z.string().min(1),
+});
 
 export async function POST(request: Request) {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { code } = await request.json();
-    const userId = session.user.id;
+    const body = await request.json();
+    const validation = requestSchema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { message: "Invalid request data", errors: validation.error.errors },
+        { status: 400 }
+      );
+    }
+
+    const { code } = validation.data;
 
     const invitationCode = await db.query.invitationCodes.findFirst({
-      where: (invitationCodes, { eq }) => eq(invitationCodes.code, code),
+      where: eq(invitationCodes.code, code),
     });
 
     if (!invitationCode) {
@@ -39,8 +54,10 @@ export async function POST(request: Request) {
     const projectId = invitationCode.projectId;
 
     const existingMember = await db.query.members.findFirst({
-      where: (members, { and, eq }) =>
-        and(eq(members.userId, userId), eq(members.projectId, projectId)),
+      where: and(
+        eq(members.userId, session.user.id),
+        eq(members.projectId, projectId)
+      ),
     });
 
     if (existingMember) {
@@ -48,8 +65,8 @@ export async function POST(request: Request) {
     }
 
     await db.insert(members).values({
-      userId,
-      projectId,
+      userId: session.user.id,
+      projectId: projectId,
       role: "MEMBER",
     });
 
