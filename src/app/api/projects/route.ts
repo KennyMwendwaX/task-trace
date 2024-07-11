@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { auth } from "../../../auth";
 import db from "@/database/db";
-import { members, projects } from "@/database/schema";
+import { members, projects, users } from "@/database/schema";
+import { eq } from "drizzle-orm";
 
 export async function GET() {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const projects = await db.query.projects.findMany();
@@ -33,14 +34,14 @@ export async function POST(request: Request) {
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user.id;
 
     const user = await db.query.users.findFirst({
-      where: (user, { eq }) => eq(user.id, userId),
+      where: eq(users.id, userId),
     });
 
     if (!user)
