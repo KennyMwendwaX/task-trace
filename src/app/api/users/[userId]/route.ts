@@ -1,18 +1,30 @@
+import { auth } from "@/auth";
 import db from "@/database/db";
+import { users } from "@/database/schema";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { userId: string } }
 ) {
-  const id = params.id;
-
-  if (!id)
-    return NextResponse.json({ message: "No user Id found" }, { status: 400 });
-
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { userId } = params;
+
+    if (!userId)
+      return NextResponse.json(
+        { message: "No user Id found" },
+        { status: 400 }
+      );
+
     const user = await db.query.users.findFirst({
-      where: (user, { eq }) => eq(user.id, id),
+      where: eq(users.id, userId),
     });
 
     if (!user)
