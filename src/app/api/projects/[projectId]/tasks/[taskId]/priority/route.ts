@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 import { and, eq } from "drizzle-orm";
 
 const requestSchema = z.object({
-  label: taskSchema.shape.label,
+  priority: taskSchema.shape.priority,
 });
 
 export async function PATCH(
@@ -51,9 +51,9 @@ export async function PATCH(
     if (!task)
       return NextResponse.json({ message: "Task not found" }, { status: 404 });
 
-    const label = await request.json();
+    const priority = await request.json();
 
-    const validation = requestSchema.safeParse({ label });
+    const validation = requestSchema.safeParse({ priority });
 
     if (!validation.success)
       return NextResponse.json(
@@ -64,11 +64,11 @@ export async function PATCH(
     await db
       .update(tasks)
       .set({
-        label: validation.data.label,
+        priority: validation.data.priority,
       })
       .where(and(eq(tasks.id, taskId), eq(tasks.projectId, projectId)));
 
-    return NextResponse.json({ message: "Label changed" }, { status: 200 });
+    return NextResponse.json({ message: "Priority changed" }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },
