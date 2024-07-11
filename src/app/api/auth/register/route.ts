@@ -3,6 +3,7 @@ import * as bcrypt from "bcryptjs";
 import { userSchema, signupSchema } from "@/lib/schema/UserSchema";
 import db from "@/database/db";
 import { users } from "@/database/schema";
+import { eq } from "drizzle-orm";
 
 const requestSchema = userSchema.omit({
   id: true,
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     const { name, email, password } = validation.data;
 
     const userExists = await db.query.users.findFirst({
-      where: (userExists, { eq }) => eq(userExists.email, email),
+      where: eq(users.email, email),
     });
 
     if (userExists)
