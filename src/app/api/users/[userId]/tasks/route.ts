@@ -1,20 +1,28 @@
+import { auth } from "@/auth";
 import db from "@/database/db";
 import { members } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { userId: string } }
-) {
+export async function GET({ params }: { params: { userId: string } }) {
   try {
-    const userId = params.userId;
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { userId } = params;
 
     if (!userId)
       return NextResponse.json(
         { message: "No user Id found" },
         { status: 400 }
       );
+
+    if (session.user.id !== userId) {
+      return NextResponse.json({ message: "Access denied" }, { status: 403 });
+    }
 
     const userTasks = await db.query.members.findMany({
       where: eq(members.userId, userId),

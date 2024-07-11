@@ -23,6 +23,10 @@ export async function GET(
         { status: 400 }
       );
 
+    if (session.user.id !== userId) {
+      return NextResponse.json({ message: "Access denied" }, { status: 403 });
+    }
+
     const user = await db.query.users.findFirst({
       where: eq(users.id, userId),
     });
