@@ -2,9 +2,9 @@ import { auth } from "@/auth";
 import db from "@/database/db";
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
-import { invitationCodes } from "@/database/schema";
+import { invitationCodes, members, projects } from "@/database/schema";
 import add from "date-fns/add";
-import { eq } from "drizzle-orm/sql";
+import { and, eq } from "drizzle-orm/sql";
 
 export async function GET(
   req: Request,
@@ -13,14 +13,50 @@ export async function GET(
   try {
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const projectId = params.projectId;
+    const { projectId } = params;
+
+    if (!projectId)
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project)
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 400 }
+      );
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            "You don't have permission to add tasks to get invitation code",
+        },
+        { status: 403 }
+      );
+    }
 
     const invitationCode = await db.query.invitationCodes.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+      where: eq(projects.id, projectId),
     });
 
     if (!invitationCode) {
