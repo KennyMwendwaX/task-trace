@@ -30,7 +30,7 @@ export async function GET(
 
     if (!project)
       return NextResponse.json(
-        { message: "Project not found" },
+        { message: "No project Id found" },
         { status: 404 }
       );
 
@@ -80,8 +80,6 @@ export async function POST(
         { status: 404 }
       );
 
-    const req = await request.json();
-
     const project = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
     });
@@ -109,6 +107,8 @@ export async function POST(
       );
     }
 
+    const req = await request.json();
+
     const requestData = {
       ...req,
       dueDate: new Date(req.dueDate),
@@ -117,10 +117,7 @@ export async function POST(
     const validation = taskFormSchema.safeParse(requestData);
 
     if (!validation.success)
-      return NextResponse.json(
-        { message: "Invalid data", errors: validation.error.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Invalid data" }, { status: 400 });
 
     const { name, label, priority, dueDate, memberId, description } =
       validation.data;

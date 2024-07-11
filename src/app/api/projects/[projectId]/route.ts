@@ -1,17 +1,31 @@
 import db from "@/database/db";
-import { projects } from "@/database/schema";
+import { members, projects } from "@/database/schema";
 import { projectFormSchema } from "@/lib/schema/ProjectSchema";
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { auth } from "@/auth";
 
 export async function GET(
   request: Request,
   { params }: { params: { projectId: string } }
 ) {
   try {
-    const projectId = params.projectId;
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId } = params;
+
+    if (!projectId)
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
+
     const project = await db.query.projects.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+      where: eq(projects.id, projectId),
       with: {
         owner: {
           columns: {
@@ -48,15 +62,22 @@ export async function PUT(
   { params }: { params: { projectId: string } }
 ) {
   try {
-    const req = await request.json();
+    const session = await auth();
 
-    const projectId = params.projectId;
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId } = params;
 
     if (!projectId)
-      return NextResponse.json({ message: "No project Id" }, { status: 404 });
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
 
     const project = await db.query.projects.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
+      where: eq(projects.id, projectId),
     });
 
     if (!project)
@@ -65,6 +86,25 @@ export async function PUT(
         { status: 404 }
       );
 
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return NextResponse.json(
+        { message: "You don't have permission to add tasks to this project" },
+        { status: 403 }
+      );
+    }
+
+    const req = await request.json();
+
     const validation = projectFormSchema.safeParse(req);
 
     if (!validation.success)
@@ -72,7 +112,7 @@ export async function PUT(
 
     const { name, status, description } = validation.data;
 
-    const updatedProject = await db
+    await db
       .update(projects)
       .set({
         name: name,
@@ -80,9 +120,6 @@ export async function PUT(
         description: description,
       })
       .where(eq(projects.id, projectId));
-
-    if (!updatedProject)
-      return NextResponse.json({ message: "Failed to update project" });
 
     return NextResponse.json(
       { message: "Project successfully updated" },
