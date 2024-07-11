@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import db from "@/database/db";
-import { users } from "@/database/schema";
+import { members, users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
-export async function GET() {
+export async function GET({ params }: { params: { userId: string } }) {
   try {
     const session = await auth();
 
@@ -12,34 +12,36 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = session.user.id;
+    const { userId } = params;
 
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
+    if (!userId)
+      return NextResponse.json(
+        { message: "No user Id found" },
+        { status: 400 }
+      );
+
+    if (session.user.id !== userId) {
+      return NextResponse.json({ message: "Access denied" }, { status: 403 });
+    }
+
+    const userProjects = await db.query.members.findMany({
+      where: eq(members.userId, userId),
       with: {
-        members: {
-          with: {
-            project: true,
-          },
-        },
+        project: true,
       },
     });
 
-    if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
-
-    const projects = user.members.map((member) => ({
-      ...member.project,
-      memberRole: member.role,
-    }));
-
-    if (projects.length === 0) {
+    if (userProjects.length === 0) {
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
       );
     }
+
+    const projects = userProjects.map(({ project, role }) => ({
+      ...project,
+      memberRole: role,
+    }));
 
     return NextResponse.json({ projects }, { status: 200 });
   } catch (error) {
