@@ -168,21 +168,22 @@ export default function TaskPage({ params }: TaskPageProps) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 mt-4">
-        <div className="flex flex-wrap-reverse gap-3">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap gap-3 lg:flex-wrap-reverse">
           <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
             <MdAccessTime className="w-4 h-4 text-gray-600 mr-2" />
             <span className="text-sm font-semibold text-gray-800">
               Created: {taskCreatedAt}
             </span>
           </div>
-
-          <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-            <LuCalendar className="w-4 h-4 text-gray-600 mr-2" />
-            <span className="text-sm font-semibold text-gray-800">
-              Updated: {taskUpdatedAt}
-            </span>
-          </div>
+          {taskUpdatedAt && (
+            <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
+              <LuCalendar className="w-4 h-4 text-gray-600 mr-2" />
+              <span className="text-sm font-semibold text-gray-800">
+                Updated: {taskUpdatedAt}
+              </span>
+            </div>
+          )}
           <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
             <LuTimer className="w-4 h-4 text-gray-600 mr-2" />
             <span className="text-sm font-semibold text-gray-800">
