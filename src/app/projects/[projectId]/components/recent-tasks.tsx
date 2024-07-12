@@ -75,9 +75,7 @@ export default function RecentTasks({ projectId, tasks }: Props) {
                   return (
                     <TableRow key={task.id}>
                       <TableCell className="font-medium hover:underline cursor-pointer">
-                        <Link
-                          className="hover:underline"
-                          href={`/projects/${projectId}/tasks/${task.id}`}>
+                        <Link href={`/projects/${projectId}/tasks/${task.id}`}>
                           {task.name}
                         </Link>
                       </TableCell>

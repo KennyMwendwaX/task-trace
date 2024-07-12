@@ -134,9 +134,9 @@ export default function TaskPage({ params }: TaskPageProps) {
   const status = statuses.find((s) => s.value === task.status);
   const priority = priorities.find((p) => p.value === task.priority);
 
-  const taskCreatedAt = format(task.createdAt, "dd MMM, yyyy • hh:mm:ss a");
+  const taskCreatedAt = format(task.createdAt, "dd MMM, yyyy • hh:mm a");
   const taskUpdatedAt = task.updatedAt
-    ? format(task.updatedAt, "dd MMM, yyyy • hh:mm:ss a")
+    ? format(task.updatedAt, "dd MMM, yyyy • hh:mm a")
     : null;
   const taskDueDate = format(task.dueDate, "dd MMM, yyyy");
 
@@ -176,10 +176,11 @@ export default function TaskPage({ params }: TaskPageProps) {
               Created: {taskCreatedAt}
             </span>
           </div>
+
           <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
             <LuCalendar className="w-4 h-4 text-gray-600 mr-2" />
             <span className="text-sm font-semibold text-gray-800">
-              Updated: {taskUpdatedAt || "Not updated"}
+              Updated: {taskUpdatedAt}
             </span>
           </div>
           <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
