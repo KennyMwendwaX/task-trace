@@ -3,18 +3,14 @@
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ResponsiveContainer,
-  Legend,
-  TooltipProps,
-  BarChart,
-  XAxis,
-  YAxis,
-  Bar,
-} from "recharts";
-import {
-  NameType,
-  ValueType,
-} from "recharts/types/component/DefaultTooltipContent";
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
 
 type Props = {
@@ -54,21 +50,11 @@ export default function TaskChart({ tasks }: Props) {
     (a, b) => statusOrder.indexOf(a.Status) - statusOrder.indexOf(b.Status)
   );
 
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: TooltipProps<ValueType, NameType>) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white border border-slate-900 p-3">
-          <div className="">{`${payload[0].name}`}</div>
-          <div className="text-purple-600">{`Tasks: ${payload[0].value}`}</div>
-        </div>
-      );
-    }
-
-    return null;
-  };
+  const chartConfig = {
+    Tasks: {
+      label: "Status",
+    },
+  } satisfies ChartConfig;
 
   return (
     <>
@@ -76,7 +62,7 @@ export default function TaskChart({ tasks }: Props) {
         <CardHeader>
           <CardTitle className="text-xl font-bold">Tasks Overview</CardTitle>
         </CardHeader>
-        <CardContent className="pt-2">
+        <CardContent className="pt-2 px-2">
           {tasks.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
               <TbChartBarOff className="h-8 w-8 mb-4" />
@@ -86,32 +72,29 @@ export default function TaskChart({ tasks }: Props) {
               <p className="text-sm text-center">You do not have any tasks.</p>
             </div>
           ) : (
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={statusChartData}>
-                  <XAxis
-                    dataKey="Status"
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Bar
-                    dataKey="Tasks"
-                    fill="currentColor"
-                    radius={[4, 4, 0, 0]}
-                    className="fill-primary"
-                  />
-                  <Legend />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <ChartContainer
+              config={chartConfig}
+              className="min-h-[300px] w-full">
+              <BarChart accessibilityLayer data={statusChartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="Status"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar
+                  dataKey="Tasks"
+                  fill="hsl(var(--primary))"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ChartContainer>
           )}
         </CardContent>
       </Card>

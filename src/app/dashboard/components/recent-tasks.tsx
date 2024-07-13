@@ -39,7 +39,7 @@ export default function RecentTasks({ tasks }: Props) {
           <div className="flex justify-between items-center">
             <CardTitle className="text-xl font-bold">Recent Tasks</CardTitle>
             <Link href="/tasks">
-              <Button variant="default" size="sm">
+              <Button variant="default" size="sm" className="hidden sm:flex">
                 View All
                 <LuArrowUpRight className="ml-2 h-4 w-4" />
               </Button>
