@@ -3,16 +3,17 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative">
+    <section className="relative overflow-hidden">
       {/* Illustration behind hero content */}
       <div
         className="absolute left-1/2 transform -translate-x-1/2 bottom-0 pointer-events-none -z-10"
         aria-hidden="true">
         <svg
-          width="1260"
+          width="1360"
           height="578"
           viewBox="0 0 1360 578"
-          xmlns="http://www.w3.org/2000/svg">
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-auto scale-150 origin-bottom">
           <defs>
             <linearGradient
               x1="50%"
@@ -32,9 +33,9 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 z-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Hero content */}
-        <div className="pt-32 pb-12 md:pt-40 md:pb-32">
+        <div className="pt-20 pb-12 md:pt-40 md:pb-20">
           {/* Section header */}
           <div className="text-center pb-12 md:pb-16">
             <h1
