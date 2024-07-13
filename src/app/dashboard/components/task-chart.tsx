@@ -72,47 +72,46 @@ export default function TaskChart({ tasks }: Props) {
 
   return (
     <>
-      <Card>
-        <CardHeader className="flex flex-row items-center">
-          <CardTitle className="text-xl">Tasks Overview</CardTitle>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">Tasks Overview</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4">
+        <CardContent className="pt-2">
           {tasks.length === 0 ? (
-            <div className="mx-auto flex flex-col items-center justify-center text-center pt-16">
-              <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
-
-              <h3 className="mt-4 text-xl font-semibold">
+            <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
+              <TbChartBarOff className="h-8 w-8 mb-4" />
+              <h3 className="font-semibold text-center">
                 Tasks chart not available
               </h3>
-              <p className="mb-4 mt-2 text-base text-muted-foreground">
-                You do not have any tasks.
-              </p>
+              <p className="text-sm text-center">You do not have any tasks.</p>
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={statusChartData}>
-                <XAxis
-                  dataKey="Status"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Bar
-                  dataKey="Tasks"
-                  fill="currentColor"
-                  radius={[4, 4, 0, 0]}
-                  className="fill-primary"
-                />
-                <Legend />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={statusChartData}>
+                  <XAxis
+                    dataKey="Status"
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Bar
+                    dataKey="Tasks"
+                    fill="currentColor"
+                    radius={[4, 4, 0, 0]}
+                    className="fill-primary"
+                  />
+                  <Legend />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           )}
         </CardContent>
       </Card>

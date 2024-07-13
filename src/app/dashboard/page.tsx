@@ -46,7 +46,7 @@ export default function Dashboard() {
   // }
 
   return (
-    <>
+    <main className="container mx-auto px-4 sm:px-6 md:px-8 py-4 bg-muted/40 min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div className="text-2xl font-bold tracking-tight mb-4 sm:mb-0">
           Welcome, {session.data?.user?.name}!
@@ -60,10 +60,10 @@ export default function Dashboard() {
       <div className="mt-4">
         <TaskOverview tasks={tasks} />
       </div>
-      <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
+      <div className="w-full grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
         <TaskChart tasks={tasks} />
         <RecentTasks tasks={tasks} />
       </div>
-    </>
+    </main>
   );
 }
