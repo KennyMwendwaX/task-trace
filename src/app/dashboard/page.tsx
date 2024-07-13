@@ -47,11 +47,11 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="flex items-center">
-        <div className="text-2xl font-bold tracking-tight">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-2xl font-bold tracking-tight mb-4 sm:mb-0">
           Welcome, {session.data?.user?.name}!
         </div>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <JoinProjectModal />
           <AddProjectModal />
         </div>
