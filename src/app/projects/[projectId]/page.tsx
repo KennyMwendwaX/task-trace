@@ -174,7 +174,7 @@ export default function ProjectPage({
       ) : (
         <div className="space-y-4">
           <ProjectOverview project={project} tasks={tasks} members={members} />
-          <div className="grid gap-4 md:gap-4 lg:grid-cols-2 mt-6">
+          <div className="w-full grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
             <TaskChart tasks={tasks} />
             <RecentTasks projectId={projectId} tasks={tasks} />
           </div>
