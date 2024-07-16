@@ -3,18 +3,14 @@
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ResponsiveContainer,
-  Legend,
-  TooltipProps,
-  BarChart,
-  XAxis,
-  YAxis,
-  Bar,
-} from "recharts";
-import {
-  NameType,
-  ValueType,
-} from "recharts/types/component/DefaultTooltipContent";
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
 
 type Props = {
@@ -42,8 +38,8 @@ export default function TaskChart({ tasks }: Props) {
 
   // Convert the counts into an array of objects suitable for Recharts
   let statusChartData = Object.keys(statusCounts).map((status) => ({
-    Status: statusText[status],
-    Tasks: statusCounts[status],
+    status: statusText[status],
+    tasks: statusCounts[status],
   }));
 
   // Order of statuses
@@ -51,24 +47,19 @@ export default function TaskChart({ tasks }: Props) {
 
   // Sort the statusChartData based on the desired order
   statusChartData = statusChartData.sort(
-    (a, b) => statusOrder.indexOf(a.Status) - statusOrder.indexOf(b.Status)
+    (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
   );
 
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: TooltipProps<ValueType, NameType>) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white border border-slate-900 p-3">
-          <div className="">{`${payload[0].name}`}</div>
-          <div className="text-purple-600">{`Tasks: ${payload[0].value}`}</div>
-        </div>
-      );
-    }
-
-    return null;
-  };
+  const chartConfig = {
+    tasks: {
+      label: "Tasks",
+      color: "hsl(var(--primary))",
+    },
+    status: {
+      label: "Status",
+      color: "hsl(var(--muted-foreground))",
+    },
+  } satisfies ChartConfig;
 
   return (
     <>
@@ -76,7 +67,7 @@ export default function TaskChart({ tasks }: Props) {
         <CardHeader className="flex flex-row items-center">
           <CardTitle className="text-xl">Tasks Analytics Chart</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4">
+        <CardContent className="pt-2 px-2">
           {tasks.length === 0 ? (
             <div className="mx-auto flex flex-col items-center justify-center text-center py-16">
               <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
@@ -89,10 +80,12 @@ export default function TaskChart({ tasks }: Props) {
               </p>
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={statusChartData}>
+            <ChartContainer
+              config={chartConfig}
+              className="min-h-[350px] w-full">
+              <BarChart accessibilityLayer data={statusChartData}>
                 <XAxis
-                  dataKey="Status"
+                  dataKey="status"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
@@ -104,15 +97,18 @@ export default function TaskChart({ tasks }: Props) {
                   tickLine={false}
                   axisLine={false}
                 />
-                <Bar
-                  dataKey="Tasks"
-                  fill="currentColor"
-                  radius={[4, 4, 0, 0]}
-                  className="fill-primary"
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
                 />
-                <Legend />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar
+                  dataKey="tasks"
+                  fill="hsl(var(--primary))"
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           )}
         </CardContent>
       </Card>

@@ -10,7 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
 
 type Props = {
@@ -60,6 +60,7 @@ export default function TaskChart({ tasks }: Props) {
       color: "hsl(var(--muted-foreground))",
     },
   } satisfies ChartConfig;
+
   return (
     <>
       <Card className="w-full">
@@ -78,7 +79,7 @@ export default function TaskChart({ tasks }: Props) {
           ) : (
             <ChartContainer
               config={chartConfig}
-              className="min-h-[300px] w-full">
+              className="min-h-[350px] w-full">
               <BarChart accessibilityLayer data={statusChartData}>
                 <XAxis
                   dataKey="status"
