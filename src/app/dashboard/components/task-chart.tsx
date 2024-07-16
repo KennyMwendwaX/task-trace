@@ -10,7 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
 
 type Props = {
@@ -38,8 +38,8 @@ export default function TaskChart({ tasks }: Props) {
 
   // Convert the counts into an array of objects suitable for Recharts
   let statusChartData = Object.keys(statusCounts).map((status) => ({
-    Status: statusText[status],
-    Tasks: statusCounts[status],
+    status: statusText[status],
+    tasks: statusCounts[status],
   }));
 
   // Order of statuses
@@ -47,15 +47,19 @@ export default function TaskChart({ tasks }: Props) {
 
   // Sort the statusChartData based on the desired order
   statusChartData = statusChartData.sort(
-    (a, b) => statusOrder.indexOf(a.Status) - statusOrder.indexOf(b.Status)
+    (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
   );
 
   const chartConfig = {
-    Tasks: {
+    tasks: {
+      label: "Tasks",
+      color: "hsl(var(--primary))",
+    },
+    status: {
       label: "Status",
+      color: "hsl(var(--muted-foreground))",
     },
   } satisfies ChartConfig;
-
   return (
     <>
       <Card className="w-full">
@@ -76,20 +80,26 @@ export default function TaskChart({ tasks }: Props) {
               config={chartConfig}
               className="min-h-[300px] w-full">
               <BarChart accessibilityLayer data={statusChartData}>
-                <CartesianGrid vertical={false} />
                 <XAxis
-                  dataKey="Status"
+                  dataKey="status"
+                  stroke="#888888"
+                  fontSize={12}
                   tickLine={false}
-                  tickMargin={10}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
                   axisLine={false}
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
+                  content={<ChartTooltipContent />}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar
-                  dataKey="Tasks"
+                  dataKey="tasks"
                   fill="hsl(var(--primary))"
                   radius={[4, 4, 0, 0]}
                 />
