@@ -41,19 +41,19 @@ export default function RecentTasks({ projectId, tasks }: Props) {
   return (
     <>
       <Card>
-        <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardTitle className="text-xl">Recent Tasks</CardTitle>
-            <CardDescription>
-              Tasks recently added to the project.
-            </CardDescription>
-          </div>
-          <Button asChild size="sm" className="ml-auto gap-1">
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-xl font-bold">Recent Tasks</CardTitle>
+            <Button asChild size="sm" className="ml-auto gap-1">
             <Link href={`/projects/${projectId}/tasks`}>
               View All
               <LuArrowUpRight className="h-4 w-4" />
             </Link>
           </Button>
+          </div>
+          <CardDescription>
+              Tasks recently added to the project.
+            </CardDescription>
         </CardHeader>
         <CardContent>
           {recentTasks.length > 0 ? (
