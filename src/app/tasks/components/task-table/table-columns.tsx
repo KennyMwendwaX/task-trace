@@ -79,6 +79,9 @@ export const TableColumns: ColumnDef<UserTask>[] = [
         </div>
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "status",
@@ -107,6 +110,9 @@ export const TableColumns: ColumnDef<UserTask>[] = [
         </div>
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "priority",
@@ -132,6 +138,9 @@ export const TableColumns: ColumnDef<UserTask>[] = [
           <span>{priority.label}</span>
         </div>
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {
