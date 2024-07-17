@@ -39,11 +39,6 @@ export default function UserTasks() {
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       ) as UserTask[]) || [];
 
-  const tasksDone = tasks.filter((task) => task.status === "DONE");
-  const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
-  const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
-  const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
-
   // if (tasksIsLoading) {
   //   return <Loading />;
   // }

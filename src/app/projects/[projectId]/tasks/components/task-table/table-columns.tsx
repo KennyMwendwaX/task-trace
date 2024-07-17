@@ -115,6 +115,9 @@ export const TableColumns = ({
         </div>
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "priority",
@@ -140,6 +143,9 @@ export const TableColumns = ({
           <span>{priority.label}</span>
         </div>
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {

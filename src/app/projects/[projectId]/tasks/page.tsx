@@ -88,11 +88,6 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
     updatedAt: new Date(task.updatedAt),
   })) as ProjectTask[];
 
-  const tasksDone = tasks.filter((task) => task.status === "DONE");
-  const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
-  const tasksInProgress = tasks.filter((task) => task.status === "IN_PROGRESS");
-  const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
-
   return (
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
@@ -104,65 +99,14 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
             <div className="text-lg text-muted-foreground">
               Here&apos;s a list of your project tasks!
             </div>
-            <Tabs defaultValue="all" className="pt-2">
-              <TabsList className="grid grid-cols-5 w-[600px]">
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="done">Done</TabsTrigger>
-                <TabsTrigger value="todo">Todo</TabsTrigger>
-                <TabsTrigger value="inprogress">In Progress</TabsTrigger>
-                <TabsTrigger value="canceled">Canceled</TabsTrigger>
-              </TabsList>
-              <TabsContent value="all">
-                <div className="pt-4">
-                  <TaskTable
-                    data={tasks}
-                    columns={TableColumns({ projectId })}
-                    members={members}
-                    projectId={projectId}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="done">
-                <div className="pt-4">
-                  <TaskTable
-                    data={tasksDone}
-                    columns={TableColumns({ projectId })}
-                    members={members}
-                    projectId={projectId}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="todo">
-                <div className="pt-4">
-                  <TaskTable
-                    data={tasksTodo}
-                    columns={TableColumns({ projectId })}
-                    members={members}
-                    projectId={projectId}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="inprogress">
-                <div className="pt-4">
-                  <TaskTable
-                    data={tasksInProgress}
-                    columns={TableColumns({ projectId })}
-                    members={members}
-                    projectId={projectId}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="canceled">
-                <div className="pt-4">
-                  <TaskTable
-                    data={tasksCanceled}
-                    columns={TableColumns({ projectId })}
-                    members={members}
-                    projectId={projectId}
-                  />
-                </div>
-              </TabsContent>
-            </Tabs>
+            <div className="pt-4">
+              <TaskTable
+                data={tasks}
+                columns={TableColumns({ projectId })}
+                members={members}
+                projectId={projectId}
+              />
+            </div>
           </>
         ) : (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
