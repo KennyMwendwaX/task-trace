@@ -55,52 +55,9 @@ export default function UserTasks() {
           <div className="text-lg text-muted-foreground">
             Here&apos;s a list of your tasks from your member projects!
           </div>
-          <Tabs defaultValue="all" className="pt-2">
-            <div className="overflow-x-auto">
-              <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 whitespace-nowrap">
-                <TabsTrigger value="all" className="flex-shrink-0">
-                  All
-                </TabsTrigger>
-                <TabsTrigger value="done" className="flex-shrink-0">
-                  Done
-                </TabsTrigger>
-                <TabsTrigger value="todo" className="flex-shrink-0">
-                  Todo
-                </TabsTrigger>
-                <TabsTrigger value="inprogress" className="flex-shrink-0">
-                  In Progress
-                </TabsTrigger>
-                <TabsTrigger value="canceled" className="flex-shrink-0">
-                  Canceled
-                </TabsTrigger>
-              </TabsList>
-            </div>
-            <TabsContent value="all">
-              <div className="pt-4">
-                <TaskTable data={tasks} columns={TableColumns} />
-              </div>
-            </TabsContent>
-            <TabsContent value="done">
-              <div className="pt-4">
-                <TaskTable data={tasksDone} columns={TableColumns} />
-              </div>
-            </TabsContent>
-            <TabsContent value="todo">
-              <div className="pt-4">
-                <TaskTable data={tasksTodo} columns={TableColumns} />
-              </div>
-            </TabsContent>
-            <TabsContent value="inprogress">
-              <div className="pt-4">
-                <TaskTable data={tasksInProgress} columns={TableColumns} />
-              </div>
-            </TabsContent>
-            <TabsContent value="canceled">
-              <div className="pt-4">
-                <TaskTable data={tasksCanceled} columns={TableColumns} />
-              </div>
-            </TabsContent>
-          </Tabs>
+          <div className="pt-4">
+            <TaskTable data={tasks} columns={TableColumns} />
+          </div>
         </>
       ) : (
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
