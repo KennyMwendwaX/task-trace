@@ -6,6 +6,7 @@ import TableFacetedFilter from "./table-faceted-filter";
 import { priorities, statuses } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { LuSearch } from "react-icons/lu";
 
 interface TableToolbarProps<TData> {
   table: Table<TData>;
@@ -17,16 +18,20 @@ export default function TableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <>
-      <div className="flex flex-1 items-center space-x-2">
+    <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+      <div className="relative w-full sm:w-auto">
+        <LuSearch className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground" />
         <Input
+          type="search"
           placeholder="Search tasks..."
+          className="h-8 pl-8 focus:border-2 focus:border-blue-600 w-full sm:w-full md:w-[250px]"
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="h-8 focus:border-2 focus:border-blue-600 w-[150px] lg:w-[250px]"
         />
+      </div>
+      <div className="flex flex-wrap gap-2">
         {table.getColumn("status") && (
           <TableFacetedFilter
             column={table.getColumn("status")}
@@ -51,6 +56,6 @@ export default function TableToolbar<TData>({
           </Button>
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -84,7 +84,7 @@ export default function TaskTable<TData, TValue>({
   return (
     <>
       <div className="space-y-4">
-        <div className="flex justify-between">
+        <div className="flex flex-col">
           <TableToolbar table={table} />
         </div>
         <div className="rounded-md border bg-white">
