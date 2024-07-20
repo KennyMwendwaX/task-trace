@@ -81,13 +81,13 @@ export default function Projects() {
     <main className="container mx-auto px-4 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
       {hasProjects || search ? (
         <>
-          <div className="flex items-center justify-between sm:gap-2">
-            <div className="relative md:grow-0">
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:space-x-2">
+            <div className="relative w-full sm:w-auto sm:flex-grow">
               <LuSearch className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search projects..."
-                className="w-[200px] rounded-lg bg-background pl-8 md:w-[345px] lg:w-[400px]"
+                className="w-full pl-8 rounded-lg bg-background sm:w-[200px] md:w-[400px]"
                 value={search}
                 onChange={handleSearch}
               />
