@@ -34,19 +34,19 @@ export function SideNav({ className, links, ...props }: SidebarNavProps) {
         className
       )}
       {...props}>
-      {links.map((item) => (
+      {links.map((link) => (
         <Link
-          key={item.href}
-          href={item.href}
+          key={link.href}
+          href={link.href}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            pathname === item.href
+            pathname === link.href
               ? "bg-muted hover:bg-muted text-primary"
               : "hover:bg-muted hover:text-primary text-muted-foreground",
             "flex items-center justify-start gap-3 rounded-lg px-6 py-2.5 transition-all"
           )}>
-          {item.icon}
-          {item.title}
+          {link.icon}
+          {link.title}
         </Link>
       ))}
     </nav>

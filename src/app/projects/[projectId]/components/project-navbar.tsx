@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,26 +18,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import Logo from "../../../../../public/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
+import { useParams, usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { LuHome, LuLineChart, LuMenu, LuUsers } from "react-icons/lu";
+import { RxDashboard } from "react-icons/rx";
+import { GoTasklist } from "react-icons/go";
+import { HiOutlineCog } from "react-icons/hi";
 
 export default function ProjectNavbar() {
   return (
@@ -50,7 +41,7 @@ export default function ProjectNavbar() {
               variant="outline"
               size="icon"
               className="shrink-0 lg:hidden">
-              <Menu className="h-5 w-5" />
+              <LuMenu className="h-5 w-5" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
@@ -62,41 +53,7 @@ export default function ProjectNavbar() {
               <span className="text-lg tracking-tighter">TaskTrace</span>
               <span className="sr-only">Logo</span>
             </Link>
-            <nav className="grid gap-2 text-lg font-medium">
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground">
-                <Home className="h-5 w-5" />
-                Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2.5 text-foreground hover:text-foreground">
-                <ShoppingCart className="h-5 w-5" />
-                Projects
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground">
-                <Package className="h-5 w-5" />
-                Tasks
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground">
-                <Users className="h-5 w-5" />
-                Members
-              </Link>
-              <Link
-                href="#"
-                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground">
-                <LineChart className="h-5 w-5" />
-                Analytics
-              </Link>
-            </nav>
+            <SmSidebar />
             <div className="mt-auto">
               <Card>
                 <CardHeader>
@@ -156,6 +113,83 @@ export default function ProjectNavbar() {
           </DropdownMenu>
         </div>
       </header>
+    </>
+  );
+}
+
+interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
+  links: {
+    href: string;
+    title: string;
+    icon: JSX.Element;
+  }[];
+}
+
+export function SideNav({ className, links, ...props }: SidebarNavProps) {
+  const pathname = usePathname();
+
+  return (
+    <nav className={cn("grid gap-2 text-xl font-medium")} {...props}>
+      {links.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            pathname === link.href
+              ? "bg-muted hover:bg-muted text-primary"
+              : "hover:bg-muted hover:text-primary text-muted-foreground",
+            "flex items-center justify-start gap-3 rounded-lg px-4 py-2.5 transition-all"
+          )}>
+          {link.icon}
+          {link.title}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+export function SmSidebar() {
+  const params = useParams<{ projectId: string }>();
+  const projectId = params.projectId;
+
+  const links = [
+    {
+      href: `/dashboard`,
+      title: "Dashboard",
+      icon: <LuHome className="h-5 w-5" />,
+    },
+    {
+      href: `/projects/${projectId}`,
+      title: "Overview",
+      icon: <RxDashboard className="h-5 w-5" />,
+    },
+    {
+      href: `/projects/${projectId}/tasks`,
+      title: "Tasks",
+      icon: <GoTasklist className="h-6 w-6" />,
+    },
+    {
+      href: `/projects/${projectId}/members`,
+      title: "Members",
+      icon: <LuUsers className="h-5 w-5" />,
+    },
+    {
+      href: `/projects/${projectId}/analytics`,
+      title: "Analytics",
+      icon: <LuLineChart className="h-5 w-5" />,
+    },
+    {
+      href: `/projects/${projectId}/settings`,
+      title: "Settings",
+      icon: <HiOutlineCog className="h-6 w-6" />,
+    },
+  ];
+
+  return (
+    <>
+      {/* Arrow Home */}
+      <SideNav links={links} />
     </>
   );
 }
