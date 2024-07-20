@@ -326,7 +326,7 @@ export default function AddTaskModal({ projectId, members }: Props) {
                     />
                   </div>
                   <DialogFooter>
-                    <Button type="submit">Save Task</Button>
+                    <Button type="submit">Add Task</Button>
                   </DialogFooter>
                 </form>
               </Form>

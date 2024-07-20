@@ -204,7 +204,7 @@ export default function AddMemberModal({ projectId, users }: Props) {
                 </div>
 
                 <DialogFooter>
-                  <Button type="submit">Save Member</Button>
+                  <Button type="submit">Add Member</Button>
                 </DialogFooter>
               </form>
             </Form>
