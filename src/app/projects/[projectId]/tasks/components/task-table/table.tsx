@@ -94,7 +94,7 @@ export default function TaskTable<TData, TValue>({
   return (
     <>
       <div className="space-y-4">
-        <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
           <TableToolbar table={table} />
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
             <AddTaskModal projectId={projectId} members={members} />
