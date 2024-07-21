@@ -38,8 +38,9 @@ export const TableColumns = ({
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    id: "name",
     header: () => <TableColumnHeader name="Name" />,
+    accessorFn: (row) => row.user.name, // Use accessorFn to access nested property
     cell: ({ row }) => {
       const member = memberSchema.parse(row.original);
       const memberName = member.user.name;
