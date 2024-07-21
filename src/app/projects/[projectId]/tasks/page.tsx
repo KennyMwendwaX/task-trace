@@ -90,7 +90,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
+      <main className="flex flex-1 flex-col px-4 lg:pt-4 lg:ml-[260px]">
         <div className="text-2xl font-bold tracking-tight">
           {project.name} Tasks
         </div>

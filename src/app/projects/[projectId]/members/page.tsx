@@ -93,7 +93,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   return (
     <>
-      <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
+      <main className="container mx-auto px-4 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
         <div className="text-2xl font-bold tracking-tight">
           {project.name} Members
         </div>
