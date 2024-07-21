@@ -79,9 +79,6 @@ export const TableColumns: ColumnDef<UserTask>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
   },
   {
     accessorKey: "status",
