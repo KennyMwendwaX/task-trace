@@ -46,29 +46,18 @@ export const TableColumns: ColumnDef<UserTask>[] = [
           </span>
         );
       }
+      const badgeStyles = {
+        FEATURE: "border-blue-600 text-blue-600",
+        DOCUMENTATION: "border-purple-600 text-purple-600",
+        BUG: "border-amber-600 text-amber-600",
+        ERROR: "border-red-600 text-red-600",
+      };
+
       return (
         <div className="flex space-x-2">
-          {label.value === "FEATURE" ? (
-            <Badge className="border-blue-600 text-blue-600" variant="outline">
-              {label.label}
-            </Badge>
-          ) : label.value === "DOCUMENTATION" ? (
-            <Badge
-              className="border-purple-600 text-purple-600"
-              variant="outline">
-              {label.label}
-            </Badge>
-          ) : label.value === "BUG" ? (
-            <Badge
-              className="border-amber-600 text-amber-600"
-              variant="outline">
-              {label.label}
-            </Badge>
-          ) : label.value === "ERROR" ? (
-            <Badge className="border-red-600 text-red-600" variant="outline">
-              {label.label}
-            </Badge>
-          ) : null}
+          <Badge className={badgeStyles[label.value]} variant="outline">
+            {label.label}
+          </Badge>
           <span className="max-w-[500px] truncate font-medium">
             <Link
               className="hover:underline"
