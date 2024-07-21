@@ -46,6 +46,7 @@ export const TableColumns: ColumnDef<UserTask>[] = [
           </span>
         );
       }
+
       const badgeStyles = {
         FEATURE: "border-blue-600 text-blue-600",
         DOCUMENTATION: "border-purple-600 text-purple-600",
