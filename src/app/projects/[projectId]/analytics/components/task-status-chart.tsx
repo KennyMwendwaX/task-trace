@@ -97,11 +97,8 @@ export default function TaskStatusChart({ tasks }: Props) {
     [statusColors]
   ) satisfies ChartConfig;
 
-  const id = "task-pie-chart";
-
   return (
-    <Card data-chart={id}>
-      <ChartStyle id={id} config={chartConfig} />
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-0">
         <CardTitle className="text-xl">Tasks status Chart</CardTitle>
         {statusChartData.length > 0 && (
@@ -143,7 +140,6 @@ export default function TaskStatusChart({ tasks }: Props) {
           </div>
         ) : (
           <ChartContainer
-            id={id}
             config={chartConfig}
             className="mx-auto aspect-square w-full max-w-[300px]">
             <PieChart>
