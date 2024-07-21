@@ -29,7 +29,7 @@ type StatusCounts = {
   [key: string]: number;
 };
 
-export default function StatusTaskChart({ tasks }: Props) {
+export default function TaskStatusChart({ tasks }: Props) {
   const statusText: Record<Status, string> = React.useMemo(
     () => ({
       DONE: "Done",
