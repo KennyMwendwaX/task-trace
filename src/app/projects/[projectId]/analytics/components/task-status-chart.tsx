@@ -42,10 +42,10 @@ export default function TaskStatusChart({ tasks }: Props) {
 
   const statusColors = React.useMemo(
     () => ({
-      [statusText.DONE]: "hsl(var(--chart-1))",
-      [statusText.TO_DO]: "hsl(var(--chart-2))",
-      [statusText.IN_PROGRESS]: "hsl(var(--chart-3))",
-      [statusText.CANCELED]: "hsl(var(--chart-4))",
+      [statusText.DONE]: "#16a34a",
+      [statusText.TO_DO]: "#2563eb",
+      [statusText.IN_PROGRESS]: "#ea580c",
+      [statusText.CANCELED]: "#dc2626",
     }),
     [statusText]
   );
@@ -103,7 +103,7 @@ export default function TaskStatusChart({ tasks }: Props) {
     <Card data-chart={id}>
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex flex-row items-center justify-between pb-0">
-        <CardTitle className="text-xl">Tasks Analytics Chart</CardTitle>
+        <CardTitle className="text-xl">Tasks status Chart</CardTitle>
         {statusChartData.length > 0 && (
           <Select value={activeStatus} onValueChange={setActiveStatus}>
             <SelectTrigger
