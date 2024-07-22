@@ -24,86 +24,66 @@ type Props = {
   tasks: ProjectTask[];
 };
 
-type StatusCounts = {
-  [key: string]: number;
+const statusText: Record<Status, string> = {
+  DONE: "Done",
+  TO_DO: "Todo",
+  IN_PROGRESS: "In Progress",
+  CANCELED: "Canceled",
 };
 
+const statusColors: Record<string, string> = {
+  Done: "#16a34a",
+  Todo: "#2563eb",
+  "In Progress": "#ea580c",
+  Canceled: "#dc2626",
+};
+
+const statusOrder = ["Done", "Todo", "In Progress", "Canceled"];
+
 export default function TaskStatusChart({ tasks }: Props) {
-  const statusText: Record<Status, string> = useMemo(
-    () => ({
-      DONE: "Done",
-      TO_DO: "Todo",
-      IN_PROGRESS: "In Progress",
-      CANCELED: "Canceled",
-    }),
-    []
-  );
-
-  const statusColors = useMemo(
-    () => ({
-      [statusText.DONE]: "#16a34a",
-      [statusText.TO_DO]: "#2563eb",
-      [statusText.IN_PROGRESS]: "#ea580c",
-      [statusText.CANCELED]: "#dc2626",
-    }),
-    [statusText]
-  );
-
-  const statusOrder = useMemo(
-    () => ["Done", "Todo", "In Progress", "Canceled"],
-    []
-  );
-
   const statusChartData = useMemo(() => {
-    const statusCounts: StatusCounts = {};
-    tasks.forEach((task) => {
+    const statusCounts = tasks.reduce((acc, task) => {
       const status = statusText[task.status];
-      statusCounts[status] = (statusCounts[status] || 0) + 1;
-    });
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    return Object.keys(statusCounts)
+    return statusOrder
+      .filter((status) => statusCounts[status])
       .map((status) => ({
         status,
         tasks: statusCounts[status],
         fill: statusColors[status],
-      }))
-      .sort(
-        (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
-      );
-  }, [tasks, statusText, statusColors, statusOrder]);
+      }));
+  }, [tasks]);
 
-  const [activeStatus, setActiveStatus] = useState("Done");
+  const [activeStatus, setActiveStatus] = useState(() =>
+    statusChartData.length > 0 ? statusChartData[0].status : "Done"
+  );
 
   useEffect(() => {
-    if (statusChartData.length > 0) {
-      const availableStatus = statusOrder.find((status) =>
-        statusChartData.some((item) => item.status === status)
-      );
-      if (availableStatus) {
-        setActiveStatus(availableStatus);
-      }
+    if (
+      statusChartData.length > 0 &&
+      !statusChartData.some((item) => item.status === activeStatus)
+    ) {
+      setActiveStatus(statusChartData[0].status);
     }
-  }, [statusChartData, statusOrder]);
+  }, [statusChartData, activeStatus]);
 
   const activeIndex = useMemo(
     () => statusChartData.findIndex((item) => item.status === activeStatus),
     [statusChartData, activeStatus]
   );
 
-  const chartConfig = useMemo(
-    () => ({
-      tasks: {
-        label: "Tasks",
-      },
-      ...Object.fromEntries(
-        Object.entries(statusColors).map(([status, color]) => [
-          status.toLowerCase(),
-          { label: status, color },
-        ])
-      ),
-    }),
-    [statusColors]
-  ) satisfies ChartConfig;
+  const chartConfig: ChartConfig = {
+    tasks: { label: "Tasks" },
+    ...Object.fromEntries(
+      Object.entries(statusColors).map(([status, color]) => [
+        status.toLowerCase(),
+        { label: status, color },
+      ])
+    ),
+  };
 
   return (
     <Card>
