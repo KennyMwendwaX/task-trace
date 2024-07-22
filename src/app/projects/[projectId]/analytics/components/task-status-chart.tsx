@@ -86,7 +86,7 @@ export default function TaskStatusChart({ tasks }: Props) {
   };
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between pb-0">
         <CardTitle className="text-xl">Tasks status Chart</CardTitle>
         {statusChartData.length > 0 && (
