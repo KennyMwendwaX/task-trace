@@ -12,43 +12,36 @@ import {
 } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
+import { Status } from "@/lib/config";
+import { useMemo } from "react";
 
 type Props = {
   tasks: UserTask[];
 };
 
-type StatusCounts = {
-  [key: string]: number;
+const statusText: Record<Status, string> = {
+  DONE: "Done",
+  TO_DO: "Todo",
+  IN_PROGRESS: "In Progress",
+  CANCELED: "Canceled",
 };
 
+const statusOrder = ["Done", "Todo", "In Progress", "Canceled"];
+
 export default function TaskChart({ tasks }: Props) {
-  // Count the number of tasks for each status
-  const statusCounts: StatusCounts = {};
-  tasks.forEach((task) => {
-    const status = task.status;
-    statusCounts[status] = (statusCounts[status] || 0) + 1;
-  });
-
-  const statusText: Record<string, string> = {
-    DONE: "Done",
-    TO_DO: "Todo",
-    IN_PROGRESS: "In Progress",
-    CANCELED: "Canceled",
-  };
-
-  // Convert the counts into an array of objects suitable for Recharts
-  let statusChartData = Object.keys(statusCounts).map((status) => ({
-    status: statusText[status],
-    tasks: statusCounts[status],
-  }));
-
-  // Order of statuses
-  const statusOrder = ["Done", "Todo", "In Progress", "Canceled"];
-
-  // Sort the statusChartData based on the desired order
-  statusChartData = statusChartData.sort(
-    (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
-  );
+  const statusChartData = useMemo(() => {
+    const statusCounts = tasks.reduce((acc, task) => {
+      const status = statusText[task.status];
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    return statusOrder
+      .filter((status) => statusCounts[status])
+      .map((status) => ({
+        status,
+        tasks: statusCounts[status],
+      }));
+  }, [tasks]);
 
   const chartConfig = {
     tasks: {
