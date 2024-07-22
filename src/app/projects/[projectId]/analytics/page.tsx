@@ -15,7 +15,9 @@ export default function Analytics() {
   return (
     <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
       <div className="text-2xl font-bold tracking-tight">Analytics</div>
-      <TaskStatusChart tasks={tasks} />
+      <div className="w-full grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
+        <TaskStatusChart tasks={tasks} />
+      </div>
     </main>
   );
 }
