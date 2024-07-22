@@ -5,13 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
-  ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Pie, PieChart, Sector, Label } from "recharts";
 import { TbChartPieOff } from "react-icons/tb";
-import * as React from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -30,7 +29,7 @@ type StatusCounts = {
 };
 
 export default function TaskStatusChart({ tasks }: Props) {
-  const statusText: Record<Status, string> = React.useMemo(
+  const statusText: Record<Status, string> = useMemo(
     () => ({
       DONE: "Done",
       TO_DO: "Todo",
@@ -40,7 +39,7 @@ export default function TaskStatusChart({ tasks }: Props) {
     []
   );
 
-  const statusColors = React.useMemo(
+  const statusColors = useMemo(
     () => ({
       [statusText.DONE]: "#16a34a",
       [statusText.TO_DO]: "#2563eb",
@@ -50,39 +49,48 @@ export default function TaskStatusChart({ tasks }: Props) {
     [statusText]
   );
 
-  const statusChartData = React.useMemo(() => {
+  const statusOrder = useMemo(
+    () => ["Done", "Todo", "In Progress", "Canceled"],
+    []
+  );
+
+  const statusChartData = useMemo(() => {
     const statusCounts: StatusCounts = {};
     tasks.forEach((task) => {
       const status = statusText[task.status];
       statusCounts[status] = (statusCounts[status] || 0) + 1;
     });
 
-    return Object.keys(statusCounts).map((status) => ({
-      status,
-      tasks: statusCounts[status],
-      fill: statusColors[status],
-    }));
-  }, [tasks, statusText, statusColors]);
+    return Object.keys(statusCounts)
+      .map((status) => ({
+        status,
+        tasks: statusCounts[status],
+        fill: statusColors[status],
+      }))
+      .sort(
+        (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+      );
+  }, [tasks, statusText, statusColors, statusOrder]);
 
-  const [activeStatus, setActiveStatus] = React.useState(
-    statusChartData[0]?.status || ""
-  );
+  const [activeStatus, setActiveStatus] = useState("Done");
 
-  React.useEffect(() => {
-    if (
-      statusChartData.length > 0 &&
-      !statusChartData.some((item) => item.status === activeStatus)
-    ) {
-      setActiveStatus(statusChartData[0].status);
+  useEffect(() => {
+    if (statusChartData.length > 0) {
+      const availableStatus = statusOrder.find((status) =>
+        statusChartData.some((item) => item.status === status)
+      );
+      if (availableStatus) {
+        setActiveStatus(availableStatus);
+      }
     }
-  }, [statusChartData, activeStatus]);
+  }, [statusChartData, statusOrder]);
 
-  const activeIndex = React.useMemo(
+  const activeIndex = useMemo(
     () => statusChartData.findIndex((item) => item.status === activeStatus),
     [statusChartData, activeStatus]
   );
 
-  const chartConfig = React.useMemo(
+  const chartConfig = useMemo(
     () => ({
       tasks: {
         label: "Tasks",
