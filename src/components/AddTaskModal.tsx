@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,7 +12,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -38,7 +36,6 @@ import { useForm } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
-import { Textarea } from "@/components/ui/textarea";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -204,7 +201,6 @@ export default function AddTaskModal({ projectId, members }: Props) {
                     </div>
 
                     <div className="relative">
-                      {/* Use flex to align label and popover content */}
                       <FormField
                         control={form.control}
                         name="dueDate"
