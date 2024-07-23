@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
@@ -20,7 +20,8 @@ import { Session } from "next-auth";
 import { LuMenu } from "react-icons/lu";
 import Logo from "../../public/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -42,44 +43,7 @@ export default function Navbar() {
             <span className="text-lg tracking-tighter">TaskTrace</span>
             <span className="sr-only">Logo</span>
           </Link>
-          <nav className="grid gap-6 text-lg font-medium">
-            <Link
-              href="/dashboard"
-              className={`${
-                pathname === "/dashboard"
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              } transition-colors hover:text-foreground`}>
-              Dashboard
-            </Link>
-            <Link
-              href="/projects"
-              className={`${
-                pathname === "/projects"
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              } transition-colors hover:text-foreground`}>
-              Projects
-            </Link>
-            <Link
-              href="/tasks"
-              className={`${
-                pathname === "/tasks"
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              } transition-colors hover:text-foreground`}>
-              Tasks
-            </Link>
-            <Link
-              href="/settings"
-              className={`${
-                pathname === "/settings"
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              } transition-colors hover:text-foreground`}>
-              Settings
-            </Link>
-          </nav>
+          <SmSidebar />
         </SheetContent>
       </Sheet>
       <Link
@@ -161,5 +125,63 @@ export default function Navbar() {
         </DropdownMenu>
       </div>
     </header>
+  );
+}
+
+interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
+  links: {
+    href: string;
+    title: string;
+  }[];
+}
+
+export function SideNav({ className, links, ...props }: SidebarNavProps) {
+  const pathname = usePathname();
+
+  return (
+    <nav className={cn("grid gap-2 text-xl font-medium mt-2")} {...props}>
+      {links.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            pathname === link.href
+              ? "bg-muted hover:bg-muted text-primary"
+              : "hover:bg-muted hover:text-primary text-muted-foreground",
+            "flex items-center justify-start gap-3 rounded-lg px-4 py-2.5 transition-all"
+          )}>
+          {link.title}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+export function SmSidebar() {
+  const links = [
+    {
+      href: "/dashboard",
+      title: "Dashboard",
+    },
+    {
+      href: "/projects",
+      title: "Projects",
+    },
+    {
+      href: "/tasks",
+      title: "Tasks",
+    },
+    {
+      href: "/settings",
+      title: "Settings",
+    },
+  ];
+
+  return (
+    <>
+      {/* Arrow Home */}
+      <SideNav links={links} />
+    </>
   );
 }
