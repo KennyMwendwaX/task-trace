@@ -171,7 +171,7 @@ export default function AddProjectModal() {
                   />
                 </div>
                 <DialogFooter>
-                  <Button type="submit">Save Project</Button>
+                  <Button type="submit">Create Project</Button>
                 </DialogFooter>
               </form>
             </Form>
