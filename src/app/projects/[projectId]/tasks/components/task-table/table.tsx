@@ -39,14 +39,12 @@ import Link from "next/link";
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  members: Member[];
   projectId: string;
 }
 
 export default function TaskTable<TData, TValue>({
   columns,
   data,
-  members,
   projectId,
 }: TaskTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});

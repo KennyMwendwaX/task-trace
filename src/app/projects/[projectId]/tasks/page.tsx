@@ -106,7 +106,6 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
               <TaskTable
                 data={tasks}
                 columns={TableColumns({ projectId })}
-                members={members}
                 projectId={projectId}
               />
             </div>
