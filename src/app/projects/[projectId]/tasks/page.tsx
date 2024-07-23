@@ -13,6 +13,9 @@ import Loading from "@/components/loading";
 import { membersData } from "../components/members";
 import { tasksData } from "../components/tasks";
 import { projectData } from "../components/project";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { AiOutlinePlus } from "react-icons/ai";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
@@ -116,7 +119,12 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
               <p className="mb-4 mt-2 text-base text-muted-foreground">
                 You have not added any tasks. Add one below.
               </p>
-              <AddTaskModal projectId={projectId} members={members} />
+              <Link href={`/projects/${projectId}/tasks/create`}>
+                <Button className="flex items-center gap-1 rounded-3xl">
+                  <AiOutlinePlus className="w-4 h-4 text-white" />
+                  <span>Create Task</span>
+                </Button>
+              </Link>
             </div>
           </div>
         )}

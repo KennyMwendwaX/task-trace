@@ -32,6 +32,9 @@ import { IoDownloadOutline } from "react-icons/io5";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
 import { Member } from "@/lib/schema/MemberSchema";
+import { Button } from "@/components/ui/button";
+import { AiOutlinePlus } from "react-icons/ai";
+import Link from "next/link";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -97,7 +100,12 @@ export default function TaskTable<TData, TValue>({
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
           <TableToolbar table={table} />
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
-            <AddTaskModal projectId={projectId} members={members} />
+            <Link href={`/projects/${projectId}/tasks/create`}>
+              <Button className="flex items-center gap-1 rounded-3xl">
+                <AiOutlinePlus className="w-4 h-4 text-white" />
+                <span>Create Task</span>
+              </Button>
+            </Link>
             <CSVLink
               data={csvData}
               headers={headers}
