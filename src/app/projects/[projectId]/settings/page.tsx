@@ -219,7 +219,7 @@ export default function Settings({
               </CardContent>
             </Card>
 
-            <Card className="border-destructive">
+            <Card className="border-red-300 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-xl text-destructive">
                   Danger Zone
