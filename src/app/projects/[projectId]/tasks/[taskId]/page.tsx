@@ -144,7 +144,7 @@ export default function TaskPage({ params }: TaskPageProps) {
     <main className="flex flex-1 flex-col gap-6 p-4 sm:p-6 lg:ml-[260px] max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">{task.name}</h1>
+          <h1 className="text-xl sm:text-3xl font-bold mb-2">{task.name}</h1>
           <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
             {label && <TaskLabelBadge label={label} />}
             {status && <TaskStatusBadge status={status} />}
