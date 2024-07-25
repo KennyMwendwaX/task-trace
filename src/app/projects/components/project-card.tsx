@@ -100,7 +100,7 @@ export default function ProjectCard({ project }: Props) {
             {projectStatus?.label}
           </Badge>
           <Badge variant="outline" className="text-sm">
-            <LuUsers className="mr-1 h-3 w-3" /> {dummyProject.members.length}
+            <LuUsers className="mr-1 h-4 w-4" /> {dummyProject.members.length}{" "}
             members
           </Badge>
         </div>

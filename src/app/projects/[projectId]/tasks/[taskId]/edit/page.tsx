@@ -126,7 +126,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
   return (
     <main className="flex flex-1 flex-col gap-6 p-4 sm:p-6 lg:ml-[260px] max-w-6xl mx-auto">
       <div className="flex justify-between items-center">
-        <div className="text-2xl font-bold">Create New Task</div>
+        <div className="text-2xl font-bold">UpdateTask</div>
         <Button
           size="sm"
           variant="outline"
