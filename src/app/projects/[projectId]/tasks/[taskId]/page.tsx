@@ -9,7 +9,7 @@ import rehypeStringify from "rehype-stringify";
 import rehypeHighlight from "rehype-highlight";
 import { LuCalendar, LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
-import { FiTrash } from "react-icons/fi";
+import { FiEdit, FiTrash } from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,6 +18,7 @@ import EditTaskModal from "@/components/EditTaskModal";
 import { labels, priorities, statuses } from "@/lib/config";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { taskData } from "../components/task";
+import Link from "next/link";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -152,12 +153,14 @@ export default function TaskPage({ params }: TaskPageProps) {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <EditTaskModal
-            projectId={projectId}
-            memberId={task.memberId}
-            members={[]}
-            task={task}
-          />
+          <Link href={`/projects/${projectId}/tasks/${taskId}/edit`}>
+            <Button
+              variant="outline"
+              className="flex items-center gap-1 w-full">
+              <FiEdit />
+              Edit Task
+            </Button>
+          </Link>
           <Button
             variant="destructive"
             className="flex items-center justify-center w-full sm:w-auto"
