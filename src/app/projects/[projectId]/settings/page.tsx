@@ -228,8 +228,8 @@ export default function Settings({
 
               <CardContent>
                 {/* Leave Project */}
-                <div className="flex items-center justify-between py-3 border-t border-gray-200">
-                  <div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t border-gray-200">
+                  <div className="mb-2 sm:mb-0 text-left">
                     <h3 className="text-sm font-medium">Leave Project</h3>
                     <p className="text-sm text-gray-500">
                       You will lose access to this project
@@ -244,8 +244,8 @@ export default function Settings({
                         Leave Project
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader className="text-left">
                         <DialogTitle>
                           Are you sure you want to leave this project?
                         </DialogTitle>
@@ -254,7 +254,7 @@ export default function Settings({
                           to this project.
                         </DialogDescription>
                       </DialogHeader>
-                      <DialogFooter>
+                      <div className="flex justify-end gap-2 mt-4">
                         <DialogClose asChild>
                           <Button variant="outline" size="sm">
                             Close
@@ -263,43 +263,46 @@ export default function Settings({
                         <Button variant="destructive" size="sm">
                           Leave Project
                         </Button>
-                      </DialogFooter>
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </div>
 
                 {/* Delete Project */}
-                <div className="flex items-center justify-between py-3 border-t border-gray-200">
-                  <div>
-                    <h3 className="text-sm font-medium">Delete this project</h3>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t border-gray-200">
+                  <div className="mb-2 sm:mb-0 text-left">
+                    <h3 className="text-sm font-medium">Delete project</h3>
                     <p className="text-sm text-gray-500">
                       Once you delete a project, there is no going back.
                     </p>
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="destructive" size="sm">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="self-start sm:self-center">
                         Delete Project
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader className="text-left">
                         <DialogTitle>Are you absolutely sure?</DialogTitle>
                         <DialogDescription>
                           This action cannot be undone. This will permanently
                           delete the project and remove all associated data.
                         </DialogDescription>
                       </DialogHeader>
-                      <DialogFooter>
+                      <div className="flex justify-end gap-2 mt-4">
                         <DialogClose asChild>
                           <Button variant="outline" size="sm">
-                            Close
+                            Cancel
                           </Button>
                         </DialogClose>
                         <Button variant="destructive" size="sm">
                           Delete Project
                         </Button>
-                      </DialogFooter>
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </div>
