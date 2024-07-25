@@ -96,7 +96,7 @@ export default function TaskTable<TData, TValue>({
           <TableToolbar table={table} />
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
             <Link href={`/projects/${projectId}/tasks/create`}>
-              <Button className="flex items-center gap-1 rounded-3xl">
+              <Button className="flex items-center gap-1 rounded-3xl w-full sm:w-auto">
                 <AiOutlinePlus className="w-4 h-4 text-white" />
                 <span>Create Task</span>
               </Button>
