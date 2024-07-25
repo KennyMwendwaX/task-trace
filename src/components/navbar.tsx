@@ -73,6 +73,15 @@ export default function Navbar() {
           Projects
         </Link>
         <Link
+          href="/explore"
+          className={`${
+            pathname === "/explore"
+              ? "text-foreground"
+              : "text-muted-foreground"
+          } transition-colors hover:text-foreground`}>
+          Explore
+        </Link>
+        <Link
           href="/tasks"
           className={`${
             pathname === "/tasks" ? "text-foreground" : "text-muted-foreground"
@@ -167,6 +176,10 @@ export function SmSidebar() {
     {
       href: "/projects",
       title: "Projects",
+    },
+    {
+      href: "/explore",
+      title: "Explore",
     },
     {
       href: "/tasks",
