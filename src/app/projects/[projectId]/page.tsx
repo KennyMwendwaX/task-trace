@@ -138,19 +138,7 @@ export default function ProjectPage({
 
   return (
     <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
-        <h2 className="text-2xl font-bold tracking-tight truncate max-w-full sm:max-w-[calc(100%-140px)]">
-          {project.name}
-        </h2>
-        <Button
-          variant="destructive"
-          size="sm"
-          className="whitespace-nowrap shrink-0">
-          <IoMdExit className="mr-1 h-5 w-5" />
-          Leave Project
-        </Button>
-      </div>
-
+      <div className="text-2xl font-bold tracking-tight">{project.name}</div>
       {!members || members.length == 0 ? (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
           <div className="flex flex-col items-center gap-1 text-center">
