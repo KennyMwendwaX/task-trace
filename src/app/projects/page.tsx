@@ -51,7 +51,7 @@ export default function Projects() {
     ...project,
     status: project.status as ProjectStatus,
     createdAt: new Date(project.createdAt),
-    updatedAt: new Date(project.updatedAt),
+    updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
     invitationCode: {
       ...project.invitationCode,
       expiresAt: new Date(project.invitationCode.expiresAt),
