@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { projectsData } from "./components/projects";
 import { ProjectStatus } from "@/lib/config";

@@ -130,8 +130,12 @@ export default function Projects() {
               )}
             </>
           ) : (
-            <div className="text-center mt-8">
-              <p>No projects found matching &quot;{search}&quot;</p>
+            <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center pt-36">
+              <MdOutlineFolderOff className="h-14 w-14 text-muted-foreground" />
+              <h3 className="mt-4 text-2xl font-semibold">No projects found</h3>
+              <p className="mb-4 mt-2 text-lg text-muted-foreground">
+                Try adjusting your search input.
+              </p>
             </div>
           )}
         </>
