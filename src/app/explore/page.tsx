@@ -1,18 +1,14 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { projectsData } from "./components/projects";
-import { ProjectRole, ProjectStatus } from "@/lib/config";
+import { ProjectStatus } from "@/lib/config";
 import { Project } from "@/lib/schema/ProjectSchema";
 import ProjectCard from "./components/project-card";
 import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { LuFolders, LuSearch } from "react-icons/lu";
-import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
-import AddProjectModal from "@/components/AddProjectModal";
 import {
   Select,
   SelectContent,
@@ -20,14 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 
 export default function Explore() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const search = searchParams.get("search") || "";
-  const [filter, setFilter] = useState<"ALL" | "BUILDING" | "LIVE">("ALL");
-  const [sort, setSort] = useState<"date" | "name">("date");
+  const filter = searchParams.get("filter") || "ALL";
+  const sort = searchParams.get("sort") || "date";
 
   const projects: Project[] = projectsData.map((project) => ({
     ...project,
@@ -40,11 +36,28 @@ export default function Explore() {
     },
   }));
 
+  const updateUrlParams = (
+    newSearch?: string,
+    newFilter?: string,
+    newSort?: string
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    if (newSearch !== undefined) params.set("search", newSearch);
+    if (newFilter !== undefined) params.set("filter", newFilter);
+    if (newSort !== undefined) params.set("sort", newSort);
+    router.push(`/explore?${params.toString()}`, { scroll: false });
+  };
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchQuery = e.target.value;
-    router.push(`/explore?search=${encodeURIComponent(searchQuery)}`, {
-      scroll: false,
-    });
+    updateUrlParams(e.target.value, filter, sort);
+  };
+
+  const handleFilterChange = (value: string) => {
+    updateUrlParams(search, value, sort);
+  };
+
+  const handleSortChange = (value: string) => {
+    updateUrlParams(search, filter, value);
   };
 
   const filteredProjects = projects
@@ -74,9 +87,7 @@ export default function Explore() {
           />
         </div>
         <div className="flex gap-2">
-          <Select
-            value={filter}
-            onValueChange={(value: any) => setFilter(value)}>
+          <Select value={filter} onValueChange={handleFilterChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
@@ -86,7 +97,7 @@ export default function Explore() {
               <SelectItem value="LIVE">Live</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={sort} onValueChange={(value: any) => setSort(value)}>
+          <Select value={sort} onValueChange={handleSortChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
