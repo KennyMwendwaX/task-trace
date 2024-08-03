@@ -4,7 +4,7 @@ export const projectData = {
   status: "LIVE",
   description: "Tepesco vero subnecto accusamus viriliter.",
   ownerId: "cbf0c008-55fd-4e93-bc7f-1b822eeb0f67",
-  isPublic: false,
+  isPublic: true,
   owner: {
     name: "Ora Dare",
     email: "Jacinto.Robel10@yahoo.com",

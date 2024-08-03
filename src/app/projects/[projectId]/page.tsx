@@ -12,7 +12,7 @@ import AddTaskModal from "@/components/AddTaskModal";
 import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import AddMemberModal from "@/components/AddMemberModal";
-import { FiUserPlus } from "react-icons/fi";
+import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { projectData } from "./components/project";
 import { usersData } from "./components/users";
 import { membersData } from "./components/members";
@@ -21,6 +21,7 @@ import { TbPlaylistX } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { IoMdExit } from "react-icons/io";
 import { ProjectStatus } from "@/lib/config";
+import { Badge } from "@/components/ui/badge";
 
 export default function ProjectPage({
   params,
@@ -138,7 +139,24 @@ export default function ProjectPage({
 
   return (
     <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
-      <div className="text-2xl font-bold tracking-tight">{project.name}</div>
+      <div className="flex items-center gap-2">
+        <div className="text-2xl font-bold tracking-tight">{project.name}</div>
+        <Badge
+          variant={project.isPublic ? "secondary" : "outline"}
+          className="flex items-center gap-1">
+          {project.isPublic ? (
+            <>
+              <FiGlobe className="w-3 h-3" />
+              Public
+            </>
+          ) : (
+            <>
+              <FiLock className="w-3 h-3" />
+              Private
+            </>
+          )}
+        </Badge>
+      </div>
       {!members || members.length == 0 ? (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
           <div className="flex flex-col items-center gap-1 text-center">
