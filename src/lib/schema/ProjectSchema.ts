@@ -20,6 +20,7 @@ export const projectSchema = z.object({
     .max(200, {
       message: "Description cannot be longer than 200 characters",
     }),
+  isPublic: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
   owner: z.object({
@@ -35,6 +36,7 @@ export const projectSchema = z.object({
 // Omitted schema for client-side form validation
 export const projectFormSchema = projectSchema.omit({
   id: true,
+  isPublic: true,
   createdAt: true,
   updatedAt: true,
   ownerId: true,
