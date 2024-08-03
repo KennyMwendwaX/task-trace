@@ -1,5 +1,5 @@
 {
-  "id": "b36e80ac-5c16-4609-b4e0-98427059443d",
+  "id": "ee8ed0a4-205b-4e07-b13a-86fed42e7be8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -276,6 +276,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",

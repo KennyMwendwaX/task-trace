@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS "project" (
 	"name" text NOT NULL,
 	"status" text NOT NULL,
 	"description" text NOT NULL,
+	"is_public" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp (3) DEFAULT now() NOT NULL,
 	"updated_at" timestamp (3),
 	"owner_id" uuid NOT NULL
