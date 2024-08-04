@@ -27,36 +27,35 @@ export default function Projects() {
 
   const userId = session.data?.user?.id;
 
-  // const { data, isLoading, error } = useQuery({
-  //   queryKey: ["projects", userId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/projects/${userId}/projects`);
-  //     return data.projects as Project[];
-  //   },
-  // });
-
-  // const ownedProjects = data?.ownedProjects || [];
-  // const memberProjects = data?.memberProjects || [];
-
-  // if (isLoading) {
-  //   return (
-  //     <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
-  //       <Loading />
-  //     </main>
-  //   );
-  // }
-
-  const userProjects = [] as Project[];
-  const memberProjects = projectsData.map((project) => ({
-    ...project,
-    status: project.status as ProjectStatus,
-    createdAt: new Date(project.createdAt),
-    updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
-    invitationCode: {
-      ...project.invitationCode,
-      expiresAt: new Date(project.invitationCode.expiresAt),
+  const {
+    data: projectsData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["user-projects", userId],
+    queryFn: async () => {
+      if (!userId) throw new Error("User ID not found");
+      const { data } = await axios.get(`/api/users/${userId}/projects`);
+      return data.projects as UserProject[];
     },
-  }));
+    enabled: !!userId,
+  });
+
+  const userProjects = projectsData || [];
+  const ownedProjects =
+    projectsData?.filter((project) => project.memberRole === "OWNER") || [];
+  const adminProjects =
+    projectsData?.filter((project) => project.memberRole === "ADMIN") || [];
+  const memberProjects =
+    projectsData?.filter((project) => project.memberRole === "MEMBER") || [];
+
+  if (isLoading) {
+    return (
+      <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
+        <Loading />
+      </main>
+    );
+  }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchQuery = e.target.value;
