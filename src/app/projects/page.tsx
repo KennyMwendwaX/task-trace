@@ -44,9 +44,7 @@ export default function Projects() {
       );
   };
 
-  const isLoading = true;
-
-  const { data: projects = [] } = useQuery<UserProject[]>({
+  const { data: projects = [], isLoading } = useQuery<UserProject[]>({
     queryKey: ["user-projects", userId],
     queryFn: () => fetchUserProjects(userId),
     enabled: !!userId,

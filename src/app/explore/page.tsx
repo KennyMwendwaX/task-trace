@@ -1,8 +1,6 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { projectsData } from "./components/projects";
-import { ProjectStatus } from "@/lib/config";
 import { Project } from "@/lib/schema/ProjectSchema";
 import ProjectCard from "./components/project-card";
 import { Input } from "@/components/ui/input";
@@ -15,25 +13,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Explore() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const fetchPublicProjects = async (): Promise<Project[]> => {
+    const { data } = await axios.get("/api/projects");
+    return data.publicProjects
+      .map((project: Project) => ({
+        ...project,
+        createdAt: new Date(project.createdAt),
+        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+      }))
+      .sort(
+        (a: Project, b: Project) =>
+          b.createdAt.getTime() - a.createdAt.getTime()
+      );
+  };
+
+  const { data: projects = [], isLoading } = useQuery<Project[]>({
+    queryKey: ["public-projects"],
+    queryFn: () => fetchPublicProjects(),
+  });
+
+  if (isLoading) {
+    return (
+      <main className="container mx-auto px-8 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
+        <Loading />
+      </main>
+    );
+  }
+
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "ALL";
   const sort = searchParams.get("sort") || "date";
-
-  const projects: Project[] = projectsData.map((project) => ({
-    ...project,
-    status: project.status as ProjectStatus,
-    createdAt: new Date(project.createdAt),
-    updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
-    invitationCode: {
-      ...project.invitationCode,
-      expiresAt: new Date(project.invitationCode.expiresAt),
-    },
-  }));
 
   const updateUrlParams = (
     newSearch?: string,
