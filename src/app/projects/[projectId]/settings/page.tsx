@@ -54,7 +54,7 @@ export default function Settings({
 }: {
   params: { projectId: string };
 }) {
-  const project: Project = {
+  const project = {
     ...projectData,
     status: projectData.status as "BUILDING" | "LIVE",
     createdAt: new Date(projectData.createdAt),
