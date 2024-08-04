@@ -6,10 +6,8 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import axios from "axios";
-import { priorities } from "@/lib/config";
 import TaskOverview from "./components/task-overview";
 import Loading from "./components/loading";
-import { tasksData } from "./components/tasks";
 import RecentTasks from "./components/recent-tasks";
 import TaskChart from "./components/task-chart";
 
@@ -18,32 +16,33 @@ export default function Dashboard() {
 
   const userId = session.data?.user?.id;
 
-  // const {
-  //   data: tasksData,
-  //   isLoading: tasksIsLoading,
-  //   error: tasksError,
-  // } = useQuery({
-  //   queryKey: ["user-tasks", userId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/users/${userId}/tasks`);
-  //     return data.tasks as UserTask[];
-  //   },
-  // });
+  const {
+    data: tasksData,
+    isLoading: tasksIsLoading,
+    error: tasksError,
+  } = useQuery({
+    queryKey: ["user-tasks", userId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/users/${userId}/tasks`);
+      return data.tasks as UserTask[];
+    },
+  });
+
   const tasks =
     (tasksData
       ?.map((task) => ({
         ...task,
         dueDate: new Date(task.dueDate),
         createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
+        updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
       }))
       .sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       ) as UserTask[]) || [];
 
-  // if (tasksIsLoading) {
-  //   return <Loading />;
-  // }
+  if (tasksIsLoading) {
+    return <Loading />;
+  }
 
   return (
     <>

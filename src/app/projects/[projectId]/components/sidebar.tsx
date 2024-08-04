@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button";
 import { LuHome, LuLineChart, LuUsers } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoTasklist } from "react-icons/go";
