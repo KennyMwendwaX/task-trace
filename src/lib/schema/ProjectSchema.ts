@@ -27,10 +27,6 @@ export const projectSchema = z.object({
     name: z.string(),
     email: z.string(),
   }),
-  invitationCode: z.object({
-    code: z.string(),
-    expiresAt: z.date().nullable(),
-  }),
 });
 
 // Omitted schema for client-side form validation
@@ -41,7 +37,6 @@ export const projectFormSchema = projectSchema.omit({
   updatedAt: true,
   ownerId: true,
   owner: true,
-  invitationCode: true,
 });
 
 export type Project = z.infer<typeof projectSchema>;
