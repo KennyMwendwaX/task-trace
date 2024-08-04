@@ -30,7 +30,7 @@ export default function Projects() {
   // const { data, isLoading, error } = useQuery({
   //   queryKey: ["projects", userId],
   //   queryFn: async () => {
-  //     const { data } = await axios.get("/api/projects");
+  //     const { data } = await axios.get(`/api/projects/${userId}/projects`);
   //     return data.projects as Project[];
   //   },
   // });
