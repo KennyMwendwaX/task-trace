@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "./components/loading";
 
 export default function Explore() {
   const searchParams = useSearchParams();
