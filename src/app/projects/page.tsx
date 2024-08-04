@@ -27,17 +27,28 @@ export default function Projects() {
 
   const userId = session.data?.user?.id;
 
-  const { data: projectsData, isLoading } = useQuery({
+  const fetchUserProjects = async (
+    userId: string | undefined
+  ): Promise<UserProject[]> => {
+    if (!userId) throw new Error("User ID not found");
+    const { data } = await axios.get(`/api/users/${userId}/projects`);
+    return data.projects
+      .map((project: UserProject) => ({
+        ...project,
+        createdAt: new Date(project.createdAt),
+        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+      }))
+      .sort(
+        (a: UserProject, b: UserProject) =>
+          b.createdAt.getTime() - a.createdAt.getTime()
+      );
+  };
+
+  const { data: projects = [], isLoading } = useQuery<UserProject[]>({
     queryKey: ["user-projects", userId],
-    queryFn: async () => {
-      if (!userId) throw new Error("User ID not found");
-      const { data } = await axios.get(`/api/users/${userId}/projects`);
-      return data.projects as UserProject[];
-    },
+    queryFn: () => fetchUserProjects(userId),
     enabled: !!userId,
   });
-
-  const projects = projectsData || [];
 
   const ownedProjects = projects.filter(
     (project) => project.memberRole === "OWNER"

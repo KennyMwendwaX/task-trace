@@ -10,37 +10,40 @@ import TaskOverview from "./components/task-overview";
 import Loading from "./components/loading";
 import RecentTasks from "./components/recent-tasks";
 import TaskChart from "./components/task-chart";
+import { Label, Priority, Status } from "@/lib/config";
 
 export default function Dashboard() {
   const session = useSession();
 
   const userId = session.data?.user?.id;
 
-  const {
-    data: tasksData,
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["user-tasks", userId],
-    queryFn: async () => {
-      if (!userId) throw new Error("User ID not found");
-      const { data } = await axios.get(`/api/users/${userId}/tasks`);
-      return data.tasks as UserTask[];
-    },
-    enabled: !!userId,
-  });
-
-  const tasks =
-    (tasksData
-      ?.map((task) => ({
+  const fetchUserTasks = async (
+    userId: string | undefined
+  ): Promise<UserTask[]> => {
+    if (!userId) throw new Error("User ID not found");
+    const { data } = await axios.get(`/api/users/${userId}/tasks`);
+    return data.tasks
+      .map((task: UserTask) => ({
         ...task,
         dueDate: new Date(task.dueDate),
         createdAt: new Date(task.createdAt),
         updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
       }))
       .sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      ) as UserTask[]) || [];
+        (a: UserTask, b: UserTask) =>
+          b.createdAt.getTime() - a.createdAt.getTime()
+      );
+  };
+
+  const {
+    data: tasks = [],
+    isLoading: tasksIsLoading,
+    error: tasksError,
+  } = useQuery({
+    queryKey: ["user-tasks", userId],
+    queryFn: () => fetchUserTasks(userId),
+    enabled: !!userId,
+  });
 
   if (tasksIsLoading) {
     return <Loading />;
