@@ -23,9 +23,11 @@ export default function Dashboard() {
   } = useQuery({
     queryKey: ["user-tasks", userId],
     queryFn: async () => {
+      if (!userId) throw new Error("User ID not found");
       const { data } = await axios.get(`/api/users/${userId}/tasks`);
       return data.tasks as UserTask[];
     },
+    enabled: !!userId,
   });
 
   const tasks =
