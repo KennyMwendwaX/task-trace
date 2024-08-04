@@ -16,6 +16,7 @@ import {
   LuUsers,
   LuClock,
   LuClipboard,
+  LuTrash2,
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -47,25 +48,23 @@ type Props = {
 };
 
 export default function ProjectCard({ project }: Props) {
-  const projectStatus = projectStatuses.find(
-    (status) => status.value === project.status
-  );
+  const statusColor =
+    project.status === "LIVE"
+      ? "border-green-600 text-green-600"
+      : "border-blue-600 text-blue-600";
+  const formattedDate = format(project.createdAt, "MMM d, yyyy");
 
   const completedTasks = 17;
   const totalTasks = 25;
   const progressPercentage = (completedTasks / totalTasks) * 100;
-  const createdAt = format(project.createdAt, "dd/MM/yyyy");
 
   return (
-    <Card className="hover:shadow-lg transition-all duration-300 group overflow-hidden">
+    <Card className="hover:shadow-lg transition-all duration-300">
       <CardHeader className="pb-2 relative">
         <div className="absolute top-2 right-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8 opacity-70 hover:opacity-100">
+              <Button size="icon" variant="ghost" className="h-8 w-8">
                 <LuMoreVertical className="h-4 w-4" />
                 <span className="sr-only">More</span>
               </Button>
@@ -79,7 +78,7 @@ export default function ProjectCard({ project }: Props) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-600">
-                Trash
+                <LuTrash2 className="mr-2 h-4 w-4" /> Trash
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -90,17 +89,11 @@ export default function ProjectCard({ project }: Props) {
           </CardTitle>
         </Link>
         <div className="flex items-center space-x-2 mt-2">
-          <Badge
-            variant="outline"
-            className={`${
-              projectStatus?.value === "LIVE"
-                ? "border-green-600 text-green-500"
-                : "border-blue-600 text-blue-500"
-            }`}>
-            {projectStatus?.label}
+          <Badge variant="outline" className={statusColor}>
+            {project.status}
           </Badge>
           <Badge variant="outline" className="text-sm">
-            <LuUsers className="mr-1 h-4 w-4" /> {dummyProject.members.length}{" "}
+            <LuUsers className="mr-1 h-4 w-4" /> {dummyProject.members.length}
             members
           </Badge>
         </div>
@@ -147,7 +140,7 @@ export default function ProjectCard({ project }: Props) {
           </div>
           <div className="flex items-center text-sm text-gray-600">
             <LuClock className="mr-1 h-4 w-4" />
-            {createdAt}
+            {formattedDate}
           </div>
         </div>
       </CardContent>
