@@ -11,7 +11,7 @@ import { LuFolders, LuPin, LuSearch, LuShield, LuUsers } from "react-icons/lu";
 import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
-import { ProjectRole, ProjectStatus } from "@/lib/config";
+import { ProjectRole } from "@/lib/config";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -44,7 +44,9 @@ export default function Projects() {
       );
   };
 
-  const { data: projects = [], isLoading } = useQuery<UserProject[]>({
+  const isLoading = true;
+
+  const { data: projects = [] } = useQuery<UserProject[]>({
     queryKey: ["user-projects", userId],
     queryFn: () => fetchUserProjects(userId),
     enabled: !!userId,
@@ -110,22 +112,24 @@ export default function Projects() {
 
   return (
     <main className="container mx-auto px-4 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:space-x-2">
-        <div className="relative w-full sm:w-auto sm:flex-grow">
-          <LuSearch className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search projects..."
-            className="w-full pl-8 rounded-lg bg-background sm:w-[200px] md:w-[400px]"
-            value={search}
-            onChange={handleSearch}
-          />
-        </div>
-        <AddProjectModal />
-      </div>
-
       {projects.length > 0 ? (
         <>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:space-x-2">
+            <div className="relative w-full sm:w-auto sm:flex-grow">
+              <LuSearch className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search projects..."
+                className="w-full pl-8 rounded-lg bg-background sm:w-[200px] md:w-[400px]"
+                value={search}
+                onChange={handleSearch}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <JoinProjectModal />
+              <AddProjectModal />
+            </div>
+          </div>
           {search ? (
             filteredProjects.length > 0 ? (
               <div className="mt-6">
