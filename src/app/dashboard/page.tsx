@@ -10,7 +10,6 @@ import TaskOverview from "./components/task-overview";
 import Loading from "./components/loading";
 import RecentTasks from "./components/recent-tasks";
 import TaskChart from "./components/task-chart";
-import { Label, Priority, Status } from "@/lib/config";
 
 export default function Dashboard() {
   const session = useSession();
@@ -45,29 +44,31 @@ export default function Dashboard() {
     enabled: !!userId,
   });
 
-  if (tasksIsLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-2xl font-bold tracking-tight mb-4 sm:mb-0">
-          Welcome, {session.data?.user?.name}!
-        </div>
-        <div className="flex items-center gap-2">
-          <JoinProjectModal />
-          <AddProjectModal />
-        </div>
-      </div>
+      {tasksIsLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-2xl font-bold tracking-tight mb-4 sm:mb-0">
+              Welcome, {session.data?.user?.name}!
+            </div>
+            <div className="flex items-center gap-2">
+              <JoinProjectModal />
+              <AddProjectModal />
+            </div>
+          </div>
 
-      <div className="mt-4">
-        <TaskOverview tasks={tasks} />
-      </div>
-      <div className="w-full grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
-        <TaskChart tasks={tasks} />
-        <RecentTasks tasks={tasks} />
-      </div>
+          <div className="mt-4">
+            <TaskOverview tasks={tasks} />
+          </div>
+          <div className="w-full grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
+            <TaskChart tasks={tasks} />
+            <RecentTasks tasks={tasks} />
+          </div>
+        </>
+      )}
     </>
   );
 }
