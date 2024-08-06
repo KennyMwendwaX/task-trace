@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { IoMdExit } from "react-icons/io";
 import { ProjectStatus } from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectPage({
   params,
@@ -157,6 +158,7 @@ export default function ProjectPage({
           )}
         </Badge>
       </div>
+
       {!members || members.length == 0 ? (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
           <div className="flex flex-col items-center gap-1 text-center">
