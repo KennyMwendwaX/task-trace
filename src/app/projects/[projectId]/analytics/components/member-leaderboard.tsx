@@ -47,7 +47,7 @@ export default function MemberLeaderboard({ tasks }: Props) {
     });
     return Object.values(stats)
       .sort((a, b) => b.completedTasks - a.completedTasks)
-      .slice(0, 5); // Top 5 members
+      .slice(0, 5);
   }, [tasks]);
   const maxTasks = Math.max(...memberStats.map((stat) => stat.completedTasks));
 
