@@ -13,15 +13,9 @@ import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
-import { projectData } from "./components/project";
-import { usersData } from "./components/users";
-import { membersData } from "./components/members";
-import { tasksData } from "./components/tasks";
 import { TbPlaylistX } from "react-icons/tb";
-import { Button } from "@/components/ui/button";
-import { IoMdExit } from "react-icons/io";
-import { ProjectStatus } from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
+import { MdOutlineFolderOff } from "react-icons/md";
 
 export default function ProjectPage({
   params,
@@ -30,9 +24,7 @@ export default function ProjectPage({
 }) {
   const projectId = params.projectId;
 
-  const fetchProject = async (
-    projectId: string | undefined
-  ): Promise<Project> => {
+  const fetchProject = async (projectId: string): Promise<Project> => {
     if (!projectId) throw new Error("No project ID");
     try {
       const { data } = await axios.get<{ project: Project }>(
@@ -54,112 +46,124 @@ export default function ProjectPage({
     }
   };
 
+  const fetchUsers = async (): Promise<User[]> => {
+    try {
+      const { data } = await axios.get<{ users: User[] }>("/api/users");
+      return data.users.map((user) => ({
+        ...user,
+        createdAt: new Date(user.createdAt),
+        updatedAt: user.updatedAt ? new Date(user.updatedAt) : null,
+      }));
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch users: ${error.message}`);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
+  };
+
+  const fetchProjectMembers = async (projectId: string) => {
+    if (!projectId) throw new Error("No project ID");
+    try {
+      const { data } = await axios.get<{ members: Member[] }>(
+        `/api/projects/${projectId}/members`
+      );
+      return data.members.map((member) => ({
+        ...member,
+        createdAt: new Date(member.createdAt),
+        updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
+      }));
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch project members: ${error.message}`);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
+  };
+
+  const fetchProjectTasks = async (projectId: string) => {
+    if (!projectId) throw new Error("No project ID");
+    try {
+      const { data } = await axios.get<{ tasks: ProjectTask[] }>(
+        `/api/projects/${projectId}/tasks`
+      );
+      return data.tasks.map((task) => ({
+        ...task,
+        createdAt: new Date(task.createdAt),
+        updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
+      }));
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch project tasks: ${error.message}`);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
+  };
+
   const {
     data: project,
     isLoading: projectLoading,
     error: projectError,
   } = useQuery({
     queryKey: ["project", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}`);
-      return data.project as Project;
-    },
+    queryFn: () => fetchProject(projectId),
+    enabled: !!projectId,
   });
 
   const {
-    data: usersData,
+    data: users,
     isLoading: usersIsLoading,
     error: usersError,
   } = useQuery({
     queryKey: ["users"],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/users");
-      return data.users as User[];
-    },
+    queryFn: () => fetchUsers(),
   });
 
   const {
-    data: membersData,
+    data: members,
     isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({
     queryKey: ["project-members", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}/members`);
-      return data.members as Member[];
-    },
+    queryFn: () => fetchProjectMembers(projectId),
+    enabled: !!projectId,
   });
 
   const {
-    data: tasksData,
+    data: tasks,
     isLoading: tasksIsLoading,
     error: tasksError,
   } = useQuery({
     queryKey: ["project-tasks", projectId],
-    queryFn: async () => {
-      const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
-      return data.tasks as ProjectTask[];
-    },
+    queryFn: () => fetchProjectTasks(projectId),
+    enabled: !!projectId,
   });
 
-  // const isLoading =
-  //   projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
+  const isLoading =
+    projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
 
-  // if (isLoading) {
-  //   return (
-  //     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-  //       <Loading />
-  //     </main>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
+        <Loading />
+      </main>
+    );
+  }
 
-  // if (!project) {
-  //   return (
-  //     <main className="mx-auto flex flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-  //       <div className="mx-auto flex flex-col items-center justify-center text-center pt-36">
-  //         <MdOutlineFolderOff className="h-16 w-16 text-muted-foreground" />
+  if (!project) {
+    return (
+      <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
+        <div className="mx-auto flex flex-col items-center justify-center text-center pt-36">
+          <MdOutlineFolderOff className="h-16 w-16 text-muted-foreground" />
 
-  //         <h3 className="mt-4 text-2xl font-semibold">Project was not found</h3>
-  //       </div>
-  //     </main>
-  //   );
-  // }
-  // const project = {
-  //   ...projectData,
-  //   status: projectData.status as ProjectStatus,
-  //   createdAt: new Date(projectData.createdAt),
-  //   updatedAt: new Date(projectData.updatedAt),
-  //   invitationCode: {
-  //     ...projectData.invitationCode,
-  //     expiresAt: new Date(projectData.invitationCode.expiresAt),
-  //   },
-  // };
-
-  // const users = usersData.map((user) => ({
-  //   ...user,
-  //   emailVerified: new Date(user.emailVerified),
-  //   createdAt: new Date(user.createdAt),
-  //   updatedAt: new Date(user.updatedAt),
-  // })) as User[];
-
-  // const members = membersData.map((member) => ({
-  //   ...member,
-  //   createdAt: new Date(member.createdAt),
-  //   updatedAt: new Date(member.updatedAt),
-  //   tasks: member.tasks.map((task) => ({
-  //     ...task,
-  //     dueDate: new Date(task.dueDate),
-  //     createdAt: new Date(task.createdAt),
-  //     updatedAt: new Date(task.updatedAt),
-  //   })),
-  // })) as Member[];
-
-  // const tasks = tasksData.map((task) => ({
-  //   ...task,
-  //   dueDate: new Date(task.dueDate),
-  //   createdAt: new Date(task.createdAt),
-  //   updatedAt: new Date(task.updatedAt),
-  // })) as ProjectTask[];
+          <h3 className="mt-4 text-2xl font-semibold">Project was not found</h3>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
