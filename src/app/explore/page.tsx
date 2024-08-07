@@ -22,17 +22,24 @@ export default function Explore() {
   const router = useRouter();
 
   const fetchPublicProjects = async (): Promise<Project[]> => {
-    const { data } = await axios.get("/api/projects");
-    return data.publicProjects
-      .map((project: Project) => ({
-        ...project,
-        createdAt: new Date(project.createdAt),
-        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
-      }))
-      .sort(
-        (a: Project, b: Project) =>
-          b.createdAt.getTime() - a.createdAt.getTime()
+    try {
+      const { data } = await axios.get<{ publicProjects: Project[] }>(
+        "/api/projects"
       );
+      return data.publicProjects
+        .map((project) => ({
+          ...project,
+          createdAt: new Date(project.createdAt),
+          updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+        }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch projects: ${error.message}`);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
   };
 
   const { data: projects = [], isLoading } = useQuery<Project[]>({

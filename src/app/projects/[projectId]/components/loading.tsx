@@ -23,7 +23,7 @@ export default function Loading() {
                 <Skeleton className="h-8 w-28 rounded-full" />
               </div>
               <Skeleton className="h-14 w-full rounded-full" />
-              <Skeleton className="h-8 w-40 rounded-full" />
+              <Skeleton className="h-8 w-full rounded-full" />
             </div>
           </div>
 
@@ -47,7 +47,7 @@ export default function Loading() {
           <CardHeader className="flex flex-row items-center">
             <Skeleton className="h-6 w-48" />
           </CardHeader>
-          <CardContent className="pt-2 px-2">
+          <CardContent className="pt-2 px-6">
             <Skeleton className="h-[350px] w-full" />
           </CardContent>
         </Card>
@@ -61,7 +61,7 @@ export default function Loading() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {[...Array(5)].map((_, index) => (
+              {[...Array(6)].map((_, index) => (
                 <Skeleton key={index} className="h-12 w-full" />
               ))}
             </div>

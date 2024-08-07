@@ -31,17 +31,26 @@ export default function Projects() {
     userId: string | undefined
   ): Promise<UserProject[]> => {
     if (!userId) throw new Error("User ID not found");
-    const { data } = await axios.get(`/api/users/${userId}/projects`);
-    return data.projects
-      .map((project: UserProject) => ({
-        ...project,
-        createdAt: new Date(project.createdAt),
-        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
-      }))
-      .sort(
-        (a: UserProject, b: UserProject) =>
-          b.createdAt.getTime() - a.createdAt.getTime()
+    try {
+      const { data } = await axios.get<{ projects: UserProject[] }>(
+        `/api/users/${userId}/projects`
       );
+      return data.projects
+        .map((project) => ({
+          ...project,
+          createdAt: new Date(project.createdAt),
+          updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+        }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `Failed to fetch user member projects: ${error.message}`
+        );
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
   };
 
   const { data: projects = [], isLoading } = useQuery<UserProject[]>({

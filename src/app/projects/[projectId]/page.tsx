@@ -30,53 +30,77 @@ export default function ProjectPage({
 }) {
   const projectId = params.projectId;
 
-  // const {
-  //   data: project,
-  //   isLoading: projectLoading,
-  //   error: projectError,
-  // } = useQuery({
-  //   queryKey: ["project", projectId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/projects/${projectId}`);
-  //     return data.project as Project;
-  //   },
-  // });
+  const fetchProject = async (
+    projectId: string | undefined
+  ): Promise<Project> => {
+    if (!projectId) throw new Error("No project ID");
+    try {
+      const { data } = await axios.get<{ project: Project }>(
+        `/api/projects/${projectId}`
+      );
+      return {
+        ...data.project,
+        createdAt: new Date(data.project.createdAt),
+        updatedAt: data.project.updatedAt
+          ? new Date(data.project.updatedAt)
+          : null,
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch project: ${error.message}`);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
+  };
 
-  // const {
-  //   data: usersData,
-  //   isLoading: usersIsLoading,
-  //   error: usersError,
-  // } = useQuery({
-  //   queryKey: ["users"],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get("/api/users");
-  //     return data.users as User[];
-  //   },
-  // });
+  const {
+    data: project,
+    isLoading: projectLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}`);
+      return data.project as Project;
+    },
+  });
 
-  // const {
-  //   data: membersData,
-  //   isLoading: membersIsLoading,
-  //   error: membersError,
-  // } = useQuery({
-  //   queryKey: ["project-members", projectId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/projects/${projectId}/members`);
-  //     return data.members as Member[];
-  //   },
-  // });
+  const {
+    data: usersData,
+    isLoading: usersIsLoading,
+    error: usersError,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/users");
+      return data.users as User[];
+    },
+  });
 
-  // const {
-  //   data: tasksData,
-  //   isLoading: tasksIsLoading,
-  //   error: tasksError,
-  // } = useQuery({
-  //   queryKey: ["project-tasks", projectId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
-  //     return data.tasks as ProjectTask[];
-  //   },
-  // });
+  const {
+    data: membersData,
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["project-members", projectId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}/members`);
+      return data.members as Member[];
+    },
+  });
+
+  const {
+    data: tasksData,
+    isLoading: tasksIsLoading,
+    error: tasksError,
+  } = useQuery({
+    queryKey: ["project-tasks", projectId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/projects/${projectId}/tasks`);
+      return data.tasks as ProjectTask[];
+    },
+  });
 
   // const isLoading =
   //   projectLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
@@ -100,42 +124,42 @@ export default function ProjectPage({
   //     </main>
   //   );
   // }
-  const project = {
-    ...projectData,
-    status: projectData.status as ProjectStatus,
-    createdAt: new Date(projectData.createdAt),
-    updatedAt: new Date(projectData.updatedAt),
-    invitationCode: {
-      ...projectData.invitationCode,
-      expiresAt: new Date(projectData.invitationCode.expiresAt),
-    },
-  };
+  // const project = {
+  //   ...projectData,
+  //   status: projectData.status as ProjectStatus,
+  //   createdAt: new Date(projectData.createdAt),
+  //   updatedAt: new Date(projectData.updatedAt),
+  //   invitationCode: {
+  //     ...projectData.invitationCode,
+  //     expiresAt: new Date(projectData.invitationCode.expiresAt),
+  //   },
+  // };
 
-  const users = usersData.map((user) => ({
-    ...user,
-    emailVerified: new Date(user.emailVerified),
-    createdAt: new Date(user.createdAt),
-    updatedAt: new Date(user.updatedAt),
-  })) as User[];
+  // const users = usersData.map((user) => ({
+  //   ...user,
+  //   emailVerified: new Date(user.emailVerified),
+  //   createdAt: new Date(user.createdAt),
+  //   updatedAt: new Date(user.updatedAt),
+  // })) as User[];
 
-  const members = membersData.map((member) => ({
-    ...member,
-    createdAt: new Date(member.createdAt),
-    updatedAt: new Date(member.updatedAt),
-    tasks: member.tasks.map((task) => ({
-      ...task,
-      dueDate: new Date(task.dueDate),
-      createdAt: new Date(task.createdAt),
-      updatedAt: new Date(task.updatedAt),
-    })),
-  })) as Member[];
+  // const members = membersData.map((member) => ({
+  //   ...member,
+  //   createdAt: new Date(member.createdAt),
+  //   updatedAt: new Date(member.updatedAt),
+  //   tasks: member.tasks.map((task) => ({
+  //     ...task,
+  //     dueDate: new Date(task.dueDate),
+  //     createdAt: new Date(task.createdAt),
+  //     updatedAt: new Date(task.updatedAt),
+  //   })),
+  // })) as Member[];
 
-  const tasks = tasksData.map((task) => ({
-    ...task,
-    dueDate: new Date(task.dueDate),
-    createdAt: new Date(task.createdAt),
-    updatedAt: new Date(task.updatedAt),
-  })) as ProjectTask[];
+  // const tasks = tasksData.map((task) => ({
+  //   ...task,
+  //   dueDate: new Date(task.dueDate),
+  //   createdAt: new Date(task.createdAt),
+  //   updatedAt: new Date(task.updatedAt),
+  // })) as ProjectTask[];
 
   return (
     <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
