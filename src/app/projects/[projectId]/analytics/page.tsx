@@ -5,7 +5,7 @@ import TaskStatusChart from "./components/task-status-chart";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProjectTasks } from "@/lib/api/tasks";
 import Loading from "./components/loading";
-import { TbChartBar, TbPlaylistX } from "react-icons/tb";
+import { TbChartBar } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
