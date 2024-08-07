@@ -47,12 +47,6 @@ export async function GET(
             email: true,
           },
         },
-        // invitationCode: {
-        //   columns: {
-        //     code: true,
-        //     expiresAt: true,
-        //   },
-        // },
       },
     });
 
