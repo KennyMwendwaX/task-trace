@@ -1,12 +1,10 @@
 "use client";
 
-import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { tasksData } from "../components/tasks";
+import { fetchProjectMembers } from "@/lib/api/members";
 import MemberLeaderboard from "./components/member-leaderboard";
 import TaskStatusChart from "./components/task-status-chart";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { Member } from "@/lib/schema/MemberSchema";
+import { fetchProjectTasks } from "@/lib/api/tasks";
 
 export default function Analytics({
   params,
@@ -15,48 +13,8 @@ export default function Analytics({
 }) {
   const projectId = params.projectId;
 
-  const fetchProjectMembers = async (projectId: string) => {
-    if (!projectId) throw new Error("No project ID");
-    try {
-      const { data } = await axios.get<{ members: Member[] }>(
-        `/api/projects/${projectId}/members`
-      );
-      return data.members.map((member) => ({
-        ...member,
-        createdAt: new Date(member.createdAt),
-        updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
-      }));
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch project members: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
-  const fetchProjectTasks = async (projectId: string) => {
-    if (!projectId) throw new Error("No project ID");
-    try {
-      const { data } = await axios.get<{ tasks: ProjectTask[] }>(
-        `/api/projects/${projectId}/tasks`
-      );
-      return data.tasks.map((task) => ({
-        ...task,
-        createdAt: new Date(task.createdAt),
-        updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
-      }));
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch project tasks: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
   const {
-    data: members,
+    data: members = [],
     isLoading: membersIsLoading,
     error: membersError,
   } = useQuery({

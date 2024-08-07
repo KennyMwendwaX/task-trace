@@ -4,16 +4,16 @@ import AddProjectModal from "@/components/AddProjectModal";
 import Loading from "./components/loading";
 import ProjectCard from "./components/project-card";
 import { Input } from "@/components/ui/input";
-import { Project } from "@/lib/schema/ProjectSchema";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { LuFolders, LuPin, LuSearch, LuShield, LuUsers } from "react-icons/lu";
 import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
-import { ProjectRole } from "@/lib/config";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { fetchUserProjects } from "@/lib/api/projects";
+import { Project } from "@/lib/schema/ProjectSchema";
+import { ProjectRole } from "@/lib/config";
 
 interface UserProject extends Project {
   memberRole: ProjectRole;
@@ -27,33 +27,7 @@ export default function Projects() {
 
   const userId = session.data?.user?.id;
 
-  const fetchUserProjects = async (
-    userId: string | undefined
-  ): Promise<UserProject[]> => {
-    if (!userId) throw new Error("User ID not found");
-    try {
-      const { data } = await axios.get<{ projects: UserProject[] }>(
-        `/api/users/${userId}/projects`
-      );
-      return data.projects
-        .map((project) => ({
-          ...project,
-          createdAt: new Date(project.createdAt),
-          updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
-        }))
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(
-          `Failed to fetch user member projects: ${error.message}`
-        );
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
-  const { data: projects = [], isLoading } = useQuery<UserProject[]>({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ["user-projects", userId],
     queryFn: () => fetchUserProjects(userId),
     enabled: !!userId,

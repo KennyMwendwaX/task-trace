@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Project } from "@/lib/schema/ProjectSchema";
 import ProjectCard from "./components/project-card";
 import { Input } from "@/components/ui/input";
 import { LuFolders, LuSearch } from "react-icons/lu";
@@ -13,36 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./components/loading";
+import { fetchPublicProjects } from "@/lib/api/projects";
 
 export default function Explore() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const fetchPublicProjects = async (): Promise<Project[]> => {
-    try {
-      const { data } = await axios.get<{ publicProjects: Project[] }>(
-        "/api/projects"
-      );
-      return data.publicProjects
-        .map((project) => ({
-          ...project,
-          createdAt: new Date(project.createdAt),
-          updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
-        }))
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch projects: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
-  const { data: projects = [], isLoading } = useQuery<Project[]>({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ["public-projects"],
     queryFn: () => fetchPublicProjects(),
   });

@@ -3,14 +3,9 @@
 import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
-import { Project } from "@/lib/schema/ProjectSchema";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./components/loading";
 import AddTaskModal from "@/components/AddTaskModal";
-import { User } from "@/lib/schema/UserSchema";
-import { Member } from "@/lib/schema/MemberSchema";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
@@ -19,6 +14,10 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { LuChevronLeft } from "react-icons/lu";
+import { fetchProject } from "@/lib/api/projects";
+import { fetchUsers } from "@/lib/api/users";
+import { fetchProjectMembers } from "@/lib/api/members";
+import { fetchProjectTasks } from "@/lib/api/tasks";
 
 export default function ProjectPage({
   params,
@@ -27,85 +26,6 @@ export default function ProjectPage({
 }) {
   const projectId = params.projectId;
   const router = useRouter();
-
-  const fetchProject = async (projectId: string): Promise<Project> => {
-    if (!projectId) throw new Error("No project ID");
-    try {
-      const { data } = await axios.get<{ project: Project }>(
-        `/api/projects/${projectId}`
-      );
-      return {
-        ...data.project,
-        createdAt: new Date(data.project.createdAt),
-        updatedAt: data.project.updatedAt
-          ? new Date(data.project.updatedAt)
-          : null,
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch project: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
-  const fetchUsers = async (): Promise<User[]> => {
-    try {
-      const { data } = await axios.get<{ users: User[] }>("/api/users");
-      return data.users.map((user) => ({
-        ...user,
-        createdAt: new Date(user.createdAt),
-        updatedAt: user.updatedAt ? new Date(user.updatedAt) : null,
-      }));
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch users: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
-  const fetchProjectMembers = async (projectId: string) => {
-    if (!projectId) throw new Error("No project ID");
-    try {
-      const { data } = await axios.get<{ members: Member[] }>(
-        `/api/projects/${projectId}/members`
-      );
-      return data.members.map((member) => ({
-        ...member,
-        createdAt: new Date(member.createdAt),
-        updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
-      }));
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch project members: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
-
-  const fetchProjectTasks = async (projectId: string) => {
-    if (!projectId) throw new Error("No project ID");
-    try {
-      const { data } = await axios.get<{ tasks: ProjectTask[] }>(
-        `/api/projects/${projectId}/tasks`
-      );
-      return data.tasks.map((task) => ({
-        ...task,
-        createdAt: new Date(task.createdAt),
-        updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
-      }));
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to fetch project tasks: ${error.message}`);
-      } else {
-        throw new Error("An unknown error occurred");
-      }
-    }
-  };
 
   const {
     data: project,
