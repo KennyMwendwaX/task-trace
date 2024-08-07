@@ -24,6 +24,20 @@ export async function GET(
         { status: 404 }
       );
 
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (!currentUserMember) {
+      return NextResponse.json(
+        { message: "You are not a member of the project" },
+        { status: 403 }
+      );
+    }
+
     const project = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
       with: {
@@ -33,12 +47,12 @@ export async function GET(
             email: true,
           },
         },
-        invitationCode: {
-          columns: {
-            code: true,
-            expiresAt: true,
-          },
-        },
+        // invitationCode: {
+        //   columns: {
+        //     code: true,
+        //     expiresAt: true,
+        //   },
+        // },
       },
     });
 
