@@ -12,6 +12,7 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LuChevronLeft } from "react-icons/lu";
+import Loading from "./components/loading";
 
 export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
@@ -19,7 +20,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   const {
     data: project,
-    isLoading: projectLoading,
+    isLoading: projectIsLoading,
     error: projectError,
   } = useQuery({
     queryKey: ["project", projectId],
@@ -45,13 +46,13 @@ export default function Members({ params }: { params: { projectId: string } }) {
     queryFn: () => fetchUsers(),
   });
 
-  // if (projectIsLoading || membersIsLoading || usersIsLoading) {
-  //   return (
-  //     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 lg:ml-[260px]">
-  //       <Loading />
-  //     </main>
-  //   );
-  // }
+  if (projectIsLoading || membersIsLoading || usersIsLoading) {
+    return (
+      <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
+        <Loading />
+      </main>
+    );
+  }
 
   if (!project) {
     return (
