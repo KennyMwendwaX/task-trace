@@ -35,6 +35,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
   } = useQuery({
     queryKey: ["project-members", projectId],
     queryFn: () => fetchProjectMembers(projectId),
+    enabled: !!projectId,
   });
 
   const {
