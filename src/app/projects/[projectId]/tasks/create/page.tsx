@@ -39,16 +39,17 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Member } from "@/lib/schema/MemberSchema";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { membersData } from "../../components/members";
+import { fetchProjectMembers } from "@/lib/api/members";
+import { fetchProject } from "@/lib/api/projects";
+import { MdOutlineFolderOff } from "react-icons/md";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -94,19 +95,56 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
     },
   });
 
-  const members = membersData
-    ?.map((member) => ({
-      ...member,
-      createdAt: new Date(member.createdAt),
-      updatedAt: new Date(member.updatedAt),
-      tasks: member.tasks.map((task) => ({
-        ...task,
-        dueDate: new Date(task.dueDate),
-        createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
-      })),
-    }))
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Member[];
+  const {
+    data: project,
+    isLoading: projectIsLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => fetchProject(projectId),
+    enabled: !!projectId,
+  });
+
+  const {
+    data: members = [],
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["project-members", projectId],
+    queryFn: () => fetchProjectMembers(projectId),
+    enabled: !!projectId,
+  });
+
+  if (!project) {
+    return (
+      <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+          <div className="flex flex-col items-center gap-1 text-center">
+            <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
+              <MdOutlineFolderOff className="h-12 w-12 text-gray-400" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-3">
+              No Project Found
+            </h2>
+            <p className="text-gray-600 mb-4">
+              The project you&apos;re looking for doesn&apos;t exist or has been
+              removed.
+            </p>
+            <div className="flex justify-center">
+              <Button
+                size="lg"
+                variant="default"
+                className="flex items-center justify-center gap-2 rounded-full"
+                onClick={() => router.push("/dashboard")}>
+                <LuChevronLeft className="w-5 h-5" />
+                Return to Dashboard
+              </Button>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   async function onSubmit(values: TaskFormValues) {
     addTask(values);
