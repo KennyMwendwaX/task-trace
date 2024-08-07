@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Member } from "@/lib/schema/MemberSchema";
-import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { LuUsers, LuCalendar, LuUser2, LuCheckSquare } from "react-icons/lu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,12 +11,11 @@ import {
 } from "@radix-ui/react-icons";
 
 type Props = {
-  project: Project;
   tasks: ProjectTask[];
   members: Member[];
 };
 
-export default function ProjectOverview({ project, tasks, members }: Props) {
+export default function ProjectOverview({ tasks, members }: Props) {
   const totalTasks = tasks.length;
   const tasksDone = tasks.filter((task) => task.status === "DONE").length;
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO").length;
