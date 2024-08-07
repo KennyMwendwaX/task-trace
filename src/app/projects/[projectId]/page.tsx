@@ -96,7 +96,7 @@ export default function ProjectPage({
               <Button
                 size="lg"
                 variant="default"
-                className="flex items-center justify-center gap-2"
+                className="flex items-center justify-center gap-2 rounded-full"
                 onClick={() => router.push("/dashboard")}>
                 <LuChevronLeft className="w-5 h-5" />
                 Return to Dashboard

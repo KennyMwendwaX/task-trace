@@ -3,55 +3,42 @@
 import MemberTable from "./components/member-table/table";
 import { TableColumns } from "./components/member-table/table-columns";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import type { User } from "@/lib/schema/UserSchema";
-import type { Member } from "@/lib/schema/MemberSchema";
-import Loading from "@/components/loading";
-import { Project } from "@/lib/schema/ProjectSchema";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/AddMemberModal";
-import { usersData } from "../components/users";
-import { membersData } from "../components/members";
-import { projectData } from "../components/project";
+import { fetchProjectMembers } from "@/lib/api/members";
+import { fetchUsers } from "@/lib/api/users";
+import { fetchProject } from "@/lib/api/projects";
 
 export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
-  // const {
-  //   data: project,
-  //   isLoading: projectIsLoading,
-  //   error: projectError,
-  // } = useQuery({
-  //   queryKey: ["project", projectId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/projects/${projectId}`);
-  //     return data.project as Project;
-  //   },
-  // });
+  const {
+    data: project,
+    isLoading: projectLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => fetchProject(projectId),
+    enabled: !!projectId,
+  });
 
-  // const {
-  //   data: membersData,
-  //   isLoading: membersIsLoading,
-  //   error: membersError,
-  // } = useQuery({
-  //   queryKey: ["project-members", projectId],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(`/api/projects/${projectId}/members`);
-  //     return data.members as Member[];
-  //   },
-  // });
+  const {
+    data: members = [],
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["project-members", projectId],
+    queryFn: () => fetchProjectMembers(projectId),
+  });
 
-  // const {
-  //   data: usersData,
-  //   isLoading: usersIsLoading,
-  //   error: usersError,
-  // } = useQuery({
-  //   queryKey: ["users"],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get("/api/users");
-  //     return data.users as User[];
-  //   },
-  // });
+  const {
+    data: users = [],
+    isLoading: usersIsLoading,
+    error: usersError,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => fetchUsers(),
+  });
 
   // if (projectIsLoading || membersIsLoading || usersIsLoading) {
   //   return (
@@ -70,26 +57,6 @@ export default function Members({ params }: { params: { projectId: string } }) {
   //     </main>
   //   );
   // }
-  const project = projectData;
-  const users = usersData.map((user) => ({
-    ...user,
-    emailVerified: new Date(user.emailVerified),
-    createdAt: new Date(user.createdAt),
-    updatedAt: new Date(user.updatedAt),
-  })) as User[];
-  const members = membersData
-    ?.map((member) => ({
-      ...member,
-      createdAt: new Date(member.createdAt),
-      updatedAt: new Date(member.updatedAt),
-      tasks: member.tasks.map((task) => ({
-        ...task,
-        dueDate: new Date(task.dueDate),
-        createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
-      })),
-    }))
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Member[];
 
   return (
     <>
