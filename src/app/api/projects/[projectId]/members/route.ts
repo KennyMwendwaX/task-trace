@@ -23,6 +23,21 @@ export async function GET(
         { message: "No project Id found" },
         { status: 404 }
       );
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (!currentUserMember) {
+      return NextResponse.json(
+        { message: "You are not a member of the project" },
+        { status: 403 }
+      );
+    }
+
     const project = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
     });
@@ -33,7 +48,8 @@ export async function GET(
         { status: 404 }
       );
 
-    const members = await db.query.members.findMany({
+    const projectMembers = await db.query.members.findMany({
+      where: eq(members.projectId, projectId),
       with: {
         user: {
           columns: {
@@ -45,7 +61,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ members }, { status: 200 });
+    return NextResponse.json({ members: projectMembers }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },
