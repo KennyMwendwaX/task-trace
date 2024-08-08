@@ -151,7 +151,7 @@ export const TableColumns = ({
     header: () => <TableColumnHeader name="Due Date" />,
     cell: ({ row }) => {
       const task = taskSchema.parse(row.original);
-      const date = format(task.dueDate, "dd/MM/yyyy");
+      const date = format(task.dueDate, "MMM d, yyyy");
       return <div>{date}</div>;
     },
   },
