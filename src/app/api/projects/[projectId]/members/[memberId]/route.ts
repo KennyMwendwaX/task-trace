@@ -24,6 +24,20 @@ export async function GET(
       );
     }
 
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (!currentUserMember) {
+      return NextResponse.json(
+        { message: "You are not a member of the project" },
+        { status: 403 }
+      );
+    }
+
     const member = await db.query.members.findFirst({
       where: and(eq(members.id, memberId), eq(projects.id, projectId)),
       with: {
@@ -71,20 +85,14 @@ export async function DELETE(
       );
     }
 
-    const member = await db.query.members.findFirst({
-      where: and(
-        eq(members.id, memberId),
-        eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
-      ),
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(eq(members.id, memberId), eq(members.projectId, projectId)),
     });
 
-    if (!member) {
+    if (!currentUserMember) {
       return NextResponse.json(
-        {
-          message: "You are not a member of this project",
-        },
-        { status: 403 }
+        { message: "Member not found" },
+        { status: 404 }
       );
     }
 
@@ -92,7 +100,17 @@ export async function DELETE(
       where: eq(projects.id, projectId),
     });
 
-    if (project?.ownerId === session.user.id) {
+    if (!project) {
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
+    }
+
+    if (
+      project.ownerId === session.user.id &&
+      currentUserMember.userId === session.user.id
+    ) {
       return NextResponse.json(
         {
           message:
@@ -102,22 +120,27 @@ export async function DELETE(
       );
     }
 
-    await db
-      .delete(members)
-      .where(
-        and(
-          eq(members.id, memberId),
-          eq(members.projectId, projectId),
-          eq(members.userId, session.user.id)
-        )
-      );
+    if (
+      project.ownerId === session.user.id ||
+      currentUserMember.role === "ADMIN" ||
+      currentUserMember.userId === session.user.id
+    ) {
+      await db
+        .delete(members)
+        .where(and(eq(members.id, memberId), eq(members.projectId, projectId)));
 
-    return NextResponse.json(
-      { message: "Successfully left the project" },
-      { status: 200 }
-    );
+      return NextResponse.json(
+        { message: "Member removed successfully" },
+        { status: 200 }
+      );
+    } else {
+      return NextResponse.json(
+        { message: "You are not authorized to remove this member" },
+        { status: 403 }
+      );
+    }
   } catch (error) {
-    console.error("Error leaving project:", error);
+    console.error("Error removing member:", error);
     return NextResponse.json(
       { message: "Server error, try again later" },
       { status: 500 }
