@@ -17,11 +17,12 @@ export async function GET(
 
     const { userId } = params;
 
-    if (!userId)
+    if (!userId) {
       return NextResponse.json(
         { message: "No user Id found" },
         { status: 400 }
       );
+    }
 
     if (session.user.id !== userId) {
       return NextResponse.json({ message: "Access denied" }, { status: 403 });
@@ -31,6 +32,7 @@ export async function GET(
       where: eq(members.userId, userId),
       with: {
         project: true,
+        tasks: true,
       },
     });
 
@@ -41,9 +43,15 @@ export async function GET(
       );
     }
 
-    const projects = userProjects.map(({ project, role }) => ({
+    const projects = userProjects.map(({ project, role, tasks }) => ({
       ...project,
       memberRole: role,
+      totalTasksCount: tasks.length,
+      completedTasksCount: tasks.filter((task) => task.status === "DONE")
+        .length,
+      memberCount: userProjects.filter(
+        (member) => member.projectId === project.id
+      ).length,
     }));
 
     return NextResponse.json({ projects }, { status: 200 });
