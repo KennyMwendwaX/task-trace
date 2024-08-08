@@ -24,6 +24,20 @@ export async function GET(
         { status: 400 }
       );
 
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (!currentUserMember) {
+      return NextResponse.json(
+        { message: "You are not a member of the project" },
+        { status: 403 }
+      );
+    }
+
     const task = await db.query.tasks.findFirst({
       where: eq(tasks.id, taskId),
       with: {
@@ -165,22 +179,6 @@ export async function DELETE(
         { message: "Project ID and Task ID are required" },
         { status: 400 }
       );
-
-    const member = await db.query.members.findFirst({
-      where: and(
-        eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
-      ),
-    });
-
-    if (!member) {
-      return NextResponse.json(
-        {
-          message: "You are not a member of this project",
-        },
-        { status: 403 }
-      );
-    }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(

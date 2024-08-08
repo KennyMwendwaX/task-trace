@@ -48,18 +48,30 @@ export async function PATCH(
       where: and(eq(projects.id, projectId), eq(tasks.id, taskId)),
     });
 
-    if (!task)
+    if (!task) {
       return NextResponse.json({ message: "Task not found" }, { status: 404 });
+    }
+
+    if (
+      currentUserMember.role !== "OWNER" &&
+      currentUserMember.role !== "ADMIN" &&
+      task.memberId !== currentUserMember.id
+    ) {
+      return NextResponse.json(
+        { message: "You are not authorized to modify this task" },
+        { status: 403 }
+      );
+    }
 
     const label = await request.json();
-
     const validation = requestSchema.safeParse({ label });
 
-    if (!validation.success)
+    if (!validation.success) {
       return NextResponse.json(
         { message: "Invalid request data" },
         { status: 400 }
       );
+    }
 
     await db
       .update(tasks)

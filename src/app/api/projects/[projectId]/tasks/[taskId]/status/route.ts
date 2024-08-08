@@ -51,8 +51,18 @@ export async function PATCH(
     if (!task)
       return NextResponse.json({ message: "Task not found" }, { status: 404 });
 
-    const status = await request.json();
+    if (
+      currentUserMember.role !== "OWNER" &&
+      currentUserMember.role !== "ADMIN" &&
+      task.memberId !== currentUserMember.id
+    ) {
+      return NextResponse.json(
+        { message: "You are not authorized to modify this task" },
+        { status: 403 }
+      );
+    }
 
+    const status = await request.json();
     const validation = requestSchema.safeParse({ status });
 
     if (!validation.success)

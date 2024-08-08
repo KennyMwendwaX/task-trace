@@ -48,8 +48,7 @@ export async function GET(
     ) {
       return NextResponse.json(
         {
-          message:
-            "You don't have permission to add tasks to get invitation code",
+          message: "You don't have permission get the project invitation code",
         },
         { status: 403 }
       );

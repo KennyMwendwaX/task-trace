@@ -66,7 +66,14 @@ export async function PATCH(
       where: eq(projects.id, projectId),
     });
 
-    if (project?.ownerId === targetMember.userId) {
+    if (!project) {
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
+    }
+
+    if (project.ownerId === targetMember.userId) {
       return NextResponse.json(
         { message: "Cannot change the role of the project owner" },
         { status: 403 }
