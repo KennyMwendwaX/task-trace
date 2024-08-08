@@ -15,12 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { labels, priorities, statuses } from "@/lib/config";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { taskData } from "../components/task";
 import Link from "next/link";
 import { fetchProject } from "@/lib/api/projects";
 import { fetchTask } from "@/lib/api/tasks";
 import { BsListTask } from "react-icons/bs";
+import Loading from "./components/loading";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -146,6 +145,14 @@ export default function TaskPage({ params }: TaskPageProps) {
     onError: (error) => console.log(error),
   });
 
+  if (projectIsLoading || taskIsLoading) {
+    return (
+      <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
+        <Loading />
+      </main>
+    );
+  }
+
   if (!project) {
     return (
       <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
@@ -247,7 +254,6 @@ export default function TaskPage({ params }: TaskPageProps) {
           </Button>
         </div>
       </div>
-
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-3 lg:flex-wrap-reverse">
           <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
@@ -286,7 +292,6 @@ export default function TaskPage({ params }: TaskPageProps) {
           </div>
         </div>
       </div>
-
       <Card className="mt-4 p-4 sm:p-6">
         <MarkdownPreview
           className="bg-gray-50 p-4 rounded-md"
