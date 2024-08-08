@@ -10,7 +10,7 @@ import {
 
 export default function Loading() {
   return (
-    <>
+    <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
       <Skeleton className="h-8 w-3/4 max-w-[300px]" />
       <Skeleton className="h-6 w-1/2 max-w-[400px] mt-2" />
 
@@ -79,6 +79,6 @@ export default function Loading() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </main>
   );
 }

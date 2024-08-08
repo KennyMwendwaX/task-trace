@@ -39,40 +39,41 @@ import { LuClipboard } from "react-icons/lu";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { projectData } from "../components/project";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  Project,
   ProjectFormValues,
   projectFormSchema,
 } from "@/lib/schema/ProjectSchema";
+import { fetchProject } from "@/lib/api/projects";
+import NoProjectFound from "../components/no-project-found";
 
 export default function Settings({
   params,
 }: {
   params: { projectId: string };
 }) {
-  const project = {
-    ...projectData,
-    status: projectData.status as "BUILDING" | "LIVE",
-    createdAt: new Date(projectData.createdAt),
-    updatedAt: new Date(projectData.updatedAt),
-    invitationCode: {
-      ...projectData.invitationCode,
-      expiresAt: new Date(projectData.invitationCode.expiresAt),
-    },
-  };
+  const projectId = params.projectId;
+  const queryClient = useQueryClient();
+
+  const {
+    data: project,
+    isLoading: projectIsLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => fetchProject(projectId),
+    enabled: !!projectId,
+  });
+
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
-      name: project.name,
-      status: project.status,
-      description: project.description,
+      name: "Go concurrency model",
+      status: "LIVE",
+      description:
+        "This is a cold world, but that is just a tip of the ice berg.",
     },
   });
-  const queryClient = useQueryClient();
-  const router = useRouter();
 
   const {
     mutate: updateProject,
@@ -99,11 +100,18 @@ export default function Settings({
     },
   });
 
+  // if (projectIsLoading) {
+  //   return <Loading />;
+  // }
+
+  if (!project) {
+    return <NoProjectFound />;
+  }
+
   async function onSubmit(values: ProjectFormValues) {
     updateProject(values);
   }
-  const projectId = params.projectId;
-  const code = project.invitationCode.code;
+  const code = "Tzq63nZSNe";
 
   const handleCopy = () => {
     navigator.clipboard
@@ -120,7 +128,7 @@ export default function Settings({
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
         <div className="text-2xl font-bold tracking-tight">
-          {project.name} Settings
+          Go concurrency model Settings
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-4 items-start mt-2">
           <div className="w-full flex flex-col gap-4">
