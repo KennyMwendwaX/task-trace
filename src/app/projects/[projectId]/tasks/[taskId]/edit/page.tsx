@@ -39,18 +39,20 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Member } from "@/lib/schema/MemberSchema";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { taskData as task } from "../../components/task";
-import { membersData } from "../../../components/members";
 import { Label, Priority } from "@/lib/config";
+import { fetchProject } from "@/lib/api/projects";
+import { fetchTask } from "@/lib/api/tasks";
+import { fetchProjectMembers } from "@/lib/api/members";
+import { MdOutlineFolderOff } from "react-icons/md";
+import { BsListTask } from "react-icons/bs";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -59,24 +61,44 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 interface EditTaskPageProps {
   params: {
     projectId: string;
+    taskId: string;
   };
 }
 
 export default function EditTaskPage({ params }: EditTaskPageProps) {
-  const { projectId } = params;
-  const form = useForm<TaskFormValues>({
-    resolver: zodResolver(taskFormSchema),
-    values: {
-      name: task.name,
-      label: task.label as Label,
-      priority: task.priority as Priority,
-      dueDate: new Date(task.dueDate),
-      memberId: task.memberId,
-      description: task.description,
-    },
-  });
+  const { projectId, taskId } = params;
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const {
+    data: project,
+    isLoading: projectIsLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => fetchProject(projectId),
+    enabled: !!projectId,
+  });
+
+  const {
+    data: task,
+    isLoading: taskIsLoading,
+    error: taskError,
+  } = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: () => fetchTask(projectId, taskId),
+    enabled: !!projectId && !!taskId,
+  });
+
+  const {
+    data: members = [],
+    isLoading: membersIsLoading,
+    error: membersError,
+  } = useQuery({
+    queryKey: ["project-members", projectId],
+    queryFn: () => fetchProjectMembers(projectId),
+    enabled: !!projectId,
+  });
 
   const {
     mutate: updateTask,
@@ -84,6 +106,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
     error,
   } = useMutation({
     mutationFn: async (values: TaskFormValues) => {
+      if (!taskId || !task) throw new Error("No task ID or task data");
       const options = {
         method: "PUT",
         body: JSON.stringify(values),
@@ -98,7 +121,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["task", task.id],
+        queryKey: ["task", task?.id],
       });
     },
     onError: (error) => {
@@ -106,19 +129,17 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
     },
   });
 
-  const members = membersData
-    ?.map((member) => ({
-      ...member,
-      createdAt: new Date(member.createdAt),
-      updatedAt: new Date(member.updatedAt),
-      tasks: member.tasks.map((task) => ({
-        ...task,
-        dueDate: new Date(task.dueDate),
-        createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
-      })),
-    }))
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Member[];
+  const form = useForm<TaskFormValues>({
+    resolver: zodResolver(taskFormSchema),
+    values: {
+      name: task?.name || "",
+      label: (task?.label as Label) || "",
+      priority: (task?.priority as Priority) || "",
+      dueDate: task?.dueDate ? new Date(task.dueDate) : new Date(),
+      memberId: task?.memberId || "",
+      description: task?.description || "",
+    },
+  });
 
   async function onSubmit(values: TaskFormValues) {
     updateTask(values);

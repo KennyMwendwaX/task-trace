@@ -139,7 +139,7 @@ export default function TaskPage({ params }: TaskPageProps) {
       if (!response.ok) throw new Error("Something went wrong");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
       router.push(`/projects/${projectId}/tasks`);
     },
     onError: (error) => console.log(error),
