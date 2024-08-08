@@ -1,10 +1,5 @@
 import axios from "axios";
-import { Project } from "../schema/ProjectSchema";
-import { ProjectRole } from "../config";
-
-interface UserProject extends Project {
-  memberRole: ProjectRole;
-}
+import { ExtendedProject, Project } from "../schema/ProjectSchema";
 
 export const fetchProject = async (projectId: string): Promise<Project> => {
   if (!projectId) throw new Error("No project ID");
@@ -30,10 +25,10 @@ export const fetchProject = async (projectId: string): Promise<Project> => {
 
 export const fetchUserProjects = async (
   userId: string | undefined
-): Promise<UserProject[]> => {
+): Promise<ExtendedProject[]> => {
   if (!userId) throw new Error("User ID not found");
   try {
-    const { data } = await axios.get<{ projects: UserProject[] }>(
+    const { data } = await axios.get<{ projects: ExtendedProject[] }>(
       `/api/users/${userId}/projects`
     );
     return data.projects

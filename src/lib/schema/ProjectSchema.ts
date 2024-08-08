@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProjectRole } from "../config";
 
 export const projectSchema = z.object({
   id: z.string(),
@@ -41,3 +42,9 @@ export const projectFormSchema = projectSchema.omit({
 
 export type Project = z.infer<typeof projectSchema>;
 export type ProjectFormValues = z.infer<typeof projectFormSchema>;
+export type ExtendedProject = Project & {
+  memberRole: ProjectRole;
+  totalTasksCount: number;
+  completedTasksCount: number;
+  memberCount: number;
+};
