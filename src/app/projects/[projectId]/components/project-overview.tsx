@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Project } from "@/lib/schema/ProjectSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { LuUsers, LuCalendar, LuUser2, LuCheckSquare } from "react-icons/lu";
@@ -9,13 +10,20 @@ import {
   StopwatchIcon,
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+import React from "react";
 
 type Props = {
+  project: Project;
   tasks: ProjectTask[];
   members: Member[];
 };
 
-export default function ProjectOverview({ tasks, members }: Props) {
+const ProjectOverview = React.memo(function ProjectOverview({
+  project,
+  tasks,
+  members,
+}: Props) {
   const totalTasks = tasks.length;
   const tasksDone = tasks.filter((task) => task.status === "DONE").length;
   const tasksTodo = tasks.filter((task) => task.status === "TO_DO").length;
@@ -25,6 +33,11 @@ export default function ProjectOverview({ tasks, members }: Props) {
   const tasksCanceled = tasks.filter(
     (task) => task.status === "CANCELED"
   ).length;
+
+  const createdAt = format(project.createdAt, "MMM d, yyyy");
+  const updatedAt = project.updatedAt
+    ? format(project.updatedAt, "MMM d, yyyy")
+    : null;
 
   const cardData = [
     {
@@ -61,11 +74,7 @@ export default function ProjectOverview({ tasks, members }: Props) {
             <h2 className="text-xl font-bold text-gray-800">
               Project Overview
             </h2>
-            <p className="text-gray-600 mt-1">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-              quas laudantium facere. Quae, modi dolores. Perferendis ut neque
-              nemo cumque consequuntur autem.
-            </p>
+            <p className="text-gray-600 mt-1">{project.description}</p>
           </div>
           <div className="flex flex-col w-full lg:w-auto gap-3">
             <div className="flex justify-between gap-2">
@@ -92,16 +101,18 @@ export default function ProjectOverview({ tasks, members }: Props) {
               <div>
                 <p className="text-xs text-gray-500">Owner</p>
                 <p className="text-sm font-semibold text-gray-800">
-                  Johnny Billionz
+                  {project.owner.name}
                 </p>
               </div>
             </div>
-            <div className="flex items-center text-gray-600 bg-gray-100 rounded-full px-3 py-1.5">
-              <LuCalendar className="w-4 h-4 mr-2" />
-              <span className="text-sm font-semibold text-gray-800">
-                Updated: 2024-07-06
-              </span>
-            </div>
+            {updatedAt && (
+              <div className="flex items-center text-gray-600 bg-gray-100 rounded-full px-3 py-1.5">
+                <LuCalendar className="w-4 h-4 mr-2" />
+                <span className="text-sm font-semibold text-gray-800">
+                  Updated: 2024-07-06
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -125,4 +136,6 @@ export default function ProjectOverview({ tasks, members }: Props) {
       </div>
     </Card>
   );
-}
+});
+
+export default ProjectOverview;
