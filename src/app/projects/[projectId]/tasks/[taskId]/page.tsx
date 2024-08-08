@@ -1,24 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
 import rehypeHighlight from "rehype-highlight";
-import { LuCalendar, LuTimer, LuUser2 } from "react-icons/lu";
-import { MdAccessTime } from "react-icons/md";
+import { LuCalendar, LuChevronLeft, LuTimer, LuUser2 } from "react-icons/lu";
+import { MdAccessTime, MdOutlineFolderOff } from "react-icons/md";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import EditTaskModal from "@/components/EditTaskModal";
 import { labels, priorities, statuses } from "@/lib/config";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { taskData } from "../components/task";
 import Link from "next/link";
+import { fetchProject } from "@/lib/api/projects";
+import { fetchTask } from "@/lib/api/tasks";
+import { BsListTask } from "react-icons/bs";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -108,12 +110,25 @@ export default function TaskPage({ params }: TaskPageProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const task = {
-    ...taskData,
-    dueDate: new Date(taskData.dueDate),
-    createdAt: new Date(taskData.createdAt),
-    updatedAt: new Date(taskData.updatedAt),
-  } as ProjectTask;
+  const {
+    data: project,
+    isLoading: projectIsLoading,
+    error: projectError,
+  } = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => fetchProject(projectId),
+    enabled: !!projectId,
+  });
+
+  const {
+    data: task,
+    isLoading: taskIsLoading,
+    error: taskError,
+  } = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: () => fetchTask(projectId, taskId),
+    enabled: !!projectId && !!taskId,
+  });
 
   const { mutate: deleteTask } = useMutation({
     mutationFn: async () => {
@@ -211,7 +226,6 @@ export default function TaskPage({ params }: TaskPageProps) {
       </div>
 
       <Card className="mt-4 p-4 sm:p-6">
-        <h2 className="text-xl font-semibold mb-4">Description</h2>
         <MarkdownPreview
           className="bg-gray-50 p-4 rounded-md"
           source={task.description}

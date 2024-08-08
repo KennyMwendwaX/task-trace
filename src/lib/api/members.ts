@@ -7,11 +7,13 @@ export const fetchProjectMembers = async (projectId: string) => {
     const { data } = await axios.get<{ members: Member[] }>(
       `/api/projects/${projectId}/members`
     );
-    return data.members.map((member) => ({
-      ...member,
-      createdAt: new Date(member.createdAt),
-      updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
-    }));
+    return data.members
+      .map((member) => ({
+        ...member,
+        createdAt: new Date(member.createdAt),
+        updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
+      }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to fetch project members: ${error.message}`);

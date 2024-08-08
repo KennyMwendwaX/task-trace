@@ -60,7 +60,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   if (!project) {
     return (
       <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
-        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[560px]">
           <div className="flex flex-col items-center gap-1 text-center">
             <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
               <MdOutlineFolderOff className="h-12 w-12 text-gray-400" />
@@ -108,7 +108,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
             </div>
           </>
         ) : (
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[520px]">
+          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[560px]">
             <div className="flex flex-col items-center gap-1 text-center">
               <TbPlaylistX className="h-12 w-12 text-muted-foreground" />
               <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
