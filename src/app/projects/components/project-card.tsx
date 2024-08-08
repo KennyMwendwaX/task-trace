@@ -20,43 +20,28 @@ import {
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Project } from "@/lib/schema/ProjectSchema";
+import { ExtendedProject } from "@/lib/schema/ProjectSchema";
 import { format } from "date-fns";
 
-const dummyProject = {
-  id: "1",
-  name: "Project Alpha",
-  status: "LIVE",
-  description:
-    "This is a sample project description. It showcases the project's main goals and objectives.",
-  members: [
-    { name: "John Doe", avatar: "https://example.com/avatar1.jpg" },
-    { name: "Jane Smith", avatar: "https://example.com/avatar2.jpg" },
-    { name: "Bob Johnson", avatar: "https://example.com/avatar3.jpg" },
-    { name: "Alice Brown", avatar: "https://example.com/avatar4.jpg" },
-  ],
-  dueDate: "2023-12-31",
-};
-
-const projectStatuses = [
-  { value: "LIVE", label: "Live" },
-  { value: "BUILDING", label: "Building" },
-];
-
 type Props = {
-  project: Project;
+  project: ExtendedProject;
 };
+
+const members = [
+  { name: "John Doe", avatar: "https://example.com/avatar1.jpg" },
+  { name: "Jane Smith", avatar: "https://example.com/avatar2.jpg" },
+  { name: "Bob Johnson", avatar: "https://example.com/avatar3.jpg" },
+  { name: "Alice Brown", avatar: "https://example.com/avatar4.jpg" },
+];
 
 export default function ProjectCard({ project }: Props) {
   const statusColor =
     project.status === "LIVE"
       ? "border-green-600 text-green-600"
       : "border-blue-600 text-blue-600";
-  const formattedDate = format(project.createdAt, "MMM d, yyyy");
-
-  const completedTasks = 17;
-  const totalTasks = 25;
-  const progressPercentage = (completedTasks / totalTasks) * 100;
+  const createdAt = format(project.createdAt, "MMM d, yyyy");
+  const progressPercentage =
+    (project.completedTasksCount / project.totalTasksCount) * 100;
 
   return (
     <Card className="hover:shadow-lg transition-all duration-300">
@@ -93,7 +78,7 @@ export default function ProjectCard({ project }: Props) {
             {project.status}
           </Badge>
           <Badge variant="outline" className="text-sm">
-            <LuUsers className="mr-1 h-4 w-4" /> {dummyProject.members.length}
+            <LuUsers className="mr-1 h-4 w-4" /> {project.memberCount}
             members
           </Badge>
         </div>
@@ -106,7 +91,7 @@ export default function ProjectCard({ project }: Props) {
           <div className="flex justify-between items-center text-sm">
             <span className="font-medium text-gray-700">Progress</span>
             <span className="text-gray-600 font-medium">
-              {completedTasks}/{totalTasks} tasks
+              {project.completedTasksCount}/{project.totalTasksCount} tasks
             </span>
           </div>
           <Progress
@@ -126,21 +111,21 @@ export default function ProjectCard({ project }: Props) {
         </div>
         <div className="mt-4 flex items-center justify-between">
           <div className="flex -space-x-2">
-            {dummyProject.members.slice(0, 3).map((member, index) => (
+            {members.slice(0, 3).map((member, index) => (
               <Avatar key={index} className="border-2 border-white w-8 h-8">
                 <AvatarImage src={member.avatar} alt={member.name} />
                 <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
               </Avatar>
             ))}
-            {dummyProject.members.length > 3 && (
+            {members.length > 3 && (
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-xs font-medium text-gray-600 border-2 border-white">
-                +{dummyProject.members.length - 3}
+                +{members.length - 3}
               </div>
             )}
           </div>
           <div className="flex items-center text-sm text-gray-600">
             <LuClock className="mr-1 h-4 w-4" />
-            {formattedDate}
+            {createdAt}
           </div>
         </div>
       </CardContent>

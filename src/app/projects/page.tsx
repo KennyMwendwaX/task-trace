@@ -12,12 +12,7 @@ import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { fetchUserProjects } from "@/lib/api/projects";
-import { Project } from "@/lib/schema/ProjectSchema";
-import { ProjectRole } from "@/lib/config";
-
-interface UserProject extends Project {
-  memberRole: ProjectRole;
-}
+import { ExtendedProject } from "@/lib/schema/ProjectSchema";
 
 export default function Projects() {
   const session = useSession();
@@ -56,7 +51,7 @@ export default function Projects() {
   };
 
   const renderProjectSection = (
-    projects: UserProject[],
+    projects: ExtendedProject[],
     title: string,
     icon: React.ReactNode
   ) => {
