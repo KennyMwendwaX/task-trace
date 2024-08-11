@@ -26,9 +26,9 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Project,
   ProjectFormValues,
   projectFormSchema,
-  projectSchema,
 } from "@/lib/schema/ProjectSchema";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -36,6 +36,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
   projectId: string;
+  //   project: Project;
 }
 
 export default function UpdateProjectDetails({ projectId }: Props) {

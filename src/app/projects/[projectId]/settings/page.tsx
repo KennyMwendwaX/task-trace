@@ -2,6 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -10,14 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Dialog,
   DialogClose,
@@ -29,19 +29,12 @@ import {
 } from "@/components/ui/dialog";
 import { LuClipboard } from "react-icons/lu";
 import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ProjectFormValues, projectSchema } from "@/lib/schema/ProjectSchema";
+import { useQuery } from "@tanstack/react-query";
 import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../components/no-project-found";
-import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { z } from "zod";
-
-const switchFormSchema = z.object({
-  isPublic: projectSchema.shape.isPublic,
-});
+import UpdateProjectDetails from "./components/update-project-details";
+import ProjectVisibility from "./components/project-visibilty";
 
 export default function Settings({
   params,
@@ -49,7 +42,6 @@ export default function Settings({
   params: { projectId: string };
 }) {
   const projectId = params.projectId;
-  const queryClient = useQueryClient();
 
   const {
     data: project,
@@ -61,35 +53,6 @@ export default function Settings({
     enabled: !!projectId,
   });
 
-  const switchForm = useForm<z.infer<typeof switchFormSchema>>({
-    resolver: zodResolver(switchFormSchema),
-  });
-
-  const {
-    mutate: updateProject,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: async (values: ProjectFormValues) => {
-      const options = {
-        method: "PUT",
-        body: JSON.stringify(values),
-      };
-      const response = await fetch("/api/projects", options);
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["project", projectId],
-      });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
   // if (projectIsLoading) {
   //   return <Loading />;
   // }
@@ -97,10 +60,6 @@ export default function Settings({
   // if (!project) {
   //   return <NoProjectFound />;
   // }
-
-  async function onSubmit(values: ProjectFormValues) {
-    updateProject(values);
-  }
 
   const code = "Tzq63nZSNe";
 
@@ -115,10 +74,6 @@ export default function Settings({
       });
   };
 
-  function onSubmitSwitch(data: z.infer<typeof switchFormSchema>) {
-    toast.success("Hi yall");
-  }
-
   return (
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
@@ -127,47 +82,8 @@ export default function Settings({
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-4 items-start mt-2">
           <div className="w-full flex flex-col gap-4">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="text-xl">Project Visibility</CardTitle>
-                <CardDescription>
-                  Control who can see your project.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <Form {...switchForm}>
-                    <form
-                      onSubmit={switchForm.handleSubmit(onSubmitSwitch)}
-                      className="w-full space-y-6">
-                      <FormField
-                        control={switchForm.control}
-                        name="isPublic"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                            <div className="space-y-0.5">
-                              <FormLabel className="text-base">
-                                Make project public{" "}
-                              </FormLabel>
-                              <FormDescription>
-                                Allow anyone with the link to view this project
-                              </FormDescription>
-                            </div>
-                            <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <Button type="submit">Submit</Button>
-                    </form>
-                  </Form>
-                </div>
-              </CardContent>
-            </Card>
+            <UpdateProjectDetails projectId={projectId} />
+            <ProjectVisibility />
 
             <Card className="border-red-300 shadow-sm">
               <CardHeader>
