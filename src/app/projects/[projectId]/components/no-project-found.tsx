@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LuChevronLeft } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
