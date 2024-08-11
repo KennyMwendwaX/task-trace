@@ -35,11 +35,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
-  projectId: string;
   project: Project;
 }
 
-export default function UpdateProjectDetails({ projectId, project }: Props) {
+export default function UpdateProjectDetails({ project }: Props) {
   const queryClient = useQueryClient();
 
   const form = useForm<ProjectFormValues>({
@@ -69,7 +68,7 @@ export default function UpdateProjectDetails({ projectId, project }: Props) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["project", projectId],
+        queryKey: ["project", project.id],
       });
     },
     onError: (error) => {

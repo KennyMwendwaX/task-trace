@@ -22,7 +22,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 interface Props {
-  projectId: string;
   project: Project;
 }
 
@@ -34,7 +33,7 @@ const project = {
   isPublic: true,
 };
 
-export default function ProjectVisibility({ projectId, project }: Props) {
+export default function ProjectVisibility({ project }: Props) {
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
     defaultValues: {
