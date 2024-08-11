@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   project: Project;
@@ -29,38 +30,61 @@ const switchFormSchema = z.object({
   isPublic: projectSchema.shape.isPublic,
 });
 
-const project = {
-  isPublic: true,
-};
-
 export default function ProjectVisibility({ project }: Props) {
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
     defaultValues: {
-      isPublic: project.isPublic,
+      isPublic: project?.isPublic,
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: toggleProjectVisibility,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async (isPublic: boolean) => {
+      const options = {
+        method: "PATCH",
+        body: JSON.stringify({ isPublic }),
+      };
+      const response = await fetch(
+        `/api/projects/${project.id}/visibility`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["project", project.id],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
   const handleSwitchChange = useCallback(
-    async (checked: boolean) => {
-      try {
-        // Update the form state
-        switchForm.setValue("isPublic", checked);
-
-        // Perform any async operation here, e.g., API call
-        // await updateProjectVisibility(projectId, checked);
-
-        toast.success(
-          checked ? "Project is now public" : "Project is now private"
-        );
-      } catch (error) {
-        console.error("Error updating project visibility:", error);
-        toast.error("Failed to update project visibility");
-        // Revert the switch state if the operation failed
-        switchForm.setValue("isPublic", !checked);
-      }
+    (checked: boolean) => {
+      switchForm.setValue("isPublic", checked);
+      toggleProjectVisibility(checked, {
+        onSuccess: () => {
+          toast.success(
+            checked ? "Project is now public" : "Project is now private"
+          );
+        },
+        onError: (error) => {
+          console.error("Error updating project visibility:", error);
+          toast.error("Failed to update project visibility");
+          switchForm.setValue("isPublic", !checked);
+        },
+      });
     },
-    [switchForm]
+    [switchForm, toggleProjectVisibility]
   );
 
   return (
@@ -90,6 +114,7 @@ export default function ProjectVisibility({ project }: Props) {
                       <Switch
                         checked={field.value}
                         onCheckedChange={handleSwitchChange}
+                        disabled={isPending}
                       />
                     </FormControl>
                   </FormItem>
