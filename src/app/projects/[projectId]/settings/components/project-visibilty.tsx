@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { useCallback } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -14,7 +13,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { Project, projectSchema } from "@/lib/schema/ProjectSchema";
@@ -32,14 +30,39 @@ const switchFormSchema = z.object({
   isPublic: projectSchema.shape.isPublic,
 });
 
+const project = {
+  isPublic: true,
+};
+
 export default function ProjectVisibility() {
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
+    defaultValues: {
+      isPublic: project.isPublic,
+    },
   });
 
-  function onSubmitSwitch(data: z.infer<typeof switchFormSchema>) {
-    toast.success("Hi yall");
-  }
+  const handleSwitchChange = useCallback(
+    async (checked: boolean) => {
+      try {
+        // Update the form state
+        switchForm.setValue("isPublic", checked);
+
+        // Perform any async operation here, e.g., API call
+        // await updateProjectVisibility(projectId, checked);
+
+        toast.success(
+          checked ? "Project is now public" : "Project is now private"
+        );
+      } catch (error) {
+        console.error("Error updating project visibility:", error);
+        toast.error("Failed to update project visibility");
+        // Revert the switch state if the operation failed
+        switchForm.setValue("isPublic", !checked);
+      }
+    },
+    [switchForm]
+  );
 
   return (
     <Card className="w-full">
@@ -50,9 +73,7 @@ export default function ProjectVisibility() {
       <CardContent>
         <div className="flex items-center justify-between">
           <Form {...switchForm}>
-            <form
-              onSubmit={switchForm.handleSubmit(onSubmitSwitch)}
-              className="w-full space-y-6">
+            <form className="w-full space-y-6">
               <FormField
                 control={switchForm.control}
                 name="isPublic"
@@ -60,7 +81,7 @@ export default function ProjectVisibility() {
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        Make project public{" "}
+                        Make project public
                       </FormLabel>
                       <FormDescription>
                         Allow anyone with the link to view this project
@@ -69,13 +90,12 @@ export default function ProjectVisibility() {
                     <FormControl>
                       <Switch
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={handleSwitchChange}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
             </form>
           </Form>
         </div>
