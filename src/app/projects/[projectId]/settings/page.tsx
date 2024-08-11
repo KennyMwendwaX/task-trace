@@ -39,9 +39,9 @@ export default function Settings({
   //   return <Loading />;
   // }
 
-  // if (!project) {
-  //   return <NoProjectFound />;
-  // }
+  if (!project) {
+    return <NoProjectFound />;
+  }
 
   const code = "Tzq63nZSNe";
 
@@ -64,8 +64,8 @@ export default function Settings({
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-4 items-start mt-2">
           <div className="w-full flex flex-col gap-4">
-            <UpdateProjectDetails projectId={projectId} />
-            <ProjectVisibility />
+            <UpdateProjectDetails projectId={projectId} project={project} />
+            <ProjectVisibility projectId={projectId} project={project} />
             <DangerZone />
           </div>
 

@@ -36,10 +36,10 @@ import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
   projectId: string;
-  //   project: Project;
+  project: Project;
 }
 
-export default function UpdateProjectDetails({ projectId }: Props) {
+export default function UpdateProjectDetails({ projectId, project }: Props) {
   const queryClient = useQueryClient();
 
   const form = useForm<ProjectFormValues>({

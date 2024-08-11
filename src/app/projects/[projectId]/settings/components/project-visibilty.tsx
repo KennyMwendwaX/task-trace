@@ -34,7 +34,7 @@ const project = {
   isPublic: true,
 };
 
-export default function ProjectVisibility() {
+export default function ProjectVisibility({ projectId, project }: Props) {
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
     defaultValues: {
