@@ -2,14 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormDescription,
@@ -19,12 +11,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogClose,
@@ -34,18 +27,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { LuClipboard } from "react-icons/lu";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ProjectFormValues,
-  projectFormSchema,
-  projectSchema,
-} from "@/lib/schema/ProjectSchema";
+import { ProjectFormValues, projectSchema } from "@/lib/schema/ProjectSchema";
 import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../components/no-project-found";
 import { Switch } from "@/components/ui/switch";
@@ -62,7 +49,6 @@ export default function Settings({
   params: { projectId: string };
 }) {
   const projectId = params.projectId;
-  const [isPublic, setIsPublic] = useState(false);
   const queryClient = useQueryClient();
 
   const {
@@ -77,16 +63,6 @@ export default function Settings({
 
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
-  });
-
-  const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectFormSchema),
-    defaultValues: {
-      name: "Go concurrency model",
-      status: "LIVE",
-      description:
-        "This is a cold world, but that is just a tip of the ice berg.",
-    },
   });
 
   const {
@@ -151,100 +127,6 @@ export default function Settings({
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-4 items-start mt-2">
           <div className="w-full flex flex-col gap-4">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  Update Project Details
-                </CardTitle>
-                <CardDescription>
-                  Only the owner or admins can update the project details.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form
-                    className="space-y-3 pt-2 px-3"
-                    onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="grid md:grid-cols-2 md:gap-6">
-                      <div className="relative">
-                        <FormField
-                          control={form.control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Project Name</FormLabel>
-                              <FormControl>
-                                <Input
-                                  type="text"
-                                  id="name"
-                                  className="focus:border-2 focus:border-blue-600"
-                                  placeholder="Project name"
-                                  {...field}
-                                  value={field.value || ""}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="relative">
-                        <FormField
-                          control={form.control}
-                          name="status"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Project Status</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value || undefined}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select status" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="LIVE">Live</SelectItem>
-                                  <SelectItem value="BUILDING">
-                                    Building
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                id="description"
-                                className="focus:border-2 focus:border-blue-600"
-                                placeholder="Project description"
-                                {...field}
-                                value={field.value || ""}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <Button size="sm" type="submit">
-                      Update Project
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-
             <Card className="w-full">
               <CardHeader>
                 <CardTitle className="text-xl">Project Visibility</CardTitle>
