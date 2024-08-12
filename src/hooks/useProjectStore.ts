@@ -1,5 +1,5 @@
 import { Member } from "@/lib/schema/MemberSchema";
-import { ExtendedProject, Project } from "@/lib/schema/ProjectSchema";
+import { Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask, UserTask } from "@/lib/schema/TaskSchema";
 import { create } from "zustand";
 
