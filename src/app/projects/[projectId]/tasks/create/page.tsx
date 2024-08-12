@@ -86,7 +86,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
       router.push(`/projects/${projectId}/tasks`);
     },
