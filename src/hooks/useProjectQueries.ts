@@ -43,7 +43,7 @@ export const usePublicProjectsQuery = (): UseQueryResult<Project[], Error> => {
   return result;
 };
 
-export const useMembersQuery = (
+export const useProjectMembersQuery = (
   projectId: string
 ): UseQueryResult<Member[], Error> => {
   const setMembers = useProjectStore((state) => state.setMembers);

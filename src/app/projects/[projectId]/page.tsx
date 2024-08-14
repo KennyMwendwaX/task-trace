@@ -3,18 +3,21 @@
 import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
-import { useQuery } from "@tanstack/react-query";
 import Loading from "./components/loading";
 import AddTaskModal from "@/components/AddTaskModal";
 import AddMemberModal from "@/components/AddMemberModal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
-import { fetchProject } from "@/lib/api/projects";
-import { fetchUsers } from "@/lib/api/users";
-import { fetchProjectMembers } from "@/lib/api/members";
-import { fetchProjectTasks } from "@/lib/api/tasks";
 import NoProjectFound from "./components/no-project-found";
+import {
+  useProjectMembersQuery,
+  useProjectQuery,
+  useProjectTasksQuery,
+} from "@/hooks/useProjectQueries";
+import { useUsersQuery } from "@/hooks/useUserQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
+import { useUserStore } from "@/hooks/useUserStore";
 
 export default function ProjectPage({
   params,
@@ -23,44 +26,13 @@ export default function ProjectPage({
 }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
+  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
+  const { isLoading: usersIsLoading } = useUsersQuery();
+  const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
+  const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
 
-  const {
-    data: users,
-    isLoading: usersIsLoading,
-    error: usersError,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => fetchUsers(),
-  });
-
-  const {
-    data: members,
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: () => fetchProjectMembers(projectId),
-    enabled: !!projectId,
-  });
-
-  const {
-    data: tasks,
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["project-tasks", projectId],
-    queryFn: () => fetchProjectTasks(projectId),
-    enabled: !!projectId,
-  });
+  const { project, members, tasks } = useProjectStore();
+  const { users } = useUserStore();
 
   const isLoading =
     projectIsLoading || usersIsLoading || membersIsLoading || tasksIsLoading;

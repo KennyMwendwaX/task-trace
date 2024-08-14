@@ -7,24 +7,20 @@ interface ProjectStore {
   project: Project | null;
   publicProjects: Project[];
   members: Member[];
-  userTasks: UserTask[];
-  projectTasks: ProjectTask[];
+  tasks: ProjectTask[];
   setProject: (project: Project) => void;
   setPublicProjects: (projects: Project[]) => void;
   setMembers: (members: Member[]) => void;
-  //   setUserTasks: (userTasks: UserTask[]) => void;
-  setProjectTasks: (projectTasks: ProjectTask[]) => void;
+  setProjectTasks: (tasks: ProjectTask[]) => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set) => ({
   project: null,
   publicProjects: [],
   members: [],
-  userTasks: [],
-  projectTasks: [],
+  tasks: [],
   setProject: (project) => set({ project }),
   setPublicProjects: (publicProjects) => set({ publicProjects }),
   setMembers: (members) => set({ members }),
-  //   setUserTasks: (userTasks) => set({ userTasks }),
-  setProjectTasks: (projectTasks) => set({ projectTasks }),
+  setProjectTasks: (tasks) => set({ tasks }),
 }));
