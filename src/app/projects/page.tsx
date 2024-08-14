@@ -13,6 +13,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { fetchUserProjects } from "@/lib/api/projects";
 import { ExtendedProject } from "@/lib/schema/ProjectSchema";
+import { useUsersProjectsQuery } from "@/hooks/useUserQueries";
+import { useUserStore } from "@/hooks/useUserStore";
 
 export default function Projects() {
   const session = useSession();
@@ -22,11 +24,8 @@ export default function Projects() {
 
   const userId = session.data?.user?.id;
 
-  const { data: projects = [], isLoading } = useQuery({
-    queryKey: ["user-projects", userId],
-    queryFn: () => fetchUserProjects(userId),
-    enabled: !!userId,
-  });
+  const { isLoading } = useUsersProjectsQuery(userId);
+  const { projects } = useUserStore();
 
   const ownedProjects = projects.filter(
     (project) => project.memberRole === "OWNER"
