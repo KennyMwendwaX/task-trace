@@ -2,12 +2,8 @@
 
 import MemberTable from "./components/member-table/table";
 import { TableColumns } from "./components/member-table/table-columns";
-import { useQuery } from "@tanstack/react-query";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/AddMemberModal";
-import { fetchProjectMembers } from "@/lib/api/members";
-import { fetchUsers } from "@/lib/api/users";
-import { fetchProject } from "@/lib/api/projects";
 import Loading from "./components/loading";
 import NoProjectFound from "../components/no-project-found";
 import {

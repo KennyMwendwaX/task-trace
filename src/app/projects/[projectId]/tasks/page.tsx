@@ -2,51 +2,27 @@
 
 import TaskTable from "./components/task-table/table";
 import { TableColumns } from "./components/task-table/table-columns";
-import { useQuery } from "@tanstack/react-query";
 import { TbPlaylistX } from "react-icons/tb";
 import Loading from "./components/loading";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { fetchProjectTasks } from "@/lib/api/tasks";
-import { fetchProjectMembers } from "@/lib/api/members";
-import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../components/no-project-found";
+import {
+  useProjectQuery,
+  useProjectTasksQuery,
+} from "@/hooks/useProjectQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
+  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
+  const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
 
-  const {
-    data: tasks = [],
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["project-tasks", projectId],
-    queryFn: () => fetchProjectTasks(projectId),
-    enabled: !!projectId,
-  });
+  const { project, tasks } = useProjectStore();
 
-  const {
-    data: members,
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: () => fetchProjectMembers(projectId),
-    enabled: !!projectId,
-  });
-
-  if (projectIsLoading || tasksIsLoading || membersIsLoading) {
+  if (projectIsLoading || tasksIsLoading) {
     return <Loading />;
   }
 
