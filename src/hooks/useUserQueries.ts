@@ -44,7 +44,7 @@ export const useUsersProjectsQuery = (
 };
 
 export const useUsersTasksQuery = (
-  userId: string
+  userId: string | undefined
 ): UseQueryResult<UserTask[], Error> => {
   const setUserTasks = useUserStore((state) => state.setUserTasks);
   const result = useQuery({

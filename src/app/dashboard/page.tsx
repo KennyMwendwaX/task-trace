@@ -3,27 +3,19 @@
 import AddProjectModal from "@/components/AddProjectModal";
 import JoinProjectModal from "@/components/join-project-modal";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
 import TaskOverview from "./components/task-overview";
 import Loading from "./components/loading";
 import RecentTasks from "./components/recent-tasks";
 import TaskChart from "./components/task-chart";
-import { fetchUserTasks } from "@/lib/api/tasks";
+import { useUsersTasksQuery } from "@/hooks/useUserQueries";
+import { useUserStore } from "@/hooks/useUserStore";
 
 export default function Dashboard() {
   const session = useSession();
-
   const userId = session.data?.user?.id;
 
-  const {
-    data: tasks = [],
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["user-tasks", userId],
-    queryFn: () => fetchUserTasks(userId),
-    enabled: !!userId,
-  });
+  const { isLoading: tasksIsLoading } = useUsersTasksQuery(userId);
+  const { tasks } = useUserStore();
 
   return (
     <>

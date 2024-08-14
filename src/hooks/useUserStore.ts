@@ -5,18 +5,18 @@ import { create } from "zustand";
 
 interface UserStore {
   users: User[];
-  userProjects: ExtendedProject[];
-  userTasks: UserTask[];
+  projects: ExtendedProject[];
+  tasks: UserTask[];
   setUsers: (users: User[]) => void;
-  setUserProjects: (userProjects: ExtendedProject[]) => void;
-  setUserTasks: (userTasks: UserTask[]) => void;
+  setUserProjects: (projects: ExtendedProject[]) => void;
+  setUserTasks: (tasks: UserTask[]) => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
   users: [],
-  userProjects: [],
-  userTasks: [],
+  projects: [],
+  tasks: [],
   setUsers: (users) => set({ users }),
-  setUserProjects: (userProjects) => set({ userProjects }),
-  setUserTasks: (userTasks) => set({ userTasks }),
+  setUserProjects: (projects) => set({ projects }),
+  setUserTasks: (tasks) => set({ tasks }),
 }));
