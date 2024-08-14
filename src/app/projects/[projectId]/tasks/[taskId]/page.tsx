@@ -21,6 +21,11 @@ import { fetchTask } from "@/lib/api/tasks";
 import Loading from "./components/loading";
 import NoProjectFound from "../../components/no-project-found";
 import NoTaskFound from "./components/no-task-found";
+import {
+  useProjectQuery,
+  useProjectTaskQuery,
+} from "@/hooks/useProjectQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -110,25 +115,10 @@ export default function TaskPage({ params }: TaskPageProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
+  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
+  const { isLoading: taskIsLoading } = useProjectTaskQuery(projectId, taskId);
 
-  const {
-    data: task,
-    isLoading: taskIsLoading,
-    error: taskError,
-  } = useQuery({
-    queryKey: ["task", taskId],
-    queryFn: () => fetchTask(projectId, taskId),
-    enabled: !!projectId && !!taskId,
-  });
+  const { project, task } = useProjectStore();
 
   const { mutate: deleteTask } = useMutation({
     mutationFn: async () => {
