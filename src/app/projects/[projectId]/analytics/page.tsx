@@ -2,16 +2,16 @@
 
 import MemberLeaderboard from "./components/member-leaderboard";
 import TaskStatusChart from "./components/task-status-chart";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProjectTasks } from "@/lib/api/tasks";
 import Loading from "./components/loading";
 import { TbChartBar } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../components/no-project-found";
-import { useProjectTasksQuery } from "@/hooks/useProjectQueries";
+import {
+  useProjectQuery,
+  useProjectTasksQuery,
+} from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Analytics({
@@ -21,10 +21,11 @@ export default function Analytics({
 }) {
   const projectId = params.projectId;
 
+  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
   const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
   const { project, tasks } = useProjectStore();
 
-  if (tasksIsLoading) {
+  if (projectIsLoading || tasksIsLoading) {
     return <Loading />;
   }
 

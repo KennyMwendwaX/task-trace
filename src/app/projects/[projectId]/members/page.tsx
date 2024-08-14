@@ -10,38 +10,23 @@ import { fetchUsers } from "@/lib/api/users";
 import { fetchProject } from "@/lib/api/projects";
 import Loading from "./components/loading";
 import NoProjectFound from "../components/no-project-found";
+import {
+  useProjectMembersQuery,
+  useProjectQuery,
+} from "@/hooks/useProjectQueries";
+import { useUsersQuery } from "@/hooks/useUserQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
+import { useUserStore } from "@/hooks/useUserStore";
 
 export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
+  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
+  const { isLoading: usersIsLoading } = useUsersQuery();
+  const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
 
-  const {
-    data: members = [],
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: () => fetchProjectMembers(projectId),
-    enabled: !!projectId,
-  });
-
-  const {
-    data: users = [],
-    isLoading: usersIsLoading,
-    error: usersError,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => fetchUsers(),
-  });
+  const { project, members } = useProjectStore();
+  const { users } = useUserStore();
 
   if (projectIsLoading || membersIsLoading || usersIsLoading) {
     return <Loading />;
