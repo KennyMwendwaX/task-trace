@@ -53,6 +53,11 @@ import { fetchTask } from "@/lib/api/tasks";
 import { fetchProjectMembers } from "@/lib/api/members";
 import NoProjectFound from "../../../components/no-project-found";
 import NoTaskFound from "../components/no-task-found";
+import {
+  useProjectQuery,
+  useProjectTaskQuery,
+} from "@/hooks/useProjectQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -70,35 +75,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
-
-  const {
-    data: task,
-    isLoading: taskIsLoading,
-    error: taskError,
-  } = useQuery({
-    queryKey: ["task", taskId],
-    queryFn: () => fetchTask(projectId, taskId),
-    enabled: !!projectId && !!taskId,
-  });
-
-  const {
-    data: members = [],
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: () => fetchProjectMembers(projectId),
-    enabled: !!projectId,
-  });
+  const { project, members, task } = useProjectStore();
 
   const {
     mutate: updateTask,

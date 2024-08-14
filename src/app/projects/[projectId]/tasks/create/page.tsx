@@ -68,6 +68,8 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  const { project, members } = useProjectStore();
+
   const {
     mutate: addTask,
     isPending,
@@ -93,8 +95,6 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
       console.log(error);
     },
   });
-
-  const { project, members } = useProjectStore();
 
   if (!project) {
     return <NoProjectFound />;
