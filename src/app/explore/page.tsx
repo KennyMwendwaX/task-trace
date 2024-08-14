@@ -15,15 +15,15 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./components/loading";
 import { fetchPublicProjects } from "@/lib/api/projects";
+import { usePublicProjectsQuery } from "@/hooks/useProjectQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Explore() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const { data: projects = [], isLoading } = useQuery({
-    queryKey: ["public-projects"],
-    queryFn: () => fetchPublicProjects(),
-  });
+  const { isLoading } = usePublicProjectsQuery();
+  const { publicProjects: projects } = useProjectStore();
 
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "ALL";
