@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../components/no-project-found";
+import { useProjectTasksQuery } from "@/hooks/useProjectQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Analytics({
   params,
@@ -19,25 +21,8 @@ export default function Analytics({
 }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
-
-  const {
-    data: tasks = [],
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["project-tasks", projectId],
-    queryFn: () => fetchProjectTasks(projectId),
-    enabled: !!projectId,
-  });
+  const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
+  const { project, tasks } = useProjectStore();
 
   if (tasksIsLoading) {
     return <Loading />;
