@@ -5,7 +5,7 @@ import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { fetchProject, fetchPublicProjects } from "@/lib/api/projects";
 import { fetchProjectMembers } from "@/lib/api/members";
-import { fetchProjectTasks } from "@/lib/api/tasks";
+import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
 import { useEffect } from "react";
 
 export const useProjectQuery = (
@@ -77,6 +77,26 @@ export const useProjectTasksQuery = (
       setProjectTasks(result.data);
     }
   }, [result.data, setProjectTasks]);
+
+  return result;
+};
+
+export const useProjectTaskQuery = (
+  projectId: string,
+  taskId: string
+): UseQueryResult<ProjectTask, Error> => {
+  const setProjectTask = useProjectStore((state) => state.setProjectTask);
+  const result = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: () => fetchTask(projectId, taskId),
+    enabled: !!projectId && !!taskId,
+  });
+
+  useEffect(() => {
+    if (result.data) {
+      setProjectTask(result.data);
+    }
+  }, [result.data, setProjectTask]);
 
   return result;
 };
