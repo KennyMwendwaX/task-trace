@@ -12,9 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useQuery } from "@tanstack/react-query";
 import Loading from "./components/loading";
-import { fetchPublicProjects } from "@/lib/api/projects";
 import { usePublicProjectsQuery } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 
