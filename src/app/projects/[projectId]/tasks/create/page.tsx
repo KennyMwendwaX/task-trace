@@ -39,7 +39,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
@@ -47,9 +47,8 @@ import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { fetchProjectMembers } from "@/lib/api/members";
-import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../../components/no-project-found";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -95,25 +94,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
     },
   });
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
-
-  const {
-    data: members = [],
-    isLoading: membersIsLoading,
-    error: membersError,
-  } = useQuery({
-    queryKey: ["project-members", projectId],
-    queryFn: () => fetchProjectMembers(projectId),
-    enabled: !!projectId,
-  });
+  const { project, members } = useProjectStore();
 
   if (!project) {
     return <NoProjectFound />;

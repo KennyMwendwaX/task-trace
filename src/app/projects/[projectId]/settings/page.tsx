@@ -1,12 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { fetchProject } from "@/lib/api/projects";
 import NoProjectFound from "../components/no-project-found";
 import UpdateProjectDetails from "./components/update-project-details";
 import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
 import ProjectInvite from "./components/project-invite";
+import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Settings({
   params,
@@ -15,19 +14,9 @@ export default function Settings({
 }) {
   const projectId = params.projectId;
 
-  const {
-    data: project,
-    isLoading: projectIsLoading,
-    error: projectError,
-  } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => fetchProject(projectId),
-    enabled: !!projectId,
-  });
+  // const { isLoading: projectIsLoading } = useProjectQuery(projectId);
 
-  // if (projectIsLoading) {
-  //   return <Loading />;
-  // }
+  const { project } = useProjectStore();
 
   if (!project) {
     return <NoProjectFound />;
