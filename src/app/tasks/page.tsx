@@ -2,26 +2,18 @@
 
 import TaskTable from "./components/task-table/table";
 import { TableColumns } from "./components/task-table/table-columns";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { TbPlaylistX } from "react-icons/tb";
 import Loading from "./components/loading";
-import { fetchUserTasks } from "@/lib/api/tasks";
+import { useUsersTasksQuery } from "@/hooks/useUserQueries";
+import { useUserStore } from "@/hooks/useUserStore";
 
 export default function UserTasks() {
   const session = useSession();
-
   const userId = session.data?.user?.id;
 
-  const {
-    data: tasks = [],
-    isLoading: tasksIsLoading,
-    error: tasksError,
-  } = useQuery({
-    queryKey: ["user-tasks", userId],
-    queryFn: () => fetchUserTasks(userId),
-    enabled: !!userId,
-  });
+  const { isLoading: tasksIsLoading } = useUsersTasksQuery(userId);
+  const { tasks } = useUserStore();
 
   return (
     <>
