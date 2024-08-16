@@ -162,3 +162,35 @@ export const useAddProjectTaskMutation = (
     },
   });
 };
+
+export const useUpdateProjectTaskMutation = (
+  projectId: string,
+  task: ProjectTask | null
+): UseMutationResult<void, Error, TaskFormValues> => {
+  const queryClient = useQueryClient();
+  if (!task) throw new Error("No task ID or task data");
+
+  return useMutation({
+    mutationFn: async (values: TaskFormValues) => {
+      const options = {
+        method: "PUT",
+        body: JSON.stringify(values),
+      };
+      const response = await fetch(
+        `/api/projects/${projectId}/tasks/${task.id}`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["task", task.id],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};

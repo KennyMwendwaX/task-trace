@@ -39,7 +39,6 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
@@ -48,15 +47,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Label, Priority } from "@/lib/config";
-import { fetchProject } from "@/lib/api/projects";
-import { fetchTask } from "@/lib/api/tasks";
-import { fetchProjectMembers } from "@/lib/api/members";
 import NoProjectFound from "../../../components/no-project-found";
 import NoTaskFound from "../components/no-task-found";
-import {
-  useProjectQuery,
-  useProjectTaskQuery,
-} from "@/hooks/useProjectQueries";
+import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
@@ -72,7 +65,6 @@ interface EditTaskPageProps {
 
 export default function EditTaskPage({ params }: EditTaskPageProps) {
   const { projectId, taskId } = params;
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   const { project, members, task } = useProjectStore();
@@ -81,30 +73,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
     mutate: updateTask,
     isPending,
     error,
-  } = useMutation({
-    mutationFn: async (values: TaskFormValues) => {
-      if (!taskId || !task) throw new Error("No task ID or task data");
-      const options = {
-        method: "PUT",
-        body: JSON.stringify(values),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}`,
-        options
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["task", task?.id],
-      });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  } = useUpdateProjectTaskMutation(projectId, task);
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -127,7 +96,17 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
   }
 
   async function onSubmit(values: TaskFormValues) {
-    updateTask(values);
+    updateTask(values, {
+      onSuccess: () => {
+        // Handle success (e.g., close modal, show success message)
+        form.reset();
+        router.push(`/projects/${projectId}/tasks/${taskId}`);
+      },
+      onError: (error) => {
+        // Handle error (e.g., show error message)
+        console.error("Failed to add project:", error);
+      },
+    });
   }
 
   return (
