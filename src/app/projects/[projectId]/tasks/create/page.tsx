@@ -39,16 +39,16 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import NoProjectFound from "../../components/no-project-found";
 import { useProjectStore } from "@/hooks/useProjectStore";
+import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
+import { useRouter } from "next/navigation";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -65,43 +65,32 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
-  const queryClient = useQueryClient();
   const router = useRouter();
-
-  const { project, members } = useProjectStore();
 
   const {
     mutate: addTask,
     isPending,
     error,
-  } = useMutation({
-    mutationFn: async (values: TaskFormValues) => {
-      const options = {
-        method: "POST",
-        body: JSON.stringify(values),
-      };
-      const response = await fetch(`/api/projects/${projectId}/tasks`, options);
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
-      });
-      router.push(`/projects/${projectId}/tasks`);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  } = useAddProjectTaskMutation(projectId);
+
+  const { project, members } = useProjectStore();
 
   if (!project) {
     return <NoProjectFound />;
   }
 
   async function onSubmit(values: TaskFormValues) {
-    addTask(values);
+    addTask(values, {
+      onSuccess: () => {
+        // Handle success (e.g., close modal, show success message)
+        form.reset();
+        router.push(`/projects/${projectId}/tasks`);
+      },
+      onError: (error) => {
+        // Handle error (e.g., show error message)
+        console.error("Failed to add project:", error);
+      },
+    });
   }
 
   return (
