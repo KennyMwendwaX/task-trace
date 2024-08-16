@@ -1,6 +1,12 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { useProjectStore } from "./useProjectStore";
-import { Project } from "@/lib/schema/ProjectSchema";
+import { Project, ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { fetchProject, fetchPublicProjects } from "@/lib/api/projects";
@@ -99,4 +105,33 @@ export const useProjectTaskQuery = (
   }, [result.data, setProjectTask]);
 
   return result;
+};
+
+export const useAddProjectMutation = (): UseMutationResult<
+  void,
+  Error,
+  ProjectFormValues
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (values: ProjectFormValues) => {
+      const options = {
+        method: "POST",
+        body: JSON.stringify(values),
+      };
+      const response = await fetch("/api/projects", options);
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-projects"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 };

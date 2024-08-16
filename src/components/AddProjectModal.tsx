@@ -27,58 +27,41 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ProjectFormValues,
   projectFormSchema,
 } from "@/lib/schema/ProjectSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
 import { LuFolderPlus } from "react-icons/lu";
+import { useAddProjectMutation } from "@/hooks/useProjectQueries";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
   });
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const router = useRouter();
+
+  const { mutate: addProject, isPending, error } = useAddProjectMutation();
 
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
   };
 
-  const {
-    mutate: addProject,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: async (values: ProjectFormValues) => {
-      const options = {
-        method: "POST",
-        body: JSON.stringify(values),
-      };
-      const response = await fetch("/api/projects", options);
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["user-projects"],
-      });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const onSubmit = async (values: ProjectFormValues) => {
+    addProject(values, {
+      onSuccess: () => {
+        // Handle success (e.g., close modal, show success message)
+        toggleDialog();
+        form.reset();
+      },
+      onError: (error) => {
+        // Handle error (e.g., show error message)
+        console.error("Failed to add project:", error);
+      },
+    });
+  };
 
-  async function onSubmit(values: ProjectFormValues) {
-    addProject(values);
-    toggleDialog();
-    router.refresh();
-  }
   return (
     <>
       <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
