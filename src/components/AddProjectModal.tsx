@@ -37,6 +37,7 @@ import { LuFolderPlus } from "react-icons/lu";
 import { useAddProjectMutation } from "@/hooks/useProjectQueries";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -56,9 +57,9 @@ export default function AddProjectModal() {
   const onSubmit = async (values: ProjectFormValues) => {
     addProject(values, {
       onSuccess: (data) => {
-        toast.success("Project created successfully!");
-        toggleDialog();
         form.reset();
+        toggleDialog();
+        toast.success("Project created successfully!");
         router.push(`/projects/${data.projectId}`);
       },
       onError: (error) => {
@@ -153,7 +154,14 @@ export default function AddProjectModal() {
                   type="submit"
                   className="w-full sm:w-auto"
                   disabled={isPending}>
-                  {isPending ? "Creating..." : "Create Project"}
+                  {isPending ? (
+                    <>
+                      <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    "Create Project"
+                  )}
                 </Button>
               </DialogFooter>
             </form>
