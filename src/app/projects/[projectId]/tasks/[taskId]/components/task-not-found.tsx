@@ -7,7 +7,7 @@ interface Props {
   projectId: string;
 }
 
-export default function NoTaskFound({ projectId }: Props) {
+export default function TaskNotFound({ projectId }: Props) {
   const router = useRouter();
 
   return (

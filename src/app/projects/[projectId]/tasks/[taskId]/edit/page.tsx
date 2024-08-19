@@ -48,7 +48,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Label, Priority } from "@/lib/config";
 import NoProjectFound from "../../../components/no-project-found";
-import NoTaskFound from "../components/no-task-found";
+import TaskNotFound from "../components/task-not-found";
 import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 
@@ -92,7 +92,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
   }
 
   if (!task) {
-    return <NoTaskFound projectId={projectId} />;
+    return <TaskNotFound projectId={projectId} />;
   }
 
   async function onSubmit(values: TaskFormValues) {

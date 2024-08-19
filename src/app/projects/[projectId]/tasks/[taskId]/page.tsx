@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import rehypeSanitize from "rehype-sanitize";
@@ -16,11 +16,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { labels, priorities, statuses } from "@/lib/config";
 import Link from "next/link";
-import { fetchProject } from "@/lib/api/projects";
-import { fetchTask } from "@/lib/api/tasks";
 import Loading from "./components/loading";
 import NoProjectFound from "../../components/no-project-found";
-import NoTaskFound from "./components/no-task-found";
+import TaskNotFound from "./components/task-not-found";
 import {
   useProjectQuery,
   useProjectTaskQuery,
@@ -145,7 +143,7 @@ export default function TaskPage({ params }: TaskPageProps) {
   }
 
   if (!task) {
-    return <NoTaskFound projectId={projectId} />;
+    return <TaskNotFound projectId={projectId} />;
   }
 
   const label = labels.find((l) => l.value === task.label);
