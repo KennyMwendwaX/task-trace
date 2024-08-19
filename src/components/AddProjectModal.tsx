@@ -36,11 +36,15 @@ import { Button } from "./ui/button";
 import { LuFolderPlus } from "react-icons/lu";
 import { useAddProjectMutation } from "@/hooks/useProjectQueries";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
   });
+
+  const router = useRouter();
+
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const { mutate: addProject, isPending, error } = useAddProjectMutation();
@@ -51,10 +55,11 @@ export default function AddProjectModal() {
 
   const onSubmit = async (values: ProjectFormValues) => {
     addProject(values, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("Project created successfully!");
         toggleDialog();
         form.reset();
+        router.push(`/projects/${data.projectId}`);
       },
       onError: (error) => {
         toast.error("Failed to create project!");

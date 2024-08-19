@@ -108,7 +108,7 @@ export const useProjectTaskQuery = (
 };
 
 export const useAddProjectMutation = (): UseMutationResult<
-  void,
+  { projectId: string },
   Error,
   ProjectFormValues
 > => {
@@ -124,6 +124,8 @@ export const useAddProjectMutation = (): UseMutationResult<
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
+      const data = await response.json();
+      return { projectId: data.projectId };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
