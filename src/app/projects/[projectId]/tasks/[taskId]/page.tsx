@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { labels, priorities, statuses } from "@/lib/config";
 import Link from "next/link";
 import Loading from "./components/loading";
-import NoProjectFound from "../../components/no-project-found";
+import ProjectNotFound from "../../components/project-not-found";
 import TaskNotFound from "./components/task-not-found";
 import {
   useProjectQuery,
@@ -139,7 +139,7 @@ export default function TaskPage({ params }: TaskPageProps) {
   }
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   if (!task) {

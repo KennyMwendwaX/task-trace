@@ -7,7 +7,7 @@ import { TbChartBar } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import NoProjectFound from "../components/no-project-found";
+import ProjectNotFound from "../components/project-not-found";
 import {
   useProjectQuery,
   useProjectTasksQuery,
@@ -30,7 +30,7 @@ export default function Analytics({
   }
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   return (

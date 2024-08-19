@@ -45,7 +45,7 @@ import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
-import NoProjectFound from "../../components/no-project-found";
+import ProjectNotFound from "../../components/project-not-found";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
@@ -76,7 +76,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   const { project, members } = useProjectStore();
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   async function onSubmit(values: TaskFormValues) {

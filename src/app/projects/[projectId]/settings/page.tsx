@@ -1,6 +1,6 @@
 "use client";
 
-import NoProjectFound from "../components/no-project-found";
+import ProjectNotFound from "../components/project-not-found";
 import UpdateProjectDetails from "./components/update-project-details";
 import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
@@ -19,7 +19,7 @@ export default function Settings({
   const { project } = useProjectStore();
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   return (

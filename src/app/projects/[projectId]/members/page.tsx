@@ -5,7 +5,7 @@ import { TableColumns } from "./components/member-table/table-columns";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/AddMemberModal";
 import Loading from "./components/loading";
-import NoProjectFound from "../components/no-project-found";
+import ProjectNotFound from "../components/project-not-found";
 import {
   useProjectMembersQuery,
   useProjectQuery,
@@ -29,7 +29,7 @@ export default function Members({ params }: { params: { projectId: string } }) {
   }
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   return (

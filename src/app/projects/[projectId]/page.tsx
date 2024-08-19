@@ -9,7 +9,7 @@ import AddMemberModal from "@/components/AddMemberModal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
-import NoProjectFound from "./components/no-project-found";
+import ProjectNotFound from "./components/project-not-found";
 import {
   useProjectMembersQuery,
   useProjectQuery,
@@ -42,7 +42,7 @@ export default function ProjectPage({
   }
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   return (

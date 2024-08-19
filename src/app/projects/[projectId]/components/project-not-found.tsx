@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { LuChevronLeft } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
 
-export default function NoProjectFound() {
+export default function ProjectNotFound() {
   const router = useRouter();
 
   return (

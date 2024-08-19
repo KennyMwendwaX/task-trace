@@ -47,7 +47,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Label, Priority } from "@/lib/config";
-import NoProjectFound from "../../../components/no-project-found";
+import ProjectNotFound from "../../../components/project-not-found";
 import TaskNotFound from "../components/task-not-found";
 import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
@@ -88,7 +88,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
   });
 
   if (!project) {
-    return <NoProjectFound />;
+    return <ProjectNotFound />;
   }
 
   if (!task) {
