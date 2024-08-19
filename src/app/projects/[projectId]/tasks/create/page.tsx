@@ -50,6 +50,7 @@ import { useProjectStore } from "@/hooks/useProjectStore";
 import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -314,7 +315,14 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={isPending}>
-                {isPending ? "Creating..." : "Create Task"}
+                {isPending ? (
+                  <>
+                    <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Project"
+                )}
               </Button>
             </div>
           </form>
