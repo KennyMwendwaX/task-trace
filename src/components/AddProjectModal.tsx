@@ -149,8 +149,11 @@ export default function AddProjectModal() {
                 )}
               />
               <DialogFooter className="sm:justify-end">
-                <Button type="submit" className="w-full sm:w-auto">
-                  Create Project
+                <Button
+                  type="submit"
+                  className="w-full sm:w-auto"
+                  disabled={isPending}>
+                  {isPending ? "Creating..." : "Create Project"}
                 </Button>
               </DialogFooter>
             </form>
