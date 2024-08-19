@@ -146,24 +146,19 @@ export async function POST(
         { status: 400 }
       );
 
-    const taskResult = await db
-      .insert(tasks)
-      .values({
-        name: name,
-        label: label,
-        priority: priority,
-        dueDate: dueDate,
-        description: description,
-        status: "TO_DO",
-        memberId: memberId,
-        projectId: projectId,
-      })
-      .returning({ id: tasks.id });
-
-    const taskId = taskResult[0].id;
+    await db.insert(tasks).values({
+      name: name,
+      label: label,
+      priority: priority,
+      dueDate: dueDate,
+      description: description,
+      status: "TO_DO",
+      memberId: memberId,
+      projectId: projectId,
+    });
 
     return NextResponse.json(
-      { message: "Task added to project", taskId: taskId },
+      { message: "Task added to project" },
       { status: 201 }
     );
   } catch (error) {

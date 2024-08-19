@@ -49,6 +49,7 @@ import ProjectNotFound from "../../components/project-not-found";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -82,12 +83,12 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   async function onSubmit(values: TaskFormValues) {
     addTask(values, {
       onSuccess: () => {
-        // Handle success (e.g., close modal, show success message)
         form.reset();
+        toast.success("Task created successfully!");
         router.push(`/projects/${projectId}/tasks`);
       },
       onError: (error) => {
-        // Handle error (e.g., show error message)
+        toast.error("Failed to create project!");
         console.error("Failed to add project:", error);
       },
     });
