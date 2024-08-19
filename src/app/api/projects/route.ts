@@ -88,7 +88,10 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      { message: "Project created successfully" },
+      {
+        message: "Project created successfully",
+        projectId: projectId,
+      },
       { status: 201 }
     );
   } catch (error) {

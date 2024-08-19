@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -10,5 +11,10 @@ export default function ProjectsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <Toaster richColors />
+    </>
+  );
 }

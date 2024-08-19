@@ -35,6 +35,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { LuFolderPlus } from "react-icons/lu";
 import { useAddProjectMutation } from "@/hooks/useProjectQueries";
+import { toast } from "sonner";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -51,13 +52,13 @@ export default function AddProjectModal() {
   const onSubmit = async (values: ProjectFormValues) => {
     addProject(values, {
       onSuccess: () => {
-        // Handle success (e.g., close modal, show success message)
+        toast.success("Project created successfully!");
         toggleDialog();
         form.reset();
       },
       onError: (error) => {
-        // Handle error (e.g., show error message)
-        console.error("Failed to add project:", error);
+        toast.error("Failed to create project!");
+        console.error("Failed to create project:", error);
       },
     });
   };
