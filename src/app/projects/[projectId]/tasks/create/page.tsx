@@ -89,8 +89,8 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
         router.push(`/projects/${projectId}/tasks`);
       },
       onError: (error) => {
-        toast.error("Failed to create project!");
-        console.error("Failed to add project:", error);
+        toast.error("Failed to create task!");
+        console.error("Failed to create task:", error);
       },
     });
   }

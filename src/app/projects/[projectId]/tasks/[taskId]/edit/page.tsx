@@ -51,6 +51,8 @@ import ProjectNotFound from "../../../components/project-not-found";
 import TaskNotFound from "../components/task-not-found";
 import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
+import { toast } from "sonner";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -98,13 +100,13 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
   async function onSubmit(values: TaskFormValues) {
     updateTask(values, {
       onSuccess: () => {
-        // Handle success (e.g., close modal, show success message)
         form.reset();
-        router.push(`/projects/${projectId}/tasks/${taskId}`);
+        toast.success("Task updated successfully!");
+        router.push(`/projects/${projectId}/tasks`);
       },
       onError: (error) => {
-        // Handle error (e.g., show error message)
-        console.error("Failed to add project:", error);
+        toast.error("Failed to update task!");
+        console.error("Failed to update task:", error);
       },
     });
   }
@@ -328,7 +330,14 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={isPending}>
-                {isPending ? "Updating..." : "Update Task"}
+                {isPending ? (
+                  <>
+                    <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Project"
+                )}
               </Button>
             </div>
           </form>
