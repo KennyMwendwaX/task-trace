@@ -8,7 +8,7 @@ export default function ProjectNotFound() {
 
   return (
     <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[800px] md:min-h-[560px]">
+      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[calc(100vh-100px)]">
         <div className="flex flex-col items-center gap-1 text-center">
           <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
             <MdOutlineFolderOff className="h-12 w-12 text-gray-400" />
