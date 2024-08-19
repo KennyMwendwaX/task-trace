@@ -321,7 +321,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                     Creating...
                   </>
                 ) : (
-                  "Create Project"
+                  "Create Task"
                 )}
               </Button>
             </div>

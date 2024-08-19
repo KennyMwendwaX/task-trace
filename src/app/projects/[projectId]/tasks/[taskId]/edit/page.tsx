@@ -333,10 +333,10 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
                 {isPending ? (
                   <>
                     <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
+                    Updating...
                   </>
                 ) : (
-                  "Create Project"
+                  "Update Task"
                 )}
               </Button>
             </div>
