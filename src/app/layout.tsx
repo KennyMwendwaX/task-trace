@@ -5,6 +5,7 @@ import TanstackProvider from "@/providers/TanstackProvider";
 import SessionProvider from "@/providers/SessionProvider";
 import Layout from "@/components/layout";
 import { auth } from "../auth";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "TaskTrace",
@@ -22,7 +23,10 @@ export default async function RootLayout({
       <body className={GeistSans.className}>
         <SessionProvider session={session}>
           <TanstackProvider>
-            <Layout>{children}</Layout>
+            <Layout>
+              {children}
+              <Toaster richColors />
+            </Layout>
           </TanstackProvider>
         </SessionProvider>
       </body>
