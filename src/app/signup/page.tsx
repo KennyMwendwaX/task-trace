@@ -19,6 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupValues, signupSchema } from "@/lib/schema/UserSchema";
 import { useRouter } from "next/navigation";
 import Logo from "../../../public/logo.png";
+import { useUserSignupMutation } from "@/hooks/useUserQueries";
+import { toast } from "sonner";
 // import { useSession } from "next-auth/react";
 
 export default function Signup() {
@@ -33,33 +35,20 @@ export default function Signup() {
 
   const errors = form.formState.errors;
 
-  async function onSubmit(values: SignupValues) {
-    const payload = {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    };
+  const { mutate: signup, isPending, error } = useUserSignupMutation();
 
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    };
-
-    const register = await fetch("/api/auth/register", options);
-
-    if (register.status === 409) {
-      setServerErrors("Email is already registered");
-    }
-
-    if (register.status === 500) {
-      setServerErrors("Server error, try again later");
-    }
-
-    if (register.ok) {
-      router.push("/signin");
-    }
-  }
+  const onSubmit = async (values: SignupValues) => {
+    signup(values, {
+      onSuccess: () => {
+        form.reset();
+        toast.success("User registered successfully!");
+        router.push("/signin");
+      },
+      onError: (error) => {
+        setServerErrors(error.message);
+      },
+    });
+  };
 
   return (
     <>
