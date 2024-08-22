@@ -10,7 +10,7 @@ import {
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
 
-export const users = pgTable("user", {
+export const user = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
   email: text("email").unique().notNull(),
@@ -25,17 +25,17 @@ export const users = pgTable("user", {
   ),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  projects: many(projects),
-  members: many(members),
+export const userRelations = relations(user, ({ many }) => ({
+  project: many(project),
+  member: many(member),
 }));
 
-export const accounts = pgTable(
+export const account = pgTable(
   "account",
   {
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
@@ -54,15 +54,15 @@ export const accounts = pgTable(
   })
 );
 
-export const sessions = pgTable("session", {
+export const session = pgTable("session", {
   sessionToken: text("session_token").notNull().primaryKey(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
-export const verificationTokens = pgTable(
+export const verificationToken = pgTable(
   "verification_token",
   {
     identifier: text("identifier").notNull(),
@@ -74,7 +74,7 @@ export const verificationTokens = pgTable(
   })
 );
 
-export const projects = pgTable("project", {
+export const project = pgTable("project", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
   status: text("status").notNull(),
@@ -88,22 +88,22 @@ export const projects = pgTable("project", {
   ),
   ownerId: uuid("owner_id")
     .notNull()
-    .references(() => users.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    .references(() => user.id, { onDelete: "restrict", onUpdate: "cascade" }),
 });
 
-export const projectsRelations = relations(projects, ({ one, many }) => ({
-  owner: one(users, {
-    fields: [projects.ownerId],
-    references: [users.id],
+export const projectRelations = relations(project, ({ one, many }) => ({
+  owner: one(user, {
+    fields: [project.ownerId],
+    references: [user.id],
   }),
-  members: many(members),
-  invitationCode: one(invitationCodes, {
-    fields: [projects.id],
-    references: [invitationCodes.projectId],
+  member: many(member),
+  invitationCode: one(invitationCode, {
+    fields: [project.id],
+    references: [invitationCode.projectId],
   }),
 }));
 
-export const members = pgTable("member", {
+export const member = pgTable("member", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   role: text("role")
     .$type<"OWNER" | "ADMIN" | "MEMBER">()
@@ -117,28 +117,28 @@ export const members = pgTable("member", {
   ),
   userId: uuid("user_id")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade", onUpdate: "cascade" }),
   projectId: uuid("project_id")
     .notNull()
-    .references(() => projects.id, {
+    .references(() => project.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
 });
 
-export const membersRelations = relations(members, ({ one, many }) => ({
-  user: one(users, {
-    fields: [members.userId],
-    references: [users.id],
+export const memberRelations = relations(member, ({ one, many }) => ({
+  user: one(user, {
+    fields: [member.userId],
+    references: [user.id],
   }),
-  project: one(projects, {
-    fields: [members.projectId],
-    references: [projects.id],
+  project: one(project, {
+    fields: [member.projectId],
+    references: [project.id],
   }),
-  tasks: many(tasks),
+  task: many(task),
 }));
 
-export const tasks = pgTable("task", {
+export const task = pgTable("task", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
   label: text("label").notNull(),
@@ -152,35 +152,35 @@ export const tasks = pgTable("task", {
   updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
     () => new Date()
   ),
-  memberId: uuid("member_id").references(() => members.id, {
+  memberId: uuid("member_id").references(() => member.id, {
     onDelete: "set null",
     onUpdate: "cascade",
   }),
   projectId: uuid("project_id")
     .notNull()
-    .references(() => projects.id, {
+    .references(() => project.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
 });
 
-export const tasksRelations = relations(tasks, ({ one }) => ({
-  member: one(members, {
-    fields: [tasks.memberId],
-    references: [members.id],
+export const taskRelations = relations(task, ({ one }) => ({
+  member: one(member, {
+    fields: [task.memberId],
+    references: [member.id],
   }),
-  project: one(projects, {
-    fields: [tasks.projectId],
-    references: [projects.id],
+  project: one(project, {
+    fields: [task.projectId],
+    references: [project.id],
   }),
 }));
 
-export const invitationCodes = pgTable("invitation_code", {
+export const invitationCode = pgTable("invitation_code", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   code: text("code").notNull().unique(),
   projectId: uuid("project_id")
     .notNull()
-    .references(() => projects.id, { onDelete: "cascade" }),
+    .references(() => project.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expires_at", { mode: "date", precision: 3 }),
   createdAt: timestamp("created_at", { mode: "date", precision: 3 })
     .defaultNow()
@@ -190,12 +190,9 @@ export const invitationCodes = pgTable("invitation_code", {
   ),
 });
 
-export const invitationCodesRelations = relations(
-  invitationCodes,
-  ({ one }) => ({
-    project: one(projects, {
-      fields: [invitationCodes.projectId],
-      references: [projects.id],
-    }),
-  })
-);
+export const invitationCodeRelations = relations(invitationCode, ({ one }) => ({
+  project: one(project, {
+    fields: [invitationCode.projectId],
+    references: [project.id],
+  }),
+}));
