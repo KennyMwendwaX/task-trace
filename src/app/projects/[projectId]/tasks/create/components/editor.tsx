@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Hint from "./hint";
+import EmojiPopover from "./emoji-popover";
 
 interface EditorProps {
   variant?: "create" | "edit";
@@ -99,6 +100,12 @@ export default function Editor({
     }
   };
 
+  const onEmojiSelect = (emoji: any) => {
+    const quill = quillRef.current;
+
+    quill?.insertText(quill.getSelection()?.index || 0, emoji.native);
+  };
+
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
   console.log({ isEmpty, text });
   return (
@@ -115,15 +122,11 @@ export default function Editor({
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
-          <Hint label="Insert emoji">
-            <Button
-              disabled={false}
-              size="icon"
-              variant="ghost"
-              onClick={() => {}}>
+          <EmojiPopover onEmojiSelect={onEmojiSelect}>
+            <Button disabled={false} size="icon" variant="ghost">
               <LuSmile className="size-4" />
             </Button>
-          </Hint>
+          </EmojiPopover>
           <Hint label="Insert image">
             <Button
               disabled={false}
