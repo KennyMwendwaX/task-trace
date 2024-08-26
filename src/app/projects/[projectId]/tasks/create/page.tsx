@@ -51,6 +51,7 @@ import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import ChatInput from "./components/chat-input";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -77,9 +78,9 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
 
   const { project, members } = useProjectStore();
 
-  if (!project) {
-    return <ProjectNotFound />;
-  }
+  // if (!project) {
+  //   return <ProjectNotFound />;
+  // }
 
   async function onSubmit(values: TaskFormValues) {
     addTask(values, {
@@ -110,7 +111,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
       </div>
 
       <Card className="p-6">
-        <Form {...form}>
+        {/* <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
@@ -326,7 +327,8 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
               </Button>
             </div>
           </form>
-        </Form>
+        </Form> */}
+        <ChatInput />
       </Card>
     </main>
   );
