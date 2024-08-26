@@ -111,7 +111,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
       </div>
 
       <Card className="p-6">
-        {/* <Form {...form}>
+        <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
@@ -327,7 +327,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
               </Button>
             </div>
           </form>
-        </Form> */}
+        </Form>
         <ChatInput />
       </Card>
     </main>

@@ -97,7 +97,7 @@
   color: #1d1c1d !important;
   font-weight: 400 !important;
   font-family: "Lato", sans-serif !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
 }
 
 .ql-editor a {
@@ -117,7 +117,7 @@
   font-family: "Lato", sans-serif !important;
   color: #8d8d8d p !important;
   font-style: normal !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: 400 !important;
   @apply truncate;
 }
