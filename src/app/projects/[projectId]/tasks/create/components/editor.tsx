@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Hint from "./hint";
 
 interface EditorProps {
   variant?: "create" | "edit";
@@ -105,7 +106,34 @@ export default function Editor({
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
         <div ref={containerRef} className="h-48 ql-custom" />
         <div className="flex px-2 pb-2 z-[5]">
-          <TooltipProvider>
+          <Hint
+            label={isToolbarVisible ? "Hide formatting" : "Show formatting"}>
+            <Button
+              size="icon"
+              variant={isToolbarVisible ? "default" : "ghost"}
+              onClick={() => toggleToolbar()}>
+              <PiTextAa className="size-4" />
+            </Button>
+          </Hint>
+          <Hint label="Insert emoji">
+            <Button
+              disabled={false}
+              size="icon"
+              variant="ghost"
+              onClick={() => {}}>
+              <LuSmile className="size-4" />
+            </Button>
+          </Hint>
+          <Hint label="Insert image">
+            <Button
+              disabled={false}
+              size="icon"
+              variant="ghost"
+              onClick={() => {}}>
+              <LuImage className="size-4" />
+            </Button>
+          </Hint>
+          {/* <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -164,7 +192,7 @@ export default function Editor({
                 <p>Send message</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider> */}
         </div>
       </div>
     </div>
