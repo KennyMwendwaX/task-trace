@@ -13,8 +13,11 @@ import { LuSmile } from "react-icons/lu";
 import { PiTextAa } from "react-icons/pi";
 import Hint from "./hint";
 import EmojiPopover from "./emoji-popover";
+import { Control, useController } from "react-hook-form";
 
 interface EditorProps {
+  control: Control<any>;
+  name: string;
   variant?: "create" | "edit";
   placeholder?: string;
   defaultValue?: Delta | Op[];
@@ -23,6 +26,8 @@ interface EditorProps {
 }
 
 export default function Editor({
+  control,
+  name,
   variant,
   placeholder,
   defaultValue = [],
@@ -31,6 +36,14 @@ export default function Editor({
 }: EditorProps) {
   const [text, setText] = useState("");
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
+
+  const {
+    field: { onChange, value },
+  } = useController({
+    name,
+    control,
+    defaultValue: defaultValue,
+  });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const placeholderRef = useRef(placeholder);
@@ -68,8 +81,15 @@ export default function Editor({
     setText(quill.getText());
 
     quill.on(Quill.events.TEXT_CHANGE, () => {
+      const content = quill.getContents();
+      onChange(content);
       setText(quill.getText());
     });
+
+    if (value) {
+      quill.setContents(value);
+    }
+
     return () => {
       quill.off(Quill.events.TEXT_CHANGE);
       if (container) {
@@ -82,7 +102,7 @@ export default function Editor({
         innerRef.current = null;
       }
     };
-  }, [innerRef]);
+  }, [innerRef, onChange, value]);
 
   const toggleToolbar = () => {
     setIsToolbarVisible((current) => !current);

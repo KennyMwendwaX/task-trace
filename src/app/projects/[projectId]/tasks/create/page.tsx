@@ -23,7 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
 import {
@@ -52,10 +52,10 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import ChatInput from "./components/chat-input";
+import Quill from "quill";
+import { useRef } from "react";
 
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
+const Editor = dynamic(() => import("./components/editor"), { ssr: false });
 
 interface CreateTaskPageProps {
   params: {
@@ -65,6 +65,9 @@ interface CreateTaskPageProps {
 
 export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   const { projectId } = params;
+
+  const editorRef = useRef<Quill | null>(null);
+
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
@@ -289,22 +292,18 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
               />
             </div>
 
-            <FormField
-              control={form.control}
+            <Controller
               name="description"
+              control={form.control}
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <SimpleMDE
-                      id="description"
-                      className="focus:border-2 focus:border-blue-600"
-                      placeholder="Task description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <Editor
+                  variant="create"
+                  placeholder="Task description"
+                  disabled={false}
+                  innerRef={editorRef}
+                  control={form.control}
+                  name="description"
+                />
               )}
             />
 
@@ -328,8 +327,28 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
             </div>
           </form>
         </Form>
-        <ChatInput />
       </Card>
     </main>
   );
+}
+
+{
+  /* <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <SimpleMDE
+                      id="description"
+                      className="focus:border-2 focus:border-blue-600"
+                      placeholder="Task description"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */
 }
