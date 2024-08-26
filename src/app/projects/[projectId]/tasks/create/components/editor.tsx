@@ -9,15 +9,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { LuImage, LuSmile } from "react-icons/lu";
-import { MdSend } from "react-icons/md";
+import { LuSmile } from "react-icons/lu";
 import { PiTextAa } from "react-icons/pi";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import Hint from "./hint";
 import EmojiPopover from "./emoji-popover";
 
@@ -127,75 +120,6 @@ export default function Editor({
               <LuSmile className="size-4" />
             </Button>
           </EmojiPopover>
-          <Hint label="Insert image">
-            <Button
-              disabled={false}
-              size="icon"
-              variant="ghost"
-              onClick={() => {}}>
-              <LuImage className="size-4" />
-            </Button>
-          </Hint>
-          {/* <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  variant={isToolbarVisible ? "default" : "ghost"}
-                  onClick={() => toggleToolbar()}>
-                  <PiTextAa className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {isToolbarVisible ? "Hide formatting" : "Show formatting"}
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  disabled={false}
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => {}}>
-                  <LuSmile className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Insert emoji</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  disabled={false}
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => {}}>
-                  <LuImage className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Insert image</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  disabled={false}
-                  onClick={() => {}}
-                  className="ml-auto bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
-                  size="icon">
-                  <MdSend className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Send message</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider> */}
         </div>
       </div>
     </div>
