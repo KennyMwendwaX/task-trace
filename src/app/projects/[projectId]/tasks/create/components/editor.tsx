@@ -3,11 +3,11 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Toolbar from "./toolbar";
 
-interface TiptapProps {
+interface EditorProps {
   onChange: (richtext: string) => void;
 }
 
-export default function Tiptap({ onChange }: TiptapProps) {
+export default function Editor({ onChange }: EditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({

@@ -49,7 +49,7 @@ import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import Tiptap from "./components/tiptap";
+import Editor from "./components/editor";
 
 interface CreateTaskPageProps {
   params: {
@@ -293,7 +293,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Tiptap onChange={field.onChange} />
+                    <Editor onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -344,45 +344,4 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                 </FormItem>
               )}
             /> */
-}
-
-{
-  /* <Controller
-              name="description"
-              control={form.control}
-              render={({ field }) => (
-                <Editor
-                  control={form.control}
-                  name="description"
-                  variant="create"
-                  placeholder="Task description"
-                  disabled={false}
-                  innerRef={editorRef}
-                  defaultValue={new Delta()
-                  setValue={form.setValue}
-                />
-              )}
-            /> */
-}
-{
-  /* <Controller
-              name="description"
-              control={form.control}
-              rules={{
-                required: "Please enter task description",
-              }}
-              render={({ field }) => (
-                <ReactQuill
-                  {...field}
-                  theme="snow"
-                  placeholder={"Write Description"}
-                  onChange={(text) => {
-                    field.onChange(text);
-                  }}
-                />
-              )}
-            />
-            <p className="Error">
-              {form.formState.errors.description && "Enter valid content"}
-            </p> */
 }
