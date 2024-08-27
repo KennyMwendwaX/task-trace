@@ -13,16 +13,18 @@ import { LuSmile } from "react-icons/lu";
 import { PiTextAa } from "react-icons/pi";
 import Hint from "./hint";
 import EmojiPopover from "./emoji-popover";
-import { Control, useController } from "react-hook-form";
+import { Control, useController, UseFormSetValue } from "react-hook-form";
+import { TaskFormValues } from "@/lib/schema/TaskSchema";
 
 interface EditorProps {
   control: Control<any>;
   name: string;
   variant?: "create" | "edit";
   placeholder?: string;
-  defaultValue?: Delta | Op[];
+  defaultValue: Delta | Op[];
   disabled?: boolean;
   innerRef?: MutableRefObject<Quill | null>;
+  setValue: UseFormSetValue<TaskFormValues>;
 }
 
 export default function Editor({
@@ -30,9 +32,10 @@ export default function Editor({
   name,
   variant,
   placeholder,
-  defaultValue = [],
+  defaultValue,
   disabled = false,
   innerRef,
+  setValue,
 }: EditorProps) {
   const [text, setText] = useState("");
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
@@ -81,15 +84,8 @@ export default function Editor({
     setText(quill.getText());
 
     quill.on(Quill.events.TEXT_CHANGE, () => {
-      const content = quill.getContents();
-      onChange(content);
       setText(quill.getText());
     });
-
-    if (value) {
-      quill.setContents(value);
-    }
-
     return () => {
       quill.off(Quill.events.TEXT_CHANGE);
       if (container) {
@@ -102,7 +98,7 @@ export default function Editor({
         innerRef.current = null;
       }
     };
-  }, [innerRef, onChange, value]);
+  }, [innerRef]);
 
   const toggleToolbar = () => {
     setIsToolbarVisible((current) => !current);
@@ -120,7 +116,9 @@ export default function Editor({
   };
 
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
-  console.log({ isEmpty, text });
+
+  if (!isEmpty) setValue("description", text);
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">

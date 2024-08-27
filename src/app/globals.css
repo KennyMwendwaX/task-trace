@@ -87,7 +87,6 @@
 
 .ql-container {
   font-family: "Lato", sans-serif !important;
-  border: none !important;
   height: unset !important;
 }
 
@@ -120,4 +119,27 @@
   font-size: 16px !important;
   font-weight: 400 !important;
   @apply truncate;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ProseMirror h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.ProseMirror h3 {
+  font-size: 1.125rem;
+  font-weight: bold;
 }

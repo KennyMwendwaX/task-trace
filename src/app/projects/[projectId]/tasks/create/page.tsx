@@ -23,7 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import format from "date-fns/format";
 import {
@@ -41,8 +41,6 @@ import {
 } from "@/components/ui/command";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import ProjectNotFound from "../../components/project-not-found";
@@ -51,11 +49,7 @@ import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import ChatInput from "./components/chat-input";
-import Quill from "quill";
-import { useRef } from "react";
-
-const Editor = dynamic(() => import("./components/editor"), { ssr: false });
+import Tiptap from "./components/tiptap";
 
 interface CreateTaskPageProps {
   params: {
@@ -66,10 +60,11 @@ interface CreateTaskPageProps {
 export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   const { projectId } = params;
 
-  const editorRef = useRef<Quill | null>(null);
-
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
+    defaultValues: {
+      memberId: "2yehrh4ryh4eif",
+    },
   });
   const router = useRouter();
 
@@ -86,17 +81,18 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   // }
 
   async function onSubmit(values: TaskFormValues) {
-    addTask(values, {
-      onSuccess: () => {
-        form.reset();
-        toast.success("Task created successfully!");
-        router.push(`/projects/${projectId}/tasks`);
-      },
-      onError: (error) => {
-        toast.error("Failed to create task!");
-        console.error("Failed to create task:", error);
-      },
-    });
+    // addTask(values, {
+    //   onSuccess: () => {
+    //     form.reset();
+    //     toast.success("Task created successfully!");
+    //     router.push(`/projects/${projectId}/tasks`);
+    //   },
+    //   onError: (error) => {
+    //     toast.error("Failed to create task!");
+    //     console.error("Failed to create task:", error);
+    //   },
+    // });
+    console.log("Values", values);
   }
 
   return (
@@ -136,7 +132,6 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                 </FormItem>
               )}
             />
-
             <div className="grid md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -291,19 +286,17 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                 )}
               />
             </div>
-
-            <Controller
-              name="description"
+            <FormField
               control={form.control}
+              name="description"
               render={({ field }) => (
-                <Editor
-                  variant="create"
-                  placeholder="Task description"
-                  disabled={false}
-                  innerRef={editorRef}
-                  control={form.control}
-                  name="description"
-                />
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Tiptap onChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
 
@@ -351,4 +344,45 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                 </FormItem>
               )}
             /> */
+}
+
+{
+  /* <Controller
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <Editor
+                  control={form.control}
+                  name="description"
+                  variant="create"
+                  placeholder="Task description"
+                  disabled={false}
+                  innerRef={editorRef}
+                  defaultValue={new Delta()
+                  setValue={form.setValue}
+                />
+              )}
+            /> */
+}
+{
+  /* <Controller
+              name="description"
+              control={form.control}
+              rules={{
+                required: "Please enter task description",
+              }}
+              render={({ field }) => (
+                <ReactQuill
+                  {...field}
+                  theme="snow"
+                  placeholder={"Write Description"}
+                  onChange={(text) => {
+                    field.onChange(text);
+                  }}
+                />
+              )}
+            />
+            <p className="Error">
+              {form.formState.errors.description && "Enter valid content"}
+            </p> */
 }
