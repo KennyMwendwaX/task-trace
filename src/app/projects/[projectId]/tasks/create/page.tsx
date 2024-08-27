@@ -49,7 +49,7 @@ import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import Editor from "./components/editor";
+import Editor from "../components/tiptap/editor";
 
 interface CreateTaskPageProps {
   params: {
