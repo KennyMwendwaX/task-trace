@@ -53,6 +53,7 @@ import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Editor from "./components/editor";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -310,18 +311,15 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <SimpleMDE
-                      id="description"
-                      className="focus:border-2 focus:border-blue-600"
-                      placeholder="Task description"
-                      {...field}
+                    <Editor
+                      description={field.name}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <div className="flex justify-end space-x-4">
               <Button
                 type="button"
