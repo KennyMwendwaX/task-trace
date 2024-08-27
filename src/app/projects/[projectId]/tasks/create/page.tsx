@@ -62,10 +62,8 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
-    defaultValues: {
-      memberId: "2yehrh4ryh4eif",
-    },
   });
+
   const router = useRouter();
 
   const {
@@ -76,23 +74,22 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
 
   const { project, members } = useProjectStore();
 
-  // if (!project) {
-  //   return <ProjectNotFound />;
-  // }
+  if (!project) {
+    return <ProjectNotFound />;
+  }
 
   async function onSubmit(values: TaskFormValues) {
-    // addTask(values, {
-    //   onSuccess: () => {
-    //     form.reset();
-    //     toast.success("Task created successfully!");
-    //     router.push(`/projects/${projectId}/tasks`);
-    //   },
-    //   onError: (error) => {
-    //     toast.error("Failed to create task!");
-    //     console.error("Failed to create task:", error);
-    //   },
-    // });
-    console.log("Values", values);
+    addTask(values, {
+      onSuccess: () => {
+        form.reset();
+        toast.success("Task created successfully!");
+        router.push(`/projects/${projectId}/tasks`);
+      },
+      onError: (error) => {
+        toast.error("Failed to create task!");
+        console.error("Failed to create task:", error);
+      },
+    });
   }
 
   return (
@@ -323,25 +320,4 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
       </Card>
     </main>
   );
-}
-
-{
-  /* <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <SimpleMDE
-                      id="description"
-                      className="focus:border-2 focus:border-blue-600"
-                      placeholder="Task description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */
 }
