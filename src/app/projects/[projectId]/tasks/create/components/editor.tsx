@@ -46,6 +46,7 @@ export default function Editor({ onChange }: EditorProps) {
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
+    immediatelyRender: false,
   });
 
   return (

@@ -41,8 +41,6 @@ import {
 } from "@/components/ui/command";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
@@ -54,10 +52,6 @@ import { useProjectStore } from "@/hooks/useProjectStore";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Editor from "./components/editor";
-
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
 
 interface EditTaskPageProps {
   params: {
