@@ -9,7 +9,7 @@ import { useProjectStore } from "./useProjectStore";
 import { Project, ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
 import { Member } from "@/lib/schema/MemberSchema";
-import { fetchProject, fetchPublicProjects } from "@/lib/api/projects";
+import { fetchProject, fetchProjects } from "@/lib/api/projects";
 import { fetchProjectMembers } from "@/lib/api/members";
 import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
 import { useEffect } from "react";
@@ -33,18 +33,18 @@ export const useProjectQuery = (
   return result;
 };
 
-export const usePublicProjectsQuery = (): UseQueryResult<Project[], Error> => {
-  const setPublicProjects = useProjectStore((state) => state.setPublicProjects);
+export const useProjectsQuery = (): UseQueryResult<Project[], Error> => {
+  const setProjects = useProjectStore((state) => state.setProjects);
   const result = useQuery({
-    queryKey: ["public-projects"],
-    queryFn: () => fetchPublicProjects(),
+    queryKey: ["projects"],
+    queryFn: () => fetchProjects(),
   });
 
   useEffect(() => {
     if (result.data) {
-      setPublicProjects(result.data);
+      setProjects(result.data);
     }
-  }, [result.data, setPublicProjects]);
+  }, [result.data, setProjects]);
 
   return result;
 };

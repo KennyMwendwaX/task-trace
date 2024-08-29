@@ -13,15 +13,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Loading from "./components/loading";
-import { usePublicProjectsQuery } from "@/hooks/useProjectQueries";
+import { useProjectsQuery } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Explore() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const { isLoading } = usePublicProjectsQuery();
-  const { publicProjects: projects } = useProjectStore();
+  const { isLoading } = useProjectsQuery();
+  const { projects } = useProjectStore();
 
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "ALL";

@@ -47,12 +47,10 @@ export const fetchUserProjects = async (
   }
 };
 
-export const fetchPublicProjects = async (): Promise<Project[]> => {
+export const fetchProjects = async (): Promise<Project[]> => {
   try {
-    const { data } = await axios.get<{ publicProjects: Project[] }>(
-      "/api/projects"
-    );
-    return data.publicProjects
+    const { data } = await axios.get<{ projects: Project[] }>("/api/projects");
+    return data.projects
       .map((project) => ({
         ...project,
         createdAt: new Date(project.createdAt),

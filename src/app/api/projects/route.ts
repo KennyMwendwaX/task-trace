@@ -13,18 +13,16 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const publicProjects = await db.query.projects.findMany({
-      where: eq(projects.isPublic, true),
-    });
+    const projects = await db.query.projects.findMany();
 
-    if (publicProjects.length === 0) {
+    if (projects.length === 0) {
       return NextResponse.json(
-        { message: "No public projects found" },
+        { message: "No projects found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(publicProjects, { status: 200 });
+    return NextResponse.json(projects, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Server error, try again later" },

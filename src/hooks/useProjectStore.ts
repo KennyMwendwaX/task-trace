@@ -5,12 +5,12 @@ import { create } from "zustand";
 
 interface ProjectStore {
   project: Project | null;
-  publicProjects: Project[];
+  projects: Project[];
   members: Member[];
   task: ProjectTask | null;
   tasks: ProjectTask[];
   setProject: (project: Project) => void;
-  setPublicProjects: (projects: Project[]) => void;
+  setProjects: (projects: Project[]) => void;
   setMembers: (members: Member[]) => void;
   setProjectTask: (task: ProjectTask) => void;
   setProjectTasks: (tasks: ProjectTask[]) => void;
@@ -18,12 +18,12 @@ interface ProjectStore {
 
 export const useProjectStore = create<ProjectStore>((set) => ({
   project: null,
-  publicProjects: [],
+  projects: [],
   members: [],
   task: null,
   tasks: [],
   setProject: (project) => set({ project }),
-  setPublicProjects: (publicProjects) => set({ publicProjects }),
+  setProjects: (projects) => set({ projects }),
   setMembers: (members) => set({ members }),
   setProjectTask: (task) => set({ task }),
   setProjectTasks: (tasks) => set({ tasks }),
