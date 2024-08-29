@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LuClipboard } from "react-icons/lu";
+import { LuClipboard, LuRotateCw } from "react-icons/lu";
 import { toast } from "sonner";
 
 export default function ProjectInvite() {
@@ -16,40 +16,36 @@ export default function ProjectInvite() {
   const handleCopy = () => {
     navigator.clipboard
       .writeText(code)
-      .then(() => {
-        toast.success("Invitation code copied to clipboard!");
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-      });
+      .then(() => toast.success("Invitation code copied to clipboard!"))
+      .catch((err) => console.error("Failed to copy text: ", err));
   };
+
   return (
-    <Card className="w-full lg:max-w-sm">
+    <Card className="w-full h-fit">
       <CardHeader>
         <CardTitle className="text-xl">Project Invite</CardTitle>
         <CardDescription>
-          Share this code to invite new members to the project.
+          Share this code to invite new members.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center gap-3 pt-3">
-        <div className="rounded-md bg-primary px-6 py-3 text-3xl font-bold text-primary-foreground">
-          {code}
+      <CardContent className="flex flex-col items-center justify-center gap-4">
+        <div className="bg-primary/10 rounded-lg p-4 text-center">
+          <p className="text-4xl font-mono font-bold text-primary">{code}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Expires in 7 days
+          </p>
         </div>
-
-        <p className="text-sm text-muted-foreground">
-          This code will expire in 7 days.
-        </p>
       </CardContent>
-      <CardFooter className="border-t flex items-center justify-between py-2.5">
+      <CardFooter className="flex justify-between">
         <Button
-          className="flex items-center gap-1"
-          size="sm"
-          onClick={handleCopy}>
-          <LuClipboard className="w-4 h-4" />
-          Copy
+          variant="outline"
+          className="flex items-center gap-2 text-destructive">
+          <LuRotateCw className="w-4 h-4" />
+          Regenerate
         </Button>
-        <Button variant="outline" size="sm" className="text-red-500">
-          Regenerate Code
+        <Button onClick={handleCopy} className="flex items-center gap-2">
+          <LuClipboard className="w-4 h-4" />
+          Copy Code
         </Button>
       </CardFooter>
     </Card>

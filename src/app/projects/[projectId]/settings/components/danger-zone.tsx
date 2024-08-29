@@ -10,7 +10,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export default function DangerZone() {
+interface DangerZoneProps {
+  projectId?: string;
+}
+
+export default function DangerZone({ projectId }: DangerZoneProps) {
   return (
     <Card className="border-red-300 shadow-sm">
       <CardHeader>
