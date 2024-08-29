@@ -6,14 +6,6 @@ import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
 import ProjectInvite from "./components/project-invite";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { LuSettings } from "react-icons/lu";
 import { useState } from "react";
@@ -69,26 +61,7 @@ export default function Settings({
         <h1 className="text-3xl font-bold tracking-tight">
           {project?.name} Settings
         </h1>
-        <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <LuSettings className="w-4 h-4" />
-              Update Project
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Update Project Details</DialogTitle>
-              <DialogDescription>
-                Make changes to your project here. Click save when you&apos;re
-                done.
-              </DialogDescription>
-            </DialogHeader>
-            <UpdateProjectDetails
-              onSuccess={() => setIsUpdateModalOpen(false)}
-            />
-          </DialogContent>
-        </Dialog>
+        <UpdateProjectDetails />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
