@@ -1,13 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormField,
@@ -43,7 +35,7 @@ import {
 import { LuSettings } from "react-icons/lu";
 
 interface Props {
-  project?: Project;
+  project: Project;
 }
 
 export default function UpdateProjectDetails({ project }: Props) {
@@ -76,7 +68,7 @@ export default function UpdateProjectDetails({ project }: Props) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["project", project?.id],
+        queryKey: ["project", project.id],
       });
     },
     onError: (error) => {

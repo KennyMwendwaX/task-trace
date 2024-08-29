@@ -23,7 +23,7 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
-  project?: Project;
+  project: Project;
 }
 
 const switchFormSchema = z.object({
@@ -51,7 +51,7 @@ export default function ProjectVisibility({ project }: Props) {
         body: JSON.stringify({ isPublic }),
       };
       const response = await fetch(
-        `/api/projects/${project?.id}/visibility`,
+        `/api/projects/${project.id}/visibility`,
         options
       );
       if (!response.ok) {
@@ -60,7 +60,7 @@ export default function ProjectVisibility({ project }: Props) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["project", project?.id],
+        queryKey: ["project", project.id],
       });
     },
     onError: (error) => {

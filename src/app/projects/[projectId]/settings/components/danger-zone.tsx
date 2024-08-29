@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 
 interface DangerZoneProps {
-  projectId?: string;
+  projectId: string;
 }
 
 export default function DangerZone({ projectId }: DangerZoneProps) {
