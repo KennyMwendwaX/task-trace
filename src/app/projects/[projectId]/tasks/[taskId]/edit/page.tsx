@@ -306,7 +306,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Editor
-                      description={field.name}
+                      description={field.value}
                       onChange={field.onChange}
                     />
                   </FormControl>

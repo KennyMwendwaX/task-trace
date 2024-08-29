@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Toolbar from "./toolbar";
+import { Level } from "@tiptap/extension-heading";
 
 interface EditorProps {
   description: string;
@@ -21,7 +22,7 @@ export default function Editor({ description, onChange }: EditorProps) {
         heading: {
           levels: [1, 2, 3],
           HTMLAttributes: {
-            class: ({ level }: { level: number }) => {
+            class: ({ level }: { level: Level }) => {
               switch (level) {
                 case 1:
                   return "text-2xl font-bold";
