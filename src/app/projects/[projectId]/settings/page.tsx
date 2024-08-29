@@ -20,7 +20,7 @@ export default function Settings({
 
   const { project } = useProjectStore();
 
-  if (!projectIsLoading) {
+  if (projectIsLoading) {
     return <Loading />;
   }
 
