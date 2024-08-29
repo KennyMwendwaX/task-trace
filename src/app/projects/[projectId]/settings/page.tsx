@@ -1,6 +1,7 @@
 "use client";
 
 import ProjectNotFound from "../components/project-not-found";
+import Loading from "./components/loading";
 import UpdateProjectDetails from "./components/update-project-details";
 import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
@@ -18,6 +19,10 @@ export default function Settings({
   const { isLoading: projectIsLoading } = useProjectQuery(projectId);
 
   const { project } = useProjectStore();
+
+  if (!projectIsLoading) {
+    return <Loading />;
+  }
 
   if (!project) {
     return <ProjectNotFound />;
