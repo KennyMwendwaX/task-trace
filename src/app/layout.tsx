@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import TanstackProvider from "@/providers/TanstackProvider";
 import SessionProvider from "@/providers/SessionProvider";
-import Layout from "@/components/layout";
 import { auth } from "../auth";
 import { Toaster } from "sonner";
 
@@ -23,10 +22,8 @@ export default async function RootLayout({
       <body className={GeistSans.className}>
         <SessionProvider session={session}>
           <TanstackProvider>
-            <Layout>
-              {children}
-              <Toaster richColors />
-            </Layout>
+            {children}
+            <Toaster richColors />
           </TanstackProvider>
         </SessionProvider>
       </body>
