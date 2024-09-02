@@ -140,3 +140,56 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { projectId: string } }
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { projectId } = params;
+
+    if (!projectId) {
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
+    }
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project) {
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
+    }
+
+    if (project.ownerId !== session.user.id) {
+      return NextResponse.json(
+        { message: "Only the project owner can delete the project" },
+        { status: 403 }
+      );
+    }
+
+    await db.delete(projects).where(eq(projects.id, projectId));
+
+    return NextResponse.json(
+      { message: "Project successfully deleted" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    return NextResponse.json(
+      { message: "Server error, try again later" },
+      { status: 500 }
+    );
+  }
+}
