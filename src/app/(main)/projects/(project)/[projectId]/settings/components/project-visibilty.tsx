@@ -21,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toggleProjectVisibility } from "@/lib/api/projects";
 
 interface Props {
   project: Project;
@@ -40,24 +41,13 @@ export default function ProjectVisibility({ project }: Props) {
 
   const queryClient = useQueryClient();
 
-  const {
-    mutate: toggleProjectVisibility,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: async (isPublic: boolean) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ isPublic }),
-      };
-      const response = await fetch(
-        `/api/projects/${project.id}/visibility`,
-        options
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-    },
+  const toggleVisibility = useMutation<
+    void,
+    Error,
+    { projectId: string; isPublic: boolean }
+  >({
+    mutationFn: ({ projectId, isPublic }) =>
+      toggleProjectVisibility(projectId, isPublic),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["project", project.id],
@@ -71,20 +61,23 @@ export default function ProjectVisibility({ project }: Props) {
   const handleSwitchChange = useCallback(
     (checked: boolean) => {
       switchForm.setValue("isPublic", checked);
-      toggleProjectVisibility(checked, {
-        onSuccess: () => {
-          toast.success(
-            checked ? "Project is now public" : "Project is now private"
-          );
-        },
-        onError: (error) => {
-          console.error("Error updating project visibility:", error);
-          toast.error("Failed to update project visibility");
-          switchForm.setValue("isPublic", !checked);
-        },
-      });
+      toggleVisibility.mutate(
+        { projectId: project.id, isPublic: checked },
+        {
+          onSuccess: () => {
+            toast.success(
+              checked ? "Project is now public" : "Project is now private"
+            );
+          },
+          onError: (error) => {
+            console.error("Error updating project visibility:", error);
+            toast.error("Failed to update project visibility");
+            switchForm.setValue("isPublic", !checked);
+          },
+        }
+      );
     },
-    [switchForm, toggleProjectVisibility]
+    [switchForm, toggleVisibility, project.id]
   );
 
   return (
@@ -114,7 +107,7 @@ export default function ProjectVisibility({ project }: Props) {
                       <Switch
                         checked={field.value}
                         onCheckedChange={handleSwitchChange}
-                        disabled={isPending}
+                        disabled={toggleVisibility.isPending}
                       />
                     </FormControl>
                   </FormItem>

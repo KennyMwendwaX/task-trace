@@ -76,3 +76,21 @@ export const deleteProject = async (projectId: string) => {
   }
   return response.json();
 };
+
+export const toggleProjectVisibility = async (
+  projectId: string,
+  isPublic: boolean
+) => {
+  const options = {
+    method: "PATCH",
+    body: JSON.stringify({ isPublic }),
+  };
+
+  const response = await fetch(
+    `/api/projects/${projectId}/visibility`,
+    options
+  );
+  if (!response.ok) {
+    throw new Error("Something went wrong");
+  }
+};
