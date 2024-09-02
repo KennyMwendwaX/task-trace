@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupValues, signupSchema } from "@/lib/schema/UserSchema";
 import { useRouter } from "next/navigation";
-import Logo from "../../../public/logo.png";
+import Logo from "@/app/logo.png";
 import { useUserSignupMutation } from "@/hooks/useUserQueries";
 import { toast } from "sonner";
 // import { useSession } from "next-auth/react";

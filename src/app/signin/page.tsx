@@ -21,7 +21,7 @@ import { redirect } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { credentialsLogin, providerLogin } from "@/actions/auth/login";
-import Logo from "../../../public/logo.png";
+import Logo from "@/app/logo.png";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);

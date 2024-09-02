@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { MdLogout, MdMenu, MdClose } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
 import { Session } from "next-auth";
-import Logo from "../../../public/logo.png";
+import Logo from "@/app/logo.png";
 
 interface Props {
   session: Session | null;

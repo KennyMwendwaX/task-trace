@@ -18,7 +18,7 @@ import { MdLogout } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
 import { Session } from "next-auth";
 import { LuMenu } from "react-icons/lu";
-import Logo from "../../public/logo.png";
+import Logo from "@/app/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
