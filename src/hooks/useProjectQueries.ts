@@ -18,6 +18,7 @@ import {
 import { fetchProjectMembers } from "@/lib/api/members";
 import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
 import { useEffect } from "react";
+import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 
 export const useProjectQuery = (
   projectId: string
@@ -204,7 +205,7 @@ export const useUpdateProjectTaskMutation = (
 
 export const useProjectInvitationCodeQuery = (
   projectId: string
-): UseQueryResult<string, Error> => {
+): UseQueryResult<InvitationCode, Error> => {
   const setProjectInvitationCode = useProjectStore(
     (state) => state.setInvitationCode
   );
@@ -225,7 +226,7 @@ export const useProjectInvitationCodeQuery = (
 
 export const useProjectInvitationCodeMutation = (
   projectId: string
-): UseMutationResult<void, Error, string> => {
+): UseMutationResult<InvitationCode, Error, string> => {
   const queryClient = useQueryClient();
   if (!projectId) throw new Error("No project ID");
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ExtendedProject, Project } from "../schema/ProjectSchema";
+import { InvitationCode } from "../schema/InvitationCodeSchema";
 
 export const fetchProject = async (projectId: string): Promise<Project> => {
   if (!projectId) throw new Error("No project ID");
@@ -95,7 +96,9 @@ export const toggleProjectVisibility = async (
   }
 };
 
-export const getInvitationCode = async (projectId: string) => {
+export const getInvitationCode = async (
+  projectId: string
+): Promise<InvitationCode> => {
   const response = await fetch(`/api/projects/${projectId}/invitation-code`);
   if (!response.ok) {
     const errorData = await response.json();
@@ -104,7 +107,9 @@ export const getInvitationCode = async (projectId: string) => {
   return response.json();
 };
 
-export const generateInvitationCode = async (projectId: string) => {
+export const generateInvitationCode = async (
+  projectId: string
+): Promise<InvitationCode> => {
   const response = await fetch(`/api/projects/${projectId}/invitation-code`, {
     method: "POST",
   });

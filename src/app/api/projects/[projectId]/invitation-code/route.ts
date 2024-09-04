@@ -76,9 +76,10 @@ export async function GET(
       );
     }
 
-    const code = invitationCode.code;
-
-    return NextResponse.json({ code }, { status: 200 });
+    return NextResponse.json(
+      { code: invitationCode.code, expiresAt: invitationCode.expiresAt },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Error getting invitation code:", error);
     return NextResponse.json(

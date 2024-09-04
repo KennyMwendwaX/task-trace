@@ -47,7 +47,7 @@ export default function Settings({
           <ProjectVisibility project={project} />
           <DangerZone projectId={project.id} />
         </div>
-        <ProjectInvite />
+        <ProjectInvite projectId={projectId} invitationCode={invitationCode} />
       </div>
     </main>
   );
