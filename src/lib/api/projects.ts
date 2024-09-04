@@ -94,3 +94,12 @@ export const toggleProjectVisibility = async (
     throw new Error("Something went wrong");
   }
 };
+
+const getInvitationCode = async (projectId: string) => {
+  const response = await fetch(`/api/projects/${projectId}/invitation-code`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to get invitation code.");
+  }
+  return response.json();
+};
