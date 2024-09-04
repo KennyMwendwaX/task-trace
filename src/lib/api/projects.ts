@@ -95,7 +95,7 @@ export const toggleProjectVisibility = async (
   }
 };
 
-const getInvitationCode = async (projectId: string) => {
+export const getInvitationCode = async (projectId: string) => {
   const response = await fetch(`/api/projects/${projectId}/invitation-code`);
   if (!response.ok) {
     const errorData = await response.json();

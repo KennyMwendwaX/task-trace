@@ -9,7 +9,11 @@ import { useProjectStore } from "./useProjectStore";
 import { Project, ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
 import { Member } from "@/lib/schema/MemberSchema";
-import { fetchProject, fetchProjects } from "@/lib/api/projects";
+import {
+  fetchProject,
+  fetchProjects,
+  getInvitationCode,
+} from "@/lib/api/projects";
 import { fetchProjectMembers } from "@/lib/api/members";
 import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
 import { useEffect } from "react";
@@ -195,4 +199,25 @@ export const useUpdateProjectTaskMutation = (
       console.log(error);
     },
   });
+};
+
+export const useGetProjectInvitationCode = (
+  projectId: string
+): UseQueryResult<string, Error> => {
+  const setProjectInvitationCode = useProjectStore(
+    (state) => state.setInvitationCode
+  );
+  const result = useQuery({
+    queryKey: ["invitation-code", projectId],
+    queryFn: () => getInvitationCode(projectId),
+    enabled: !!projectId,
+  });
+
+  useEffect(() => {
+    if (result.data) {
+      setProjectInvitationCode(result.data);
+    }
+  }, [result.data, setProjectInvitationCode]);
+
+  return result;
 };
