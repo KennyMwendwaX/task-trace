@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,167 +8,96 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LuClipboard, LuRotateCw } from "react-icons/lu";
-import { toast } from "@/components/ui/use-toast";
 import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
+import { useProjectInvitationCodeMutation } from "@/hooks/useProjectQueries";
+import { toast } from "sonner";
+import { differenceInDays, format } from "date-fns";
 
 interface ProjectInviteProps {
   projectId: string;
   invitationCode: InvitationCode | null;
 }
 
-const getInvitationCode = async (projectId: string) => {
-  const response = await fetch(`/api/projects/${projectId}/invitation-code`);
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to get invitation code.");
-  }
-  return response.json();
-};
+export default function ProjectInvite({
+  projectId,
+  invitationCode,
+}: ProjectInviteProps) {
+  const {
+    mutate: generateInvitationCode,
+    isPending,
+    error,
+  } = useProjectInvitationCodeMutation(projectId);
 
-const generateInvitationCode = async (projectId: string) => {
-  const response = await fetch(`/api/projects/${projectId}/invitation-code`, {
-    method: "POST",
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to generate invitation code.");
-  }
-  return response.json();
-};
-
-export default function ProjectInvite({ projectId }: ProjectInviteProps) {
-  const queryClient = useQueryClient();
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["invitation-code", projectId],
-    queryFn: () => getInvitationCode(projectId),
-    onError: (err: Error) => {
-      toast({
-        title: "Error",
-        description: err.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const regenerateCodeMutation = useMutation({
-    mutationFn: () => generateInvitationCode(projectId),
-    onSuccess: (data) => {
-      setIsGenerating(false);
-      toast({
-        title: "Success",
-        description: "Invitation code regenerated.",
-      });
-      queryClient.setQueryData(["invitation-code", projectId], data);
-    },
-    onError: (err: Error) => {
-      setIsGenerating(false);
-      toast({
-        title: "Error",
-        description: err.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleCopy = () => {
-    if (data?.code) {
-      navigator.clipboard
-        .writeText(data.code)
-        .then(() =>
-          toast({
-            title: "Success",
-            description: "Invitation code copied to clipboard!",
-          })
-        )
-        .catch((err) => console.error("Failed to copy text: ", err));
-    }
+  const handleRegenerate = async (projectId: string) => {
+    generateInvitationCode(projectId, {
+      onSuccess: () => {
+        toast.success("Invitation code generated successfully!");
+      },
+      onError: () => {
+        toast.error("Failed to generate invitation code!");
+      },
+    });
   };
 
-  const handleRegenerate = () => {
-    setIsGenerating(true);
-    regenerateCodeMutation.mutate();
-  };
-
-  if (isLoading) {
+  if (!invitationCode) {
     return (
-      <Card className="w-full h-fit">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-xl">Project Invite</CardTitle>
-          <CardDescription>Loading...</CardDescription>
+          <CardTitle>Project Invite</CardTitle>
         </CardHeader>
-      </Card>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Card className="w-full h-fit">
-        <CardHeader>
-          <CardTitle className="text-xl">Project Invite</CardTitle>
-          <CardDescription>Error: {(error as Error)?.message}</CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
-
-  if (!data?.code) {
-    return (
-      <Card className="w-full h-fit">
-        <CardHeader>
-          <CardTitle className="text-xl">Project Invite</CardTitle>
+        <CardContent>
           <CardDescription>
             No invitation code found. Please generate a new one.
           </CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-center">
-          <Button
-            variant="primary"
-            className="flex items-center gap-2"
-            onClick={handleRegenerate}
-            disabled={isGenerating}>
-            <LuRotateCw className="w-4 h-4" />
-            {isGenerating ? "Generating..." : "Generate Invitation Code"}
-          </Button>
         </CardContent>
+        <CardFooter>
+          <Button
+            onClick={() => handleRegenerate(projectId)}
+            disabled={isPending}>
+            {isPending ? "Generating..." : "Generate Invitation Code"}
+          </Button>
+        </CardFooter>
       </Card>
     );
   }
 
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(invitationCode.code)
+      .then(() => toast.success("Invitation code copied to clipboard!"))
+      .catch((err) => console.error("Failed to copy text: ", err));
+  };
+
+  const daysUntilExpiration = invitationCode.expiresAt
+    ? differenceInDays(new Date(invitationCode.expiresAt), new Date())
+    : null;
+
   return (
-    <Card className="w-full h-fit">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Project Invite</CardTitle>
+        <CardTitle>Project Invite</CardTitle>
         <CardDescription>
           Share this code to invite new members.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center gap-4">
-        <div className="bg-primary/10 rounded-lg p-4 text-center">
-          <p className="text-4xl font-mono font-bold text-primary">
-            {data.code}
-          </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Expires in{" "}
-            {Math.floor(
-              (data.expiresAt - new Date().getTime()) / (1000 * 60 * 60 * 24)
-            )}{" "}
-            days
-          </p>
+      <CardContent>
+        <div className="flex justify-between items-center">
+          <span className="font-mono text-lg">{invitationCode.code}</span>
+          {daysUntilExpiration !== null && (
+            <span className="text-sm text-gray-500">
+              Expires in {daysUntilExpiration} days
+            </span>
+          )}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter>
         <Button
-          variant="outline"
-          className="flex items-center gap-2 text-destructive"
-          onClick={handleRegenerate}
-          disabled={isGenerating}>
-          <LuRotateCw className="w-4 h-4" />
-          {isGenerating ? "Regenerating..." : "Regenerate"}
+          onClick={() => handleRegenerate(projectId)}
+          disabled={isPending}>
+          {isPending ? "Regenerating..." : "Regenerate"}
         </Button>
-        <Button onClick={handleCopy} className="flex items-center gap-2">
-          <LuClipboard className="w-4 h-4" />
+        <Button onClick={handleCopy} className="ml-2" variant="secondary">
+          <LuClipboard className="mr-1" />
           Copy Code
         </Button>
       </CardFooter>

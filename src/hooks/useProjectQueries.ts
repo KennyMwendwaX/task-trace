@@ -232,10 +232,8 @@ export const useProjectInvitationCodeMutation = (
 
   return useMutation({
     mutationFn: () => generateInvitationCode(projectId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["invitation-code", projectId],
-      });
+    onSuccess: (data) => {
+      queryClient.setQueryData(["invitation-code", projectId], data);
     },
     onError: (error) => {
       console.log(error);
