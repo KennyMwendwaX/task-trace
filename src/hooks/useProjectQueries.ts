@@ -12,6 +12,7 @@ import { Member } from "@/lib/schema/MemberSchema";
 import {
   fetchProject,
   fetchProjects,
+  generateInvitationCode,
   getInvitationCode,
 } from "@/lib/api/projects";
 import { fetchProjectMembers } from "@/lib/api/members";
@@ -224,21 +225,19 @@ export const useProjectInvitationCodeQuery = (
 
 export const useProjectInvitationCodeMutation = (
   projectId: string
-): UseQueryResult<string, Error> => {
-  const setProjectInvitationCode = useProjectStore(
-    (state) => state.setInvitationCode
-  );
-  const result = useQuery({
-    queryKey: ["invitation-code", projectId],
-    queryFn: () => getInvitationCode(projectId),
-    enabled: !!projectId,
+): UseMutationResult<void, Error, string> => {
+  const queryClient = useQueryClient();
+  if (!projectId) throw new Error("No project ID");
+
+  return useMutation({
+    mutationFn: () => generateInvitationCode(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["invitation-code", projectId],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
   });
-
-  useEffect(() => {
-    if (result.data) {
-      setProjectInvitationCode(result.data);
-    }
-  }, [result.data, setProjectInvitationCode]);
-
-  return result;
 };
