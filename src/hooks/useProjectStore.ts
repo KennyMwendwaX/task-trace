@@ -1,6 +1,6 @@
 import { Member } from "@/lib/schema/MemberSchema";
 import { Project } from "@/lib/schema/ProjectSchema";
-import { ProjectTask, UserTask } from "@/lib/schema/TaskSchema";
+import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { create } from "zustand";
 
 interface ProjectStore {

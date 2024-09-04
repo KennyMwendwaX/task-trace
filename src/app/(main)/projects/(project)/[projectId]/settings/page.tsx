@@ -7,7 +7,10 @@ import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
 import ProjectInvite from "./components/project-invite";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import { useProjectQuery } from "@/hooks/useProjectQueries";
+import {
+  useProjectInvitationCodeQuery,
+  useProjectQuery,
+} from "@/hooks/useProjectQueries";
 
 export default function Settings({
   params,
@@ -17,10 +20,12 @@ export default function Settings({
   const { projectId } = params;
 
   const { isLoading: projectIsLoading } = useProjectQuery(projectId);
+  const { isLoading: invitationCodeIsLoading } =
+    useProjectInvitationCodeQuery(projectId);
 
-  const { project } = useProjectStore();
+  const { project, invitationCode } = useProjectStore();
 
-  if (projectIsLoading) {
+  if (projectIsLoading || invitationCodeIsLoading) {
     return <Loading />;
   }
 
