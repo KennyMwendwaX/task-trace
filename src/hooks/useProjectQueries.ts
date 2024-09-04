@@ -201,7 +201,28 @@ export const useUpdateProjectTaskMutation = (
   });
 };
 
-export const useGetProjectInvitationCode = (
+export const useProjectInvitationCodeQuery = (
+  projectId: string
+): UseQueryResult<string, Error> => {
+  const setProjectInvitationCode = useProjectStore(
+    (state) => state.setInvitationCode
+  );
+  const result = useQuery({
+    queryKey: ["invitation-code", projectId],
+    queryFn: () => getInvitationCode(projectId),
+    enabled: !!projectId,
+  });
+
+  useEffect(() => {
+    if (result.data) {
+      setProjectInvitationCode(result.data);
+    }
+  }, [result.data, setProjectInvitationCode]);
+
+  return result;
+};
+
+export const useProjectInvitationCodeMutation = (
   projectId: string
 ): UseQueryResult<string, Error> => {
   const setProjectInvitationCode = useProjectStore(

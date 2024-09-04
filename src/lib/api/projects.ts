@@ -103,3 +103,14 @@ export const getInvitationCode = async (projectId: string) => {
   }
   return response.json();
 };
+
+export const generateInvitationCode = async (projectId: string) => {
+  const response = await fetch(`/api/projects/${projectId}/invitation-code`, {
+    method: "POST",
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to generate invitation code.");
+  }
+  return response.json();
+};
