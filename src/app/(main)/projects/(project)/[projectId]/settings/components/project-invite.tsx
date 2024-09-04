@@ -52,9 +52,21 @@ export default function ProjectInvite({
         </CardContent>
         <CardFooter>
           <Button
+            variant="default"
+            className="flex items-center gap-2"
             onClick={() => handleRegenerate(projectId)}
             disabled={isPending}>
-            {isPending ? "Generating..." : "Generate Invitation Code"}
+            {isPending ? (
+              <>
+                <LuRotateCw className="w-4 h-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <LuRotateCw className="w-4 h-4" />
+                Generate Invitation Code
+              </>
+            )}
           </Button>
         </CardFooter>
       </Card>
@@ -90,11 +102,23 @@ export default function ProjectInvite({
           )}
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex justify-between">
         <Button
+          variant="outline"
+          className="flex items-center gap-2 text-destructive"
           onClick={() => handleRegenerate(projectId)}
           disabled={isPending}>
-          {isPending ? "Regenerating..." : "Regenerate"}
+          {isPending ? (
+            <>
+              <LuRotateCw className="w-4 h-4 animate-spin" />
+              Regenerating...
+            </>
+          ) : (
+            <>
+              <LuRotateCw className="w-4 h-4" />
+              Regenerate
+            </>
+          )}
         </Button>
         <Button onClick={handleCopy} className="ml-2" variant="secondary">
           <LuClipboard className="mr-1" />
