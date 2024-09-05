@@ -15,6 +15,7 @@ import {
   fetchProjects,
   generateInvitationCode,
   getInvitationCode,
+  leaveProject,
 } from "@/lib/api/projects";
 import { fetchProjectMembers } from "@/lib/api/members";
 import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
@@ -242,9 +243,25 @@ export const useProjectInvitationCodeMutation = (
   });
 };
 
-export const useDeleteProjectMutation = (
-  projectId: string
-): UseMutationResult<void, Error, string> => {
+export const useLeaveProjectMutation = (
+  projectId: string,
+  userId: string | undefined
+) => {
+  const queryClient = useQueryClient();
+  if (!projectId || !userId) throw new Error("No project or user ID");
+
+  return useMutation({
+    mutationFn: () => leaveProject(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-projects", userId] });
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useDeleteProjectMutation = (projectId: string) => {
   const queryClient = useQueryClient();
   if (!projectId) throw new Error("No project ID");
 

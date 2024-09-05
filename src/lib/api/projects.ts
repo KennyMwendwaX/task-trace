@@ -67,17 +67,6 @@ export const fetchProjects = async (): Promise<Project[]> => {
   }
 };
 
-export const deleteProject = async (projectId: string) => {
-  const response = await fetch(`/api/project/${projectId}`, {
-    method: "DELETE",
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to delete the project.");
-  }
-  return response.json();
-};
-
 export const toggleProjectVisibility = async (
   projectId: string,
   isPublic: boolean
@@ -127,6 +116,17 @@ export const leaveProject = async (projectId: string) => {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.message || "Failed to leave the project.");
+  }
+  return response.json();
+};
+
+export const deleteProject = async (projectId: string) => {
+  const response = await fetch(`/api/project/${projectId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to delete the project.");
   }
   return response.json();
 };

@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,7 +11,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useDeleteProjectMutation } from "@/hooks/useProjectQueries";
+import {
+  useDeleteProjectMutation,
+  useLeaveProjectMutation,
+} from "@/hooks/useProjectQueries";
+import { useSession } from "next-auth/react";
 
 interface DangerZoneProps {
   projectId: string;
@@ -21,14 +24,17 @@ interface DangerZoneProps {
 export default function DangerZone({ projectId }: DangerZoneProps) {
   const router = useRouter();
 
-  const {
-    mutate: deleteProject,
-    isPending: isDeletingProject,
-    error,
-  } = useDeleteProjectMutation(projectId);
+  const session = useSession();
+  const userId = session.data?.user?.id;
 
-  const handleDeleteProject = () => {
-    deleteProject(projectId, {
+  const { mutate: leaveProject, isPending: isLeavingProject } =
+    useLeaveProjectMutation(projectId, userId);
+
+  const { mutate: deleteProject, isPending: isDeletingProject } =
+    useDeleteProjectMutation(projectId);
+
+  const handleLeaveProject = () => {
+    leaveProject(undefined, {
       onSuccess: () => {
         toast.success("Project has been deleted!");
         router.push("/dashboard");
@@ -39,8 +45,16 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
     });
   };
 
-  const handleLeaveProject = () => {
-    // leave project
+  const handleDeleteProject = () => {
+    deleteProject(undefined, {
+      onSuccess: () => {
+        toast.success("Project has been deleted!");
+        router.push("/dashboard");
+      },
+      onError: () => {
+        toast.error("Failed to delete project");
+      },
+    });
   };
 
   return (
@@ -80,13 +94,13 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
                     Cancel
                   </Button>
                 </DialogClose>
-                {/* <Button
+                <Button
                   variant="destructive"
                   size="sm"
                   onClick={handleLeaveProject}
-                  disabled={leaveMutation.isPending}>
-                  {leaveMutation.isPending ? "Leaving..." : "Leave Project"}
-                </Button> */}
+                  disabled={isLeavingProject}>
+                  {isLeavingProject ? "Leaving..." : "Leave Project"}
+                </Button>
               </div>
             </DialogContent>
           </Dialog>
