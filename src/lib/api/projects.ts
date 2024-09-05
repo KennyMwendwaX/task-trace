@@ -119,3 +119,14 @@ export const generateInvitationCode = async (
   }
   return response.json();
 };
+
+export const leaveProject = async (projectId: string) => {
+  const response = await fetch(`/api/projects/${projectId}/leave`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to leave the project.");
+  }
+  return response.json();
+};
