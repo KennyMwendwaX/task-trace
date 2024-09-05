@@ -11,58 +11,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
-import { deleteProject } from "@/lib/api/projects";
+import { toast } from "sonner";
+import { useDeleteProjectMutation } from "@/hooks/useProjectQueries";
 
 interface DangerZoneProps {
   projectId: string;
 }
 
-const leaveProject = async ({
-  projectId,
-  memberId,
-}: {
-  projectId: string;
-  memberId: string;
-}) => {
-  const response = await fetch(
-    `/api/project/${projectId}/members/${memberId}`,
-    {
-      method: "DELETE",
-    }
-  );
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to leave the project.");
-  }
-  return response.json();
-};
-
 export default function DangerZone({ projectId }: DangerZoneProps) {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
-  const deleteMutation = useMutation({
-    mutationFn: () => deleteProject(projectId),
-    onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Project has been deleted.",
-      });
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-      router.push("/dashboard");
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Error",
-        description: error.message || "An unexpected error occurred.",
-        variant: "destructive",
-      });
-    },
-  });
+  const {
+    mutate: deleteProject,
+    isPending: isDeletingProject,
+    error,
+  } = useDeleteProjectMutation(projectId);
 
   const handleDeleteProject = () => {
-    deleteMutation.mutate();
+    deleteProject(projectId, {
+      onSuccess: () => {
+        toast.success("Project has been deleted!");
+        router.push("/dashboard");
+      },
+      onError: () => {
+        toast.error("Failed to delete project");
+      },
+    });
   };
 
   const handleLeaveProject = () => {
@@ -153,8 +127,8 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
                   variant="destructive"
                   size="sm"
                   onClick={handleDeleteProject}
-                  disabled={deleteMutation.isPending}>
-                  {deleteMutation.isPending ? "Deleting..." : "Delete Project"}
+                  disabled={isDeletingProject}>
+                  {isDeletingProject ? "Deleting..." : "Delete Project"}
                 </Button>
               </div>
             </DialogContent>

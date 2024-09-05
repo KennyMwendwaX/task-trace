@@ -10,6 +10,7 @@ import { Project, ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import {
+  deleteProject,
   fetchProject,
   fetchProjects,
   generateInvitationCode,
@@ -236,6 +237,23 @@ export const useProjectInvitationCodeMutation = (
       queryClient.setQueryData(["invitation-code", projectId], data);
     },
     onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useDeleteProjectMutation = (
+  projectId: string
+): UseMutationResult<void, Error, string> => {
+  const queryClient = useQueryClient();
+  if (!projectId) throw new Error("No project ID");
+
+  return useMutation({
+    mutationFn: () => deleteProject(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (error: Error) => {
       console.log(error);
     },
   });
