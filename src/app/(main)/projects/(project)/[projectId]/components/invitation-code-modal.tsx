@@ -51,11 +51,16 @@ export default function InvitationCodeModal({
     resolver: zodResolver(invitationCodeSchema),
   });
 
+  const toggleDialog = () => {
+    setDialogOpen(!isDialogOpen);
+  };
+
   const { mutate, isPending, error } = useMutation({
     mutationFn: (data: z.infer<typeof invitationCodeSchema>) =>
       axios.post(`/api/projects/${projectId}/join`, data),
     onSuccess: () => {
       toast.success("You've successfully joined the project.");
+      toggleDialog();
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
@@ -65,10 +70,6 @@ export default function InvitationCodeModal({
       }
     },
   });
-
-  const toggleDialog = () => {
-    setDialogOpen(!isDialogOpen);
-  };
 
   const onSubmit = async (data: z.infer<typeof invitationCodeSchema>) => {
     mutate(data);
