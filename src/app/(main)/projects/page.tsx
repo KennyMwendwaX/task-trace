@@ -10,9 +10,17 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { ExtendedProject } from "@/lib/schema/ProjectSchema";
 import { useUsersProjectsQuery } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
+import { Project } from "@/lib/schema/ProjectSchema";
+import { ProjectRole } from "@/lib/config";
+
+type ExtendedProject = Project & {
+  memberRole: ProjectRole;
+  totalTasksCount: number;
+  completedTasksCount: number;
+  memberCount: number;
+};
 
 export default function Projects() {
   const session = useSession();
