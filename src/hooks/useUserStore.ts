@@ -1,14 +1,14 @@
-import { ExtendedProject } from "@/lib/schema/ProjectSchema";
+import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { User } from "@/lib/schema/UserSchema";
 import { create } from "zustand";
 
 interface UserStore {
   users: User[];
-  projects: ExtendedProject[];
+  projects: UserProject[];
   tasks: UserTask[];
   setUsers: (users: User[]) => void;
-  setUserProjects: (projects: ExtendedProject[]) => void;
+  setUserProjects: (projects: UserProject[]) => void;
   setUserTasks: (tasks: UserTask[]) => void;
 }
 

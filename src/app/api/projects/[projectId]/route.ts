@@ -51,10 +51,12 @@ export async function GET(
 
     const project = {
       ...projectData,
-      member: {
-        id: currentUserMember?.id ?? null,
-        role: currentUserMember?.role ?? null,
-      },
+      member: currentUserMember
+        ? {
+            id: currentUserMember.id,
+            role: currentUserMember.role,
+          }
+        : null,
     };
 
     return NextResponse.json({ project }, { status: 200 });

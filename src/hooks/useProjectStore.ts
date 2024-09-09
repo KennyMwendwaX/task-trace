@@ -1,17 +1,17 @@
 import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 import { Member } from "@/lib/schema/MemberSchema";
-import { Project } from "@/lib/schema/ProjectSchema";
+import { ExtendedProject, Project } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { create } from "zustand";
 
 interface ProjectStore {
-  project: Project | null;
+  project: ExtendedProject | null;
   projects: Project[];
   members: Member[];
   task: ProjectTask | null;
   tasks: ProjectTask[];
   invitationCode: InvitationCode | null;
-  setProject: (project: Project) => void;
+  setProject: (project: ExtendedProject) => void;
   setProjects: (projects: Project[]) => void;
   setMembers: (members: Member[]) => void;
   setProjectTask: (task: ProjectTask) => void;

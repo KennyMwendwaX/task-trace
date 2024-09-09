@@ -48,3 +48,11 @@ export type UserProject = Project & {
   completedTasksCount: number;
   memberCount: number;
 };
+
+export interface Member {
+  id: string;
+  role: string;
+}
+export type ExtendedProject = Project & {
+  member: Member | null;
+};

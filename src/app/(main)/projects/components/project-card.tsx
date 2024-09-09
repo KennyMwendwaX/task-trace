@@ -20,11 +20,11 @@ import {
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ExtendedProject } from "@/lib/schema/ProjectSchema";
+import { UserProject } from "@/lib/schema/ProjectSchema";
 import { format } from "date-fns";
 
 type Props = {
-  project: ExtendedProject;
+  project: UserProject;
 };
 
 const members = [

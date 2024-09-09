@@ -1,11 +1,13 @@
 import axios from "axios";
-import { Project, UserProject } from "../schema/ProjectSchema";
+import { ExtendedProject, Project, UserProject } from "../schema/ProjectSchema";
 import { InvitationCode } from "../schema/InvitationCodeSchema";
 
-export const fetchProject = async (projectId: string): Promise<Project> => {
+export const fetchProject = async (
+  projectId: string
+): Promise<ExtendedProject> => {
   if (!projectId) throw new Error("No project ID");
   try {
-    const { data } = await axios.get<{ project: Project }>(
+    const { data } = await axios.get<{ project: ExtendedProject }>(
       `/api/projects/${projectId}`
     );
     return {
