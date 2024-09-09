@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const requestSchema = z.object({
-  code: z.string().min(1),
+  code: z.string().min(8),
 });
 
 export async function POST(request: Request) {
