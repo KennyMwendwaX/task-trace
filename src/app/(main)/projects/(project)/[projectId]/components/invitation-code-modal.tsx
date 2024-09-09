@@ -16,6 +16,12 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function InvitationCodeModal() {
@@ -39,6 +45,21 @@ export default function InvitationCodeModal() {
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-4">
+          <InputOTP maxLength={8}>
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+              <InputOTPSlot index={6} />
+              <InputOTPSlot index={7} />
+            </InputOTPGroup>
+          </InputOTP>
           <DialogFooter className="sm:justify-end">
             <Button type="submit" className="w-full sm:w-auto">
               Submit

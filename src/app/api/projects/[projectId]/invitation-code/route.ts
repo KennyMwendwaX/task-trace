@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import db from "@/database/db";
 import { NextResponse } from "next/server";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import { invitationCodes, members, projects } from "@/database/schema";
 import add from "date-fns/add";
 import { and, eq } from "drizzle-orm/sql";
@@ -135,7 +135,8 @@ export async function POST(
       );
     }
 
-    const code = nanoid(10);
+    const nanoidCustom = customAlphabet("23456789ABCDEFGHJKLMNPQRSTUVWXYZ", 8);
+    const code = nanoidCustom();
     const expiresAt = add(new Date(), { days: 7 });
 
     const existingCode = await db.query.invitationCodes.findFirst({
