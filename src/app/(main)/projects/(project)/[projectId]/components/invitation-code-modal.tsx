@@ -27,7 +27,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LuChevronLeft } from "react-icons/lu";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
 
@@ -54,10 +54,15 @@ export default function InvitationCodeModal({
     setDialogOpen(!isDialogOpen);
   };
 
+  const queryClient = useQueryClient();
+
   const { mutate, isPending, error } = useMutation({
     mutationFn: (data: z.infer<typeof invitationCodeSchema>) =>
       axios.post(`/api/projects/${projectId}/join`, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["project", projectId],
+      });
       toast.success("You've successfully joined the project.");
       toggleDialog();
     },

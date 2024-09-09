@@ -43,6 +43,13 @@ export default function ProjectPage({
   }
 
   if (!project) {
+    return <ProjectNotFound />;
+  }
+
+  const isPrivateProject = !project.isPublic;
+  const isNotMember = !project.member;
+
+  if (isPrivateProject && isNotMember) {
     return <InvitationCodeModal projectId={projectId} />;
   }
 
