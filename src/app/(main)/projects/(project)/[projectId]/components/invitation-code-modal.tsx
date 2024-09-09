@@ -28,6 +28,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LuChevronLeft } from "react-icons/lu";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import axios from "axios";
+
+interface InvitationCodeProps {
+  projectId: string;
+}
 
 const invitationCodeSchema = z.object({
   code: z.string().min(8, {
@@ -35,24 +42,41 @@ const invitationCodeSchema = z.object({
   }),
 });
 
-export default function InvitationCodeModal() {
+export default function InvitationCodeModal({
+  projectId,
+}: InvitationCodeProps) {
   const [isDialogOpen, setDialogOpen] = useState(true);
 
   const form = useForm<z.infer<typeof invitationCodeSchema>>({
     resolver: zodResolver(invitationCodeSchema),
   });
 
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: (data: z.infer<typeof invitationCodeSchema>) =>
+      axios.post(`/api/projects/${projectId}/join`, data),
+    onSuccess: () => {
+      toast.success("You've successfully joined the project.");
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message || "Failed to join project");
+      } else {
+        toast.error("Failed to join project");
+      }
+    },
+  });
+
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
   };
 
-  const onSubmit = async (code: z.infer<typeof invitationCodeSchema>) => {
-    console.log(code);
+  const onSubmit = async (data: z.infer<typeof invitationCodeSchema>) => {
+    mutate(data);
   };
   return (
     <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
       <DialogContent
-        className="w-full max-w-lg sm:max-w-2xl"
+        className="w-full max-w-md lg:max-w-xl"
         onInteractOutside={(e) => e.preventDefault()}
         hideCloseButton={true}>
         <DialogHeader>
@@ -65,7 +89,7 @@ export default function InvitationCodeModal() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 mt-4">
+            className="space-y-8 mt-4">
             <div className="flex justify-center">
               <FormField
                 control={form.control}
@@ -123,12 +147,22 @@ export default function InvitationCodeModal() {
             </div>
 
             <DialogFooter className="justify-between">
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className="flex items-center gap-1">
                 <LuChevronLeft className="h-5 w-5" />
                 Go back
               </Button>
-              <Button type="submit">
-                {form.formState.isSubmitting ? "Joining..." : "Join Project"}
+              <Button
+                type="submit"
+                className="w-full sm:w-auto"
+                disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                    Joining...
+                  </>
+                ) : (
+                  "Join Project"
+                )}
               </Button>
             </DialogFooter>
           </form>
@@ -136,20 +170,4 @@ export default function InvitationCodeModal() {
       </DialogContent>
     </Dialog>
   );
-}
-
-{
-  /* <Button
-                type="submit"
-                className="w-full sm:w-auto"
-                disabled={isPending}>
-                {isPending ? (
-                  <>
-                    <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  "Create Project"
-                )}
-              </Button> */
 }

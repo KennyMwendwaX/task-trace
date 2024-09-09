@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ExtendedProject, Project } from "../schema/ProjectSchema";
+import { Project, UserProject } from "../schema/ProjectSchema";
 import { InvitationCode } from "../schema/InvitationCodeSchema";
 
 export const fetchProject = async (projectId: string): Promise<Project> => {
@@ -26,10 +26,10 @@ export const fetchProject = async (projectId: string): Promise<Project> => {
 
 export const fetchUserProjects = async (
   userId: string | undefined
-): Promise<ExtendedProject[]> => {
+): Promise<UserProject[]> => {
   if (!userId) throw new Error("User ID not found");
   try {
-    const { data } = await axios.get<{ projects: ExtendedProject[] }>(
+    const { data } = await axios.get<{ projects: UserProject[] }>(
       `/api/users/${userId}/projects`
     );
     return data.projects

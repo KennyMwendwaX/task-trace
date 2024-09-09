@@ -12,15 +12,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useUsersProjectsQuery } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
-import { Project } from "@/lib/schema/ProjectSchema";
-import { ProjectRole } from "@/lib/config";
-
-type ExtendedProject = Project & {
-  memberRole: ProjectRole;
-  totalTasksCount: number;
-  completedTasksCount: number;
-  memberCount: number;
-};
+import { UserProject } from "@/lib/schema/ProjectSchema";
 
 export default function Projects() {
   const session = useSession();
@@ -56,7 +48,7 @@ export default function Projects() {
   };
 
   const renderProjectSection = (
-    projects: ExtendedProject[],
+    projects: UserProject[],
     title: string,
     icon: React.ReactNode
   ) => {
