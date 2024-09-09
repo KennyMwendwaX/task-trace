@@ -43,7 +43,7 @@ export default function ProjectPage({
   }
 
   if (!project) {
-    return <InvitationCodeModal />;
+    return <InvitationCodeModal projectId={projectId} />;
   }
 
   return (
