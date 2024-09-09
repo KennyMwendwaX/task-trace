@@ -18,6 +18,7 @@ import {
 import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import InvitationCodeModal from "./components/invitation-code-modal";
 
 export default function ProjectPage({
   params,
@@ -42,7 +43,7 @@ export default function ProjectPage({
   }
 
   if (!project) {
-    return <ProjectNotFound />;
+    return <InvitationCodeModal />;
   }
 
   return (
