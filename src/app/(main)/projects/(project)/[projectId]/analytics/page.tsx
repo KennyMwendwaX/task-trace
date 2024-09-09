@@ -13,6 +13,7 @@ import {
   useProjectTasksQuery,
 } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
+import InvitationCodeModal from "../components/invitation-code-modal";
 
 export default function Analytics({
   params,
@@ -31,6 +32,13 @@ export default function Analytics({
 
   if (!project) {
     return <ProjectNotFound />;
+  }
+
+  const isPrivateProject = !project.isPublic;
+  const isNotMember = !project.member;
+
+  if (isPrivateProject && isNotMember) {
+    return <InvitationCodeModal projectId={projectId} />;
   }
 
   return (

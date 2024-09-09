@@ -13,6 +13,7 @@ import {
 import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import InvitationCodeModal from "../components/invitation-code-modal";
 
 export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
@@ -30,6 +31,13 @@ export default function Members({ params }: { params: { projectId: string } }) {
 
   if (!project) {
     return <ProjectNotFound />;
+  }
+
+  const isPrivateProject = !project.isPublic;
+  const isNotMember = !project.member;
+
+  if (isPrivateProject && isNotMember) {
+    return <InvitationCodeModal projectId={projectId} />;
   }
 
   return (
