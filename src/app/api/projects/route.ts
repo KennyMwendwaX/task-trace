@@ -5,14 +5,10 @@ import db from "@/database/db";
 import { members, projects, users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
-export async function GET() {
+export const GET = auth(async function GET(req) {
+  if (!req.auth)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
     const projects = await db.query.projects.findMany();
 
     if (projects.length === 0) {
@@ -29,17 +25,19 @@ export async function GET() {
       { status: 500 }
     );
   }
-}
+});
 
-export async function POST(request: Request) {
+export const POST = auth(async function POST(req) {
+  if (!req.auth)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
-    const session = await auth();
+    const userId = req.auth.user?.id;
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = session.user.id;
+    if (!userId)
+      return NextResponse.json(
+        { message: "User ID not found" },
+        { status: 400 }
+      );
 
     const user = await db.query.users.findFirst({
       where: eq(users.id, userId),
@@ -48,9 +46,9 @@ export async function POST(request: Request) {
     if (!user)
       return NextResponse.json({ message: "User not found" }, { status: 404 });
 
-    const req = await request.json();
+    const requestData = await req.json();
 
-    const validation = projectFormSchema.safeParse(req);
+    const validation = projectFormSchema.safeParse(requestData);
 
     if (!validation.success)
       return NextResponse.json(
@@ -98,4 +96,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+});
