@@ -9,6 +9,14 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  callbacks: {
+    session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
+      }
+      return session;
+    },
+  },
   adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,
