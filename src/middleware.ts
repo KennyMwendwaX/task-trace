@@ -3,8 +3,8 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
-} from "../routes";
-import { auth } from "../auth";
+} from "./routes";
+import { auth } from "./auth";
 
 export default auth(async function middleware(req) {
   const { nextUrl } = req;

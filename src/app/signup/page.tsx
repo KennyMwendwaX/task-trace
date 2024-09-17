@@ -21,14 +21,19 @@ import { useRouter } from "next/navigation";
 import Logo from "@/app/logo.png";
 import { useUserSignupMutation } from "@/hooks/useUserQueries";
 import { toast } from "sonner";
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [serverErrors, setServerErrors] = useState("");
+
+  const { data: session, status } = useSession();
   const router = useRouter();
 
+  if (session && status === "authenticated") {
+    router.push("/");
+  }
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
   });

@@ -16,8 +16,8 @@ import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SigninValues, signinSchema } from "@/lib/schema/UserSchema";
-import { signIn, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { credentialsLogin, providerLogin } from "@/actions/auth/login";
@@ -32,11 +32,12 @@ export default function Signin() {
     resolver: zodResolver(signinSchema),
   });
 
-  //   const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  //   if (session && status === "authenticated") {
-  //     redirect("/");
-  //   }
+  if (session && status === "authenticated") {
+    router.push("/");
+  }
 
   const errors = form.formState.errors;
 
