@@ -141,103 +141,99 @@ export default function Explore() {
         <Loading />
       ) : (
         <>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative w-full sm:w-auto sm:flex-grow">
+              <LuSearch className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search projects..."
+                className="w-full pl-8 rounded-lg bg-background sm:w-[200px] md:w-[400px]"
+                value={search}
+                onChange={handleSearch}
+              />
+            </div>
+            <div className="flex gap-2">
+              <DropdownMenu>
+                <div className="flex">
+                  <Button
+                    variant="outline"
+                    className="rounded-r-none border-r-0 pr-2 font-normal">
+                    {getFilterIcon(filter)}
+                    {getFilterDisplayText(filter)}
+                  </Button>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="rounded-l-none px-2">
+                      <LuChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                </div>
+                <DropdownMenuContent align="end" className="w-[200px]">
+                  <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      onSelect={() => handleFilterChange("ALL")}>
+                      <LuSlidersHorizontal className="mr-2 h-4 w-4" />
+                      All Statuses
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => handleFilterChange("BUILDING")}>
+                      <span className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
+                      Building
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => handleFilterChange("LIVE")}>
+                      <span className="w-2 h-2 rounded-full bg-green-500 mr-2" />
+                      Live
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DropdownMenu>
+                <div className="flex">
+                  <Button
+                    variant="outline"
+                    className="rounded-r-none border-r-0 pr-2 font-normal">
+                    {getSortIcon(sort)}
+                    {getSortDisplayText(sort)}
+                  </Button>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="rounded-l-none px-2">
+                      <LuChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                </div>
+                <DropdownMenuContent align="end" className="w-[200px]">
+                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      onSelect={() => handleSortChange("date_desc")}>
+                      <LuCalendarDays className="mr-2 h-4 w-4" />
+                      Date (Newest)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => handleSortChange("date_asc")}>
+                      <LuCalendarDays className="mr-2 h-4 w-4" />
+                      Date (Oldest)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => handleSortChange("name_asc")}>
+                      <LuArrowUpDown className="mr-2 h-4 w-4" />
+                      Name (A-Z)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => handleSortChange("name_desc")}>
+                      <LuArrowUpDown className="mr-2 h-4 w-4" />
+                      Name (Z-A)
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
           {filteredProjects.length > 0 ? (
             <>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="relative w-full sm:w-auto sm:flex-grow">
-                  <LuSearch className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search projects..."
-                    className="w-full pl-8 rounded-lg bg-background sm:w-[200px] md:w-[400px]"
-                    value={search}
-                    onChange={handleSearch}
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <DropdownMenu>
-                    <div className="flex">
-                      <Button
-                        variant="outline"
-                        className="rounded-r-none border-r-0 pr-2 font-normal">
-                        {getFilterIcon(filter)}
-                        {getFilterDisplayText(filter)}
-                      </Button>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="rounded-l-none px-2">
-                          <LuChevronDown className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                    </div>
-                    <DropdownMenuContent align="end" className="w-[200px]">
-                      <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onSelect={() => handleFilterChange("ALL")}>
-                          <LuSlidersHorizontal className="mr-2 h-4 w-4" />
-                          All Statuses
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleFilterChange("BUILDING")}>
-                          <span className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-                          Building
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleFilterChange("LIVE")}>
-                          <span className="w-2 h-2 rounded-full bg-green-500 mr-2" />
-                          Live
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <DropdownMenu>
-                    <div className="flex">
-                      <Button
-                        variant="outline"
-                        className="rounded-r-none border-r-0 pr-2 font-normal">
-                        {getSortIcon(sort)}
-                        {getSortDisplayText(sort)}
-                      </Button>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="rounded-l-none px-2">
-                          <LuChevronDown className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                    </div>
-                    <DropdownMenuContent align="end" className="w-[200px]">
-                      <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onSelect={() => handleSortChange("date_desc")}>
-                          <LuCalendarDays className="mr-2 h-4 w-4" />
-                          Date (Newest)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleSortChange("date_asc")}>
-                          <LuCalendarDays className="mr-2 h-4 w-4" />
-                          Date (Oldest)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleSortChange("name_asc")}>
-                          <LuArrowUpDown className="mr-2 h-4 w-4" />
-                          Name (A-Z)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleSortChange("name_desc")}>
-                          <LuArrowUpDown className="mr-2 h-4 w-4" />
-                          Name (Z-A)
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
               <div className="flex items-center mt-8">
                 <LuFolders className="mr-2 w-7 h-7" />
                 <span className="text-xl font-semibold">Explore Projects</span>
