@@ -4,7 +4,6 @@ import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
 import Loading from "./components/loading";
-import AddTaskModal from "@/components/AddTaskModal";
 import AddMemberModal from "@/components/add-member-modal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
@@ -19,6 +18,9 @@ import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import InvitationCodeModal from "./components/invitation-code-modal";
+import { Button } from "@/components/ui/button";
+import { AiOutlinePlus } from "react-icons/ai";
+import Link from "next/link";
 
 export default function ProjectPage({
   params,
@@ -98,7 +100,12 @@ export default function ProjectPage({
             <p className="mb-4 mt-2 text-base text-muted-foreground">
               You have not added any tasks. Add one below.
             </p>
-            <AddTaskModal projectId={projectId} members={members} />
+            <Link href={`/projects/${projectId}/tasks/create`}>
+              <Button className="flex items-center space-x-2 rounded-3xl">
+                <AiOutlinePlus className="w-4 h-4 text-white" />
+                <span>New Task</span>
+              </Button>
+            </Link>
           </div>
         </div>
       ) : (

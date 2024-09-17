@@ -1,7 +1,7 @@
-import Header from "@/components/home/Header";
-import Hero from "@/components/home/Hero";
-import Features from "@/components/home/Features";
-import Footer from "@/components/home/Footer";
+import Header from "@/components/home/header";
+import Hero from "@/components/home/hero";
+import Features from "@/components/home/features";
+import Footer from "@/components/home/footer";
 import { auth } from "@/auth";
 
 export default async function Home() {
