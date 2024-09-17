@@ -5,7 +5,7 @@ import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
 import Loading from "./components/loading";
 import AddTaskModal from "@/components/AddTaskModal";
-import AddMemberModal from "@/components/AddMemberModal";
+import AddMemberModal from "@/components/add-member-modal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";

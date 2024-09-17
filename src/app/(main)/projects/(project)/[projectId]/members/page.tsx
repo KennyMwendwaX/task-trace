@@ -3,7 +3,7 @@
 import MemberTable from "./components/member-table/table";
 import { TableColumns } from "./components/member-table/table-columns";
 import { FiUserPlus } from "react-icons/fi";
-import AddMemberModal from "@/components/AddMemberModal";
+import AddMemberModal from "@/components/add-member-modal";
 import Loading from "./components/loading";
 import ProjectNotFound from "../components/project-not-found";
 import {

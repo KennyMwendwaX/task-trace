@@ -1,7 +1,6 @@
 "use client";
 
-import AddProjectModal from "@/components/AddProjectModal";
-import JoinProjectModal from "@/components/join-project-modal";
+import AddProjectModal from "@/components/add-project-modal";
 import { useSession } from "next-auth/react";
 import TaskOverview from "./components/task-overview";
 import Loading from "./components/loading";

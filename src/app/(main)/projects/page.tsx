@@ -1,11 +1,10 @@
 "use client";
 
-import AddProjectModal from "@/components/AddProjectModal";
+import AddProjectModal from "@/components/add-project-modal";
 import Loading from "./components/loading";
 import ProjectCard from "./components/project-card";
 import { Input } from "@/components/ui/input";
 import { LuFolders, LuPin, LuSearch, LuShield, LuUsers } from "react-icons/lu";
-import JoinProjectModal from "@/components/join-project-modal";
 import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";

@@ -31,7 +31,7 @@ import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { CSVLink } from "react-csv";
-import AddMemberModal from "@/components/AddMemberModal";
+import AddMemberModal from "@/components/add-member-modal";
 import { Status } from "@/lib/config";
 
 interface MemberTableProps<TData, TValue> {
