@@ -16,16 +16,16 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
 import { logout } from "@/actions/auth/logout";
-import { Session } from "next-auth";
 import { LuMenu } from "react-icons/lu";
 import Logo from "@/app/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const pathname = usePathname();
-
+  const session = useSession();
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-white px-4 md:px-6 z-50">
       <Sheet>
@@ -113,10 +113,10 @@ export default function Navbar() {
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
                 <p className="text-base font-medium leading-none">
-                  Kennedy Mwendwa
+                  {session.data?.user?.name}
                 </p>
                 <p className="text-xs leading-none text-gray-500">
-                  kennymwendwa67@gmail.com
+                  {session.data?.user?.email}
                 </p>
               </div>
             </DropdownMenuLabel>
@@ -125,7 +125,9 @@ export default function Navbar() {
               <IoSettingsOutline className="mr-2 w-5 h-5" /> Settings
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => {}}
+              onClick={() => {
+                logout();
+              }}
               className="flex items-center hover:bg-red-100">
               <MdLogout className="mr-2 w-5 h-5" />
               Logout
