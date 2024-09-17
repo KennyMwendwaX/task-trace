@@ -94,10 +94,7 @@ export default function Projects() {
                     onChange={handleSearch}
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <JoinProjectModal />
-                  <AddProjectModal />
-                </div>
+                <AddProjectModal />
               </div>
               {search ? (
                 filteredProjects.length > 0 ? (
@@ -146,10 +143,7 @@ export default function Projects() {
               <p className="mb-4 mt-2 text-lg text-muted-foreground">
                 You do not have any project. Add one below or join a project.
               </p>
-              <div className="flex items-center gap-2">
-                <JoinProjectModal />
-                <AddProjectModal />
-              </div>
+              <AddProjectModal />
             </div>
           )}
         </>

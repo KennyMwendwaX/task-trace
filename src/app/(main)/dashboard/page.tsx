@@ -27,10 +27,7 @@ export default function Dashboard() {
             <div className="text-2xl font-bold tracking-tight mb-4 sm:mb-0">
               Welcome, {session.data?.user?.name}!
             </div>
-            <div className="flex items-center gap-2">
-              <JoinProjectModal />
-              <AddProjectModal />
-            </div>
+            <AddProjectModal />
           </div>
 
           <div className="mt-4">
