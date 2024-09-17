@@ -1,8 +1,8 @@
 "use server";
 
-import { signIn } from "../../auth";
+import { signIn } from "@/auth";
 import { SigninValues, signinSchema } from "@/lib/schema/UserSchema";
-import { DEFAULT_ROUTE_REDIRECT } from "../../routes";
+import { DEFAULT_ROUTE_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 
 export const credentialsLogin = async (values: SigninValues) => {
@@ -10,7 +10,7 @@ export const credentialsLogin = async (values: SigninValues) => {
     const validation = signinSchema.safeParse(values);
     if (!validation.success) return { error: "Invalid credentials" };
     const { email, password } = validation.data;
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email: email,
       password: password,
       redirectTo: DEFAULT_ROUTE_REDIRECT, // Do not redirect, so we can handle the result ourselves
@@ -31,7 +31,7 @@ export const credentialsLogin = async (values: SigninValues) => {
 
 export const providerLogin = async (provider: "google" | "github") => {
   try {
-    const result = await signIn(provider);
+    await signIn(provider);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

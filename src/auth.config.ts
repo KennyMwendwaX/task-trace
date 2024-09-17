@@ -8,42 +8,32 @@ import db from "./database/db";
 
 export const authConfig: NextAuthConfig = {
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
-    Github({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
+    Google,
+    Github,
     Credentials({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
-      async authorize(credentials, req) {
-        // Check if credentials are present
+      authorize: async (credentials) => {
         if (!credentials) throw new Error("Credentials are required");
-
         const validation = signinSchema.safeParse(credentials);
 
-        if (validation.success) {
-          const { email, password } = validation.data;
+        if (!validation.success) return null;
 
-          // Check user exists
-          const user = await db.query.users.findFirst({
-            where: (user, { eq }) => eq(user.email, email),
-          });
+        const { email, password } = validation.data;
 
-          if (!user) return null;
+        const user = await db.query.users.findFirst({
+          where: (user, { eq }) => eq(user.email, email),
+        });
 
-          // Check password
-          const checkPassword =
-            user.password && (await compare(password, user.password));
+        if (!user) return null;
 
-          if (checkPassword) return user;
-        }
+        const checkPassword =
+          user.password && (await compare(password, user.password));
+
+        if (checkPassword) return user;
 
         return null;
       },
