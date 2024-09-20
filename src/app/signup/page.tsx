@@ -26,7 +26,6 @@ import { useSession } from "next-auth/react";
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [serverErrors, setServerErrors] = useState("");
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -50,7 +49,7 @@ export default function Signup() {
         router.push("/signin");
       },
       onError: (error) => {
-        setServerErrors(error.message);
+        toast.error(error.message);
       },
     });
   };
@@ -68,13 +67,6 @@ export default function Signup() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl">
               Sign up to have an account
             </h1>
-            {serverErrors && (
-              <div
-                className="mb-4 rounded-lg border border-red-600 bg-red-50 p-4 text-sm text-red-800"
-                role="alert">
-                {serverErrors}
-              </div>
-            )}
             <Form {...form}>
               <form
                 className="space-y-3"

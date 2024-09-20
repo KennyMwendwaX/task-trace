@@ -8,7 +8,6 @@ import {
   LuCalendarDays,
   LuChevronDown,
   LuClock,
-  LuFilter,
   LuFolders,
   LuSearch,
   LuSlidersHorizontal,
