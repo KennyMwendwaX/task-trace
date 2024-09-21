@@ -21,11 +21,11 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { credentialsLogin, providerLogin } from "@/actions/auth/login";
+import { toast } from "sonner";
 import Logo from "@/app/logo.png";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
-  const [serverError, setServerError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<SigninValues>({
@@ -44,7 +44,7 @@ export default function Signin() {
   async function onSubmit(values: SigninValues) {
     startTransition(() => {
       credentialsLogin(values).then((data) => {
-        setServerError(data?.error);
+        toast.error(data?.error);
       });
     });
   }
@@ -52,7 +52,7 @@ export default function Signin() {
   async function providerSignin(provider: "google" | "github") {
     startTransition(() => {
       providerLogin(provider).then((data) => {
-        setServerError(data?.error);
+        toast.error(data?.error);
       });
     });
   }
@@ -70,14 +70,6 @@ export default function Signin() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl">
               Sign in to your account
             </h1>
-
-            {serverError && (
-              <div
-                className="mb-4 rounded-lg border border-red-600 bg-red-50 p-4 text-sm text-red-800"
-                role="alert">
-                {serverError}
-              </div>
-            )}
 
             <Form {...form}>
               <form
