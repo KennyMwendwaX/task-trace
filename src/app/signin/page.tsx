@@ -47,7 +47,7 @@ export default function Signin() {
         if (data?.error) {
           toast.error(data?.error);
         }
-        toast.success("Signin successful!");
+        toast.success("Sign in successful!");
       });
     });
   }
@@ -58,7 +58,7 @@ export default function Signin() {
         if (data?.error) {
           toast.error(data?.error);
         }
-        toast.success("Signin successful!");
+        toast.success("Sign in successful!");
       });
     });
   }
