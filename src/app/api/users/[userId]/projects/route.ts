@@ -4,18 +4,12 @@ import db from "@/database/db";
 import { members } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { userId: string } }
-) {
+export const GET = auth(async (req) => {
+  if (!req.auth || !req.auth.user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { userId } = params;
+    const userId = req.nextUrl.pathname.split("/").pop();
 
     if (!userId) {
       return NextResponse.json(
@@ -24,7 +18,7 @@ export async function GET(
       );
     }
 
-    if (session.user.id !== userId) {
+    if (req.auth.user.id !== userId) {
       return NextResponse.json({ message: "Access denied" }, { status: 403 });
     }
 
@@ -62,4 +56,4 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+});

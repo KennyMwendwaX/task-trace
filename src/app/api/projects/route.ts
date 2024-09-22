@@ -5,7 +5,7 @@ import db from "@/database/db";
 import { members, projects, users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
-export const GET = auth(async function GET(req) {
+export const GET = auth(async (req) => {
   if (!req.auth)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
@@ -27,7 +27,7 @@ export const GET = auth(async function GET(req) {
   }
 });
 
-export const POST = auth(async function POST(req) {
+export const POST = auth(async (req) => {
   if (!req.auth)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
