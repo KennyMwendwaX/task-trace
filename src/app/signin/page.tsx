@@ -44,7 +44,10 @@ export default function Signin() {
   async function onSubmit(values: SigninValues) {
     startTransition(() => {
       credentialsLogin(values).then((data) => {
-        toast.error(data?.error);
+        if (data?.error) {
+          toast.error(data?.error);
+        }
+        toast.success("Signin successful!");
       });
     });
   }
@@ -52,7 +55,10 @@ export default function Signin() {
   async function providerSignin(provider: "google" | "github") {
     startTransition(() => {
       providerLogin(provider).then((data) => {
-        toast.error(data?.error);
+        if (data?.error) {
+          toast.error(data?.error);
+        }
+        toast.success("Signin successful!");
       });
     });
   }
