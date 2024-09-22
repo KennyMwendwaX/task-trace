@@ -42,24 +42,34 @@ export default function Signin() {
   const errors = form.formState.errors;
 
   async function onSubmit(values: SigninValues) {
-    startTransition(() => {
-      credentialsLogin(values).then((data) => {
+    startTransition(async () => {
+      try {
+        const data = await credentialsLogin(values);
         if (data?.error) {
-          toast.error(data?.error);
+          toast.error(data.error);
+        } else {
+          toast.success("Sign in successful!");
         }
-        toast.success("Sign in successful!");
-      });
+      } catch (error) {
+        console.error("Sign-in error:", error);
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     });
   }
 
   async function providerSignin(provider: "google" | "github") {
-    startTransition(() => {
-      providerLogin(provider).then((data) => {
+    startTransition(async () => {
+      try {
+        const data = await providerLogin(provider);
         if (data?.error) {
-          toast.error(data?.error);
+          toast.error(data.error);
+        } else {
+          toast.success("Sign in successful!");
         }
-        toast.success("Sign in successful!");
-      });
+      } catch (error) {
+        console.error("Sign-in error:", error);
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     });
   }
 
