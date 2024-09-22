@@ -9,7 +9,8 @@ export const GET = auth(async (req) => {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
   try {
-    const userId = req.nextUrl.pathname.split("/").pop();
+    const segments = req.nextUrl.pathname.split("/");
+    const userId = segments[segments.length - 1];
 
     if (!userId)
       return NextResponse.json(
