@@ -41,7 +41,7 @@ export default function ProjectInvite({
 
   if (!invitationCode) {
     return (
-      <Card>
+      <Card className="w-full h-fit">
         <CardHeader>
           <CardTitle>Project Invite</CardTitle>
         </CardHeader>
@@ -50,7 +50,7 @@ export default function ProjectInvite({
             No invitation code found. Please generate a new one.
           </CardDescription>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col items-center justify-center gap-4">
           <Button
             variant="default"
             className="flex items-center gap-2"
@@ -85,18 +85,20 @@ export default function ProjectInvite({
     : null;
 
   return (
-    <Card>
+    <Card className="w-full h-fit">
       <CardHeader>
-        <CardTitle>Project Invite</CardTitle>
+        <CardTitle className="text-xl">Project Invite</CardTitle>
         <CardDescription>
           Share this code to invite new members.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex justify-between items-center">
-          <span className="font-mono text-lg">{invitationCode.code}</span>
+      <CardContent className="flex flex-col items-center justify-center gap-4">
+        <div className="bg-primary/10 rounded-lg p-4 text-center">
+          <span className="text-4xl font-mono font-bold text-primary">
+            {invitationCode.code}
+          </span>
           {daysUntilExpiration !== null && (
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-muted-foreground mt-2">
               Expires in {daysUntilExpiration} days
             </span>
           )}
