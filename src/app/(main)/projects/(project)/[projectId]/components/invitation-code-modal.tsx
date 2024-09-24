@@ -30,6 +30,7 @@ import { LuChevronLeft } from "react-icons/lu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
+import Link from "next/link";
 
 interface InvitationCodeProps {
   projectId: string;
@@ -152,10 +153,12 @@ export default function InvitationCodeModal({
             </div>
 
             <DialogFooter className="justify-between">
-              <Button variant="outline" className="flex items-center gap-1">
-                <LuChevronLeft className="h-5 w-5" />
-                Go back
-              </Button>
+              <Link href="/projects">
+                <Button variant="outline" className="flex items-center gap-1">
+                  <LuChevronLeft className="h-5 w-5" />
+                  Go back
+                </Button>
+              </Link>
               <Button
                 type="submit"
                 className="w-full sm:w-auto"
