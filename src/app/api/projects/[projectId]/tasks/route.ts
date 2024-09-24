@@ -5,18 +5,13 @@ import { members, projects, tasks } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 import { auth } from "@/auth";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { projectId: string } }
-) {
+export const GET = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 2];
 
     if (!projectId)
       return NextResponse.json(
@@ -27,7 +22,7 @@ export async function GET(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -73,20 +68,15 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+});
 
-export async function POST(
-  request: Request,
-  { params }: { params: { projectId: string } }
-) {
+export const POST = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 2];
 
     if (!projectId)
       return NextResponse.json(
@@ -107,7 +97,7 @@ export async function POST(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -121,11 +111,11 @@ export async function POST(
       );
     }
 
-    const req = await request.json();
+    const requestBody = await req.json();
 
     const requestData = {
-      ...req,
-      dueDate: new Date(req.dueDate),
+      ...requestBody,
+      dueDate: new Date(requestBody.dueDate),
     };
 
     const validation = taskFormSchema.safeParse(requestData);
@@ -167,4 +157,4 @@ export async function POST(
       { status: 500 }
     );
   }
-}
+});
