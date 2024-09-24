@@ -31,7 +31,12 @@ export const useUsersQuery = (): UseQueryResult<User[], Error> => {
 
   useEffect(() => {
     if (result.data) {
-      setUsers(result.data);
+      const parsedUsers = result.data.map((user) => ({
+        ...user,
+        createdAt: new Date(user.createdAt),
+        updatedAt: user.updatedAt ? new Date(user.updatedAt) : null,
+      }));
+      setUsers(parsedUsers);
     }
   }, [result.data, setUsers]);
 
@@ -50,7 +55,12 @@ export const useUsersProjectsQuery = (
 
   useEffect(() => {
     if (result.data) {
-      setUserProjects(result.data);
+      const parsedProjects = result.data.map((project) => ({
+        ...project,
+        createdAt: new Date(project.createdAt),
+        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+      }));
+      setUserProjects(parsedProjects);
     }
   }, [result.data, setUserProjects]);
 
@@ -69,7 +79,13 @@ export const useUsersTasksQuery = (
 
   useEffect(() => {
     if (result.data) {
-      setUserTasks(result.data);
+      const parsedTasks = result.data.map((task) => ({
+        ...task,
+        dueDate: new Date(task.dueDate),
+        createdAt: new Date(task.createdAt),
+        updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
+      }));
+      setUserTasks(parsedTasks);
     }
   }, [result.data, setUserTasks]);
 

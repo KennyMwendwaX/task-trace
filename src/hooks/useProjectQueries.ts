@@ -38,7 +38,14 @@ export const useProjectQuery = (
 
   useEffect(() => {
     if (result.data) {
-      setProject(result.data);
+      const parsedProject: ExtendedProject = {
+        ...result.data,
+        createdAt: new Date(result.data.createdAt),
+        updatedAt: result.data.updatedAt
+          ? new Date(result.data.updatedAt)
+          : null,
+      };
+      setProject(parsedProject);
     }
   }, [result.data, setProject]);
 
@@ -54,7 +61,12 @@ export const useProjectsQuery = (): UseQueryResult<Project[], Error> => {
 
   useEffect(() => {
     if (result.data) {
-      setProjects(result.data);
+      const parsedProjects = result.data.map((project) => ({
+        ...project,
+        createdAt: new Date(project.createdAt),
+        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+      }));
+      setProjects(parsedProjects);
     }
   }, [result.data, setProjects]);
 
@@ -73,7 +85,12 @@ export const useProjectMembersQuery = (
 
   useEffect(() => {
     if (result.data) {
-      setMembers(result.data);
+      const parsedMembers = result.data.map((member) => ({
+        ...member,
+        createdAt: new Date(member.createdAt),
+        updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
+      }));
+      setMembers(parsedMembers);
     }
   }, [result.data, setMembers]);
 
@@ -92,7 +109,13 @@ export const useProjectTasksQuery = (
 
   useEffect(() => {
     if (result.data) {
-      setProjectTasks(result.data);
+      const parsedTasks = result.data.map((task) => ({
+        ...task,
+        dueDate: new Date(task.dueDate),
+        createdAt: new Date(task.createdAt),
+        updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
+      }));
+      setProjectTasks(parsedTasks);
     }
   }, [result.data, setProjectTasks]);
 
@@ -112,7 +135,15 @@ export const useProjectTaskQuery = (
 
   useEffect(() => {
     if (result.data) {
-      setProjectTask(result.data);
+      const parsedTask: ProjectTask = {
+        ...result.data,
+        dueDate: new Date(result.data.dueDate),
+        createdAt: new Date(result.data.createdAt),
+        updatedAt: result.data.updatedAt
+          ? new Date(result.data.updatedAt)
+          : null,
+      };
+      setProjectTask(parsedTask);
     }
   }, [result.data, setProjectTask]);
 
@@ -223,6 +254,12 @@ export const useProjectInvitationCodeQuery = (
 
   useEffect(() => {
     if (result.data) {
+      const parsedCode: InvitationCode = {
+        ...result.data,
+        expiresAt: result.data.expiresAt
+          ? new Date(result.data.expiresAt)
+          : null,
+      };
       setProjectInvitationCode(result.data);
     }
   }, [result.data, setProjectInvitationCode]);
