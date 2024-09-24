@@ -97,12 +97,12 @@ export default function ProjectInvite({
           <span className="text-4xl font-mono font-bold text-primary">
             {invitationCode.code}
           </span>
-          {daysUntilExpiration !== null && (
-            <span className="text-sm text-muted-foreground mt-2">
-              Expires in {daysUntilExpiration} days
-            </span>
-          )}
         </div>
+        {daysUntilExpiration !== null && (
+          <span className="text-sm text-muted-foreground mt-2">
+            Expires in {daysUntilExpiration} days
+          </span>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button
