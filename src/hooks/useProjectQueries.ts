@@ -260,7 +260,7 @@ export const useProjectInvitationCodeQuery = (
           ? new Date(result.data.expiresAt)
           : null,
       };
-      setProjectInvitationCode(result.data);
+      setProjectInvitationCode(parsedCode);
     }
   }, [result.data, setProjectInvitationCode]);
 
