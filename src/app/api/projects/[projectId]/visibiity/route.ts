@@ -4,23 +4,25 @@ import db from "@/database/db";
 import { projects, members } from "@/database/schema";
 import { eq, and, or } from "drizzle-orm";
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { projectId: string } }
-) {
+export const PATCH = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 2];
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
+    if (!projectId)
+      return NextResponse.json(
+        { message: "No project Id found" },
+        { status: 404 }
+      );
 
-    const { projectId } = params;
-    const { isPublic } = await request.json();
+    const { isPublic } = await req.json();
 
     const userMembership = await db.query.members.findFirst({
       where: and(
-        eq(members.userId, session.user.id),
+        eq(members.userId, req.auth.user.id),
         eq(members.projectId, projectId),
         eq(members.role, "OWNER"),
         or(eq(members.role, "ADMIN"))
@@ -52,4 +54,4 @@ export async function PATCH(
       { status: 500 }
     );
   }
-}
+});
