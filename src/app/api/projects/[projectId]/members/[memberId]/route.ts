@@ -4,18 +4,14 @@ import { members, projects } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { projectId: string; memberId: string } }
-) {
+export const GET = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId, memberId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 3];
+    const memberId = segments[segments.length - 1];
 
     if (!projectId || !memberId) {
       return NextResponse.json(
@@ -27,7 +23,7 @@ export async function GET(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -63,20 +59,16 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+});
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { projectId: string; memberId: string } }
-) {
+export const DELETE = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId, memberId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 3];
+    const memberId = segments[segments.length - 1];
 
     if (!projectId || !memberId) {
       return NextResponse.json(
@@ -108,8 +100,8 @@ export async function DELETE(
     }
 
     if (
-      project.ownerId === session.user.id &&
-      currentUserMember.userId === session.user.id
+      project.ownerId === req.auth.user.id &&
+      currentUserMember.userId === req.auth.user.id
     ) {
       return NextResponse.json(
         {
@@ -121,9 +113,9 @@ export async function DELETE(
     }
 
     if (
-      project.ownerId === session.user.id ||
+      project.ownerId === req.auth.user.id ||
       currentUserMember.role === "ADMIN" ||
-      currentUserMember.userId === session.user.id
+      currentUserMember.userId === req.auth.user.id
     ) {
       await db
         .delete(members)
@@ -146,4 +138,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
+});
