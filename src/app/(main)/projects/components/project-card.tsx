@@ -78,7 +78,7 @@ export default function ProjectCard({ project }: Props) {
             {project.status}
           </Badge>
           <Badge variant="outline" className="text-sm">
-            <LuUsers className="mr-1 h-4 w-4" /> {project.memberCount}
+            <LuUsers className="mr-1 h-4 w-4" /> {project.memberCount}&nbsp;
             members
           </Badge>
         </div>

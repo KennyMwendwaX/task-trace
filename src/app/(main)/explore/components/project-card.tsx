@@ -94,7 +94,7 @@ export default function ProjectCard({ project }: Props) {
           </Badge>
           <Badge variant="outline" className="text-sm">
             <LuUsers className="mr-1 h-4 w-4" /> {dummyProject.members.length}
-            members
+            &nbsp; members
           </Badge>
         </div>
       </CardHeader>
