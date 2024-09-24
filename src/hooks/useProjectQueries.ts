@@ -89,6 +89,12 @@ export const useProjectMembersQuery = (
         ...member,
         createdAt: new Date(member.createdAt),
         updatedAt: member.updatedAt ? new Date(member.updatedAt) : null,
+        tasks: member.tasks.map((task) => ({
+          ...task,
+          dueDate: new Date(task.dueDate),
+          createdAt: new Date(task.createdAt),
+          updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
+        })),
       }));
       setMembers(parsedMembers);
     }
