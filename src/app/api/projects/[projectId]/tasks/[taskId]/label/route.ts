@@ -10,18 +10,14 @@ const requestSchema = z.object({
   label: taskSchema.shape.label,
 });
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { projectId: string; taskId: string } }
-) {
+export const GET = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId, taskId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 4];
+    const taskId = segments[segments.length - 2];
 
     if (!projectId || !taskId) {
       return NextResponse.json(
@@ -33,7 +29,7 @@ export async function PATCH(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -63,7 +59,7 @@ export async function PATCH(
       );
     }
 
-    const label = await request.json();
+    const label = await req.json();
     const validation = requestSchema.safeParse({ label });
 
     if (!validation.success) {
@@ -87,4 +83,4 @@ export async function PATCH(
       { status: 500 }
     );
   }
-}
+});
