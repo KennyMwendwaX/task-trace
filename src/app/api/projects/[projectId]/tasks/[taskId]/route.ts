@@ -5,18 +5,14 @@ import { and, eq } from "drizzle-orm";
 import { members, tasks } from "@/database/schema";
 import { auth } from "@/auth";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { projectId: string; taskId: string } }
-) {
+export const GET = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId, taskId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 3];
+    const taskId = segments[segments.length - 1];
 
     if (!projectId || !taskId)
       return NextResponse.json(
@@ -27,7 +23,7 @@ export async function GET(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -67,20 +63,16 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+});
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { projectId: string; taskId: string } }
-) {
+export const PUT = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId, taskId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 3];
+    const taskId = segments[segments.length - 1];
 
     if (!projectId || !taskId)
       return NextResponse.json(
@@ -98,7 +90,7 @@ export async function PUT(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -112,11 +104,11 @@ export async function PUT(
       );
     }
 
-    const req = await request.json();
+    const requestBody = await req.json();
 
     const requestData = {
-      ...req,
-      dueDate: new Date(req.dueDate),
+      ...requestBody,
+      dueDate: new Date(requestBody.dueDate),
     };
 
     const validation = taskFormSchema.safeParse(requestData);
@@ -159,20 +151,16 @@ export async function PUT(
       { status: 500 }
     );
   }
-}
+});
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { projectId: string; taskId: string } }
-) {
+export const DELETE = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId, taskId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 3];
+    const taskId = segments[segments.length - 1];
 
     if (!projectId || !taskId)
       return NextResponse.json(
@@ -183,7 +171,7 @@ export async function DELETE(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -208,4 +196,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
+});
