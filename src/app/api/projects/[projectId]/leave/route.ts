@@ -4,18 +4,13 @@ import db from "@/database/db";
 import { members, projects } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { projectId: string } }
-) {
+export const DELETE = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
-
-    const { projectId } = params;
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 2];
 
     if (!projectId) {
       return NextResponse.json(
@@ -27,7 +22,7 @@ export async function DELETE(
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, req.auth.user.id)
       ),
     });
 
@@ -49,7 +44,7 @@ export async function DELETE(
       );
     }
 
-    if (project.ownerId === session.user.id) {
+    if (project.ownerId === req.auth.user.id) {
       return NextResponse.json(
         {
           message:
@@ -64,7 +59,7 @@ export async function DELETE(
       .where(
         and(
           eq(members.projectId, projectId),
-          eq(members.userId, session.user.id)
+          eq(members.userId, req.auth.user.id)
         )
       );
 
@@ -79,4 +74,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
+});
