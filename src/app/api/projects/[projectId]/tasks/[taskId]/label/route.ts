@@ -10,7 +10,7 @@ const requestSchema = z.object({
   label: taskSchema.shape.label,
 });
 
-export const GET = auth(async (req) => {
+export const PATCH = auth(async (req) => {
   if (!req.auth || !req.auth.user || !req.auth.user.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
