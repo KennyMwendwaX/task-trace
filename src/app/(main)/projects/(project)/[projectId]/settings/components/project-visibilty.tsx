@@ -97,10 +97,11 @@ export default function ProjectVisibility({ project }: Props) {
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        Make project public
+                        Make project private
                       </FormLabel>
                       <FormDescription>
-                        Allow anyone with the link to view this project
+                        Anyone with the invitation code will be able to access
+                        the project
                       </FormDescription>
                     </div>
                     <FormControl>
