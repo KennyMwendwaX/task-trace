@@ -92,7 +92,7 @@ export default function ProjectInvite({
           Share this code to invite new members.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center gap-4">
+      <CardContent className="flex flex-col items-center justify-center gap-2">
         <div className="bg-primary/10 rounded-lg p-4 text-center">
           <span className="text-4xl font-mono font-bold text-primary">
             {invitationCode.code}
