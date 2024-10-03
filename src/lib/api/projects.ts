@@ -111,6 +111,21 @@ export const generateInvitationCode = async (
   return response.json();
 };
 
+export const regenerateInvitationCode = async (
+  projectId: string
+): Promise<InvitationCode> => {
+  const response = await fetch(`/api/projects/${projectId}/invitation-code`, {
+    method: "PUT",
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || "Failed to re-generate invitation code."
+    );
+  }
+  return response.json();
+};
+
 export const leaveProject = async (projectId: string) => {
   const response = await fetch(`/api/projects/${projectId}/leave`, {
     method: "DELETE",
