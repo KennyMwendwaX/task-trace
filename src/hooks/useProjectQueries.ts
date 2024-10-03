@@ -20,6 +20,7 @@ import {
   generateInvitationCode,
   getInvitationCode,
   leaveProject,
+  regenerateInvitationCode,
 } from "@/lib/api/projects";
 import { fetchProjectMembers } from "@/lib/api/members";
 import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
@@ -273,7 +274,7 @@ export const useProjectInvitationCodeQuery = (
   return result;
 };
 
-export const useProjectInvitationCodeMutation = (
+export const useGenerateInvitationCodeMutation = (
   projectId: string
 ): UseMutationResult<InvitationCode, Error, string> => {
   const queryClient = useQueryClient();
@@ -281,6 +282,23 @@ export const useProjectInvitationCodeMutation = (
 
   return useMutation({
     mutationFn: () => generateInvitationCode(projectId),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["invitation-code", projectId], data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useRegenerateInvitationCodeMutation = (
+  projectId: string
+): UseMutationResult<InvitationCode, Error, string> => {
+  const queryClient = useQueryClient();
+  if (!projectId) throw new Error("No project ID");
+
+  return useMutation({
+    mutationFn: () => regenerateInvitationCode(projectId),
     onSuccess: (data) => {
       queryClient.setQueryData(["invitation-code", projectId], data);
     },
