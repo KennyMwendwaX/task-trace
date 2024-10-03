@@ -129,7 +129,9 @@ export default function ProjectInvite({
         </div>
         {daysUntilExpiration !== null && (
           <span className="text-sm text-muted-foreground mt-2">
-            Expires in {daysUntilExpiration} days
+            {daysUntilExpiration > 0
+              ? `Expires in ${daysUntilExpiration} days`
+              : "Expires today"}
           </span>
         )}
       </CardContent>
