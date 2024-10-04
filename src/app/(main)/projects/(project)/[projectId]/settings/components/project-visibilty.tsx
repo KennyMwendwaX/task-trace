@@ -35,7 +35,7 @@ export default function ProjectVisibility({ project }: Props) {
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
     defaultValues: {
-      isPublic: project?.isPublic,
+      isPublic: project.isPublic,
     },
   });
 
@@ -97,11 +97,14 @@ export default function ProjectVisibility({ project }: Props) {
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        Make project private
+                        {field.value
+                          ? "Make project private"
+                          : "Make project public"}
                       </FormLabel>
                       <FormDescription>
-                        Anyone with the invitation code will be able to access
-                        the project
+                        {field.value
+                          ? "Only you and invited members can access the project"
+                          : "Anyone with the invitation code will be able to access the project"}
                       </FormDescription>
                     </div>
                     <FormControl>
