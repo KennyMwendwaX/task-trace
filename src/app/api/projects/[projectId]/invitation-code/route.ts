@@ -50,7 +50,7 @@ export const GET = auth(async (req) => {
     }
 
     const invitationCode = await db.query.invitationCodes.findFirst({
-      where: eq(projects.id, projectId),
+      where: eq(invitationCodes.projectId, projectId),
     });
 
     if (!invitationCode) {

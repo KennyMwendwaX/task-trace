@@ -74,7 +74,7 @@ export const toggleProjectVisibility = async (
   isPublic: boolean
 ) => {
   const options = {
-    method: "PATCH",
+    method: "PUT",
     body: JSON.stringify({ isPublic }),
   };
 
