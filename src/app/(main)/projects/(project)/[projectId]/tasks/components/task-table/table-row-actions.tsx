@@ -52,7 +52,7 @@ export default function TableRowActions<TData>({
       }
     },
     onSuccess: () => {
-      toast.success("Successfully updated task label");
+      toast.success("Task label updated successfully");
       queryClient.invalidateQueries({
         queryKey: ["tasks", projectId],
       });
@@ -83,7 +83,7 @@ export default function TableRowActions<TData>({
       }
     },
     onSuccess: () => {
-      toast.success("Successfully updated task status");
+      toast.success("Task status updated successfully");
       queryClient.invalidateQueries({
         queryKey: ["tasks", projectId],
       });
@@ -114,7 +114,7 @@ export default function TableRowActions<TData>({
       }
     },
     onSuccess: () => {
-      toast.success("Successfully updated task priority");
+      toast.success("Task priority updated successfully");
       queryClient.invalidateQueries({
         queryKey: ["tasks", projectId],
       });
@@ -139,15 +139,18 @@ export default function TableRowActions<TData>({
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error deleting task");
       }
     },
     onSuccess: () => {
+      toast.success("Task deleted successfully");
       queryClient.invalidateQueries({
         queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to delete task");
       console.log(error);
     },
   });
