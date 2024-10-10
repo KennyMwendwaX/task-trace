@@ -58,8 +58,8 @@ export const PATCH = auth(async (req) => {
       );
     }
 
-    const status = await req.json();
-    const validation = requestSchema.safeParse({ status });
+    const requestData = await req.json();
+    const validation = requestSchema.safeParse(requestData);
 
     if (!validation.success)
       return NextResponse.json(
