@@ -1,9 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,10 +15,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { statuses, priorities, labels } from "@/lib/config";
 import { taskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -35,7 +33,7 @@ export default function TableRowActions<TData>({
   const task = taskSchema.parse(row.original);
 
   const {
-    mutate: changeLabel,
+    mutate: updateLabel,
     isPending: labelIsPending,
     error: labelChangeError,
   } = useMutation({
@@ -45,19 +43,22 @@ export default function TableRowActions<TData>({
         body: JSON.stringify(label),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/update-label`,
+        `/api/projects/${projectId}/tasks/${task.id}/label`,
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error updating task label");
       }
     },
     onSuccess: () => {
+      toast.success("Successfully updated task label");
       queryClient.invalidateQueries({
         queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to updated task label");
       console.log(error);
     },
   });
@@ -146,7 +147,7 @@ export default function TableRowActions<TData>({
   });
 
   const handleLabelChange = async (label: string) => {
-    changeLabel(label);
+    updateLabel(label);
   };
 
   const handleStatusChange = async (status: string) => {
