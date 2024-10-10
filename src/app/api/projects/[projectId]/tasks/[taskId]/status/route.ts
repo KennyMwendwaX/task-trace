@@ -18,7 +18,6 @@ export const PATCH = auth(async (req) => {
     const segments = req.nextUrl.pathname.split("/");
     const projectId = segments[segments.length - 4];
     const taskId = segments[segments.length - 2];
-    console.log(projectId, taskId);
 
     if (!projectId || !taskId) {
       return NextResponse.json(

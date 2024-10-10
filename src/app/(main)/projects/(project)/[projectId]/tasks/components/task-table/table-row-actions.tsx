@@ -71,7 +71,7 @@ export default function TableRowActions<TData>({
     mutationFn: async (status: string) => {
       const options = {
         method: "PATCH",
-        body: JSON.stringify(status),
+        body: JSON.stringify({ status }),
       };
       const response = await fetch(
         `/api/projects/${projectId}/tasks/${task.id}/status`,
