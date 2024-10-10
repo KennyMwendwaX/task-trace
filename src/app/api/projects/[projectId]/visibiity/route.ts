@@ -46,7 +46,10 @@ export const PUT = auth(async (req) => {
       );
     }
 
-    return NextResponse.json(updatedProject[0], { status: 200 });
+    return NextResponse.json(
+      { message: "Project visibility updated successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error updating project visibility:", error);
     return NextResponse.json(
