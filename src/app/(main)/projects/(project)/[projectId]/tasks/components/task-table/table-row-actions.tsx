@@ -95,7 +95,7 @@ export default function TableRowActions<TData>({
   });
 
   const {
-    mutate: changePriority,
+    mutate: updatePriority,
     isPending: priorityIsPending,
     error: priorityChangeError,
   } = useMutation({
@@ -105,19 +105,22 @@ export default function TableRowActions<TData>({
         body: JSON.stringify(priority),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/update-priority`,
+        `/api/projects/${projectId}/tasks/${task.id}/label`,
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error updating task priority");
       }
     },
     onSuccess: () => {
+      toast.success("Successfully updated task priority");
       queryClient.invalidateQueries({
         queryKey: ["tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to updated task priority");
       console.log(error);
     },
   });
@@ -158,7 +161,7 @@ export default function TableRowActions<TData>({
   };
 
   const handlePriorityChange = async (priority: string) => {
-    changePriority(priority);
+    updatePriority(priority);
   };
 
   const taskDelete = async () => {
