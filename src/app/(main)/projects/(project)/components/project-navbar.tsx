@@ -27,7 +27,6 @@ import { useSession } from "next-auth/react";
 import { logout } from "@/actions/auth/logout";
 
 export default function ProjectNavbar() {
-  const pathname = usePathname();
   const session = useSession();
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-muted px-4 md:px-6 z-50">

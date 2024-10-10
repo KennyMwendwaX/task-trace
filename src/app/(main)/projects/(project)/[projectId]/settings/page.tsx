@@ -50,12 +50,12 @@ export default function Settings({
         <UpdateProjectDetails project={project} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6">
+      <div className="flex flex-col md:flex-row md:space-x-6">
+        <div className="order-2 md:order-1 md:flex-grow space-y-6 mt-6 md:mt-0">
           <ProjectVisibility project={project} />
           <DangerZone projectId={project.id} />
         </div>
-        <div className="w-full md:w-auto">
+        <div className="order-1 md:order-2 md:w-1/3">
           <ProjectInvite
             projectId={projectId}
             invitationCode={invitationCode}
