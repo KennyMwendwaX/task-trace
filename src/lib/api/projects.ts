@@ -83,7 +83,8 @@ export const toggleProjectVisibility = async (
     options
   );
   if (!response.ok) {
-    throw new Error("Something went wrong");
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Error updating project visibility");
   }
 };
 
