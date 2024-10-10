@@ -55,7 +55,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task label updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
+        queryKey: ["user-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -86,7 +86,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task status updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
+        queryKey: ["user-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -117,7 +117,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task priority updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
+        queryKey: ["user-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -147,7 +147,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task deleted successfully");
       queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
+        queryKey: ["user-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -185,11 +185,11 @@ export default function TableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem>
-            <FiEdit className="mr-1 w-4 h-4" />
+            <FiEdit className="mr-2 w-4 h-4" />
             Edit Task
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <IoOpenOutline className="mr-1 w-4 h-4" /> Go to Project
+            <IoOpenOutline className="mr-2 w-5 h-5" /> Go to Project
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>

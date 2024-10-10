@@ -185,7 +185,7 @@ export default function TableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem>
-            <FiEdit className="mr-1 w-4 h-4" />
+            <FiEdit className="mr-2 w-4 h-4" />
             Edit Task
           </DropdownMenuItem>
           <DropdownMenuSub>
