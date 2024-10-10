@@ -18,6 +18,7 @@ export const PATCH = auth(async (req) => {
     const segments = req.nextUrl.pathname.split("/");
     const projectId = segments[segments.length - 4];
     const taskId = segments[segments.length - 2];
+    console.log(projectId, taskId);
 
     if (!projectId || !taskId) {
       return NextResponse.json(
@@ -41,7 +42,7 @@ export const PATCH = auth(async (req) => {
     }
 
     const task = await db.query.tasks.findFirst({
-      where: and(eq(projects.id, projectId), eq(tasks.id, taskId)),
+      where: and(eq(tasks.id, taskId), eq(projects.id, projectId)),
     });
 
     if (!task)
