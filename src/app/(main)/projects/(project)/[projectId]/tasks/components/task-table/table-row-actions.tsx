@@ -40,7 +40,7 @@ export default function TableRowActions<TData>({
     mutationFn: async (label: string) => {
       const options = {
         method: "PATCH",
-        body: JSON.stringify(label),
+        body: JSON.stringify({ label }),
       };
       const response = await fetch(
         `/api/projects/${projectId}/tasks/${task.id}/label`,
@@ -102,7 +102,7 @@ export default function TableRowActions<TData>({
     mutationFn: async (priority: string) => {
       const options = {
         method: "PATCH",
-        body: JSON.stringify(priority),
+        body: JSON.stringify({ priority }),
       };
       const response = await fetch(
         `/api/projects/${projectId}/tasks/${task.id}/label`,
