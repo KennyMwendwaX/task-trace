@@ -39,7 +39,7 @@ export default function TableRowActions<TData>({
   } = useMutation({
     mutationFn: async (label: string) => {
       const options = {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify(label),
       };
       const response = await fetch(
@@ -70,7 +70,7 @@ export default function TableRowActions<TData>({
   } = useMutation({
     mutationFn: async (status: string) => {
       const options = {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify(status),
       };
       const response = await fetch(
@@ -101,7 +101,7 @@ export default function TableRowActions<TData>({
   } = useMutation({
     mutationFn: async (priority: string) => {
       const options = {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify(priority),
       };
       const response = await fetch(
