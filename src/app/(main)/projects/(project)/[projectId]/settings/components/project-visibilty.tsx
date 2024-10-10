@@ -98,13 +98,13 @@ export default function ProjectVisibility({ project }: Props) {
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
                         {field.value
-                          ? "Make project private"
-                          : "Make project public"}
+                          ? "Toggle to make project private"
+                          : "Toggle to make project public"}
                       </FormLabel>
                       <FormDescription>
                         {field.value
-                          ? "Only you and invited members can access the project"
-                          : "Anyone with the invitation code will be able to access the project"}
+                          ? "Anyone with the invitation code will be able to access the project"
+                          : "Anyone will be able to access the project"}
                       </FormDescription>
                     </div>
                     <FormControl>
