@@ -103,7 +103,10 @@ export default function Navbar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar className="h-8 w-8 border border-gray-600 cursor-pointer">
-              <AvatarImage src={""} alt="profile-image" />
+              <AvatarImage
+                src={session.data?.user?.image || ""}
+                alt="profile-image"
+              />
               <AvatarFallback className="bg-white">
                 <PersonIcon className="h-5 w-5 text-gray-600" />
               </AvatarFallback>

@@ -23,74 +23,80 @@ import { LuHome, LuLineChart, LuMenu, LuUsers } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoTasklist } from "react-icons/go";
 import { HiOutlineCog } from "react-icons/hi";
+import { useSession } from "next-auth/react";
+import { logout } from "@/actions/auth/logout";
 
 export default function ProjectNavbar() {
+  const pathname = usePathname();
+  const session = useSession();
   return (
-    <>
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-muted px-4 md:px-6 z-50">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="shrink-0 lg:hidden">
-              <LuMenu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="flex flex-col">
-            <Link
-              href="/"
-              className="flex items-center gap-1 font-semibold whitespace-nowrap">
-              <Image src={Logo} width={32} height={28} alt="" />
-              <span className="text-lg tracking-tighter">TaskTrace</span>
-              <span className="sr-only">Logo</span>
-            </Link>
-            <SmSidebar />
-          </SheetContent>
-        </Sheet>
-        <Link
-          href="#"
-          className="flex items-center gap-1 font-semibold whitespace-nowrap">
-          <Image src={Logo} width={32} height={28} alt="" />
-          <span className="text-lg tracking-tighter">TaskTrace</span>
-          <span className="sr-only">Logo</span>
-        </Link>
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-muted px-4 md:px-6 z-50">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className="shrink-0 lg:hidden">
+            <LuMenu className="h-5 w-5" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="flex flex-col">
+          <Link
+            href="/"
+            className="flex items-center gap-1 font-semibold whitespace-nowrap">
+            <Image src={Logo} width={32} height={28} alt="" />
+            <span className="text-lg tracking-tighter">TaskTrace</span>
+            <span className="sr-only">Logo</span>
+          </Link>
+          <SmSidebar />
+        </SheetContent>
+      </Sheet>
+      <Link
+        href="#"
+        className="flex items-center gap-1 font-semibold whitespace-nowrap">
+        <Image src={Logo} width={32} height={28} alt="" />
+        <span className="text-lg tracking-tighter">TaskTrace</span>
+        <span className="sr-only">Logo</span>
+      </Link>
 
-        <div className="items-center ml-auto">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Avatar className="h-8 w-8 border border-gray-600 cursor-pointer">
-                <AvatarImage src={""} alt="profile-image" />
-                <AvatarFallback className="bg-white">
-                  <PersonIcon className="h-5 w-5 text-gray-600" />
-                </AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 z-50" align="end">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-base font-medium leading-none">
-                    Kennedy Mwendwa
-                  </p>
-                  <p className="text-xs leading-none text-gray-500">
-                    kennymwendwa67@gmail.com
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex items-center">
-                <IoSettingsOutline className="mr-2 w-5 h-5" /> Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center hover:bg-red-100">
-                <MdLogout className="mr-2 w-5 h-5" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </header>
-    </>
+      <div className="items-center ml-auto">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar className="h-8 w-8 border border-gray-600 cursor-pointer">
+              <AvatarImage
+                src={session.data?.user?.image || ""}
+                alt="profile-image"
+              />
+              <AvatarFallback className="bg-white">
+                <PersonIcon className="h-5 w-5 text-gray-600" />
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end">
+            <DropdownMenuLabel>
+              <div className="flex flex-col space-y-1">
+                <p className="text-base font-medium leading-none">
+                  {session.data?.user?.name}
+                </p>
+                <p className="text-xs leading-none text-gray-500">
+                  {session.data?.user?.email}
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex items-center">
+              <IoSettingsOutline className="mr-2 w-5 h-5" /> Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                logout();
+              }}
+              className="flex items-center hover:bg-red-100">
+              <MdLogout className="mr-2 w-5 h-5" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
   );
 }
 
