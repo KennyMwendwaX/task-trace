@@ -18,6 +18,8 @@ import { statuses, priorities, labels } from "@/lib/config";
 import { userTaskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IoOpenOutline } from "react-icons/io5";
+import { toast } from "sonner";
+import { FiEdit } from "react-icons/fi";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -32,85 +34,94 @@ export default function TableRowActions<TData>({
   const task = userTaskSchema.parse(row.original);
 
   const {
-    mutate: changeLabel,
+    mutate: updateLabel,
     isPending: labelIsPending,
     error: labelChangeError,
   } = useMutation({
     mutationFn: async (label: string) => {
       const options = {
-        method: "PUT",
-        body: JSON.stringify(label),
+        method: "PATCH",
+        body: JSON.stringify({ label }),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/update-label`,
+        `/api/projects/${projectId}/tasks/${task.id}/label`,
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error updating task label");
       }
     },
     onSuccess: () => {
+      toast.success("Task label updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to updated task label");
       console.log(error);
     },
   });
 
   const {
-    mutate: changeStatus,
+    mutate: updateStatus,
     isPending: statusIsPending,
     error: statusChangeError,
   } = useMutation({
     mutationFn: async (status: string) => {
       const options = {
-        method: "PUT",
-        body: JSON.stringify(status),
+        method: "PATCH",
+        body: JSON.stringify({ status }),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/update-status`,
+        `/api/projects/${projectId}/tasks/${task.id}/status`,
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error updating task status");
       }
     },
     onSuccess: () => {
+      toast.success("Task status updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to updated task status");
       console.log(error);
     },
   });
 
   const {
-    mutate: changePriority,
+    mutate: updatePriority,
     isPending: priorityIsPending,
     error: priorityChangeError,
   } = useMutation({
     mutationFn: async (priority: string) => {
       const options = {
-        method: "PUT",
-        body: JSON.stringify(priority),
+        method: "PATCH",
+        body: JSON.stringify({ priority }),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/update-priority`,
+        `/api/projects/${projectId}/tasks/${task.id}/priority`,
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error updating task priority");
       }
     },
     onSuccess: () => {
+      toast.success("Task priority updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to updated task priority");
       console.log(error);
     },
   });
@@ -129,29 +140,32 @@ export default function TableRowActions<TData>({
         options
       );
       if (!response.ok) {
-        throw new Error("Something went wrong");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error deleting task");
       }
     },
     onSuccess: () => {
+      toast.success("Task deleted successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to delete task");
       console.log(error);
     },
   });
 
   const handleLabelChange = async (label: string) => {
-    changeLabel(label);
+    updateLabel(label);
   };
 
   const handleStatusChange = async (status: string) => {
-    changeStatus(status);
+    updateStatus(status);
   };
 
   const handlePriorityChange = async (priority: string) => {
-    changePriority(priority);
+    updatePriority(priority);
   };
 
   const taskDelete = async () => {
@@ -170,9 +184,12 @@ export default function TableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuItem>
-            <IoOpenOutline className="mr-2 h-5 w-5" /> Go to Project
+            <FiEdit className="mr-1 w-4 h-4" />
+            Edit Task
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <IoOpenOutline className="mr-1 w-4 h-4" /> Go to Project
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>

@@ -19,6 +19,7 @@ import { statuses, priorities, labels } from "@/lib/config";
 import { taskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { FiEdit } from "react-icons/fi";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -183,7 +184,10 @@ export default function TableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem>
+            <FiEdit className="mr-1 w-4 h-4" />
+            Edit Task
+          </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
