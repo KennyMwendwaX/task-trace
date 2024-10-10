@@ -41,7 +41,7 @@ export const PATCH = auth(async (req) => {
     }
 
     const task = await db.query.tasks.findFirst({
-      where: and(eq(projects.id, projectId), eq(tasks.id, taskId)),
+      where: and(eq(tasks.id, taskId), eq(projects.id, projectId)),
     });
 
     if (!task)
