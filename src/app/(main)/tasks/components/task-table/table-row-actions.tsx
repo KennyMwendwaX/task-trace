@@ -20,6 +20,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IoOpenOutline } from "react-icons/io5";
 import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -31,6 +32,7 @@ export default function TableRowActions<TData>({
   projectId,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const task = userTaskSchema.parse(row.original);
 
   const {
@@ -172,6 +174,14 @@ export default function TableRowActions<TData>({
     deleteTask();
   };
 
+  const handleEditTask = () => {
+    router.push(`/projects/${projectId}/tasks/${task.id}/edit`);
+  };
+
+  const handleGoToProject = () => {
+    router.push(`/projects/${projectId}`);
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -184,11 +194,11 @@ export default function TableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleEditTask}>
             <FiEdit className="mr-2 w-4 h-4" />
             Edit Task
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleGoToProject}>
             <IoOpenOutline className="mr-2 w-5 h-5" /> Go to Project
           </DropdownMenuItem>
           <DropdownMenuSub>
@@ -253,13 +263,11 @@ export default function TableRowActions<TData>({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <button
-              onClick={() => taskDelete()}
-              className="flex items-center cursor-pointer">
-              <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
-              Delete
-            </button>
+          <DropdownMenuItem
+            className="flex items-center cursor-pointer"
+            onClick={() => taskDelete()}>
+            <TrashIcon className="text-red-500 mr-2 w-5 h-5" />
+            Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
