@@ -1,9 +1,6 @@
 "use client";
-
-import { useRouter } from "next/navigation";
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,10 +14,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { statuses, priorities, labels } from "@/lib/config";
 import { userTaskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { IoOpenOutline } from "react-icons/io5";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -174,6 +171,9 @@ export default function TableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem>
+            <IoOpenOutline className="mr-2 h-5 w-5" /> Go to Project
+          </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
