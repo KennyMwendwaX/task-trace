@@ -105,7 +105,7 @@ export default function TableRowActions<TData>({
         body: JSON.stringify({ priority }),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/label`,
+        `/api/projects/${projectId}/tasks/${task.id}/priority`,
         options
       );
       if (!response.ok) {
