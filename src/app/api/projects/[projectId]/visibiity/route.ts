@@ -24,8 +24,7 @@ export const PUT = auth(async (req) => {
       where: and(
         eq(members.userId, req.auth.user.id),
         eq(members.projectId, projectId),
-        eq(members.role, "OWNER"),
-        or(eq(members.role, "ADMIN"))
+        or(eq(members.role, "OWNER"), eq(members.role, "ADMIN"))
       ),
     });
 
