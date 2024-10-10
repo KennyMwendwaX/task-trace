@@ -54,7 +54,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task label updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -85,7 +85,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task status updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -116,7 +116,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task priority updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
@@ -146,7 +146,7 @@ export default function TableRowActions<TData>({
     onSuccess: () => {
       toast.success("Task deleted successfully");
       queryClient.invalidateQueries({
-        queryKey: ["tasks", projectId],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
