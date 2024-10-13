@@ -67,7 +67,10 @@ export const POST = auth(async (req) => {
       role: "MEMBER",
     });
 
-    return NextResponse.json({ projectId }, { status: 200 });
+    return NextResponse.json(
+      { message: "You've successfully joined the project." },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Error joining project: ", error);
     return NextResponse.json(
