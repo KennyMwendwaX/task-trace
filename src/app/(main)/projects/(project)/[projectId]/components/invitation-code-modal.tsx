@@ -31,6 +31,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface InvitationCodeProps {
   projectId: string;
@@ -46,6 +47,7 @@ export default function InvitationCodeModal({
   projectId,
 }: InvitationCodeProps) {
   const [isDialogOpen, setDialogOpen] = useState(true);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof invitationCodeSchema>>({
     resolver: zodResolver(invitationCodeSchema),
@@ -66,6 +68,7 @@ export default function InvitationCodeModal({
       });
       toast.success("You've successfully joined the project.");
       toggleDialog();
+      router.refresh();
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
