@@ -43,8 +43,8 @@ export default function Settings({
 
   return (
     <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-2">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight break-words max-w-full sm:max-w-[70%]">
           {project.name} Settings
         </h1>
         <UpdateProjectDetails project={project} />
