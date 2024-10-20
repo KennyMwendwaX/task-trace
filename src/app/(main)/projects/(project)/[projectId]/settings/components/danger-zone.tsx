@@ -40,7 +40,7 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
         router.push("/dashboard");
       },
       onError: () => {
-        toast.error("Failed to delete project");
+        toast.error("Failed to leave project");
       },
     });
   };
