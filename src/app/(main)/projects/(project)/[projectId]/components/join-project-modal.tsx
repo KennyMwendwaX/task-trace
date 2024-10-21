@@ -79,7 +79,6 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
       axios.post(`/api/projects/${projectId}/request-membership`),
     onSuccess: () => {
       toast.success("Membership request sent successfully.");
-      toggleDialog();
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
@@ -118,7 +117,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="code">Have a code</TabsTrigger>
-            <TabsTrigger value="request">Request access</TabsTrigger>
+            <TabsTrigger value="request">Request Membership</TabsTrigger>
           </TabsList>
           <TabsContent value="code">
             <Form {...form}>
@@ -183,7 +182,8 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
             <div className="space-y-4 mt-4">
               <p className="text-sm text-center">
                 Don&apos;t have an invitation code? You can request to join this
-                project. The project owner will review your request.
+                project. The project owner will review your request and add you
+                to the project.
               </p>
               <Button
                 onClick={handleSendRequest}
@@ -202,7 +202,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
           </TabsContent>
         </Tabs>
 
-        <DialogFooter className="mt-6">
+        <DialogFooter>
           <Link href="/projects" className="w-full">
             <Button
               variant="outline"
