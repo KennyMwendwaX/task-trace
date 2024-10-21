@@ -13,39 +13,59 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   links: {
     href: string;
     title: string;
-    icon: JSX.Element;
+    icon?: JSX.Element;
     isDashboard?: boolean;
   }[];
 }
 
 export function SideNav({ className, links, ...props }: SidebarNavProps) {
   const pathname = usePathname();
+  const mainLinks = links.filter((link) => !link.isDashboard);
+  const dashboardLink = links.find((link) => link.isDashboard);
 
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 px-1",
-        className
+    <nav className={cn("flex flex-col", className)} {...props}>
+      {/* Dashboard Link */}
+      {dashboardLink && (
+        <div className="px-3 mb-6">
+          <Link
+            href={dashboardLink.href}
+            className={cn(
+              "flex items-center group w-full rounded-md px-3 py-2.5",
+              "text-muted-foreground hover:text-primary hover:bg-muted/50",
+              "transition-all duration-200 ease-out"
+            )}>
+            <span className="flex items-center gap-2">
+              <LuChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
+              {dashboardLink.icon}
+            </span>
+            <span className="font-medium text-sm ml-1">
+              {dashboardLink.title}
+            </span>
+          </Link>
+        </div>
       )}
-      {...props}>
-      {links.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            pathname === link.href
-              ? "bg-muted hover:bg-muted text-primary"
-              : "hover:bg-muted hover:text-primary text-muted-foreground",
-            "flex items-center justify-start gap-3 rounded-lg px-6 py-2.5 transition-all",
-            link.isDashboard &&
-              "bg-primary/10 text-primary hover:bg-primary/20 mb-2"
-          )}>
-          {link.isDashboard && <LuChevronLeft className="h-4 w-4 mr-1" />}
-          {link.icon}
-          {link.title}
-        </Link>
-      ))}
+
+      {/* Main Navigation */}
+      <div className="px-3 space-y-1.5">
+        {mainLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              pathname === link.href
+                ? "bg-muted hover:bg-muted text-primary font-medium"
+                : "hover:bg-muted/50 hover:text-primary text-muted-foreground",
+              "w-full justify-start gap-3",
+              "h-11 px-3 py-2.5",
+              "transition-all duration-200 ease-out"
+            )}>
+            {link.icon}
+            <span className="text-sm">{link.title}</span>
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }
@@ -58,7 +78,6 @@ export default function Sidebar() {
     {
       href: `/dashboard`,
       title: "Back to Dashboard",
-      icon: <LuHome className="h-4 w-4" />,
       isDashboard: true,
     },
     {
@@ -84,13 +103,13 @@ export default function Sidebar() {
     {
       href: `/projects/${projectId}/settings`,
       title: "Settings",
-      icon: <HiOutlineCog className="h-5 w-5" />,
+      icon: <HiOutlineCog className="h-4 w-4" />,
     },
   ];
 
   return (
     <div className="fixed top-0 left-0 w-[260px] h-full border-r bg-muted/40 hidden lg:block">
-      <div className="flex h-full max-h-screen flex-col gap-2">
+      <div className="flex h-full max-h-screen flex-col">
         <div className="flex-1 mt-[72px]">
           <SideNav links={links} />
         </div>
