@@ -84,101 +84,84 @@ export default function InvitationCodeModal({
   };
   return (
     <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
-      <DialogContent
-        className="w-full max-w-md lg:max-w-xl"
-        onInteractOutside={(e) => e.preventDefault()}
-        hideCloseButton={true}>
-        <DialogHeader>
-          <DialogTitle>Enter Invitation Code</DialogTitle>
-          <DialogDescription>
-            Please enter the 8-character invitation code to join this project.
-          </DialogDescription>
-        </DialogHeader>
+    <DialogContent
+      className="w-[95vw] max-w-md lg:max-w-xl p-4 sm:p-6"
+      onInteractOutside={(e) => e.preventDefault()}
+      hideCloseButton={true}
+    >
+      <DialogHeader className="space-y-2 text-center">
+        <DialogTitle className="text-xl sm:text-2xl">Enter Invitation Code</DialogTitle>
+        <DialogDescription className="text-sm sm:text-base">
+          Please enter the 8-character invitation code to join this project.
+        </DialogDescription>
+      </DialogHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 mt-4">
-            <div className="flex justify-center">
-              <FormField
-                control={form.control}
-                name="code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <InputOTP
-                        maxLength={8}
-                        pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-                        {...field}>
-                        <InputOTPGroup>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-4">
+          <div className="flex justify-center">
+            <FormField
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <InputOTP
+                      maxLength={8}
+                      pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                      {...field}
+                    >
+                      <InputOTPGroup>
+                        {[0, 1, 2, 3].map((index) => (
                           <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={0}
+                            key={index}
+                            className="w-8 h-10 sm:w-12 sm:h-12 text-lg sm:text-2xl"
+                            index={index}
                           />
+                        ))}
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        {[4, 5, 6, 7].map((index) => (
                           <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={1}
+                            key={index}
+                            className="w-8 h-10 sm:w-12 sm:h-12 text-lg sm:text-2xl"
+                            index={index}
                           />
-                          <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={2}
-                          />
-                          <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={3}
-                          />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
-                          <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={4}
-                          />
-                          <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={5}
-                          />
-                          <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={6}
-                          />
-                          <InputOTPSlot
-                            className="w-12 h-12 text-2xl"
-                            index={7}
-                          />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                        ))}
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-            <DialogFooter className="justify-between">
-              <Link href="/projects">
-                <Button variant="outline" className="flex items-center gap-1">
-                  <LuChevronLeft className="h-5 w-5" />
-                  Go back
-                </Button>
-              </Link>
-              <Button
-                type="submit"
-                className="w-full sm:w-auto"
-                disabled={isPending}>
-                {isPending ? (
-                  <>
-                    <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
-                    Joining...
-                  </>
-                ) : (
-                  "Join Project"
-                )}
+          <DialogFooter className="flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
+            <Link href="/projects" className="w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto flex items-center justify-center gap-1">
+                <LuChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                Go back
               </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+            </Link>
+            <Button
+              type="submit"
+              className="w-full sm:w-auto"
+              disabled={isPending}
+            >
+              {isPending ? (
+                <>
+                  <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                  Joining...
+                </>
+              ) : (
+                "Join Project"
+              )}
+            </Button>
+          </DialogFooter>
+        </form>
+      </Form>
+    </DialogContent>
+  </Dialog>
   );
 }
