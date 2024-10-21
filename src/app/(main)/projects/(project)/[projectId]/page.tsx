@@ -17,7 +17,7 @@ import {
 import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
-import InvitationCodeModal from "./components/invitation-code-modal";
+import JoinProjectModal from "./components/join-project-modal";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export default function ProjectPage({
   const isNotMember = !project.member;
 
   if (isPrivateProject && isNotMember) {
-    return <InvitationCodeModal projectId={projectId} />;
+    return <JoinProjectModal projectId={projectId} />;
   }
 
   return (

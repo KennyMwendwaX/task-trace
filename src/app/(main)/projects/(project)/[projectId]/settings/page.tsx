@@ -11,7 +11,7 @@ import {
   useProjectInvitationCodeQuery,
   useProjectQuery,
 } from "@/hooks/useProjectQueries";
-import InvitationCodeModal from "../components/invitation-code-modal";
+import JoinProjectModal from "../components/join-project-modal";
 
 export default function Settings({
   params,
@@ -38,7 +38,7 @@ export default function Settings({
   const isNotMember = !project.member;
 
   if (isPrivateProject && isNotMember) {
-    return <InvitationCodeModal projectId={projectId} />;
+    return <JoinProjectModal projectId={projectId} />;
   }
 
   return (

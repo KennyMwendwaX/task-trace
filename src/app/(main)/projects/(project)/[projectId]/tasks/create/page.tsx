@@ -50,7 +50,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Editor from "./components/editor";
-import InvitationCodeModal from "../../components/invitation-code-modal";
+import JoinProjectModal from "../../components/join-project-modal";
 
 interface CreateTaskPageProps {
   params: {
@@ -83,7 +83,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
   const isNotMember = !project.member;
 
   if (isPrivateProject && isNotMember) {
-    return <InvitationCodeModal projectId={projectId} />;
+    return <JoinProjectModal projectId={projectId} />;
   }
 
   async function onSubmit(values: TaskFormValues) {

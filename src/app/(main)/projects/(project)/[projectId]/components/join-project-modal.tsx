@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { LuChevronLeft } from "react-icons/lu";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
-
 import {
   Form,
   FormControl,
@@ -35,32 +34,30 @@ import {
 } from "@/components/ui/input-otp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-interface InvitationCodeProps {
+interface JoinProjectProps {
   projectId: string;
 }
 
-const invitationCodeSchema = z.object({
+const joinProjectSchema = z.object({
   code: z.string().min(8, {
     message: "Your one-time password must be 8 characters.",
   }),
 });
 
-export default function InvitationCodeModal({
-  projectId,
-}: InvitationCodeProps) {
+export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const [isDialogOpen, setDialogOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("code");
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof invitationCodeSchema>>({
-    resolver: zodResolver(invitationCodeSchema),
+  const form = useForm<z.infer<typeof joinProjectSchema>>({
+    resolver: zodResolver(joinProjectSchema),
   });
 
   const toggleDialog = () => setDialogOpen(!isDialogOpen);
 
   const { mutate: joinWithCode, isPending: isJoiningWithCode } = useMutation({
-    mutationFn: (data: z.infer<typeof invitationCodeSchema>) =>
+    mutationFn: (data: z.infer<typeof joinProjectSchema>) =>
       axios.post(`/api/projects/${projectId}/join`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
@@ -95,7 +92,7 @@ export default function InvitationCodeModal({
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof invitationCodeSchema>) => {
+  const onSubmit = async (data: z.infer<typeof joinProjectSchema>) => {
     joinWithCode(data);
   };
 

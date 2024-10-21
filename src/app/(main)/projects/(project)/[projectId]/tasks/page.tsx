@@ -13,7 +13,7 @@ import {
   useProjectTasksQuery,
 } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import InvitationCodeModal from "../components/invitation-code-modal";
+import JoinProjectModal from "../components/join-project-modal";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
@@ -35,7 +35,7 @@ export default function Tasks({ params }: { params: { projectId: string } }) {
   const isNotMember = !project.member;
 
   if (isPrivateProject && isNotMember) {
-    return <InvitationCodeModal projectId={projectId} />;
+    return <JoinProjectModal projectId={projectId} />;
   }
 
   return (

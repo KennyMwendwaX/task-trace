@@ -24,7 +24,7 @@ import {
   useProjectTaskQuery,
 } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import InvitationCodeModal from "../../components/invitation-code-modal";
+import JoinProjectModal from "../../components/join-project-modal";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -151,7 +151,7 @@ export default function TaskPage({ params }: TaskPageProps) {
   const isNotMember = !project.member;
 
   if (isPrivateProject && isNotMember) {
-    return <InvitationCodeModal projectId={projectId} />;
+    return <JoinProjectModal projectId={projectId} />;
   }
 
   const label = labels.find((l) => l.value === task.label);
