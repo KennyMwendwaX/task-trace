@@ -28,6 +28,7 @@ export const users = pgTable("user", {
 export const usersRelations = relations(users, ({ many }) => ({
   projects: many(projects),
   members: many(members),
+  membershipRequests: many(membershipRequests),
 }));
 
 export const accounts = pgTable(
@@ -101,6 +102,7 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
     fields: [projects.id],
     references: [invitationCodes.projectId],
   }),
+  membershipRequests: many(membershipRequests),
 }));
 
 export const members = pgTable("member", {
@@ -196,6 +198,46 @@ export const invitationCodesRelations = relations(
     project: one(projects, {
       fields: [invitationCodes.projectId],
       references: [projects.id],
+    }),
+  })
+);
+
+export const membershipRequests = pgTable("membership_request", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  status: text("status")
+    .$type<"PENDING" | "APPROVED" | "REJECTED">()
+    .default("PENDING")
+    .notNull(),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const membershipRequestsRelations = relations(
+  membershipRequests,
+  ({ one }) => ({
+    project: one(projects, {
+      fields: [membershipRequests.projectId],
+      references: [projects.id],
+    }),
+    user: one(users, {
+      fields: [membershipRequests.userId],
+      references: [users.id],
     }),
   })
 );

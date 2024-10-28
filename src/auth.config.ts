@@ -15,7 +15,7 @@ export const authConfig: NextAuthConfig = {
         email: { type: "email" },
         password: { type: "password" },
       },
-      async authorize(credentials) {
+      authorize: async (credentials) => {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Credentials are required");
         }
