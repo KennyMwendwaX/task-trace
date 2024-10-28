@@ -3,7 +3,6 @@ import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import { signinSchema } from "./lib/schema/UserSchema";
 import db from "./database/db";
 
 export const authConfig: NextAuthConfig = {
@@ -13,25 +12,24 @@ export const authConfig: NextAuthConfig = {
     Credentials({
       name: "Credentials",
       credentials: {
-        email: {},
-        password: {},
+        email: { type: "email" },
+        password: { type: "password" },
       },
-      authorize: async (credentials) => {
-        if (!credentials) throw new Error("Credentials are required");
-        const validation = signinSchema.safeParse(credentials);
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Credentials are required");
+        }
 
-        if (!validation.success) return null;
-
-        const { email, password } = validation.data;
+        const { email, password } = credentials;
 
         const user = await db.query.users.findFirst({
-          where: (user, { eq }) => eq(user.email, email),
+          where: (user, { eq }) => eq(user.email, email as string),
         });
 
         if (!user) return null;
 
         const checkPassword =
-          user.password && (await compare(password, user.password));
+          user.password && (await compare(password as string, user.password));
 
         if (checkPassword) return user;
 

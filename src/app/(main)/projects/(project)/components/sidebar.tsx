@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { LuHome, LuLineChart, LuUsers, LuChevronLeft } from "react-icons/lu";
+import { LuLineChart, LuUsers, LuChevronLeft } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
 import { GoTasklist } from "react-icons/go";
 import { HiOutlineCog } from "react-icons/hi";
