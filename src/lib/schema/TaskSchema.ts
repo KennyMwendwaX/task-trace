@@ -60,7 +60,6 @@ export const taskFormSchema = taskSchema.omit({
   status: true,
   createdAt: true,
   updatedAt: true,
-  userId: true,
   projectId: true,
   member: true,
 });

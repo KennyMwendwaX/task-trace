@@ -9,6 +9,14 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
+import {
+  Label,
+  MembershipRequestStatus,
+  Priority,
+  ProjectRole,
+  ProjectStatus,
+  Status,
+} from "@/lib/config";
 
 export const users = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
@@ -78,7 +86,7 @@ export const verificationTokens = pgTable(
 export const projects = pgTable("project", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
-  status: text("status").notNull(),
+  status: text("status").$type<ProjectStatus>().notNull(),
   description: text("description").notNull(),
   isPublic: boolean("is_public").default(false).notNull(),
   createdAt: timestamp("created_at", { mode: "date", precision: 3 })
@@ -107,10 +115,7 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 
 export const members = pgTable("member", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
-  role: text("role")
-    .$type<"OWNER" | "ADMIN" | "MEMBER">()
-    .default("MEMBER")
-    .notNull(),
+  role: text("role").$type<ProjectRole>().default("MEMBER").notNull(),
   createdAt: timestamp("created_at", { mode: "date", precision: 3 })
     .defaultNow()
     .notNull(),
@@ -143,9 +148,9 @@ export const membersRelations = relations(members, ({ one, many }) => ({
 export const tasks = pgTable("task", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name").notNull(),
-  label: text("label").notNull(),
-  status: text("status").notNull(),
-  priority: text("priority").notNull(),
+  label: text("label").$type<Label>().notNull(),
+  status: text("status").$type<Status>().notNull(),
+  priority: text("priority").$type<Priority>().notNull(),
   description: text("description").notNull(),
   dueDate: timestamp("due_date", { mode: "date", precision: 3 }).notNull(),
   createdAt: timestamp("created_at", { mode: "date", precision: 3 })
@@ -205,7 +210,7 @@ export const invitationCodesRelations = relations(
 export const membershipRequests = pgTable("membership_request", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   status: text("status")
-    .$type<"PENDING" | "APPROVED" | "REJECTED">()
+    .$type<MembershipRequestStatus>()
     .default("PENDING")
     .notNull(),
   projectId: uuid("project_id")

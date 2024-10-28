@@ -95,8 +95,25 @@ export const projectRoles = [
   },
 ] as const;
 
+export const membershipRequestStatuses = [
+  {
+    label: "Pending",
+    value: "PENDING",
+  },
+  {
+    label: "Approved",
+    value: "APPROVED",
+  },
+  {
+    label: "Rejected",
+    value: "REJECTED",
+  },
+] as const;
+
 export type Label = (typeof labels)[number]["value"];
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];
 export type ProjectStatus = (typeof projectStatuses)[number]["value"];
 export type ProjectRole = (typeof projectRoles)[number]["value"];
+export type MembershipRequestStatus =
+  (typeof membershipRequestStatuses)[number]["value"];
