@@ -213,15 +213,16 @@ export const membershipRequests = pgTable("membership_request", {
     .$type<MembershipRequestStatus>()
     .default("PENDING")
     .notNull(),
-  projectId: uuid("project_id")
+  requesterName: text("requester_name").notNull(),
+  requesterId: uuid("requester_id")
     .notNull()
-    .references(() => projects.id, {
+    .references(() => users.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  userId: uuid("user_id")
+  projectId: uuid("project_id")
     .notNull()
-    .references(() => users.id, {
+    .references(() => projects.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
@@ -241,7 +242,7 @@ export const membershipRequestsRelations = relations(
       references: [projects.id],
     }),
     user: one(users, {
-      fields: [membershipRequests.userId],
+      fields: [membershipRequests.requesterId],
       references: [users.id],
     }),
   })
