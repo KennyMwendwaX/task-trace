@@ -35,6 +35,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
 import { useUserMembershipRequests } from "@/hooks/useUserQueries";
+import { useUserStore } from "@/hooks/useUserStore";
 
 interface JoinProjectProps {
   projectId: string;
@@ -53,11 +54,13 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const queryClient = useQueryClient();
   const session = useSession();
 
-  const { data: userRequests } = useUserMembershipRequests(
+  const { isLoading: isLoadingRequests } = useUserMembershipRequests(
     session.data?.user?.id
   );
 
-  const hasPendingRequest = userRequests?.some(
+  const { requests } = useUserStore();
+
+  const hasPendingRequest = requests.some(
     (request) => request.projectId === projectId && request.status === "PENDING"
   );
 
@@ -191,24 +194,42 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
           </TabsContent>
           <TabsContent value="request">
             <div className="space-y-4 mt-4">
-              <p className="text-sm text-center">
-                Don&apos;t have an invitation code? You can request to join this
-                project. The project owner will review your request and add you
-                to the project.
-              </p>
-              <Button
-                onClick={handleSendRequest}
-                className="w-full"
-                disabled={isSendingRequest}>
-                {isSendingRequest ? (
-                  <>
-                    <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
-                    Sending request...
-                  </>
-                ) : (
-                  "Send Membership Request"
-                )}
-              </Button>
+              {isLoadingRequests ? (
+                <div className="flex justify-center">
+                  <AiOutlineLoading3Quarters className="h-6 w-6 animate-spin" />
+                </div>
+              ) : hasPendingRequest ? (
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    You already have a pending request for this project. The
+                    project owner will review your request soon.
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    You'll be notified when your request is approved.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="text-sm text-center">
+                    Don&apos;t have an invitation code? You can request to join
+                    this project. The project owner will review your request and
+                    add you to the project.
+                  </p>
+                  <Button
+                    onClick={handleSendRequest}
+                    className="w-full"
+                    disabled={isSendingRequest}>
+                    {isSendingRequest ? (
+                      <>
+                        <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                        Sending request...
+                      </>
+                    ) : (
+                      "Send Membership Request"
+                    )}
+                  </Button>
+                </>
+              )}
             </div>
           </TabsContent>
         </Tabs>

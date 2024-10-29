@@ -98,9 +98,12 @@ export const useUserMembershipRequests = (
   userId: string | undefined
 ): UseQueryResult<MembershipRequests[], Error> => {
   if (!userId) throw new Error("User ID not found");
+  const setUserMembershipRequests = useUserStore(
+    (state) => state.setUserMembershipRequests
+  );
 
   const result = useQuery({
-    queryKey: ["user-requests"],
+    queryKey: ["user-requests", userId],
     queryFn: async () => {
       const { data } = await axios.get<{ requests: MembershipRequests[] }>(
         `/api/users/${userId}/tasks`
@@ -115,6 +118,12 @@ export const useUserMembershipRequests = (
     },
     enabled: !!userId,
   });
+
+  useEffect(() => {
+    if (result.data) {
+      setUserMembershipRequests(result.data);
+    }
+  }, [result.data, setUserMembershipRequests]);
 
   return result;
 };
