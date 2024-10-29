@@ -17,7 +17,6 @@ export const memberSchema = z.object({
 
 export const memberFormSchema = memberSchema.omit({
   id: true,
-  userName: true,
   createdAt: true,
   updatedAt: true,
   projectId: true,

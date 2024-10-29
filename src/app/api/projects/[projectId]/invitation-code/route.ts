@@ -3,7 +3,7 @@ import db from "@/database/db";
 import { NextResponse } from "next/server";
 import { customAlphabet } from "nanoid";
 import { invitationCodes, members, projects } from "@/database/schema";
-import add from "date-fns/add";
+import { add } from "date-fns/add";
 import { and, eq } from "drizzle-orm/sql";
 
 export const GET = auth(async (req) => {

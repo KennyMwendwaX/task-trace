@@ -33,6 +33,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSession } from "next-auth/react";
 
 interface JoinProjectProps {
   projectId: string;
@@ -49,6 +50,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const [activeTab, setActiveTab] = useState("code");
   const router = useRouter();
   const queryClient = useQueryClient();
+  const session = useSession();
 
   const form = useForm<z.infer<typeof joinProjectSchema>>({
     resolver: zodResolver(joinProjectSchema),
@@ -76,7 +78,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
 
   const { mutate: sendRequest, isPending: isSendingRequest } = useMutation({
     mutationFn: () =>
-      axios.post(`/api/projects/${projectId}/request-membership`),
+      axios.post(`/api/projects/${projectId}/membership-request`),
     onSuccess: () => {
       toast.success("Membership request sent successfully.");
     },
