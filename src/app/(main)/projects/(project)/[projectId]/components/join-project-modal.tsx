@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -51,6 +51,21 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const session = useSession();
+
+  const { data: userRequests, isLoading: isLoadingRequests } = useQuery({
+    queryKey: ["user-requests"],
+    queryFn: async () => {
+      const response = await axios.get(
+        `/api/users/${session.data?.user?.id}/membership-requests`
+      );
+      return response.data;
+    },
+  });
+
+  const hasPendingRequest = userRequests?.some(
+    (request: any) =>
+      request.projectId === projectId && request.status === "PENDING"
+  );
 
   const form = useForm<z.infer<typeof joinProjectSchema>>({
     resolver: zodResolver(joinProjectSchema),
