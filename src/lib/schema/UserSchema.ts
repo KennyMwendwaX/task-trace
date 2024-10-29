@@ -52,7 +52,6 @@ export const signinSchema = userSchema.omit({
   id: true,
   name: true,
   emailVerified: true,
-  role: true,
   image: true,
   createdAt: true,
   updatedAt: true,
