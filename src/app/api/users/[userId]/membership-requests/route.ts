@@ -13,7 +13,12 @@ export const GET = auth(async (req) => {
     const requests = await db.query.membershipRequests.findMany({
       where: and(eq(membershipRequests.requesterId, req.auth.user.id)),
       with: {
-        project: true,
+        project: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 

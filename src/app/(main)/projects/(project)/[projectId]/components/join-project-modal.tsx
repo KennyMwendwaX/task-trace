@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
+import { useUserMembershipRequests } from "@/hooks/useUserQueries";
 
 interface JoinProjectProps {
   projectId: string;
@@ -52,19 +53,12 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const queryClient = useQueryClient();
   const session = useSession();
 
-  const { data: userRequests, isLoading: isLoadingRequests } = useQuery({
-    queryKey: ["user-requests"],
-    queryFn: async () => {
-      const response = await axios.get(
-        `/api/users/${session.data?.user?.id}/membership-requests`
-      );
-      return response.data;
-    },
-  });
+  const { data: userRequests } = useUserMembershipRequests(
+    session.data?.user?.id
+  );
 
   const hasPendingRequest = userRequests?.some(
-    (request: any) =>
-      request.projectId === projectId && request.status === "PENDING"
+    (request) => request.projectId === projectId && request.status === "PENDING"
   );
 
   const form = useForm<z.infer<typeof joinProjectSchema>>({

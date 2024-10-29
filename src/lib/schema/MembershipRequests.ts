@@ -9,7 +9,10 @@ export const membershipRequestSchema = z.object({
   requesterId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
-  project: z.object({ projectSchema }),
+  project: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
 });
 
 export type MemberShipRequests = z.infer<typeof membershipRequestSchema>;

@@ -13,6 +13,8 @@ import { fetchUserProjects } from "@/lib/api/projects";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { fetchUserTasks } from "@/lib/api/tasks";
+import { MemberShipRequests } from "@/lib/schema/MembershipRequests";
+import axios from "axios";
 
 interface SignupResponse {
   message: string;
@@ -43,7 +45,7 @@ export const useUsersQuery = (): UseQueryResult<User[], Error> => {
   return result;
 };
 
-export const useUsersProjectsQuery = (
+export const useUserProjectsQuery = (
   userId: string | undefined
 ): UseQueryResult<UserProject[], Error> => {
   const setUserProjects = useUserStore((state) => state.setUserProjects);
@@ -67,7 +69,7 @@ export const useUsersProjectsQuery = (
   return result;
 };
 
-export const useUsersTasksQuery = (
+export const useUserTasksQuery = (
   userId: string | undefined
 ): UseQueryResult<UserTask[], Error> => {
   const setUserTasks = useUserStore((state) => state.setUserTasks);
@@ -88,6 +90,29 @@ export const useUsersTasksQuery = (
       setUserTasks(parsedTasks);
     }
   }, [result.data, setUserTasks]);
+
+  return result;
+};
+
+export const useUserMembershipRequests = (userId: string | undefined) => {
+  if (!userId) throw new Error("User ID not found");
+
+  const result = useQuery({
+    queryKey: ["user-requests"],
+    queryFn: async () => {
+      const { data } = await axios.get<{ requests: MemberShipRequests[] }>(
+        `/api/users/${userId}/tasks`
+      );
+      return data.requests
+        .map((request) => ({
+          ...request,
+          createdAt: new Date(request.createdAt),
+          updatedAt: request.updatedAt ? new Date(request.updatedAt) : null,
+        }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    },
+    enabled: !!userId,
+  });
 
   return result;
 };

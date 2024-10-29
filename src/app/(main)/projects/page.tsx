@@ -9,7 +9,7 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { useUsersProjectsQuery } from "@/hooks/useUserQueries";
+import { useUserProjectsQuery } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 
@@ -21,7 +21,7 @@ export default function Projects() {
 
   const userId = session.data?.user?.id;
 
-  const { isLoading } = useUsersProjectsQuery(userId);
+  const { isLoading } = useUserProjectsQuery(userId);
   const { projects } = useUserStore();
 
   const ownedProjects = projects.filter(

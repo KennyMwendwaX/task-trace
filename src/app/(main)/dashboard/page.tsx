@@ -6,14 +6,14 @@ import TaskOverview from "./components/task-overview";
 import Loading from "./components/loading";
 import RecentTasks from "./components/recent-tasks";
 import TaskChart from "./components/task-chart";
-import { useUsersTasksQuery } from "@/hooks/useUserQueries";
+import { useUserTasksQuery } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
 
 export default function Dashboard() {
   const session = useSession();
   const userId = session.data?.user?.id;
 
-  const { isLoading: tasksIsLoading } = useUsersTasksQuery(userId);
+  const { isLoading: tasksIsLoading } = useUserTasksQuery(userId);
   const { tasks } = useUserStore();
 
   return (

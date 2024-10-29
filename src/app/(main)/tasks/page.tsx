@@ -5,14 +5,14 @@ import { TableColumns } from "./components/task-table/table-columns";
 import { useSession } from "next-auth/react";
 import { TbPlaylistX } from "react-icons/tb";
 import Loading from "./components/loading";
-import { useUsersTasksQuery } from "@/hooks/useUserQueries";
+import { useUserTasksQuery } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
 
 export default function UserTasks() {
   const session = useSession();
   const userId = session.data?.user?.id;
 
-  const { isLoading: tasksIsLoading } = useUsersTasksQuery(userId);
+  const { isLoading: tasksIsLoading } = useUserTasksQuery(userId);
   const { tasks } = useUserStore();
 
   return (
