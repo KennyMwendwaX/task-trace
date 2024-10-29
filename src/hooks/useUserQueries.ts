@@ -13,7 +13,7 @@ import { fetchUserProjects } from "@/lib/api/projects";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { fetchUserTasks } from "@/lib/api/tasks";
-import { MemberShipRequests } from "@/lib/schema/MembershipRequests";
+import { MembershipRequests } from "@/lib/schema/MembershipRequests";
 import axios from "axios";
 
 interface SignupResponse {
@@ -94,13 +94,15 @@ export const useUserTasksQuery = (
   return result;
 };
 
-export const useUserMembershipRequests = (userId: string | undefined) => {
+export const useUserMembershipRequests = (
+  userId: string | undefined
+): UseQueryResult<MembershipRequests[], Error> => {
   if (!userId) throw new Error("User ID not found");
 
   const result = useQuery({
     queryKey: ["user-requests"],
     queryFn: async () => {
-      const { data } = await axios.get<{ requests: MemberShipRequests[] }>(
+      const { data } = await axios.get<{ requests: MembershipRequests[] }>(
         `/api/users/${userId}/tasks`
       );
       return data.requests

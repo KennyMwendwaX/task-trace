@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { projectSchema } from "./ProjectSchema";
 
 export const membershipRequestSchema = z.object({
   id: z.string(),
@@ -15,4 +14,4 @@ export const membershipRequestSchema = z.object({
   }),
 });
 
-export type MemberShipRequests = z.infer<typeof membershipRequestSchema>;
+export type MembershipRequests = z.infer<typeof membershipRequestSchema>;
