@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS "member" (
 CREATE TABLE IF NOT EXISTS "membership_request" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"status" text DEFAULT 'PENDING' NOT NULL,
-	"requester_name" text NOT NULL,
 	"requester_id" uuid NOT NULL,
 	"project_id" uuid NOT NULL,
 	"created_at" timestamp (3) DEFAULT now() NOT NULL,

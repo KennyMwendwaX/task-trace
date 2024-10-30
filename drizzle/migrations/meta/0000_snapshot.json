@@ -1,5 +1,5 @@
 {
-  "id": "cfb9f238-e0d1-4c9b-867c-cbeb6d6a607f",
+  "id": "24d076bf-4db9-4b5a-af42-68b74aec55c6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -268,12 +268,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'PENDING'"
-        },
-        "requester_name": {
-          "name": "requester_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         },
         "requester_id": {
           "name": "requester_id",
