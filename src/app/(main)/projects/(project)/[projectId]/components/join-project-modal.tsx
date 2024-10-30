@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
-import { useUserMembershipRequests } from "@/hooks/useUserQueries";
+import { useUserUserMembershipRequest } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
 
 interface JoinProjectProps {
@@ -54,7 +54,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const queryClient = useQueryClient();
   const session = useSession();
 
-  const { isLoading: isLoadingRequests } = useUserMembershipRequests(
+  const { isLoading: isLoadingRequests } = useUserUserMembershipRequest(
     session.data?.user?.id
   );
 

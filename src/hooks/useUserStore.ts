@@ -1,4 +1,4 @@
-import { MembershipRequests } from "@/lib/schema/MembershipRequests";
+import { UserMembershipRequest } from "@/lib/schema/UserMembershipRequest";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { User } from "@/lib/schema/UserSchema";
@@ -8,11 +8,11 @@ interface UserStore {
   users: User[];
   projects: UserProject[];
   tasks: UserTask[];
-  requests: MembershipRequests[];
+  requests: UserMembershipRequest[];
   setUsers: (users: User[]) => void;
   setUserProjects: (projects: UserProject[]) => void;
   setUserTasks: (tasks: UserTask[]) => void;
-  setUserMembershipRequests: (requests: MembershipRequests[]) => void;
+  setUserUserMembershipRequest: (requests: UserMembershipRequest[]) => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -23,5 +23,5 @@ export const useUserStore = create<UserStore>((set) => ({
   setUsers: (users) => set({ users }),
   setUserProjects: (projects) => set({ projects }),
   setUserTasks: (tasks) => set({ tasks }),
-  setUserMembershipRequests: (requests) => set({ requests }),
+  setUserUserMembershipRequest: (requests) => set({ requests }),
 }));

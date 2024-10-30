@@ -1,10 +1,9 @@
 import { z } from "zod";
 
-export const membershipRequestSchema = z.object({
+export const userMembershipRequest = z.object({
   id: z.string(),
   projectId: z.string(),
   status: z.enum(["PENDING", "APPROVED", "REJECTED"]),
-  requesterName: z.string(),
   requesterId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
@@ -14,4 +13,20 @@ export const membershipRequestSchema = z.object({
   }),
 });
 
-export type MembershipRequests = z.infer<typeof membershipRequestSchema>;
+export const projectMembershipRequest = z.object({
+  id: z.string(),
+  projectId: z.string(),
+  status: z.enum(["PENDING", "APPROVED", "REJECTED"]),
+  requesterId: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date().nullable(),
+  user: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string(),
+    image: z.string().nullable(),
+  }),
+});
+
+export type UserMembershipRequest = z.infer<typeof userMembershipRequest>;
+export type ProjectMembershipRequest = z.infer<typeof projectMembershipRequest>;

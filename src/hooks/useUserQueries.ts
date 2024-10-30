@@ -13,7 +13,7 @@ import { fetchUserProjects } from "@/lib/api/projects";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { fetchUserTasks } from "@/lib/api/tasks";
-import { MembershipRequests } from "@/lib/schema/MembershipRequests";
+import { UserMembershipRequest } from "@/lib/schema/UserMembershipRequest";
 import axios from "axios";
 
 interface SignupResponse {
@@ -78,18 +78,18 @@ export const useUserTasksQuery = (
   return result;
 };
 
-export const useUserMembershipRequests = (
+export const useUserUserMembershipRequest = (
   userId: string | undefined
-): UseQueryResult<MembershipRequests[], Error> => {
+): UseQueryResult<UserMembershipRequest[], Error> => {
   if (!userId) throw new Error("User ID not found");
-  const setUserMembershipRequests = useUserStore(
-    (state) => state.setUserMembershipRequests
+  const setUserUserMembershipRequest = useUserStore(
+    (state) => state.setUserUserMembershipRequest
   );
 
   const result = useQuery({
     queryKey: ["user-requests", userId],
     queryFn: async () => {
-      const { data } = await axios.get<{ requests: MembershipRequests[] }>(
+      const { data } = await axios.get<{ requests: UserMembershipRequest[] }>(
         `/api/users/${userId}/tasks`
       );
       return data.requests
@@ -105,9 +105,9 @@ export const useUserMembershipRequests = (
 
   useEffect(() => {
     if (result.data) {
-      setUserMembershipRequests(result.data);
+      setUserUserMembershipRequest(result.data);
     }
-  }, [result.data, setUserMembershipRequests]);
+  }, [result.data, setUserUserMembershipRequest]);
 
   return result;
 };
