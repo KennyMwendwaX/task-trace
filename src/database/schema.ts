@@ -213,7 +213,6 @@ export const membershipRequests = pgTable("membership_request", {
     .$type<MembershipRequestStatus>()
     .default("PENDING")
     .notNull(),
-  requesterName: text("requester_name").notNull(),
   requesterId: uuid("requester_id")
     .notNull()
     .references(() => users.id, {

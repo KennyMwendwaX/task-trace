@@ -23,6 +23,49 @@ export const GET = auth(async (req) => {
       );
     }
 
+    const requests = await db.query.membershipRequests.findMany({
+      where: eq(membershipRequests.projectId, projectId),
+      with: {
+        user: {
+          columns: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(requests, { status: 200 });
+  } catch (error) {
+    console.error("Error getting project membership requests:", error);
+    return NextResponse.json(
+      { message: "Server error, please try again later" },
+      { status: 500 }
+    );
+  }
+});
+
+export const POST = auth(async (req) => {
+  if (!req.auth || !req.auth.user || !req.auth.user.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+  try {
+    const segments = req.nextUrl.pathname.split("/");
+    const projectId = segments[segments.length - 2];
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project) {
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
+    }
+
     const existingMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
@@ -54,7 +97,6 @@ export const GET = auth(async (req) => {
 
     await db.insert(membershipRequests).values({
       requesterId: req.auth.user.id,
-      requesterName: req.auth.user.name!,
       projectId,
       status: "PENDING",
     });
@@ -64,7 +106,7 @@ export const GET = auth(async (req) => {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error adding member to project:", error);
+    console.error("Error sending membership request:", error);
     return NextResponse.json(
       { message: "Server error, please try again later" },
       { status: 500 }
