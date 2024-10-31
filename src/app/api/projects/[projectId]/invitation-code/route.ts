@@ -195,7 +195,7 @@ export const PUT = auth(async (req) => {
       );
     }
 
-    const nanoidCustom = customAlphabet("23456789ABCDEFGHJKLMNPQRSTUVWXYZ", 8);
+    const nanoidCustom = customAlphabet("0123456789", 8);
     const code = nanoidCustom();
     const expiresAt = add(new Date(), { days: 7 });
 

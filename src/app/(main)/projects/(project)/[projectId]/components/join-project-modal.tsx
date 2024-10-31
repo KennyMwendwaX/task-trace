@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { LuChevronLeft } from "react-icons/lu";
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 import {
   Form,
   FormControl,
@@ -147,7 +147,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
                         <FormControl>
                           <InputOTP
                             maxLength={8}
-                            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                            pattern={REGEXP_ONLY_DIGITS}
                             {...field}>
                             <InputOTPGroup>
                               {[0, 1, 2, 3].map((index) => (

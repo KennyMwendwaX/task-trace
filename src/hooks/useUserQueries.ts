@@ -13,7 +13,7 @@ import { fetchUserProjects } from "@/lib/api/projects";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { fetchUserTasks } from "@/lib/api/tasks";
-import { UserMembershipRequest } from "@/lib/schema/UserMembershipRequest";
+import { UserMembershipRequest } from "@/lib/schema/MembershipRequests";
 import axios from "axios";
 
 interface SignupResponse {
