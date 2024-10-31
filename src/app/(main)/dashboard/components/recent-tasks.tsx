@@ -1,7 +1,7 @@
 "use client";
 
 import { UserTask } from "@/lib/schema/TaskSchema";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import Link from "next/link";
 import {
   Card,

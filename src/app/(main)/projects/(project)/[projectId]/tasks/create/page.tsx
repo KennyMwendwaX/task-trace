@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/popover";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import {
   LuCheck,
   LuChevronsUpDown,

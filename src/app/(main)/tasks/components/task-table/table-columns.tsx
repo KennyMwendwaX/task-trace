@@ -7,7 +7,7 @@ import { labels, priorities, statuses } from "@/lib/config";
 import { UserTask, userTaskSchema } from "@/lib/schema/TaskSchema";
 import TableColumnHeader from "./table-column-header";
 import TableRowActions from "./table-row-actions";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import Link from "next/link";
 
 export const TableColumns: ColumnDef<UserTask>[] = [

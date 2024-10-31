@@ -1,7 +1,7 @@
 "use client";
 
 import { ProjectTask } from "@/lib/schema/TaskSchema";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import Link from "next/link";
 import {
   Card,
@@ -45,15 +45,15 @@ export default function RecentTasks({ projectId, tasks }: Props) {
           <div className="flex justify-between items-center">
             <CardTitle className="text-xl font-bold">Recent Tasks</CardTitle>
             <Button asChild size="sm" className="ml-auto gap-1">
-            <Link href={`/projects/${projectId}/tasks`}>
-              View All
-              <LuArrowUpRight className="h-4 w-4" />
-            </Link>
-          </Button>
+              <Link href={`/projects/${projectId}/tasks`}>
+                View All
+                <LuArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
           <CardDescription>
-              Tasks recently added to the project.
-            </CardDescription>
+            Tasks recently added to the project.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {recentTasks.length > 0 ? (

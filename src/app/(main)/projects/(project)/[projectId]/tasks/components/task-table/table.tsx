@@ -27,7 +27,7 @@ import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { IoDownloadOutline } from "react-icons/io5";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import { CSVLink } from "react-csv";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";

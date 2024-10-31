@@ -27,7 +27,7 @@ import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
 import { UserTask } from "@/lib/schema/TaskSchema";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

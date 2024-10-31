@@ -9,7 +9,7 @@ import { labels, priorities, statuses } from "@/lib/config";
 import { ProjectTask, taskSchema } from "@/lib/schema/TaskSchema";
 import TableColumnHeader from "./table-column-header";
 import TableRowActions from "./table-row-actions";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import Link from "next/link";
 
 interface TableColumnsProps {
