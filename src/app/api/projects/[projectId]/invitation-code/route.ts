@@ -128,7 +128,7 @@ export const POST = auth(async (req) => {
       );
     }
 
-    const nanoidCustom = customAlphabet("23456789ABCDEFGHJKLMNPQRSTUVWXYZ", 8);
+    const nanoidCustom = customAlphabet("1234567890", 8);
     const code = nanoidCustom();
     const expiresAt = add(new Date(), { days: 7 });
 
