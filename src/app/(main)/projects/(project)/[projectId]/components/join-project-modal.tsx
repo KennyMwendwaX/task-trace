@@ -90,7 +90,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
 
   const { mutate: sendRequest, isPending: isSendingRequest } = useMutation({
     mutationFn: () =>
-      axios.post(`/api/projects/${projectId}/membership-request`),
+      axios.post(`/api/projects/${projectId}/membership-requests`),
     onSuccess: () => {
       toast.success("Membership request sent successfully.");
     },
