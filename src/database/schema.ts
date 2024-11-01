@@ -106,6 +106,7 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
     references: [users.id],
   }),
   members: many(members),
+  tasks: many(tasks),
   invitationCode: one(invitationCodes, {
     fields: [projects.id],
     references: [invitationCodes.projectId],
