@@ -90,7 +90,7 @@ export const useUserUserMembershipRequest = (
     queryKey: ["user-requests", userId],
     queryFn: async () => {
       const { data } = await axios.get<{ requests: UserMembershipRequest[] }>(
-        `/api/users/${userId}/tasks`
+        `/api/users/${userId}/membership-requests`
       );
       return data.requests
         .map((request) => ({
