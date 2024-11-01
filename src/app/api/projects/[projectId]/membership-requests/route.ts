@@ -37,7 +37,7 @@ export const GET = auth(async (req) => {
       },
     });
 
-    return NextResponse.json(requests, { status: 200 });
+    return NextResponse.json({ requests }, { status: 200 });
   } catch (error) {
     console.error("Error getting project membership requests:", error);
     return NextResponse.json(

@@ -36,6 +36,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
 import { useUserUserMembershipRequest } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
+import { HiOutlineClock } from "react-icons/hi";
+import { Clock, AlertCircle, Mail } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface JoinProjectProps {
   projectId: string;
@@ -53,12 +56,13 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const session = useSession();
+  const userId = session.data?.user?.id;
 
-  const { isLoading: isLoadingRequests } = useUserUserMembershipRequest(
-    session.data?.user?.id
-  );
+  const { isLoading: isLoadingRequests } = useUserUserMembershipRequest(userId);
 
   const { requests } = useUserStore();
+
+  console.log(requests);
 
   const hasPendingRequest = requests.some(
     (request) => request.projectId === projectId && request.status === "PENDING"
@@ -92,6 +96,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
     mutationFn: () =>
       axios.post(`/api/projects/${projectId}/membership-requests`),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-requests", userId] });
       toast.success("Membership request sent successfully.");
     },
     onError: (error) => {
@@ -199,14 +204,34 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
                   <AiOutlineLoading3Quarters className="h-6 w-6 animate-spin" />
                 </div>
               ) : hasPendingRequest ? (
-                <div className="text-center space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    You already have a pending request for this project. The
-                    project owner will review your request soon.
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    You'll be notified when your request is approved.
-                  </p>
+                <div className="bg-white p-6 rounded-lg border shadow-sm">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-blue-50 p-3 rounded-full">
+                      <Clock className="h-6 w-6 text-blue-500" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-medium text-gray-900">
+                        Request Pending
+                      </h3>
+                      <div className="mt-1 flex items-center space-x-2">
+                        <span className="flex h-2 w-2">
+                          <span className="animate-ping absolute h-2 w-2 rounded-full bg-blue-400 opacity-75"></span>
+                          <span className="relative rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        <p className="text-sm text-gray-500">
+                          Awaiting owner or admin review
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 border-t pt-4">
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Mail className="h-4 w-4 mr-2" />
+                      You'll receive a notification when your request is
+                      approved
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <>

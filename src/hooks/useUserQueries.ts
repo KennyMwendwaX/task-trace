@@ -92,13 +92,16 @@ export const useUserUserMembershipRequest = (
       const { data } = await axios.get<{ requests: UserMembershipRequest[] }>(
         `/api/users/${userId}/membership-requests`
       );
-      return data.requests
+
+      const processedRequests = data.requests
         .map((request) => ({
           ...request,
           createdAt: new Date(request.createdAt),
           updatedAt: request.updatedAt ? new Date(request.updatedAt) : null,
         }))
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      return processedRequests;
     },
     enabled: !!userId,
   });

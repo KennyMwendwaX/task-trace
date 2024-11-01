@@ -22,7 +22,7 @@ export const GET = auth(async (req) => {
       },
     });
 
-    return NextResponse.json(requests);
+    return NextResponse.json({ requests });
   } catch (error) {
     console.error("Error fetching user requests:", error);
     return NextResponse.json(
