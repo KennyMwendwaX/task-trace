@@ -24,7 +24,6 @@ export const GET = auth(async (req) => {
       return NextResponse.json({ message: "Access denied" }, { status: 403 });
     }
 
-    // Fetch all user's projects with related data in a single query
     const userProjects = await db.query.members.findMany({
       where: eq(members.userId, userId),
       with: {
@@ -49,15 +48,15 @@ export const GET = auth(async (req) => {
       );
     }
 
-    // Transform the data to match your desired response format
     const projects = userProjects.map(({ project, role }) => {
-      const totalTasksCount = project.tasks.length;
-      const completedTasksCount = project.tasks.filter(
+      const { tasks, ...projectWithoutTasks } = project;
+      const totalTasksCount = tasks.length;
+      const completedTasksCount = tasks.filter(
         (task) => task.status === "DONE"
       ).length;
 
       return {
-        ...project,
+        ...projectWithoutTasks,
         memberRole: role,
         totalTasksCount,
         completedTasksCount,
