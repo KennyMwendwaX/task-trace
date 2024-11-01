@@ -222,6 +222,7 @@ export default function CreateTaskPage({ params }: CreateTaskPageProps) {
                           mode="single"
                           selected={new Date(field.value)}
                           onSelect={field.onChange}
+                          initialFocus
                           disabled={(date) => date <= new Date()}
                         />
                       </PopoverContent>

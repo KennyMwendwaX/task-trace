@@ -236,6 +236,7 @@ export default function EditTaskPage({ params }: EditTaskPageProps) {
                           mode="single"
                           selected={new Date(field.value)}
                           onSelect={field.onChange}
+                          initialFocus
                           disabled={(date) => date <= new Date()}
                         />
                       </PopoverContent>

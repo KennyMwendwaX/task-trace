@@ -1,4 +1,4 @@
-import { UserMembershipRequest } from "@/lib/schema/UserMembershipRequest";
+import { UserMembershipRequest } from "@/lib/schema/MembershipRequests";
 import { UserProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { User } from "@/lib/schema/UserSchema";
