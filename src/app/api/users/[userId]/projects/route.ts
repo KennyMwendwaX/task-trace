@@ -29,6 +29,14 @@ export const GET = auth(async (req) => {
       with: {
         project: {
           with: {
+            owner: {
+              columns: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+              },
+            },
             tasks: true,
             members: {
               with: {
