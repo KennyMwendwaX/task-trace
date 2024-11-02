@@ -9,14 +9,45 @@ export const GET = auth(async (req) => {
   if (!req.auth)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
-    const projects = await db.query.projects.findMany();
+    const projectsResult = await db.query.projects.findMany({
+      with: {
+        tasks: true,
+        members: {
+          with: {
+            user: true,
+          },
+          limit: 3,
+        },
+      },
+    });
 
-    if (projects.length === 0) {
+    if (projectsResult.length === 0) {
       return NextResponse.json(
         { message: "No projects found" },
         { status: 404 }
       );
     }
+
+    const projects = projectsResult.map((project) => {
+      const { tasks, ...projectWithoutTasks } = project;
+      const totalTasksCount = tasks.length;
+      const completedTasksCount = tasks.filter(
+        (task) => task.status === "DONE"
+      ).length;
+
+      return {
+        ...projectWithoutTasks,
+        totalTasksCount,
+        completedTasksCount,
+        memberCount: project.members.length,
+        members: project.members.map(({ user }) => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        })),
+      };
+    });
 
     return NextResponse.json({ projects }, { status: 200 });
   } catch (error) {

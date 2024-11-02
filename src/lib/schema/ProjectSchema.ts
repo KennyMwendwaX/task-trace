@@ -24,12 +24,6 @@ export const projectSchema = z.object({
   isPublic: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
-  owner: z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string(),
-    image: z.string().nullable(),
-  }),
 });
 
 // Omitted schema for client-side form validation
@@ -39,7 +33,6 @@ export const projectFormSchema = projectSchema.omit({
   createdAt: true,
   updatedAt: true,
   ownerId: true,
-  owner: true,
 });
 
 export type Project = z.infer<typeof projectSchema>;
@@ -63,4 +56,10 @@ export interface Member {
 }
 export type ExtendedProject = Project & {
   member: Member | null;
+  owner: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+  };
 };
