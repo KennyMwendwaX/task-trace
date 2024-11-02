@@ -228,7 +228,7 @@ export default function JoinProjectModal({ projectId }: JoinProjectProps) {
                   <div className="mt-4 border-t pt-4">
                     <div className="flex items-center text-sm text-gray-500">
                       <Mail className="h-4 w-4 mr-2" />
-                      You'll receive a notification when your request is
+                      You&apos;ll receive a notification when your request is
                       approved
                     </div>
                   </div>
