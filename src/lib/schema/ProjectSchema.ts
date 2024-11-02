@@ -30,14 +30,6 @@ export const projectSchema = z.object({
     email: z.string(),
     image: z.string().nullable(),
   }),
-  members: z.array(
-    z.object({
-      id: z.string(),
-      name: z.string(),
-      email: z.string(),
-      image: z.string().nullable(),
-    })
-  ),
 });
 
 // Omitted schema for client-side form validation
@@ -57,6 +49,12 @@ export type UserProject = Project & {
   totalTasksCount: number;
   completedTasksCount: number;
   memberCount: number;
+  members: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+  }[];
 };
 
 export interface Member {

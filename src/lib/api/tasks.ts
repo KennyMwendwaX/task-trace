@@ -59,6 +59,7 @@ export const fetchProjectTasks = async (projectId: string) => {
     return data.tasks
       .map((task) => ({
         ...task,
+        dueDate: new Date(task.dueDate),
         createdAt: new Date(task.createdAt),
         updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
       }))

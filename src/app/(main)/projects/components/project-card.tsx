@@ -27,13 +27,6 @@ type Props = {
   project: UserProject;
 };
 
-const members = [
-  { name: "John Doe", avatar: "https://example.com/avatar1.jpg" },
-  { name: "Jane Smith", avatar: "https://example.com/avatar2.jpg" },
-  { name: "Bob Johnson", avatar: "https://example.com/avatar3.jpg" },
-  { name: "Alice Brown", avatar: "https://example.com/avatar4.jpg" },
-];
-
 export default function ProjectCard({ project }: Props) {
   const statusColor =
     project.status === "LIVE"
@@ -111,15 +104,18 @@ export default function ProjectCard({ project }: Props) {
         </div>
         <div className="mt-4 flex items-center justify-between">
           <div className="flex -space-x-2">
-            {members.slice(0, 3).map((member, index) => (
+            {project.members.slice(0, 3).map((member, index) => (
               <Avatar key={index} className="border-2 border-white w-8 h-8">
-                <AvatarImage src={member.avatar} alt={member.name} />
+                <AvatarImage
+                  src={member.image ? member.image : ""}
+                  alt={member.name}
+                />
                 <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
               </Avatar>
             ))}
-            {members.length > 3 && (
+            {project.members.length > 3 && (
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-xs font-medium text-gray-600 border-2 border-white">
-                +{members.length - 3}
+                +{project.members.length - 3}
               </div>
             )}
           </div>
