@@ -33,8 +33,11 @@ export default function ProjectCard({ project }: Props) {
       ? "border-green-600 text-green-600"
       : "border-blue-600 text-blue-600";
   const createdAt = format(project.createdAt, "MMM d, yyyy");
-  const progressPercentage =
-    (project.completedTasksCount / project.totalTasksCount) * 100;
+
+  const hasNoTasks = project.totalTasksCount === 0;
+  const progressPercentage = hasNoTasks
+    ? 0
+    : (project.completedTasksCount / project.totalTasksCount) * 100;
 
   return (
     <Card className="hover:shadow-lg transition-all duration-300">
@@ -84,23 +87,34 @@ export default function ProjectCard({ project }: Props) {
           <div className="flex justify-between items-center text-sm">
             <span className="font-medium text-gray-700">Progress</span>
             <span className="text-gray-600 font-medium">
-              {project.completedTasksCount}/{project.totalTasksCount} tasks
+              {hasNoTasks
+                ? "No tasks"
+                : `${project.completedTasksCount}/${project.totalTasksCount} tasks`}
             </span>
           </div>
-          <Progress
-            value={progressPercentage}
-            className="h-2"
-            aria-label={`${progressPercentage.toFixed(0)}% complete`}
-          />
-          <div className="flex items-center justify-between text-sm text-gray-600">
-            <div className="flex items-center">
-              <LuCalendar className="mr-2 h-4 w-4" />
-              Last updated 3 days ago
+          {!hasNoTasks && (
+            <>
+              <Progress
+                value={progressPercentage}
+                className="h-2"
+                aria-label={`${progressPercentage.toFixed(0)}% complete`}
+              />
+              <div className="flex items-center justify-between text-sm text-gray-600">
+                <div className="flex items-center">
+                  <LuCalendar className="mr-2 h-4 w-4" />
+                  Last updated 3 days ago
+                </div>
+                <span className="font-semibold text-blue-600">
+                  {progressPercentage.toFixed(0)}% Complete
+                </span>
+              </div>
+            </>
+          )}
+          {hasNoTasks && (
+            <div className="py-2 text-sm text-gray-500 text-center">
+              Create tasks to track progress
             </div>
-            <span className="font-semibold text-blue-600">
-              {progressPercentage.toFixed(0)}% Complete
-            </span>
-          </div>
+          )}
         </div>
         <div className="mt-4 flex items-center justify-between">
           <div className="flex -space-x-2">

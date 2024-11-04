@@ -50,6 +50,18 @@ export type UserProject = Project & {
   }[];
 };
 
+export type ExploreProject = Project & {
+  totalTasksCount: number;
+  completedTasksCount: number;
+  memberCount: number;
+  members: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+  }[];
+};
+
 export interface Member {
   id: string;
   role: string;
