@@ -1,11 +1,9 @@
 "use client";
 
 import {
-  useProjectMembersQuery,
   useProjectQuery,
   useProjectTasksQuery,
 } from "@/hooks/useProjectQueries";
-import { useUsersQuery } from "@/hooks/useUserQueries";
 import Loading from "./loading";
 import { useParams, usePathname } from "next/navigation";
 
@@ -21,16 +19,13 @@ export default function AnalyticsLayoutWrapper({
   const projectId = params.projectId;
 
   const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: usersIsLoading } = useUsersQuery();
-  const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
   const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
 
-  const isLoading =
-    projectIsLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
+  const isLoading = projectIsLoading || tasksIsLoading;
 
   if (isLoading && pathname === `/projects/${projectId}/analytics`) {
     return <Loading />;
   }
 
-  return <div>{children}</div>;
+  return <>{children}</>;
 }

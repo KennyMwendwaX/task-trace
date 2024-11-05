@@ -48,5 +48,5 @@ export default function ProjectLayoutWrapper({
     return <JoinProjectModal projectId={projectId} />;
   }
 
-  return <div>{children}</div>;
+  return <>{children}</>;
 }
