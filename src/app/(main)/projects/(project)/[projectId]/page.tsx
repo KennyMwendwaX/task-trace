@@ -36,13 +36,6 @@ export default function ProjectPage({
     return null;
   }
 
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
-  }
-
   return (
     <main className="flex flex-1 flex-col gap-2 p-4 lg:pt-4 lg:ml-[260px]">
       <div className="flex items-center gap-2">
