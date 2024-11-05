@@ -12,13 +12,11 @@ import ProjectNotFound from "../components/project-not-found";
 import JoinProjectModal from "../components/join-project-modal";
 import { useParams, usePathname } from "next/navigation";
 
-interface ProjectLayoutWrapperProps {
+interface LayoutWrapperProps {
   children: React.ReactNode;
 }
 
-export default function ProjectLayoutWrapper({
-  children,
-}: ProjectLayoutWrapperProps) {
+export default function ProjectLayoutWrapper({ children }: LayoutWrapperProps) {
   const params = useParams<{ projectId: string }>();
   const pathname = usePathname();
   const projectId = params.projectId;

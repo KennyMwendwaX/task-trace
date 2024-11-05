@@ -1,17 +1,10 @@
 "use client";
 
-import ProjectNotFound from "../components/project-not-found";
-import Loading from "./components/loading";
 import UpdateProjectDetails from "./components/update-project-details";
 import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
 import ProjectInvite from "./components/project-invite";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import {
-  useProjectInvitationCodeQuery,
-  useProjectQuery,
-} from "@/hooks/useProjectQueries";
-import JoinProjectModal from "../components/join-project-modal";
 
 export default function Settings({
   params,
@@ -20,25 +13,10 @@ export default function Settings({
 }) {
   const { projectId } = params;
 
-  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: invitationCodeIsLoading } =
-    useProjectInvitationCodeQuery(projectId);
-
   const { project, invitationCode } = useProjectStore();
 
-  if (projectIsLoading || invitationCodeIsLoading) {
-    return <Loading />;
-  }
-
   if (!project) {
-    return <ProjectNotFound />;
-  }
-
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
+    return null;
   }
 
   return (
