@@ -16,15 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { labels, priorities, statuses } from "@/lib/config";
 import Link from "next/link";
-import Loading from "./components/loading";
-import ProjectNotFound from "../../components/project-not-found";
-import TaskNotFound from "./components/task-not-found";
-import {
-  useProjectQuery,
-  useProjectTaskQuery,
-} from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import JoinProjectModal from "../../components/join-project-modal";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -114,9 +106,6 @@ export default function TaskPage({ params }: TaskPageProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: taskIsLoading } = useProjectTaskQuery(projectId, taskId);
-
   const { project, task } = useProjectStore();
 
   const { mutate: deleteTask } = useMutation({
@@ -135,23 +124,12 @@ export default function TaskPage({ params }: TaskPageProps) {
     onError: (error) => console.log(error),
   });
 
-  if (projectIsLoading || taskIsLoading) {
-    return <Loading />;
-  }
-
   if (!project) {
-    return <ProjectNotFound />;
+    return null;
   }
 
   if (!task) {
-    return <TaskNotFound projectId={projectId} />;
-  }
-
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
+    return null;
   }
 
   const label = labels.find((l) => l.value === task.label);

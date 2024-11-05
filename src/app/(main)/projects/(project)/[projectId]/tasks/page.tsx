@@ -3,39 +3,18 @@
 import TaskTable from "./components/task-table/table";
 import { TableColumns } from "./components/task-table/table-columns";
 import { TbPlaylistX } from "react-icons/tb";
-import Loading from "./components/loading";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import ProjectNotFound from "../components/project-not-found";
-import {
-  useProjectQuery,
-  useProjectTasksQuery,
-} from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import JoinProjectModal from "../components/join-project-modal";
 
 export default function Tasks({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
-  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
-
   const { project, tasks } = useProjectStore();
 
-  if (projectIsLoading || tasksIsLoading) {
-    return <Loading />;
-  }
-
   if (!project) {
-    return <ProjectNotFound />;
-  }
-
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
+    return null;
   }
 
   return (
