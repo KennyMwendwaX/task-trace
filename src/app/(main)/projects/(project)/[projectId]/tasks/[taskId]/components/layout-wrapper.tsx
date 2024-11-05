@@ -13,7 +13,7 @@ interface LayoutWrapperProps {
   children: React.ReactNode;
 }
 
-export default function ProjectLayoutWrapper({ children }: LayoutWrapperProps) {
+export default function TaskLayoutWrapper({ children }: LayoutWrapperProps) {
   const params = useParams<{ projectId: string; taskId: string }>();
   const pathname = usePathname();
   const projectId = params.projectId;
