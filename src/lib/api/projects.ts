@@ -1,13 +1,17 @@
 import axios from "axios";
-import { ExtendedProject, Project, UserProject } from "../schema/ProjectSchema";
+import {
+  DetailedProject,
+  PublicProject,
+  MemberProject,
+} from "../schema/ProjectSchema";
 import { InvitationCode } from "../schema/InvitationCodeSchema";
 
 export const fetchProject = async (
   projectId: string
-): Promise<ExtendedProject> => {
+): Promise<DetailedProject> => {
   if (!projectId) throw new Error("No project ID");
   try {
-    const { data } = await axios.get<{ project: ExtendedProject }>(
+    const { data } = await axios.get<{ project: DetailedProject }>(
       `/api/projects/${projectId}`
     );
     return {
@@ -28,10 +32,10 @@ export const fetchProject = async (
 
 export const fetchUserProjects = async (
   userId: string | undefined
-): Promise<UserProject[]> => {
+): Promise<MemberProject[]> => {
   if (!userId) throw new Error("User ID not found");
   try {
-    const { data } = await axios.get<{ projects: UserProject[] }>(
+    const { data } = await axios.get<{ projects: MemberProject[] }>(
       `/api/users/${userId}/projects`
     );
     return data.projects
@@ -50,9 +54,11 @@ export const fetchUserProjects = async (
   }
 };
 
-export const fetchProjects = async (): Promise<Project[]> => {
+export const fetchProjects = async (): Promise<PublicProject[]> => {
   try {
-    const { data } = await axios.get<{ projects: Project[] }>("/api/projects");
+    const { data } = await axios.get<{ projects: PublicProject[] }>(
+      "/api/projects"
+    );
     return data.projects
       .map((project) => ({
         ...project,

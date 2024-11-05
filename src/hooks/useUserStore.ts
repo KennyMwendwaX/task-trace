@@ -1,16 +1,16 @@
 import { UserMembershipRequest } from "@/lib/schema/MembershipRequests";
-import { UserProject } from "@/lib/schema/ProjectSchema";
+import { MemberProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { User } from "@/lib/schema/UserSchema";
 import { create } from "zustand";
 
 interface UserStore {
   users: User[];
-  projects: UserProject[];
+  projects: MemberProject[];
   tasks: UserTask[];
   requests: UserMembershipRequest[];
   setUsers: (users: User[]) => void;
-  setUserProjects: (projects: UserProject[]) => void;
+  setUserProjects: (projects: MemberProject[]) => void;
   setUserTasks: (tasks: UserTask[]) => void;
   setUserUserMembershipRequest: (requests: UserMembershipRequest[]) => void;
 }

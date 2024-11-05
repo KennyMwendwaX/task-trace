@@ -1,18 +1,18 @@
 import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 import { Member } from "@/lib/schema/MemberSchema";
-import { ExtendedProject, Project } from "@/lib/schema/ProjectSchema";
+import { DetailedProject, PublicProject } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { create } from "zustand";
 
 interface ProjectStore {
-  project: ExtendedProject | null;
-  projects: Project[];
+  project: DetailedProject | null;
+  projects: PublicProject[];
   members: Member[];
   task: ProjectTask | null;
   tasks: ProjectTask[];
   invitationCode: InvitationCode | null;
-  setProject: (project: ExtendedProject) => void;
-  setProjects: (projects: Project[]) => void;
+  setProject: (project: DetailedProject) => void;
+  setProjects: (projects: PublicProject[]) => void;
   setMembers: (members: Member[]) => void;
   setProjectTask: (task: ProjectTask) => void;
   setProjectTasks: (tasks: ProjectTask[]) => void;

@@ -37,7 +37,7 @@ export const projectFormSchema = projectSchema.omit({
 
 export type Project = z.infer<typeof projectSchema>;
 export type ProjectFormValues = z.infer<typeof projectFormSchema>;
-export type UserProject = Project & {
+export type MemberProject = Project & {
   memberRole: ProjectRole;
   totalTasksCount: number;
   completedTasksCount: number;
@@ -50,7 +50,7 @@ export type UserProject = Project & {
   }[];
 };
 
-export type ExploreProject = Project & {
+export type PublicProject = Project & {
   totalTasksCount: number;
   completedTasksCount: number;
   memberCount: number;
@@ -64,12 +64,12 @@ export type ExploreProject = Project & {
 
 export interface Member {
   id: string;
-  role: string;
+  role: ProjectRole;
 }
-export type ExtendedProject = Project & {
+
+export type DetailedProject = Project & {
   member: Member | null;
   owner: {
-    id: string;
     name: string;
     email: string;
     image: string | null;

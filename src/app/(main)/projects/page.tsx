@@ -11,7 +11,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useUserProjectsQuery } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
-import { UserProject } from "@/lib/schema/ProjectSchema";
+import { MemberProject } from "@/lib/schema/ProjectSchema";
 
 export default function Projects() {
   const session = useSession();
@@ -47,7 +47,7 @@ export default function Projects() {
   };
 
   const renderProjectSection = (
-    projects: UserProject[],
+    projects: MemberProject[],
     title: string,
     icon: React.ReactNode
   ) => {

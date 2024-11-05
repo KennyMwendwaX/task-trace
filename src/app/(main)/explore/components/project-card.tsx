@@ -20,11 +20,11 @@ import {
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ExploreProject } from "@/lib/schema/ProjectSchema";
+import { PublicProject } from "@/lib/schema/ProjectSchema";
 import { format } from "date-fns";
 
 type Props = {
-  project: ExploreProject;
+  project: PublicProject;
 };
 
 export default function ProjectCard({ project }: Props) {

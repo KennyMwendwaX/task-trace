@@ -7,8 +7,8 @@ import {
 } from "@tanstack/react-query";
 import { useProjectStore } from "./useProjectStore";
 import {
-  ExtendedProject,
-  Project,
+  DetailedProject,
+  PublicProject,
   ProjectFormValues,
 } from "@/lib/schema/ProjectSchema";
 import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
@@ -29,7 +29,7 @@ import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 
 export const useProjectQuery = (
   projectId: string
-): UseQueryResult<ExtendedProject, Error> => {
+): UseQueryResult<DetailedProject, Error> => {
   const setProject = useProjectStore((state) => state.setProject);
   const result = useQuery({
     queryKey: ["project", projectId],
@@ -46,7 +46,7 @@ export const useProjectQuery = (
   return result;
 };
 
-export const useProjectsQuery = (): UseQueryResult<Project[], Error> => {
+export const useProjectsQuery = (): UseQueryResult<PublicProject[], Error> => {
   const setProjects = useProjectStore((state) => state.setProjects);
   const result = useQuery({
     queryKey: ["projects"],

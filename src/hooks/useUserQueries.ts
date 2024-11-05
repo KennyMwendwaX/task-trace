@@ -10,7 +10,7 @@ import {
 import { fetchUsers } from "@/lib/api/users";
 import { useEffect } from "react";
 import { fetchUserProjects } from "@/lib/api/projects";
-import { UserProject } from "@/lib/schema/ProjectSchema";
+import { MemberProject } from "@/lib/schema/ProjectSchema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { fetchUserTasks } from "@/lib/api/tasks";
 import { UserMembershipRequest } from "@/lib/schema/MembershipRequests";
@@ -42,7 +42,7 @@ export const useUsersQuery = (): UseQueryResult<User[], Error> => {
 
 export const useUserProjectsQuery = (
   userId: string | undefined
-): UseQueryResult<UserProject[], Error> => {
+): UseQueryResult<MemberProject[], Error> => {
   const setUserProjects = useUserStore((state) => state.setUserProjects);
   const result = useQuery({
     queryKey: ["user-projects", userId],
