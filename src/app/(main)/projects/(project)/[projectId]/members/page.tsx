@@ -4,40 +4,17 @@ import MemberTable from "./components/member-table/table";
 import { TableColumns } from "./components/member-table/table-columns";
 import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/add-member-modal";
-import Loading from "./components/loading";
-import ProjectNotFound from "../components/project-not-found";
-import {
-  useProjectMembersQuery,
-  useProjectQuery,
-} from "@/hooks/useProjectQueries";
-import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
-import JoinProjectModal from "../components/join-project-modal";
 
 export default function Members({ params }: { params: { projectId: string } }) {
   const projectId = params.projectId;
 
-  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: usersIsLoading } = useUsersQuery();
-  const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
-
   const { project, members } = useProjectStore();
   const { users } = useUserStore();
 
-  if (projectIsLoading || membersIsLoading || usersIsLoading) {
-    return <Loading />;
-  }
-
   if (!project) {
-    return <ProjectNotFound />;
-  }
-
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
+    return null;
   }
 
   return (

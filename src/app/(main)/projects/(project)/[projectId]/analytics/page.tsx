@@ -2,15 +2,10 @@
 
 import MemberLeaderboard from "./components/member-leaderboard";
 import TaskStatusChart from "./components/task-status-chart";
-import Loading from "./components/loading";
 import { TbChartBar } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import {
-  useProjectQuery,
-  useProjectTasksQuery,
-} from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 
 export default function Analytics({
