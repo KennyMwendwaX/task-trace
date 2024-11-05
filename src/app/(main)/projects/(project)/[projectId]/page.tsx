@@ -29,23 +29,11 @@ export default function ProjectPage({
 }) {
   const projectId = params.projectId;
 
-  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: usersIsLoading } = useUsersQuery();
-  const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
-  const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
-
   const { project, members, tasks } = useProjectStore();
   const { users } = useUserStore();
 
-  const isLoading =
-    projectIsLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   if (!project) {
-    return <ProjectNotFound />;
+    return null;
   }
 
   const isPrivateProject = !project.isPublic;

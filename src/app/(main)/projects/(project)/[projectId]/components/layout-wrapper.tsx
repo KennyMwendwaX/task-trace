@@ -1,0 +1,51 @@
+"use client";
+
+import {
+  useProjectMembersQuery,
+  useProjectQuery,
+  useProjectTasksQuery,
+} from "@/hooks/useProjectQueries";
+import { useUsersQuery } from "@/hooks/useUserQueries";
+import { useProjectStore } from "@/hooks/useProjectStore";
+import Loading from "../components/loading";
+import ProjectNotFound from "../components/project-not-found";
+import JoinProjectModal from "../components/join-project-modal";
+import { useParams } from "next/navigation";
+
+interface ProjectLayoutWrapperProps {
+  children: React.ReactNode;
+}
+
+export default function ProjectLayoutWrapper({
+  children,
+}: ProjectLayoutWrapperProps) {
+  const params = useParams<{ projectId: string }>();
+  const projectId = params.projectId;
+
+  const { isLoading: projectIsLoading } = useProjectQuery(projectId);
+  const { isLoading: usersIsLoading } = useUsersQuery();
+  const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
+  const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
+
+  const { project } = useProjectStore();
+
+  const isLoading =
+    projectIsLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!project) {
+    return <ProjectNotFound />;
+  }
+
+  const isPrivateProject = !project.isPublic;
+  const isNotMember = !project.member;
+
+  if (isPrivateProject && isNotMember) {
+    return <JoinProjectModal projectId={projectId} />;
+  }
+
+  return <div>{children}</div>;
+}

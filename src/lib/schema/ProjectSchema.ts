@@ -26,7 +26,6 @@ export const projectSchema = z.object({
   updatedAt: z.date().nullable(),
 });
 
-// Omitted schema for client-side form validation
 export const projectFormSchema = projectSchema.omit({
   id: true,
   isPublic: true,
@@ -36,7 +35,9 @@ export const projectFormSchema = projectSchema.omit({
 });
 
 export type Project = z.infer<typeof projectSchema>;
+
 export type ProjectFormValues = z.infer<typeof projectFormSchema>;
+
 export type MemberProject = Project & {
   memberRole: ProjectRole;
   totalTasksCount: number;
