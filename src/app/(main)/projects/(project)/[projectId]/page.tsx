@@ -3,21 +3,12 @@
 import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
-import Loading from "./components/loading";
 import AddMemberModal from "@/components/add-member-modal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
-import ProjectNotFound from "./components/project-not-found";
-import {
-  useProjectMembersQuery,
-  useProjectQuery,
-  useProjectTasksQuery,
-} from "@/hooks/useProjectQueries";
-import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
-import JoinProjectModal from "./components/join-project-modal";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
