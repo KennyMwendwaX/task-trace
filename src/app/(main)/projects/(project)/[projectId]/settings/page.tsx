@@ -5,12 +5,12 @@ import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
 import ProjectInvite from "./components/project-invite";
 import { useProjectStore } from "@/hooks/useProjectStore";
+import { use } from "react";
 
-export default function Settings({
-  params,
-}: {
-  params: { projectId: string };
-}) {
+type Params = Promise<{ projectId: string }>;
+
+export default function Settings(props: { params: Params }) {
+  const params = use(props.params);
   const { projectId } = params;
 
   const { project, invitationCode } = useProjectStore();

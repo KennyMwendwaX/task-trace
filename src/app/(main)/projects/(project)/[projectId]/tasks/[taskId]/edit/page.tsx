@@ -53,16 +53,14 @@ import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Editor from "./components/editor";
 import JoinProjectModal from "../../../components/join-project-modal";
+import { use } from "react";
 
-interface EditTaskPageProps {
-  params: {
-    projectId: string;
-    taskId: string;
-  };
-}
+type Params = Promise<{ projectId: string; taskId: string }>;
 
-export default function EditTaskPage({ params }: EditTaskPageProps) {
+export default function EditTaskPage(props: { params: Params }) {
+  const params = use(props.params);
   const { projectId, taskId } = params;
+
   const router = useRouter();
 
   const { project, members, task } = useProjectStore();

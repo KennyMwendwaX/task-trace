@@ -51,14 +51,12 @@ import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Editor from "./components/editor";
 import JoinProjectModal from "../../components/join-project-modal";
+import { use } from "react";
 
-interface CreateTaskPageProps {
-  params: {
-    projectId: string;
-  };
-}
+type Params = Promise<{ projectId: string }>;
 
-export default function CreateTaskPage({ params }: CreateTaskPageProps) {
+export default function CreateTaskPage(props: { params: Params }) {
+  const params = use(props.params);
   const { projectId } = params;
 
   const form = useForm<TaskFormValues>({

@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { labels, priorities, statuses } from "@/lib/config";
 import Link from "next/link";
 import { useProjectStore } from "@/hooks/useProjectStore";
+import { use } from "react";
 
 const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
@@ -94,15 +95,12 @@ const TaskLabelBadge: React.FC<{ label: { value: string; label: string } }> = ({
   );
 };
 
-interface TaskPageProps {
-  params: {
-    projectId: string;
-    taskId: string;
-  };
-}
+type Params = Promise<{ projectId: string; taskId: string }>;
 
-export default function TaskPage({ params }: TaskPageProps) {
+export default function Task(props: { params: Params }) {
+  const params = use(props.params);
   const { projectId, taskId } = params;
+
   const router = useRouter();
   const queryClient = useQueryClient();
 

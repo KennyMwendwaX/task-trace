@@ -6,9 +6,13 @@ import { FiUserPlus } from "react-icons/fi";
 import AddMemberModal from "@/components/add-member-modal";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { use } from "react";
 
-export default function Members({ params }: { params: { projectId: string } }) {
-  const projectId = params.projectId;
+type Params = Promise<{ projectId: string }>;
+
+export default function Members(props: { params: Params }) {
+  const params = use(props.params);
+  const { projectId } = params;
 
   const { project, members } = useProjectStore();
   const { users } = useUserStore();

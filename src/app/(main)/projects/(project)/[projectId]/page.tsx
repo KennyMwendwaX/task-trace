@@ -12,13 +12,13 @@ import { useUserStore } from "@/hooks/useUserStore";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
+import { use } from "react";
 
-export default function ProjectPage({
-  params,
-}: {
-  params: { projectId: string };
-}) {
-  const projectId = params.projectId;
+type Params = Promise<{ projectId: string }>;
+
+export default function ProjectPage(props: { params: Params }) {
+  const params = use(props.params);
+  const { projectId } = params;
 
   const { project, members, tasks } = useProjectStore();
   const { users } = useUserStore();

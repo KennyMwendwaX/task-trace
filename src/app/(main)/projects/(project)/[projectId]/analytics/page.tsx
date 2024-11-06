@@ -7,13 +7,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useProjectStore } from "@/hooks/useProjectStore";
+import { use } from "react";
 
-export default function Analytics({
-  params,
-}: {
-  params: { projectId: string };
-}) {
-  const projectId = params.projectId;
+type Params = Promise<{ projectId: string }>;
+
+export default function Analytics(props: { params: Params }) {
+  const params = use(props.params);
+  const { projectId } = params;
 
   const { project, tasks } = useProjectStore();
 
