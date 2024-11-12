@@ -208,12 +208,7 @@ export default function Task(props: { params: Params }) {
         </div>
       </div>
       <Card className="mt-4 p-4 sm:p-6">
-        <MarkdownPreview
-          className="bg-gray-50 p-4 rounded-md"
-          source={task.description}
-          rehypePlugins={rehypePlugins}
-          wrapperElement={{ "data-color-mode": "light" }}
-        />
+        <div dangerouslySetInnerHTML={{ __html: task.description }} />
       </Card>
     </main>
   );
