@@ -1,13 +1,11 @@
-import { SignupValues, User } from "@/lib/schema/UserSchema";
+import { SignupValues } from "@/lib/schema/UserSchema";
 import { useUserStore } from "./useUserStore";
 import {
   useMutation,
   UseMutationResult,
   useQuery,
-  useQueryClient,
   UseQueryResult,
 } from "@tanstack/react-query";
-import { fetchUsers } from "@/lib/api/users";
 import { useEffect } from "react";
 import { fetchUserProjects } from "@/lib/api/projects";
 import { MemberProject } from "@/lib/schema/ProjectSchema";
@@ -23,22 +21,6 @@ interface SignupResponse {
 interface SignupError {
   message: string;
 }
-
-export const useUsersQuery = (): UseQueryResult<User[], Error> => {
-  const setUsers = useUserStore((state) => state.setUsers);
-  const result = useQuery({
-    queryKey: ["users"],
-    queryFn: () => fetchUsers(),
-  });
-
-  useEffect(() => {
-    if (result.data) {
-      setUsers(result.data);
-    }
-  }, [result.data, setUsers]);
-
-  return result;
-};
 
 export const useUserProjectsQuery = (
   userId: string | undefined

@@ -5,7 +5,6 @@ import {
   useProjectQuery,
   useProjectTasksQuery,
 } from "@/hooks/useProjectQueries";
-import { useUsersQuery } from "@/hooks/useUserQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import Loading from "../components/loading";
 import ProjectNotFound from "../components/project-not-found";
@@ -22,14 +21,12 @@ export default function ProjectLayoutWrapper({ children }: LayoutWrapperProps) {
   const projectId = params.projectId;
 
   const { isLoading: projectIsLoading } = useProjectQuery(projectId);
-  const { isLoading: usersIsLoading } = useUsersQuery();
   const { isLoading: membersIsLoading } = useProjectMembersQuery(projectId);
   const { isLoading: tasksIsLoading } = useProjectTasksQuery(projectId);
 
   const { project } = useProjectStore();
 
-  const isLoading =
-    projectIsLoading || usersIsLoading || membersIsLoading || tasksIsLoading;
+  const isLoading = projectIsLoading || membersIsLoading || tasksIsLoading;
 
   if (isLoading && pathname === `/projects/${projectId}`) {
     return <Loading />;
