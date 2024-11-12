@@ -3,10 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import MarkdownPreview from "@uiw/react-markdown-preview";
-import rehypeSanitize from "rehype-sanitize";
-import rehypeStringify from "rehype-stringify";
-import rehypeHighlight from "rehype-highlight";
 import { LuCalendar, LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { FiEdit, FiTrash } from "react-icons/fi";
@@ -18,8 +14,6 @@ import { labels, priorities, statuses } from "@/lib/config";
 import Link from "next/link";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { use } from "react";
-
-const rehypePlugins = [rehypeSanitize, rehypeStringify, rehypeHighlight];
 
 interface StatusConfig {
   bg: string;

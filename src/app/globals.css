@@ -78,20 +78,24 @@
 .tiptap h1 {
   font-size: 1.875rem !important;
   font-weight: 700 !important;
-  margin-top: 1rem !important;
   margin-bottom: 0.5rem !important;
 }
 
 .tiptap h2 {
   font-size: 1.5rem !important;
   font-weight: 700 !important;
-  margin-top: 0.75rem !important;
   margin-bottom: 0.5rem !important;
 }
 
 .tiptap h3 {
   font-size: 1.25rem !important;
   font-weight: 700 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.tiptap p {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
   margin-top: 0.5rem !important;
   margin-bottom: 0.25rem !important;
 }

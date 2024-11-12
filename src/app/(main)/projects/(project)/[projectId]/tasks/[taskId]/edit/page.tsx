@@ -103,7 +103,7 @@ export default function EditTaskPage(props: { params: Params }) {
       onSuccess: () => {
         form.reset();
         toast.success("Task updated successfully!");
-        router.push(`/projects/${projectId}/tasks`);
+        router.push(`/projects/${projectId}/tasks/${taskId}`);
       },
       onError: (error) => {
         toast.error("Failed to update task!");
@@ -324,7 +324,9 @@ export default function EditTaskPage(props: { params: Params }) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => router.push(`/projects/${projectId}/tasks`)}>
+                onClick={() =>
+                  router.push(`/projects/${projectId}/tasks/${taskId}`)
+                }>
                 Cancel
               </Button>
               <Button type="submit" disabled={isPending}>
