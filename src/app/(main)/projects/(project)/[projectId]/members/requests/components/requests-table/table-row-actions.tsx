@@ -4,21 +4,16 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  MembershipRequestStatus,
-  membershipRequestStatuses,
-} from "@/lib/config";
+import { MembershipRequestStatus } from "@/lib/config";
 import { projectMembershipRequest } from "@/lib/schema/MembershipRequests";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Row } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
 
 interface TableRowActions<TData> {
@@ -31,16 +26,43 @@ export default function TableRowActions<TData>({
   projectId,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const request = projectMembershipRequest.parse(row.original);
 
-  const {
-    mutate: updateStatus,
-    isPending: statusIsPending,
-    error: statusChangeError,
-  } = useMutation({
+  const { mutate: addMember } = useMutation({
+    mutationFn: async (userId: string) => {
+      const options = {
+        method: "POST",
+        body: JSON.stringify({ userId }),
+      };
+      const response = await fetch(
+        `/api/projects/${projectId}/members`,
+        options
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+    },
+    onSuccess: () => {
+      toast.success("Membership request successfully approved");
+      router.push(`/project/${projectId}/members`);
+      queryClient.invalidateQueries({
+        queryKey: ["members", projectId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["membership-requests", projectId],
+      });
+    },
+    onError: (error) => {
+      toast.error("Failed to approve membership request");
+      console.log(error);
+    },
+  });
+
+  const { mutate: rejectRequest } = useMutation({
     mutationFn: async (status: string) => {
       const options = {
-        method: "PATCH",
+        method: "PUT",
         body: JSON.stringify({ status }),
       };
       const response = await fetch(
@@ -49,23 +71,27 @@ export default function TableRowActions<TData>({
       );
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task status");
+        throw new Error(errorData.message || "Error updating request status");
       }
     },
     onSuccess: () => {
-      toast.success("Task status updated successfully");
+      toast.success("Membership request rejected");
       queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
+        queryKey: ["membership-requests", projectId],
       });
     },
     onError: (error) => {
-      toast.error("Failed to updated task status");
+      toast.error("Failed to reject membership request");
       console.log(error);
     },
   });
 
-  const handleStatusChange = async (status: MembershipRequestStatus) => {
-    updateStatus(status);
+  const handleAddMember = async (userId: string) => {
+    addMember(userId);
+  };
+
+  const handleRejectRequest = async (status: MembershipRequestStatus) => {
+    rejectRequest(status);
   };
 
   return (
@@ -80,21 +106,14 @@ export default function TableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={request.status}>
-                {membershipRequestStatuses.map((status) => (
-                  <DropdownMenuRadioItem
-                    onClick={() => handleStatusChange(status.value)}
-                    key={status.value}
-                    value={status.value}>
-                    {status.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
+          <DropdownMenuItem onClick={() => handleAddMember(request.user.id)}>
+            <AiOutlinePlus className="mr-2 w-4 h-4" />
+            Add User
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleRejectRequest("REJECTED")}>
+            <AiOutlinePlus className="mr-2 w-4 h-4" />
+            Cancel request
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
