@@ -38,6 +38,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -273,28 +274,30 @@ export default function EditTaskPage(props: { params: Params }) {
                         <Command>
                           <CommandInput placeholder="Search member" />
                           <CommandEmpty>No member found.</CommandEmpty>
-                          <CommandGroup>
-                            <ScrollArea className="h-[200px]">
-                              {members.map((member) => (
-                                <CommandItem
-                                  value={member.user.name}
-                                  key={member.id}
-                                  onSelect={() => {
-                                    form.setValue("memberId", member.id);
-                                  }}>
-                                  <LuCheck
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      member.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {member.user.name}
-                                </CommandItem>
-                              ))}
-                            </ScrollArea>
-                          </CommandGroup>
+                          <CommandList>
+                            <CommandGroup>
+                              <ScrollArea className="h-[200px]">
+                                {members.map((member) => (
+                                  <CommandItem
+                                    value={member.user.name}
+                                    key={member.id}
+                                    onSelect={() => {
+                                      form.setValue("memberId", member.id);
+                                    }}>
+                                    <LuCheck
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        member.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {member.user.name}
+                                  </CommandItem>
+                                ))}
+                              </ScrollArea>
+                            </CommandGroup>
+                          </CommandList>
                         </Command>
                       </PopoverContent>
                     </Popover>

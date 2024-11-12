@@ -25,7 +25,7 @@ export default function MembershipRequests(props: { params: Params }) {
     <>
       <main className="flex flex-1 flex-col p-4 lg:pt-4 lg:ml-[260px]">
         <div className="text-2xl font-bold tracking-tight">
-          {project.name} Members
+          {project.name} Membership Requests
         </div>
         {!requests || requests.length == 0 ? (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[560px]">
@@ -35,8 +35,7 @@ export default function MembershipRequests(props: { params: Params }) {
                 No membership requests in the project
               </h3>
               <p className="mb-4 mt-2 text-base text-muted-foreground">
-                There are no requests in the project. Add one below from the
-                membership requests.
+                There are no membership requests currently in the project.
               </p>
             </div>
           </div>
