@@ -5,6 +5,7 @@ import {
   MemberProject,
 } from "../schema/ProjectSchema";
 import { InvitationCode } from "../schema/InvitationCodeSchema";
+import { ProjectMembershipRequest } from "../schema/MembershipRequests";
 
 export const fetchProject = async (
   projectId: string
@@ -64,6 +65,29 @@ export const fetchProjects = async (): Promise<PublicProject[]> => {
         ...project,
         createdAt: new Date(project.createdAt),
         updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+      }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch projects: ${error.message}`);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+export const fetchRequests = async (
+  projectId: string
+): Promise<ProjectMembershipRequest[]> => {
+  try {
+    const { data } = await axios.get<{ requests: ProjectMembershipRequest[] }>(
+      `/api/projects/${projectId}/membership-requests`
+    );
+    return data.requests
+      .map((request) => ({
+        ...request,
+        createdAt: new Date(request.createdAt),
+        updatedAt: request.updatedAt ? new Date(request.updatedAt) : null,
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   } catch (error) {
