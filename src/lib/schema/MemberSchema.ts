@@ -11,6 +11,7 @@ export const memberSchema = z.object({
   user: z.object({
     name: z.string(),
     email: z.string(),
+    image: z.string().nullable(),
   }),
   tasks: z.array(userTaskSchema),
 });

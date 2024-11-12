@@ -47,7 +47,10 @@ export const TableColumns = ({
       return (
         <div className="flex items-center space-x-2">
           <Avatar className="h-9 w-9">
-            <AvatarImage alt="User 1" src="/placeholder-avatar.jpg" />
+            <AvatarImage
+              alt="user-image"
+              src={member.user.image ? member.user.image : ""}
+            />
             <AvatarFallback>{memberName[0]}</AvatarFallback>
           </Avatar>
           <span>{memberName}</span>

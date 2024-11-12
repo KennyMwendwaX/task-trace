@@ -18,7 +18,7 @@ interface ProjectStore {
   setMembers: (members: Member[]) => void;
   setProjectTask: (task: ProjectTask) => void;
   setProjectTasks: (tasks: ProjectTask[]) => void;
-  setRequests: (requests: ProjectMembershipRequest[]) => void;
+  setProjectRequests: (requests: ProjectMembershipRequest[]) => void;
   setInvitationCode: (invitationCode: InvitationCode) => void;
 }
 
@@ -35,6 +35,6 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   setMembers: (members) => set({ members }),
   setProjectTask: (task) => set({ task }),
   setProjectTasks: (tasks) => set({ tasks }),
-  setRequests: (requests) => set({ requests }),
+  setProjectRequests: (requests) => set({ requests }),
   setInvitationCode: (invitationCode) => set({ invitationCode }),
 }));

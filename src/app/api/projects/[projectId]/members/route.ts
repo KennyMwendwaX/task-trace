@@ -50,6 +50,7 @@ export const GET = auth(async (req) => {
           columns: {
             name: true,
             email: true,
+            image: true,
           },
         },
         tasks: true,
