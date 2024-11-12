@@ -15,7 +15,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { statuses, priorities, labels } from "@/lib/config";
+import {
+  statuses,
+  priorities,
+  labels,
+  Label,
+  Status,
+  Priority,
+} from "@/lib/config";
 import { taskSchema } from "@/lib/schema/TaskSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -158,15 +165,15 @@ export default function TableRowActions<TData>({
     },
   });
 
-  const handleLabelChange = async (label: string) => {
+  const handleLabelChange = async (label: Label) => {
     updateLabel(label);
   };
 
-  const handleStatusChange = async (status: string) => {
+  const handleStatusChange = async (status: Status) => {
     updateStatus(status);
   };
 
-  const handlePriorityChange = async (priority: string) => {
+  const handlePriorityChange = async (priority: Priority) => {
     updatePriority(priority);
   };
 

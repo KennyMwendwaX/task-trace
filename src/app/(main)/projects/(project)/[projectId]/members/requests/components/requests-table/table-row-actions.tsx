@@ -4,14 +4,22 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { memberSchema } from "@/lib/schema/MemberSchema";
-import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  MembershipRequestStatus,
+  membershipRequestStatuses,
+} from "@/lib/config";
+import { projectMembershipRequest } from "@/lib/schema/MembershipRequests";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Row } from "@tanstack/react-table";
+import { toast } from "sonner";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -23,35 +31,41 @@ export default function TableRowActions<TData>({
   projectId,
 }: TableRowActions<TData>) {
   const queryClient = useQueryClient();
-  const member = memberSchema.parse(row.original);
+  const request = projectMembershipRequest.parse(row.original);
 
   const {
-    mutate: removeUser,
-    isPending,
-    error,
+    mutate: updateStatus,
+    isPending: statusIsPending,
+    error: statusChangeError,
   } = useMutation({
-    mutationFn: async (memberId: string) => {
+    mutationFn: async (status: string) => {
       const options = {
-        method: "DELETE",
+        method: "PATCH",
+        body: JSON.stringify({ status }),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/members/${memberId}`,
+        `/api/projects/${projectId}/membership-requests/${request.id}`,
         options
       );
-      if (!response.ok) throw new Error("Something went wrong");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error updating task status");
+      }
     },
     onSuccess: () => {
+      toast.success("Task status updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["members"],
+        queryKey: ["project-tasks", projectId],
       });
     },
     onError: (error) => {
+      toast.error("Failed to updated task status");
       console.log(error);
     },
   });
 
-  const handleRemoveUser = (id: string) => {
-    removeUser(id);
+  const handleStatusChange = async (status: MembershipRequestStatus) => {
+    updateStatus(status);
   };
 
   return (
@@ -66,17 +80,21 @@ export default function TableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>Assign Task</DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <button
-              onClick={() => handleRemoveUser(member.id)}
-              className="flex items-center cursor-pointer">
-              <TrashIcon className="text-red-500 mr-1 w-4 h-4" />
-              Remove Member
-            </button>
-          </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Label</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={request.status}>
+                {membershipRequestStatuses.map((status) => (
+                  <DropdownMenuRadioItem
+                    onClick={() => handleStatusChange(status.value)}
+                    key={status.value}
+                    value={status.value}>
+                    {status.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
