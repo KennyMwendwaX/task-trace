@@ -13,7 +13,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
 
 interface TableRowActions<TData> {
@@ -111,7 +111,7 @@ export default function TableRowActions<TData>({
             Add User
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleRejectRequest("REJECTED")}>
-            <AiOutlinePlus className="mr-2 w-4 h-4" />
+            <AiOutlineClose className="mr-2 w-4 h-4" />
             Cancel request
           </DropdownMenuItem>
         </DropdownMenuContent>

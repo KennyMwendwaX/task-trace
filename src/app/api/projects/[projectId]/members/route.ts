@@ -83,16 +83,7 @@ export const POST = auth(async (req) => {
 
     const requestBody = await req.json();
 
-    const validation = memberFormSchema.safeParse(requestBody);
-
-    if (!validation.success) {
-      return NextResponse.json(
-        { message: "Invalid data", errors: validation.error.errors },
-        { status: 400 }
-      );
-    }
-
-    const { userId, role } = validation.data;
+    const { userId } = requestBody;
 
     const project = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
@@ -142,7 +133,7 @@ export const POST = auth(async (req) => {
     }
 
     await db.insert(members).values({
-      role,
+      role: "MEMBER",
       userId,
       projectId,
     });
