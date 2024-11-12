@@ -12,6 +12,7 @@ import TableColumnHeader from "./table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
+import { membershipRequestStatuses } from "@/lib/config";
 
 interface TableColumnsProps {
   projectId: string;
@@ -76,8 +77,29 @@ export const TableColumns = ({
     accessorKey: "status",
     header: () => <TableColumnHeader name="Request Status" />,
     cell: ({ row }) => {
-      const status = row.original.status;
-      return <div>{status}</div>;
+      const status = membershipRequestStatuses.find(
+        (status) => status.value === row.getValue("status")
+      );
+
+      if (!status) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {status.value === "APPROVED" ? (
+            <status.icon className="mr-2 h-5 w-5 text-green-600" />
+          ) : status.value === "PENDING" ? (
+            <status.icon className="mr-2 h-5 w-5 text-orange-600" />
+          ) : status.value === "REJECTED" ? (
+            <status.icon className="mr-2 h-5 w-5 text-red-600" />
+          ) : null}
+          <span>{status.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {

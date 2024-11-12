@@ -45,7 +45,7 @@ export default function TableRowActions<TData>({
     },
     onSuccess: () => {
       toast.success("Membership request successfully approved");
-      router.push(`/project/${projectId}/members`);
+      router.push(`/projects/${projectId}/members`);
       queryClient.invalidateQueries({
         queryKey: ["members", projectId],
       });
@@ -105,14 +105,14 @@ export default function TableRowActions<TData>({
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[180px]">
           <DropdownMenuItem onClick={() => handleAddMember(request.user.id)}>
-            <AiOutlinePlus className="mr-2 w-4 h-4" />
-            Add User
+            <AiOutlinePlus className="mr-2 w-4 h-4 text-blue-500 " />
+            Accept Request
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleRejectRequest("REJECTED")}>
-            <AiOutlineClose className="mr-2 w-4 h-4" />
-            Cancel request
+            <AiOutlineClose className="mr-2 w-4 h-4 text-red-500 " />
+            Cancel Request
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

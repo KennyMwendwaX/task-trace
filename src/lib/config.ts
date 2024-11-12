@@ -99,14 +99,17 @@ export const membershipRequestStatuses = [
   {
     label: "Pending",
     value: "PENDING",
+    icon: StopwatchIcon,
   },
   {
     label: "Approved",
     value: "APPROVED",
+    icon: CheckCircledIcon,
   },
   {
     label: "Rejected",
     value: "REJECTED",
+    icon: CrossCircledIcon,
   },
 ] as const;
 
