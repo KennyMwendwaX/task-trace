@@ -3,12 +3,10 @@
 import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
-import AddMemberModal from "@/components/add-member-modal";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import { useUserStore } from "@/hooks/useUserStore";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
@@ -21,7 +19,6 @@ export default function ProjectPage(props: { params: Params }) {
   const { projectId } = params;
 
   const { project, members, tasks } = useProjectStore();
-  const { users } = useUserStore();
 
   if (!project) {
     return null;
@@ -57,9 +54,13 @@ export default function ProjectPage(props: { params: Params }) {
               No members in the project
             </h3>
             <p className="mb-4 mt-2 text-base text-muted-foreground">
-              There are no members in the project. Add one below.
+              There are no members in the project. Add one below from the
+              membership requests.
             </p>
-            {users && <AddMemberModal projectId={projectId} users={users} />}
+            <Button className="flex items-center space-x-2 rounded-3xl">
+              <AiOutlinePlus className="w-4 h-4 text-white" />
+              <span>Add Member</span>
+            </Button>
           </div>
         </div>
       ) : !tasks || tasks.length == 0 ? (

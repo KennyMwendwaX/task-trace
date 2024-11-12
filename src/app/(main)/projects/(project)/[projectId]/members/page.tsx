@@ -3,10 +3,10 @@
 import MemberTable from "./components/member-table/table";
 import { TableColumns } from "./components/member-table/table-columns";
 import { FiUserPlus } from "react-icons/fi";
-import AddMemberModal from "@/components/add-member-modal";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import { useUserStore } from "@/hooks/useUserStore";
 import { use } from "react";
+import { Button } from "@/components/ui/button";
+import { AiOutlinePlus } from "react-icons/ai";
 
 type Params = Promise<{ projectId: string }>;
 
@@ -15,7 +15,6 @@ export default function Members(props: { params: Params }) {
   const { projectId } = params;
 
   const { project, members } = useProjectStore();
-  const { users } = useUserStore();
 
   if (!project) {
     return null;
@@ -31,14 +30,17 @@ export default function Members(props: { params: Params }) {
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[560px]">
             <div className="flex flex-col items-center gap-1 text-center">
               <FiUserPlus className="h-12 w-12 text-muted-foreground" />
-
               <h3 className="mt-4 text-xl font-semibold">
                 No members in the project
               </h3>
               <p className="mb-4 mt-2 text-base text-muted-foreground">
-                There are no members in the project. Add one below.
+                There are no members in the project. Add one below from the
+                membership requests.
               </p>
-              <AddMemberModal projectId={projectId} users={users} />
+              <Button className="flex items-center space-x-2 rounded-3xl">
+                <AiOutlinePlus className="w-4 h-4 text-white" />
+                <span>Add Member</span>
+              </Button>
             </div>
           </div>
         ) : (
@@ -48,7 +50,6 @@ export default function Members(props: { params: Params }) {
             </div>
             <MemberTable
               data={members}
-              users={users}
               projectId={projectId}
               columns={TableColumns({ projectId })}
             />

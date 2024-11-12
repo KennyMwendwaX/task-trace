@@ -26,26 +26,23 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
-// import AddMemberModal from "@/components/AddMemberModal";
-import { User } from "@/lib/schema/UserSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { CSVLink } from "react-csv";
-import AddMemberModal from "@/components/add-member-modal";
 import { Status } from "@/lib/config";
+import { Button } from "@/components/ui/button";
+import { AiOutlinePlus } from "react-icons/ai";
 
 interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   projectId: string;
-  users: User[];
 }
 
 export default function MemberTable<TData, TValue>({
   columns,
   data,
   projectId,
-  users,
 }: MemberTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -107,7 +104,10 @@ export default function MemberTable<TData, TValue>({
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
           <TableToolbar table={table} />
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
-            <AddMemberModal projectId={projectId} users={users} />
+            <Button className="flex items-center space-x-2 rounded-3xl">
+              <AiOutlinePlus className="w-4 h-4 text-white" />
+              <span>Add Member</span>
+            </Button>
             <CSVLink
               data={csvData}
               headers={headers}
