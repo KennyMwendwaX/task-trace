@@ -7,6 +7,7 @@ import { useProjectStore } from "@/hooks/useProjectStore";
 import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
+import Link from "next/link";
 
 type Params = Promise<{ projectId: string }>;
 
@@ -37,10 +38,12 @@ export default function Members(props: { params: Params }) {
                 There are no members in the project. Add one below from the
                 membership requests.
               </p>
-              <Button className="flex items-center space-x-2 rounded-3xl">
-                <AiOutlinePlus className="w-4 h-4 text-white" />
-                <span>Add Member</span>
-              </Button>
+              <Link href={`/projects/${projectId}/members/requests`}>
+                <Button className="flex items-center space-x-2 rounded-3xl">
+                  <AiOutlinePlus className="w-4 h-4 text-white" />
+                  <span>Add Member</span>
+                </Button>
+              </Link>
             </div>
           </div>
         ) : (

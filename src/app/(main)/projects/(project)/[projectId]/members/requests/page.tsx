@@ -1,3 +1,5 @@
+"use client";
+
 import { useProjectRequestsQuery } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { use } from "react";

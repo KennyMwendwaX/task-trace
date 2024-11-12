@@ -32,6 +32,7 @@ import { CSVLink } from "react-csv";
 import { Status } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
+import Link from "next/link";
 
 interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -104,10 +105,12 @@ export default function MemberTable<TData, TValue>({
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
           <TableToolbar table={table} />
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
-            <Button className="flex items-center space-x-2 rounded-3xl">
-              <AiOutlinePlus className="w-4 h-4 text-white" />
-              <span>Add Member</span>
-            </Button>
+            <Link href={`/projects/${projectId}/members/requests`}>
+              <Button className="flex items-center space-x-2 rounded-3xl">
+                <AiOutlinePlus className="w-4 h-4 text-white" />
+                <span>Add Member</span>
+              </Button>
+            </Link>
             <CSVLink
               data={csvData}
               headers={headers}

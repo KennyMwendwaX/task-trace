@@ -36,7 +36,7 @@ export default function TableRowActions<TData>({
         body: JSON.stringify({ userId }),
       };
       const response = await fetch(
-        `/api/projects/${projectId}/members`,
+        `/api/projects/${projectId}/membership-requests/${request.id}`,
         options
       );
       if (!response.ok) {
