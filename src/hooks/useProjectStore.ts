@@ -11,15 +11,15 @@ interface ProjectStore {
   members: Member[];
   task: ProjectTask | null;
   tasks: ProjectTask[];
-  invitationCode: InvitationCode | null;
   requests: ProjectMembershipRequest[];
+  invitationCode: InvitationCode | null;
   setProject: (project: DetailedProject) => void;
   setProjects: (projects: PublicProject[]) => void;
   setMembers: (members: Member[]) => void;
   setProjectTask: (task: ProjectTask) => void;
   setProjectTasks: (tasks: ProjectTask[]) => void;
-  setInvitationCode: (invitationCode: InvitationCode) => void;
   setRequests: (requests: ProjectMembershipRequest[]) => void;
+  setInvitationCode: (invitationCode: InvitationCode) => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -28,13 +28,13 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   members: [],
   task: null,
   tasks: [],
-  invitationCode: null,
   requests: [],
+  invitationCode: null,
   setProject: (project) => set({ project }),
   setProjects: (projects) => set({ projects }),
   setMembers: (members) => set({ members }),
   setProjectTask: (task) => set({ task }),
   setProjectTasks: (tasks) => set({ tasks }),
-  setInvitationCode: (invitationCode) => set({ invitationCode }),
   setRequests: (requests) => set({ requests }),
+  setInvitationCode: (invitationCode) => set({ invitationCode }),
 }));

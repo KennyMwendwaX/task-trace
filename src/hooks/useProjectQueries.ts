@@ -17,6 +17,7 @@ import {
   deleteProject,
   fetchProject,
   fetchProjects,
+  fetchRequests,
   generateInvitationCode,
   getInvitationCode,
   leaveProject,
@@ -26,6 +27,7 @@ import { fetchProjectMembers } from "@/lib/api/members";
 import { fetchProjectTasks, fetchTask } from "@/lib/api/tasks";
 import { useEffect } from "react";
 import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
+import { ProjectMembershipRequest } from "@/lib/schema/MembershipRequests";
 
 export const useProjectQuery = (
   projectId: string
@@ -208,6 +210,27 @@ export const useUpdateProjectTaskMutation = (
       console.log(error);
     },
   });
+};
+
+export const useProjectRequestsQuery = (
+  projectId: string
+): UseQueryResult<ProjectMembershipRequest[], Error> => {
+  const setProjectRequests = useProjectStore(
+    (state) => state.setProjectRequests
+  );
+  const result = useQuery({
+    queryKey: ["membership-requests", projectId],
+    queryFn: () => fetchRequests(projectId),
+    enabled: !!projectId,
+  });
+
+  useEffect(() => {
+    if (result.data) {
+      setProjectRequests(result.data);
+    }
+  }, [result.data, setProjectRequests]);
+
+  return result;
 };
 
 export const useProjectInvitationCodeQuery = (
