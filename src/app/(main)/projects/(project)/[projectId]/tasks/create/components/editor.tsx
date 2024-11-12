@@ -6,10 +6,9 @@ import { Level } from "@tiptap/extension-heading";
 
 interface EditorProps {
   onChange: (richtext: string) => void;
-  initialContent?: string;
 }
 
-export default function Editor({ onChange, initialContent = "" }: EditorProps) {
+export default function Editor({ onChange }: EditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -50,7 +49,6 @@ export default function Editor({ onChange, initialContent = "" }: EditorProps) {
         placeholder: "Start writing...",
       }),
     ],
-    content: initialContent,
     editorProps: {
       attributes: {
         class: "prose max-w-none focus:outline-none min-h-[200px]",
