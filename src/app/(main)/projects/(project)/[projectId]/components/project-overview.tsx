@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Project } from "@/lib/schema/ProjectSchema";
+import { DetailedProject } from "@/lib/schema/ProjectSchema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { LuUsers, LuCalendar, LuUser2, LuCheckSquare } from "react-icons/lu";
@@ -14,7 +14,7 @@ import { format } from "date-fns";
 import React from "react";
 
 type Props = {
-  project: Project;
+  project: DetailedProject;
   tasks: ProjectTask[];
   members: Member[];
 };
@@ -105,14 +105,13 @@ const ProjectOverview = React.memo(function ProjectOverview({
                 </p>
               </div>
             </div>
-            {updatedAt && (
-              <div className="flex items-center text-gray-600 bg-gray-100 rounded-full px-3 py-1.5">
-                <LuCalendar className="w-4 h-4 mr-2" />
-                <span className="text-sm font-semibold text-gray-800">
-                  Updated: 2024-07-06
-                </span>
-              </div>
-            )}
+
+            <div className="flex items-center text-gray-600 bg-gray-100 rounded-full px-3 py-1.5">
+              <LuCalendar className="w-4 h-4 mr-2" />
+              <span className="text-sm font-semibold text-gray-800">
+                Created: {createdAt}
+              </span>
+            </div>
           </div>
         </div>
 
