@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import ProjectNavbar from "./components/project-navbar";
-import Sidebar from "./components/sidebar";
+import LayoutWrapper from "./components/layout-wrapper";
 
 export const metadata: Metadata = {
   title: "Project",
@@ -12,11 +11,5 @@ export default function ProjectLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <ProjectNavbar />
-      <Sidebar />
-      {children}
-    </>
-  );
+  return <LayoutWrapper>{children}</LayoutWrapper>;
 }

@@ -14,6 +14,16 @@ import { labels, priorities, statuses } from "@/lib/config";
 import Link from "next/link";
 import { useProjectStore } from "@/hooks/useProjectStore";
 import { use } from "react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface StatusConfig {
   bg: string;
@@ -135,75 +145,106 @@ export default function Task(props: { params: Params }) {
   const taskDueDate = format(task.dueDate, "dd MMM, yyyy");
 
   return (
-    <main className="flex flex-1 flex-col gap-6 p-4 sm:p-6 lg:ml-[260px] max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-        <div>
-          <h1 className="text-xl sm:text-3xl font-bold mb-2">{task.name}</h1>
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
-            {label && <TaskLabelBadge label={label} />}
-            {status && <TaskStatusBadge status={status} />}
-            {priority && <TaskPriorityBadge priority={priority} />}
-          </div>
+    <>
+      <header className="flex h-16 shrink-0 items-center gap-2">
+        <div className="flex items-center gap-2 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href={`/projects/${projectId}`}>
+                  {project.name}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href={`/projects/${projectId}/tasks`}>
+                  Tasks
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{task.name}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         </div>
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Link href={`/projects/${projectId}/tasks/${taskId}/edit`}>
+      </header>
+      <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+          <div>
+            <h1 className="text-xl sm:text-3xl font-bold mb-2">{task.name}</h1>
+            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+              {label && <TaskLabelBadge label={label} />}
+              {status && <TaskStatusBadge status={status} />}
+              {priority && <TaskPriorityBadge priority={priority} />}
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Link href={`/projects/${projectId}/tasks/${taskId}/edit`}>
+              <Button
+                variant="outline"
+                className="flex items-center gap-1 w-full">
+                <FiEdit />
+                Edit Task
+              </Button>
+            </Link>
             <Button
-              variant="outline"
-              className="flex items-center gap-1 w-full">
-              <FiEdit />
-              Edit Task
+              variant="destructive"
+              className="flex items-center justify-center w-full sm:w-auto"
+              onClick={() => deleteTask()}>
+              <FiTrash className="mr-2" />
+              Delete Task
             </Button>
-          </Link>
-          <Button
-            variant="destructive"
-            className="flex items-center justify-center w-full sm:w-auto"
-            onClick={() => deleteTask()}>
-            <FiTrash className="mr-2" />
-            Delete Task
-          </Button>
-        </div>
-      </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-wrap gap-3 lg:flex-wrap-reverse">
-          <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-            <MdAccessTime className="w-4 h-4 text-gray-600 mr-2" />
-            <span className="text-sm font-semibold text-gray-800">
-              Created: {taskCreatedAt}
-            </span>
           </div>
-          {taskUpdatedAt && (
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap gap-3 lg:flex-wrap-reverse">
             <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-              <LuCalendar className="w-4 h-4 text-gray-600 mr-2" />
+              <MdAccessTime className="w-4 h-4 text-gray-600 mr-2" />
               <span className="text-sm font-semibold text-gray-800">
-                Updated: {taskUpdatedAt}
+                Created: {taskCreatedAt}
               </span>
             </div>
-          )}
-          <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-            <LuTimer className="w-4 h-4 text-gray-600 mr-2" />
-            <span className="text-sm font-semibold text-gray-800">
-              Due: {taskDueDate}
-            </span>
+            {taskUpdatedAt && (
+              <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
+                <LuCalendar className="w-4 h-4 text-gray-600 mr-2" />
+                <span className="text-sm font-semibold text-gray-800">
+                  Updated: {taskUpdatedAt}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
+              <LuTimer className="w-4 h-4 text-gray-600 mr-2" />
+              <span className="text-sm font-semibold text-gray-800">
+                Due: {taskDueDate}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
+            <Avatar className="w-10 h-10 bg-white">
+              <AvatarImage src={""} />
+              <AvatarFallback className="bg-white">
+                <LuUser2 className="w-5 h-5 text-gray-600" />
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-xs text-gray-500">Assigned to</p>
+              <p className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+                {task.member.user.name}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
-          <Avatar className="w-10 h-10 bg-white">
-            <AvatarImage src={""} />
-            <AvatarFallback className="bg-white">
-              <LuUser2 className="w-5 h-5 text-gray-600" />
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-xs text-gray-500">Assigned to</p>
-            <p className="text-sm font-semibold text-gray-800 whitespace-nowrap">
-              {task.member.user.name}
-            </p>
-          </div>
-        </div>
-      </div>
-      <Card className="mt-4 p-4 sm:p-6">
-        <div dangerouslySetInnerHTML={{ __html: task.description }} />
-      </Card>
-    </main>
+        <Card className="mt-4 p-4 sm:p-6">
+          <div dangerouslySetInnerHTML={{ __html: task.description }} />
+        </Card>
+      </main>
+    </>
   );
 }
