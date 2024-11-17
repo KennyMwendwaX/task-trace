@@ -54,6 +54,8 @@ export default function TaskChart({ tasks }: Props) {
     },
   } satisfies ChartConfig;
 
+  console.log(tasks);
+
   return (
     <>
       <Card>
@@ -61,18 +63,7 @@ export default function TaskChart({ tasks }: Props) {
           <CardTitle className="text-xl">Tasks Analytics Chart</CardTitle>
         </CardHeader>
         <CardContent className="pt-2 px-2">
-          {tasks.length === 0 ? (
-            <div className="mx-auto flex flex-col items-center justify-center text-center py-16">
-              <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
-
-              <h3 className="mt-4 text-xl font-semibold">
-                Tasks chart not available
-              </h3>
-              <p className="mb-4 mt-2 text-base text-muted-foreground">
-                There are no tasks in the project.
-              </p>
-            </div>
-          ) : (
+          {tasks.length > 0 ? (
             <ChartContainer
               config={chartConfig}
               className="min-h-[350px] w-full">
@@ -102,6 +93,17 @@ export default function TaskChart({ tasks }: Props) {
                 />
               </BarChart>
             </ChartContainer>
+          ) : (
+            <div className="mx-auto flex flex-col items-center justify-center text-center py-16">
+              <TbChartBarOff className="h-12 w-12 text-muted-foreground" />
+
+              <h3 className="mt-4 text-xl font-semibold">
+                Tasks chart not available
+              </h3>
+              <p className="mb-4 mt-2 text-base text-muted-foreground">
+                There are no tasks in the project.
+              </p>
+            </div>
           )}
         </CardContent>
       </Card>

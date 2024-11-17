@@ -61,15 +61,7 @@ export default function TaskChart({ tasks }: Props) {
           <CardTitle className="text-xl font-bold">Tasks Overview</CardTitle>
         </CardHeader>
         <CardContent className="pt-2 px-2">
-          {tasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
-              <TbChartBarOff className="h-8 w-8 mb-4" />
-              <h3 className="font-semibold text-center">
-                Tasks chart not available
-              </h3>
-              <p className="text-sm text-center">You do not have any tasks.</p>
-            </div>
-          ) : (
+          {tasks.length > 0 ? (
             <ChartContainer
               config={chartConfig}
               className="min-h-[350px] w-full">
@@ -99,6 +91,14 @@ export default function TaskChart({ tasks }: Props) {
                 />
               </BarChart>
             </ChartContainer>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
+              <TbChartBarOff className="h-8 w-8 mb-4" />
+              <h3 className="font-semibold text-center">
+                Tasks chart not available
+              </h3>
+              <p className="text-sm text-center">You do not have any tasks.</p>
+            </div>
           )}
         </CardContent>
       </Card>

@@ -50,13 +50,7 @@ export default function RecentTasks({ tasks }: Props) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {recentTasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
-              <TbPlaylistX className="h-8 w-8 mb-4" />
-              <h3 className="font-semibold text-center">No tasks found</h3>
-              <p className="text-sm text-center">You do not have any tasks.</p>
-            </div>
-          ) : (
+          {recentTasks.length > 0 ? (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -101,6 +95,12 @@ export default function RecentTasks({ tasks }: Props) {
                   })}
                 </TableBody>
               </Table>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
+              <TbPlaylistX className="h-8 w-8 mb-4" />
+              <h3 className="font-semibold text-center">No tasks found</h3>
+              <p className="text-sm text-center">You do not have any tasks.</p>
             </div>
           )}
         </CardContent>
