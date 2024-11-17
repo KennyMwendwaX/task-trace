@@ -10,20 +10,26 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 type Params = Promise<{ projectId: string }>;
 
 export default function MembershipRequests(props: { params: Params }) {
   const params = use(props.params);
   const { projectId } = params;
-
-  const { isLoading } = useProjectRequestsQuery(projectId);
 
   const { project, requests } = useProjectStore();
 
@@ -40,13 +46,26 @@ export default function MembershipRequests(props: { params: Params }) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/projects/${projectId}`}>
-                  {project.name}
-                </BreadcrumbLink>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex items-center gap-1">
+                    <BreadcrumbEllipsis className="h-4 w-4" />
+                    <span className="sr-only">Toggle menu</span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem>
+                      <Link href="/projects">Projects</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href={`/projects/${projectId}`}>
+                        {project.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>

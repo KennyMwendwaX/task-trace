@@ -43,6 +43,10 @@ export default function ProjectPage(props: { params: Params }) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />

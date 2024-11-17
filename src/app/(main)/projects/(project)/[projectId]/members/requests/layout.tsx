@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import RequestsLayoutWrapper from "./components/layout-wrapper";
 
 export const metadata: Metadata = {
   title: "Membership Requests",
@@ -6,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <RequestsLayoutWrapper>{children}</RequestsLayoutWrapper>;
 }

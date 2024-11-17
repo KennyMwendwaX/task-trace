@@ -1,3 +1,4 @@
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -11,6 +12,17 @@ import {
 export default function Loading() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex items-center gap-2">
+        <Skeleton className="h-8 w-8 rounded-md" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-16 hidden md:block" />
+          <div className="hidden md:block">
+            <Skeleton className="h-4 w-4" />
+          </div>
+          <Skeleton className="h-4 w-32" />
+        </div>
+      </div>
       <Skeleton className="h-8 w-3/4 max-w-[300px]" />
       <Skeleton className="h-6 w-1/2 max-w-[400px] mt-2" />
 
