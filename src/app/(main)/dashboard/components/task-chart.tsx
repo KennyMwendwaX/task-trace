@@ -30,17 +30,21 @@ const statusOrder = ["Done", "Todo", "In Progress", "Canceled"];
 
 export default function TaskChart({ tasks }: Props) {
   const statusChartData = useMemo(() => {
+    const initialCounts = statusOrder.reduce((acc, status) => {
+      acc[status] = 0;
+      return acc;
+    }, {} as Record<string, number>);
+
     const statusCounts = tasks.reduce((acc, task) => {
       const status = statusText[task.status];
       acc[status] = (acc[status] || 0) + 1;
       return acc;
-    }, {} as Record<string, number>);
-    return statusOrder
-      .filter((status) => statusCounts[status])
-      .map((status) => ({
-        status,
-        tasks: statusCounts[status],
-      }));
+    }, initialCounts);
+
+    return statusOrder.map((status) => ({
+      status,
+      tasks: statusCounts[status],
+    }));
   }, [tasks]);
 
   const chartConfig = {
@@ -53,6 +57,9 @@ export default function TaskChart({ tasks }: Props) {
       color: "hsl(var(--muted-foreground))",
     },
   } satisfies ChartConfig;
+
+  const maxTasks = Math.max(...statusChartData.map((item) => item.tasks));
+  const yAxisMax = Math.max(maxTasks, 4);
 
   return (
     <>
@@ -78,6 +85,8 @@ export default function TaskChart({ tasks }: Props) {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  domain={[0, yAxisMax]}
+                  allowDecimals={false}
                 />
                 <ChartTooltip
                   cursor={false}

@@ -36,22 +36,24 @@ export default function Navbar() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
-          <Link
-            href="/"
-            className="flex items-center gap-1 font-semibold whitespace-nowrap">
-            <Image src={Logo} width={32} height={28} alt="" />
-            <span className="text-lg tracking-tighter">TaskTrace</span>
-            <span className="sr-only">Logo</span>
+          <Link className="flex items-center gap-1" href="/dashboard">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <Image src={Logo} width={32} height={28} alt="" />
+            </div>
+            <div className="flex-1 text-left text-base leading-tight">
+              <span className="truncate font-semibold">TaskTrace</span>
+            </div>
           </Link>
           <SmSidebar />
         </SheetContent>
       </Sheet>
-      <Link
-        href="#"
-        className="flex items-center gap-1 font-semibold whitespace-nowrap">
-        <Image src={Logo} width={32} height={28} alt="" />
-        <span className="text-lg tracking-tighter">TaskTrace</span>
-        <span className="sr-only">Logo</span>
+      <Link className="flex items-center gap-1" href="/dashboard">
+        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+          <Image src={Logo} width={32} height={28} alt="" />
+        </div>
+        <div className="flex-1 text-left text-base leading-tight">
+          <span className="truncate font-semibold">TaskTrace</span>
+        </div>
       </Link>
       <nav className="hidden flex-1 justify-center flex-col gap-6 text-base font-medium lg:flex lg:flex-row lg:items-center lg:gap-6">
         <Link
