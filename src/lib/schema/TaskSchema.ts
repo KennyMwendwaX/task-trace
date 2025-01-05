@@ -29,10 +29,12 @@ export const taskSchema = z.object({
     required_error: "Project id is required",
     invalid_type_error: "Project id must be a string",
   }),
-  memberId: z.string({
-    required_error: "Member is required",
-    invalid_type_error: "Member must be a string",
-  }),
+  memberId: z
+    .string({
+      required_error: "Member is required",
+      invalid_type_error: "Member must be a string",
+    })
+    .nullable(),
   description: z
     .string()
     .min(1, { message: "Task description must be at least 1 character long" })
