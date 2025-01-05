@@ -9,7 +9,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FaUser } from "react-icons/fa6";
@@ -19,13 +19,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupValues, signupSchema } from "@/lib/schema/UserSchema";
 import { useRouter } from "next/navigation";
 import Logo from "@/app/logo.png";
-import { useUserSignupMutation } from "@/hooks/useUserQueries";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { signUp } from "./actions";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -33,26 +34,31 @@ export default function Signup() {
   if (session && status === "authenticated") {
     router.push("/");
   }
+
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
   });
 
   const errors = form.formState.errors;
 
-  const { mutate: signup, isPending, error } = useUserSignupMutation();
+  async function onSubmit(values: SignupValues) {
+    startTransition(async () => {
+      try {
+        const result = await signUp(values);
 
-  const onSubmit = async (values: SignupValues) => {
-    signup(values, {
-      onSuccess: () => {
-        form.reset();
-        toast.success("User registered successfully!");
-        router.push("/signin");
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
+        if (result.error) {
+          toast.error(result.error);
+        } else {
+          form.reset();
+          toast.success(result.message);
+          router.push("/signin");
+        }
+      } catch (error) {
+        console.error("Sign-up error:", error);
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     });
-  };
+  }
 
   return (
     <div className="mx-auto flex flex-col bg-gray-100 items-center justify-center px-6 py-8 md:h-screen lg:py-0">
@@ -226,8 +232,8 @@ export default function Signup() {
                   </span>
                 )}
               </div>
-              <Button className="w-full" type="submit">
-                Sign Up
+              <Button className="w-full" type="submit" disabled={isPending}>
+                {isPending ? "Signing up..." : "Sign Up"}
               </Button>
               <div className="text-sm font-light text-black">
                 Have an account?
