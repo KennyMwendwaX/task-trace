@@ -9,9 +9,9 @@ import SearchResults from "./search-results";
 
 interface ProjectsContentProps {
   userId?: string;
-  searchParams?: {
+  searchParams?: Promise<{
     search?: string;
-  };
+  }>;
 }
 
 export default async function ProjectsContent({
@@ -26,7 +26,8 @@ export default async function ProjectsContent({
 
   const projects = result.data ?? [];
 
-  const searchQuery = searchParams?.search ?? null;
+  const params = searchParams ? await searchParams : {};
+  const searchQuery = params.search ?? null;
 
   const ownedProjects = projects.filter(
     (project) => project.memberRole === "OWNER"

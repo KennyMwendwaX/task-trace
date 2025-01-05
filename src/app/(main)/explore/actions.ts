@@ -2,10 +2,8 @@
 
 import { auth } from "@/auth";
 import db from "@/database/db";
-import { members } from "@/database/schema";
-import { eq } from "drizzle-orm";
 
-export const getUserProjects = async (userId?: string) => {
+export const getProjects = async (userId?: string) => {
   try {
     const session = await auth();
 
@@ -21,38 +19,33 @@ export const getUserProjects = async (userId?: string) => {
       };
     }
 
-    const userProjects = await db.query.members.findMany({
-      where: eq(members.userId, userId),
+    const projectsResult = await db.query.projects.findMany({
       with: {
-        project: {
+        tasks: true,
+        members: {
           with: {
-            tasks: true,
-            members: {
-              with: {
-                user: true,
-              },
-              limit: 3,
-            },
+            user: true,
           },
+          limit: 3,
         },
       },
     });
 
-    if (!userProjects || userProjects.length === 0) {
+    if (!projectsResult || projectsResult.length === 0) {
       return {
         data: [],
       };
     }
 
-    const projects = userProjects.map(({ project, role }) => {
+    const projects = projectsResult.map((project) => {
       const { tasks, ...projectWithoutTasks } = project;
       const totalTasksCount = tasks.length;
       const completedTasksCount = tasks.filter(
         (task) => task.status === "DONE"
       ).length;
+
       return {
         ...projectWithoutTasks,
-        memberRole: role,
         totalTasksCount,
         completedTasksCount,
         memberCount: project.members.length,
@@ -69,7 +62,7 @@ export const getUserProjects = async (userId?: string) => {
       data: projects,
     };
   } catch (error) {
-    console.error("Error fetching user projects:", error);
+    console.error("Error fetching projects:", error);
     return {
       error: "Failed to fetch projects",
     };
