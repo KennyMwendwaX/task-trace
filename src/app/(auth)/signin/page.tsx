@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { credentialsLogin, providerLogin } from "@/actions/auth/login";
+import { credentialsLogin, providerLogin } from "./actions";
 import { toast } from "sonner";
 import Logo from "@/app/logo.png";
 
@@ -44,9 +44,9 @@ export default function Signin() {
   async function onSubmit(values: SigninValues) {
     startTransition(async () => {
       try {
-        const data = await credentialsLogin(values);
-        if (data?.error) {
-          toast.error(data.error);
+        const result = await credentialsLogin(values);
+        if (result?.error) {
+          toast.error(result.error);
         } else {
           toast.success("Sign in successful!");
         }
@@ -60,9 +60,9 @@ export default function Signin() {
   async function providerSignin(provider: "google" | "github") {
     startTransition(async () => {
       try {
-        const data = await providerLogin(provider);
-        if (data?.error) {
-          toast.error(data.error);
+        const result = await providerLogin(provider);
+        if (result?.error) {
+          toast.error(result.error);
         } else {
           toast.success("Sign in successful!");
         }
