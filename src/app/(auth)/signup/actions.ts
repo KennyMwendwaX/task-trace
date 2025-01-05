@@ -12,7 +12,6 @@ export const signUp = async (values: SignupValues) => {
   if (!validation.success) {
     return {
       error: "Invalid request data",
-      status: 400,
     };
   }
 
@@ -26,7 +25,6 @@ export const signUp = async (values: SignupValues) => {
     if (userExists) {
       return {
         error: "Email already registered",
-        status: 409,
       };
     }
 
@@ -41,19 +39,16 @@ export const signUp = async (values: SignupValues) => {
     if (!user) {
       return {
         error: "Failed to register user",
-        status: 500,
       };
     }
 
     return {
       message: "User registered successfully",
-      status: 201,
     };
   } catch (error) {
     console.error(error);
     return {
       error: "Server error, try again later",
-      status: 500,
     };
   }
 };
