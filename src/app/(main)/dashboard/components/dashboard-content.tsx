@@ -13,13 +13,13 @@ export default async function DashboardContent({
   userId,
   userName,
 }: DashboardContentProps) {
-  const response = await getUserTasks(userId);
+  const result = await getUserTasks(userId);
 
-  if (response.error) {
-    throw new Error(response.error);
+  if (result.error) {
+    throw new Error(result.error);
   }
 
-  const tasks = response.data ?? [];
+  const tasks = result.data ?? [];
 
   return (
     <>
