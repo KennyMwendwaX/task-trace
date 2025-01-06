@@ -1,5 +1,5 @@
 import { PublicProject } from "@/lib/schema/ProjectSchema";
-import { ExploreFilters } from "./explore-filters";
+import ExploreFilters from "./explore-filters";
 import ProjectCard from "./project-card";
 import { LuFolders } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
@@ -11,7 +11,7 @@ interface ExploreContentProps {
   initialSort: string;
 }
 
-export function ExploreContent({
+export default function ExploreContent({
   projects,
   initialSearch,
   initialFilter,

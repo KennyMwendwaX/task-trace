@@ -15,7 +15,10 @@ interface SortDropdownProps {
   onSortChange: (value: string) => void;
 }
 
-export function SortDropdown({ currentSort, onSortChange }: SortDropdownProps) {
+export default function SortDropdown({
+  currentSort,
+  onSortChange,
+}: SortDropdownProps) {
   const getSortIcon = (sortValue: string) => {
     switch (sortValue) {
       case "date_desc":

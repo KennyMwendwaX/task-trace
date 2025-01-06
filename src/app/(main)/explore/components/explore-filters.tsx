@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { LuSearch } from "react-icons/lu";
 import { useCallback } from "react";
 import FilterDropdown from "./filter-dropdown";
-import { SortDropdown } from "./sort-dropdown";
+import SortDropdown from "./sort-dropdown";
 
 interface ExploreFiltersProps {
   initialSearch: string;
@@ -13,7 +13,7 @@ interface ExploreFiltersProps {
   initialSort: string;
 }
 
-export function ExploreFilters({
+export default function ExploreFilters({
   initialSearch,
   initialFilter,
   initialSort,

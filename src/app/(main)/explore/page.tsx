@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ExploreContent } from "./components/explore-content";
+import ExploreContent from "./components/explore-content";
 import Loading from "./loading";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";

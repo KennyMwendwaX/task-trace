@@ -8,21 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const skeletonWidths = {
-  header: [180, 130, 130, 130],
-  row: [180, 130, 130, 130, 40],
-};
-
 export default function Loading() {
-  const renderSkeletonCells = (widths: number[]) =>
-    widths.map((width, index) => (
-      <TableCell
-        key={index}
-        className={index === widths.length - 1 ? "text-right" : ""}>
-        <Skeleton className={`h-8 w-[${width}px]`} />
-      </TableCell>
-    ));
-
   return (
     <>
       <Skeleton className="h-8 w-[130px]" />
@@ -40,7 +26,7 @@ export default function Loading() {
               </TableHead>
               <TableHead>
                 <Skeleton className="h-4 w-20" />
-              </TableHead>{" "}
+              </TableHead>
               <TableHead>
                 <Skeleton className="h-4 w-20" />
               </TableHead>
