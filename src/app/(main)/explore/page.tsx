@@ -1,16 +1,14 @@
-import { Suspense } from "react";
 import ExploreContent from "./components/explore-content";
-import Loading from "./loading";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getProjects } from "./actions";
 
 interface PageProps {
-  searchParams?: Promise<{
+  searchParams?: {
     search?: string;
     filter?: string;
     sort?: string;
-  }>;
+  };
 }
 
 export default async function ExplorePage({ searchParams }: PageProps) {
@@ -61,13 +59,11 @@ export default async function ExplorePage({ searchParams }: PageProps) {
     });
 
   return (
-    <Suspense fallback={<Loading />}>
-      <ExploreContent
-        projects={filteredProjects}
-        initialSearch={search}
-        initialFilter={filter}
-        initialSort={sort}
-      />
-    </Suspense>
+    <ExploreContent
+      projects={filteredProjects}
+      initialSearch={search}
+      initialFilter={filter}
+      initialSort={sort}
+    />
   );
 }
