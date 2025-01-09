@@ -9,9 +9,9 @@ import SearchResults from "./search-results";
 
 interface ProjectsContentProps {
   userId?: string;
-  searchParams?: Promise<{
+  searchParams?: {
     search?: string;
-  }>;
+  };
 }
 
 export default async function ProjectsContent({

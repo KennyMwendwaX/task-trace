@@ -1,13 +1,15 @@
 import { redirect } from "next/navigation";
 import ProjectsContent from "./components/projects-content";
-import { Suspense } from "react";
-import Loading from "./loading";
 import { auth } from "@/auth";
+
+interface SearchParams {
+  search?: string;
+}
 
 export default async function ProjectsPage({
   searchParams,
 }: {
-  searchParams?: { search?: string };
+  searchParams?: SearchParams;
 }) {
   const session = await auth();
 
@@ -16,8 +18,6 @@ export default async function ProjectsPage({
   }
 
   return (
-    <Suspense fallback={<Loading />}>
-      <ProjectsContent userId={session.user.id} searchParams={searchParams} />
-    </Suspense>
+    <ProjectsContent userId={session.user.id} searchParams={searchParams} />
   );
 }
