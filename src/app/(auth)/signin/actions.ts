@@ -13,7 +13,7 @@ export const credentialsLogin = async (values: SigninValues) => {
     await signIn("credentials", {
       email: email,
       password: password,
-      redirectTo: DEFAULT_ROUTE_REDIRECT, // Do not redirect, so we can handle the result ourselves
+      redirectTo: DEFAULT_ROUTE_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {

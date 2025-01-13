@@ -1,12 +1,9 @@
-"use client";
-
 import MemberLeaderboard from "./components/member-leaderboard";
 import TaskStatusChart from "./components/task-status-chart";
 import { TbChartBar } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useProjectStore } from "@/hooks/useProjectStore";
 import { use } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -18,17 +15,37 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getProject, getProjectTasks } from "../actions";
+import { auth } from "@/auth";
+import { notFound, redirect } from "next/navigation";
 
 type Params = Promise<{ projectId: string }>;
 
-export default function Analytics(props: { params: Params }) {
+export default async function Analytics(props: { params: Params }) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
   const params = use(props.params);
   const { projectId } = params;
 
-  const { project, tasks } = useProjectStore();
+  const projectResult = await getProject(projectId, session.user.id);
+  const tasksResult = await getProjectTasks(projectId, session.user.id);
+
+  if (projectResult.error) {
+    throw new Error(projectResult.error);
+  }
+
+  if (tasksResult.error) {
+    throw new Error(tasksResult.error);
+  }
+
+  const project = projectResult.data;
+  const tasks = tasksResult.data ?? [];
 
   if (!project) {
-    return null;
+    notFound();
   }
 
   return (

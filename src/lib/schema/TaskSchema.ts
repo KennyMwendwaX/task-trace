@@ -44,13 +44,15 @@ export const taskSchema = z.object({
     .trim(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
-  member: z.object({
-    user: z.object({
-      name: z.string(),
-      email: z.string(),
-    }),
-    role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
-  }),
+  member: z
+    .object({
+      user: z.object({
+        name: z.string(),
+        email: z.string(),
+      }),
+      role: z.enum(["OWNER", "ADMIN", "MEMBER"]),
+    })
+    .nullable(),
 });
 
 export const userTaskSchema = taskSchema.omit({
