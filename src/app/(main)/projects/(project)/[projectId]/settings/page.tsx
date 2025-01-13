@@ -4,8 +4,6 @@ import UpdateProjectDetails from "./components/update-project-details";
 import ProjectVisibility from "./components/project-visibilty";
 import DangerZone from "./components/danger-zone";
 import ProjectInvite from "./components/project-invite";
-import { useProjectStore } from "@/hooks/useProjectStore";
-import { use } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -16,19 +14,44 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { auth } from "@/auth";
+import { notFound, redirect } from "next/navigation";
+import { getProject, getProjectInvitationCode } from "../actions";
 
-type Params = Promise<{ projectId: string }>;
+type Props = {
+  params: {
+    projectId: string;
+  };
+};
 
-export default function Settings(props: { params: Params }) {
-  const params = use(props.params);
+export default async function Settings({ params }: Props) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
   const { projectId } = params;
 
-  const { project, invitationCode } = useProjectStore();
+  const projectResult = await getProject(projectId, session.user.id);
+  const invitationCodeResult = await getProjectInvitationCode(
+    projectId,
+    session.user.id
+  );
 
-  if (!project) {
-    return null;
+  if (projectResult.error) {
+    throw new Error(projectResult.error);
   }
 
+  if (invitationCodeResult.error) {
+    throw new Error(invitationCodeResult.error);
+  }
+
+  const project = projectResult.data;
+  const invitationCode = invitationCodeResult.data;
+
+  if (!project) {
+    notFound();
+  }
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">

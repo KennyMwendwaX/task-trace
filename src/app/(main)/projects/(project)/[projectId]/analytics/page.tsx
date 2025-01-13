@@ -4,7 +4,6 @@ import { TbChartBar } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { use } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -19,15 +18,18 @@ import { getProject, getProjectTasks } from "../actions";
 import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
 
-type Params = Promise<{ projectId: string }>;
+type Props = {
+  params: {
+    projectId: string;
+  };
+};
 
-export default async function Analytics(props: { params: Params }) {
+export default async function Analytics({ params }: Props) {
   const session = await auth();
 
   if (!session?.user) {
     redirect("/signin");
   }
-  const params = use(props.params);
   const { projectId } = params;
 
   const projectResult = await getProject(projectId, session.user.id);

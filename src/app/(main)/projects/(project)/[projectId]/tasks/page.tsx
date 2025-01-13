@@ -1,13 +1,9 @@
-"use client";
-
 import TaskTable from "./components/task-table/table";
 import { TableColumns } from "./components/task-table/table-columns";
 import { TbPlaylistX } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useProjectStore } from "@/hooks/useProjectStore";
-import { use } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -18,19 +14,41 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { auth } from "@/auth";
+import { notFound, redirect } from "next/navigation";
+import { getProject, getProjectTasks } from "../actions";
 
-type Params = Promise<{ projectId: string }>;
+type Props = {
+  params: {
+    projectId: string;
+  };
+};
 
-export default function Tasks(props: { params: Params }) {
-  const params = use(props.params);
+export default async function Tasks({ params }: Props) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
   const { projectId } = params;
 
-  const { project, tasks } = useProjectStore();
+  const projectResult = await getProject(projectId, session.user.id);
+  const tasksResult = await getProjectTasks(projectId, session.user.id);
 
-  if (!project) {
-    return null;
+  if (projectResult.error) {
+    throw new Error(projectResult.error);
   }
 
+  if (tasksResult.error) {
+    throw new Error(tasksResult.error);
+  }
+
+  const project = projectResult.data;
+  const tasks = tasksResult.data ?? [];
+
+  if (!project) {
+    notFound();
+  }
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">

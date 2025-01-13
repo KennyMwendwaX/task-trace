@@ -1,7 +1,6 @@
 import MemberTable from "./components/member-table/table";
 import { TableColumns } from "./components/member-table/table-columns";
 import { FiUserPlus } from "react-icons/fi";
-import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
@@ -19,15 +18,18 @@ import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
 import { getProject, getProjectMembers } from "../actions";
 
-type Params = Promise<{ projectId: string }>;
+type Props = {
+  params: {
+    projectId: string;
+  };
+};
 
-export default async function Members(props: { params: Params }) {
+export default async function Members({ params }: Props) {
   const session = await auth();
 
   if (!session?.user) {
     redirect("/signin");
   }
-  const params = use(props.params);
   const { projectId } = params;
 
   const projectResult = await getProject(projectId, session.user.id);

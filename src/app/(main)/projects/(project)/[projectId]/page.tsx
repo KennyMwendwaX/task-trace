@@ -1,16 +1,12 @@
-"use client";
-
 import ProjectOverview from "./components/project-overview";
 import TaskChart from "./components/task-chart";
 import RecentTasks from "./components/recent-tasks";
 import { FiGlobe, FiLock, FiUserPlus } from "react-icons/fi";
 import { TbPlaylistX } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
-import { useProjectStore } from "@/hooks/useProjectStore";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
-import { use } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -21,17 +17,46 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { auth } from "@/auth";
+import { notFound, redirect } from "next/navigation";
+import { getProject, getProjectMembers, getProjectTasks } from "./actions";
 
-type Params = Promise<{ projectId: string }>;
+type Props = {
+  params: {
+    projectId: string;
+  };
+};
 
-export default function ProjectPage(props: { params: Params }) {
-  const params = use(props.params);
+export default async function ProjectPage({ params }: Props) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
   const { projectId } = params;
 
-  const { project, members, tasks } = useProjectStore();
+  const projectResult = await getProject(projectId, session.user.id);
+  const membersResult = await getProjectMembers(projectId, session.user.id);
+  const tasksResult = await getProjectTasks(projectId, session.user.id);
+
+  if (projectResult.error) {
+    throw new Error(projectResult.error);
+  }
+
+  if (membersResult.error) {
+    throw new Error(membersResult.error);
+  }
+
+  if (tasksResult.error) {
+    throw new Error(tasksResult.error);
+  }
+
+  const project = projectResult.data;
+  const members = membersResult.data ?? [];
+  const tasks = tasksResult.data ?? [];
 
   if (!project) {
-    return null;
+    notFound();
   }
 
   return (

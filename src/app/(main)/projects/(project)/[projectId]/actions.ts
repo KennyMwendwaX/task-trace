@@ -224,18 +224,23 @@ export const getProjectTasks = async (
 export const getProjectInvitationCode = async (
   projectId: string,
   userId?: string
-) => {
+): Promise<{
+  data: { code: string; expiresAt: Date | null } | null;
+  error?: string;
+}> => {
   try {
     const session = await auth();
 
     if (!session?.user) {
       return {
+        data: null,
         error: "Unauthorized access",
       };
     }
 
     if (!userId || userId !== session.user.id) {
       return {
+        data: null,
         error: "Unauthorized access",
       };
     }
@@ -249,6 +254,7 @@ export const getProjectInvitationCode = async (
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
       return {
+        data: null,
         error: "You don't have permission get the project invitation code",
       };
     }
@@ -278,6 +284,7 @@ export const getProjectInvitationCode = async (
   } catch (error) {
     console.error("Error fetching project invitation code:", error);
     return {
+      data: null,
       error: "Failed to fetch project invitation code",
     };
   }
