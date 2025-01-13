@@ -1,6 +1,7 @@
 import * as Excel from "exceljs";
 import { format } from "date-fns";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
+import { Member } from "./schema/MemberSchema";
 
 export interface ExcelColumn {
   header: string;
@@ -28,6 +29,41 @@ export class ExcelExportService {
       pattern: "solid",
       fgColor: { argb: "FFE9ECEF" },
     };
+  }
+
+  private addRoleFormatting() {
+    this.worksheet
+      .getColumn("role")
+      .eachCell({ includeEmpty: false }, (cell, rowNumber) => {
+        if (rowNumber > 1) {
+          switch (cell.value) {
+            case "OWNER":
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFE3F2FD" }, // Light blue
+              };
+              cell.font = { color: { argb: "FF0D47A1" }, bold: true }; // Dark blue
+              break;
+            case "ADMIN":
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFF3E5F5" }, // Light purple
+              };
+              cell.font = { color: { argb: "FF7B1FA2" }, bold: true }; // Dark purple
+              break;
+            case "MEMBER":
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFF5F5F5" }, // Light grey
+              };
+              cell.font = { color: { argb: "FF616161" } }; // Dark grey
+              break;
+          }
+        }
+      });
   }
 
   private addStatusFormatting() {
@@ -130,6 +166,36 @@ export class ExcelExportService {
       priority: task.priority,
       assignedTo: task.member?.user?.name ?? "Unassigned",
       dueDate: format(task.dueDate, "dd/MM/yyyy"),
+    }));
+
+    this.worksheet.addRows(rows);
+
+    this.addStatusFormatting();
+    this.addPriorityFormatting();
+    this.addBorders();
+    this.setupWorksheetOptions(columns.length);
+
+    const buffer = await this.workbook.xlsx.writeBuffer();
+    return new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+  }
+
+  async exportMembers(members: Member[]): Promise<Blob> {
+    const columns: ExcelColumn[] = [
+      { header: "Name", key: "name", width: 30 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Role", key: "role", width: 15 },
+      { header: "Joined At", key: "createdAt", width: 20 },
+    ];
+
+    this.setupColumns(columns);
+
+    const rows = members.map((member) => ({
+      name: member.user.name,
+      email: member.user.email,
+      role: member.role,
+      createdAt: format(member.createdAt, "MMM d, yyyy"),
     }));
 
     this.worksheet.addRows(rows);
