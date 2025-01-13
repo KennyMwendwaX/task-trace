@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AnalyticsLayoutWrapper from "./components/layout-wrapper";
 
 export const metadata: Metadata = {
   title: "Project Analytics",
@@ -7,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <AnalyticsLayoutWrapper>{children}</AnalyticsLayoutWrapper>;
+  return <>{children}</>;
 }

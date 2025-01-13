@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import MembersLayoutWrapper from "./components/layout-wrapper";
 
 export const metadata: Metadata = {
   title: "Project Members",
@@ -7,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <MembersLayoutWrapper>{children}</MembersLayoutWrapper>;
+  return <>{children}</>;
 }
