@@ -13,7 +13,6 @@ export const memberSchema = z.object({
     email: z.string(),
     image: z.string().nullable(),
   }),
-  tasks: z.array(userTaskSchema),
 });
 
 export const memberFormSchema = memberSchema.omit({
@@ -22,7 +21,6 @@ export const memberFormSchema = memberSchema.omit({
   updatedAt: true,
   projectId: true,
   user: true,
-  tasks: true,
 });
 
 export type Member = z.infer<typeof memberSchema>;

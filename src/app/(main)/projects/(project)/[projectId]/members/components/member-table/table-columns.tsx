@@ -8,6 +8,7 @@ import { Member, memberSchema } from "@/lib/schema/MemberSchema";
 import TableColumnHeader from "./table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
+import { format } from "date-fns";
 
 interface TableColumnsProps {
   projectId: string;
@@ -53,9 +54,18 @@ export const TableColumns = ({
             />
             <AvatarFallback>{memberName[0]}</AvatarFallback>
           </Avatar>
-          <span>{memberName}</span>
+          <span className="hover:underline cursor-pointer">{memberName}</span>
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "email",
+    header: () => <TableColumnHeader name="Email" />,
+    cell: ({ row }) => {
+      const member = memberSchema.parse(row.original);
+      const email = member.user.email;
+      return <div>{email}</div>;
     },
   },
   {
@@ -68,54 +78,12 @@ export const TableColumns = ({
     },
   },
   {
-    accessorKey: "tasks",
-    header: () => <TableColumnHeader name="Tasks" />,
+    accessorKey: "createdAt",
+    header: () => <TableColumnHeader name="Joined At" />,
     cell: ({ row }) => {
       const member = memberSchema.parse(row.original);
-      const tasks = member.tasks.length;
-      return <div>{tasks}</div>;
-    },
-  },
-  {
-    accessorKey: "done",
-    header: () => <TableColumnHeader name="Done" />,
-    cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
-      const tasks = member.tasks;
-      const tasksDone = tasks.filter((task) => task.status === "DONE");
-      return <div>{tasksDone.length}</div>;
-    },
-  },
-  {
-    accessorKey: "todo",
-    header: () => <TableColumnHeader name="Todo" />,
-    cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
-      const tasks = member.tasks;
-      const tasksTodo = tasks.filter((task) => task.status === "TO_DO");
-      return <div>{tasksTodo.length}</div>;
-    },
-  },
-  {
-    accessorKey: "inprogress",
-    header: () => <TableColumnHeader name="In Progress" />,
-    cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
-      const tasks = member.tasks;
-      const tasksInProgress = tasks.filter(
-        (task) => task.status === "IN_PROGRESS"
-      );
-      return <div>{tasksInProgress.length}</div>;
-    },
-  },
-  {
-    accessorKey: "canceled",
-    header: () => <TableColumnHeader name="Canceled" />,
-    cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
-      const tasks = member.tasks;
-      const tasksCanceled = tasks.filter((task) => task.status === "CANCELED");
-      return <div>{tasksCanceled.length}</div>;
+      const joinedAt = format(member.createdAt, "MMM d, yyyy");
+      return <div>{joinedAt}</div>;
     },
   },
   {

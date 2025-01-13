@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import db from "@/database/db";
 import { invitationCodes, members, projects } from "@/database/schema";
+import { Member } from "@/lib/schema/MemberSchema";
 import { DetailedProject } from "@/lib/schema/ProjectSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { add } from "date-fns";
@@ -82,18 +83,23 @@ export const getProject = async (
   }
 };
 
-export const getProjectMembers = async (projectId: string, userId?: string) => {
+export const getProjectMembers = async (
+  projectId: string,
+  userId?: string
+): Promise<{ data: Member[] | null; error?: string }> => {
   try {
     const session = await auth();
 
     if (!session?.user) {
       return {
+        data: null,
         error: "Unauthorized access",
       };
     }
 
     if (!userId || userId !== session.user.id) {
       return {
+        data: null,
         error: "Unauthorized access",
       };
     }
@@ -104,6 +110,7 @@ export const getProjectMembers = async (projectId: string, userId?: string) => {
 
     if (!currentUserMember) {
       return {
+        data: null,
         error: "You are not a member of the project",
       };
     }
@@ -114,7 +121,8 @@ export const getProjectMembers = async (projectId: string, userId?: string) => {
 
     if (!project) {
       return {
-        data: { error: "Project not found" },
+        data: null,
+        error: "Project not found",
       };
     }
 
@@ -128,7 +136,6 @@ export const getProjectMembers = async (projectId: string, userId?: string) => {
             image: true,
           },
         },
-        tasks: true,
       },
     });
 
@@ -138,6 +145,7 @@ export const getProjectMembers = async (projectId: string, userId?: string) => {
   } catch (error) {
     console.error("Error fetching project members:", error);
     return {
+      data: null,
       error: "Failed to fetch project members",
     };
   }
