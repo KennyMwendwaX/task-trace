@@ -11,11 +11,10 @@ export interface ExcelColumn {
 
 export class ExcelExportService {
   private workbook: Excel.Workbook;
-  private worksheet: Excel.Worksheet;
+  private worksheet!: Excel.Worksheet; // Added ! operator here
 
   constructor() {
     this.workbook = new Excel.Workbook();
-    this.worksheet = this.workbook.addWorksheet("Tasks");
   }
 
   private setupColumns(columns: ExcelColumn[]) {
@@ -149,7 +148,28 @@ export class ExcelExportService {
     this.worksheet.views = [{ state: "frozen", xSplit: 0, ySplit: 1 }];
   }
 
+  private applyFormatting(worksheetType: "tasks" | "members") {
+    // Common formatting
+    this.addBorders();
+
+    // Apply specific formatting based on worksheet type
+    if (worksheetType === "tasks") {
+      // Check if columns exist before applying formatting
+      const hasStatusColumn =
+        this.worksheet.getColumn("status").values.length > 0;
+      const hasPriorityColumn =
+        this.worksheet.getColumn("priority").values.length > 0;
+
+      if (hasStatusColumn) this.addStatusFormatting();
+      if (hasPriorityColumn) this.addPriorityFormatting();
+    } else if (worksheetType === "members") {
+      const hasRoleColumn = this.worksheet.getColumn("role").values.length > 0;
+      if (hasRoleColumn) this.addRoleFormatting();
+    }
+  }
+
   async exportTasks(tasks: ProjectTask[]): Promise<Blob> {
+    this.worksheet = this.workbook.addWorksheet("Tasks");
     const columns: ExcelColumn[] = [
       { header: "Task", key: "name", width: 30 },
       { header: "Status", key: "status", width: 15 },
@@ -170,9 +190,7 @@ export class ExcelExportService {
 
     this.worksheet.addRows(rows);
 
-    this.addStatusFormatting();
-    this.addPriorityFormatting();
-    this.addBorders();
+    this.applyFormatting("tasks");
     this.setupWorksheetOptions(columns.length);
 
     const buffer = await this.workbook.xlsx.writeBuffer();
@@ -182,6 +200,7 @@ export class ExcelExportService {
   }
 
   async exportMembers(members: Member[]): Promise<Blob> {
+    this.worksheet = this.workbook.addWorksheet("Members");
     const columns: ExcelColumn[] = [
       { header: "Name", key: "name", width: 30 },
       { header: "Email", key: "email", width: 30 },
@@ -200,9 +219,7 @@ export class ExcelExportService {
 
     this.worksheet.addRows(rows);
 
-    this.addStatusFormatting();
-    this.addPriorityFormatting();
-    this.addBorders();
+    this.applyFormatting("members");
     this.setupWorksheetOptions(columns.length);
 
     const buffer = await this.workbook.xlsx.writeBuffer();

@@ -22,13 +22,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { format } from "date-fns/format";
-import { CSVLink } from "react-csv";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
@@ -45,7 +44,6 @@ export default function TaskTable<TData, TValue>({
   data,
   projectId,
 }: TaskTableProps<TData, TValue>) {
-  const [isMounted, setIsMounted] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -73,28 +71,6 @@ export default function TaskTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const tasks = data as ProjectTask[];
-
-  const csvData = tasks.map((task) => ({
-    name: task.name,
-    status: task.status,
-    priority: task.priority,
-    assignedTo: task.member?.user?.name ?? "Unassigned",
-    dueDate: format(task.dueDate, "dd/MM/yyyy"),
-  }));
-
-  const headers = [
-    { label: "Task", key: "name" },
-    { label: "Status", key: "status" },
-    { label: "Priority", key: "priority" },
-    { label: "Assigned To", key: "assignedTo" },
-    { label: "Due Date", key: "dueDate" },
-  ];
-
   const handleExportExcel = async () => {
     const tasks = data as ProjectTask[];
     const excelService = new ExcelExportService();
@@ -113,14 +89,12 @@ export default function TaskTable<TData, TValue>({
                 <span>Create Task</span>
               </Button>
             </Link>
-            {isMounted && (
-              <Button
-                onClick={handleExportExcel}
-                className="flex items-center gap-1">
-                <IoDownloadOutline className="w-5 h-5" />
-                <span>Export Excel</span>
-              </Button>
-            )}
+            <Button
+              onClick={handleExportExcel}
+              className="flex items-center gap-1">
+              <IoDownloadOutline className="w-5 h-5" />
+              <span>Export Excel</span>
+            </Button>
           </div>
         </div>
         <div className="rounded-md border">
