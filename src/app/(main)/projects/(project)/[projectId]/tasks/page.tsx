@@ -17,11 +17,12 @@ import {
 import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
 import { getProject, getProjectTasks } from "../actions";
+import TasksContent from "./components/tasks-content";
 
 type Props = {
-  params: {
+  params: Promise<{
     projectId: string;
-  };
+  }>;
 };
 
 export default async function Tasks({ params }: Props) {
@@ -30,7 +31,7 @@ export default async function Tasks({ params }: Props) {
   if (!session?.user) {
     redirect("/signin");
   }
-  const { projectId } = params;
+  const { projectId } = await params;
 
   const projectResult = await getProject(projectId, session.user.id);
   const tasksResult = await getProjectTasks(projectId, session.user.id);
@@ -78,41 +79,7 @@ export default async function Tasks({ params }: Props) {
           </Breadcrumb>
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="text-2xl font-bold tracking-tight">
-          {project.name} Tasks
-        </div>
-        {tasks && tasks.length > 0 ? (
-          <>
-            <div className="text-lg text-muted-foreground">
-              Here&apos;s a list of your project tasks!
-            </div>
-            <div className="pt-4">
-              <TaskTable
-                data={tasks}
-                columns={TableColumns({ projectId })}
-                projectId={projectId}
-              />
-            </div>
-          </>
-        ) : (
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[calc(100vh-150px)]">
-            <div className="flex flex-col items-center gap-1 text-center">
-              <TbPlaylistX className="h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
-              <p className="mb-4 mt-2 text-base text-muted-foreground">
-                You have not added any tasks. Add one below.
-              </p>
-              <Link href={`/projects/${projectId}/tasks/create`}>
-                <Button className="flex items-center gap-1 rounded-3xl">
-                  <AiOutlinePlus className="w-4 h-4 text-white" />
-                  <span>Create Task</span>
-                </Button>
-              </Link>
-            </div>
-          </div>
-        )}
-      </main>
+      <TasksContent projectId={projectId} project={project} tasks={tasks} />
     </>
   );
 }

@@ -74,30 +74,30 @@ export default function MemberTable<TData, TValue>({
 
   const members = data as Member[];
 
-  const getTasksByStatus = (user: Member, status: Status) => {
-    const tasks = user.tasks;
-    const tasksStatusList = tasks.filter((task) => task.status === status);
-    return tasksStatusList.length;
-  };
+  // const getTasksByStatus = (user: Member, status: Status) => {
+  //   const tasks = user.tasks;
+  //   const tasksStatusList = tasks.filter((task) => task.status === status);
+  //   return tasksStatusList.length;
+  // };
 
-  const csvData = members.map((member) => ({
-    name: member.user.name,
-    role: member.role,
-    tasks: member.tasks.length,
-    tasksDone: getTasksByStatus(member, "DONE"),
-    tasksTodo: getTasksByStatus(member, "TO_DO"),
-    tasksInProgress: getTasksByStatus(member, "IN_PROGRESS"),
-    tasksCanceled: getTasksByStatus(member, "CANCELED"),
-  }));
+  // const csvData = members.map((member) => ({
+  //   name: member.user.name,
+  //   role: member.role,
+  //   tasks: member.tasks.length,
+  //   tasksDone: getTasksByStatus(member, "DONE"),
+  //   tasksTodo: getTasksByStatus(member, "TO_DO"),
+  //   tasksInProgress: getTasksByStatus(member, "IN_PROGRESS"),
+  //   tasksCanceled: getTasksByStatus(member, "CANCELED"),
+  // }));
 
-  const headers = [
-    { label: "Member", key: "name" },
-    { label: "Role", key: "role" },
-    { label: "Tasks Done", key: "tasksDone" },
-    { label: "Tasks Todo", key: "tasksTodo" },
-    { label: "Tasks In Progress", key: "tasksInProgress" },
-    { label: "Tasks Canceled", key: "tasksCanceled" },
-  ];
+  // const headers = [
+  //   { label: "Member", key: "name" },
+  //   { label: "Role", key: "role" },
+  //   { label: "Tasks Done", key: "tasksDone" },
+  //   { label: "Tasks Todo", key: "tasksTodo" },
+  //   { label: "Tasks In Progress", key: "tasksInProgress" },
+  //   { label: "Tasks Canceled", key: "tasksCanceled" },
+  // ];
 
   return (
     <>
@@ -111,14 +111,14 @@ export default function MemberTable<TData, TValue>({
                 <span>Add Member</span>
               </Button>
             </Link>
-            <CSVLink
+            {/* <CSVLink
               data={csvData}
               headers={headers}
               filename="team"
               className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer">
               <IoDownloadOutline className="mr-1 w-5 h-5 text-white" />
               <span>Export CSV</span>
-            </CSVLink>
+            </CSVLink> */}
           </div>
         </div>
         <div className="rounded-md border">

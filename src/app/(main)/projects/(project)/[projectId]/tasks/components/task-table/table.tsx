@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
@@ -32,6 +32,7 @@ import { CSVLink } from "react-csv";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
+import { downloadExcel, ExcelExportService } from "@/lib/excel";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,6 +45,7 @@ export default function TaskTable<TData, TValue>({
   data,
   projectId,
 }: TaskTableProps<TData, TValue>) {
+  const [isMounted, setIsMounted] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -71,13 +73,17 @@ export default function TaskTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const tasks = data as ProjectTask[];
 
   const csvData = tasks.map((task) => ({
     name: task.name,
     status: task.status,
     priority: task.priority,
-    assignedTo: task.member.user.name,
+    assignedTo: task.member?.user?.name ?? "Unassigned",
     dueDate: format(task.dueDate, "dd/MM/yyyy"),
   }));
 
@@ -89,6 +95,12 @@ export default function TaskTable<TData, TValue>({
     { label: "Due Date", key: "dueDate" },
   ];
 
+  const handleExportExcel = async () => {
+    const tasks = data as ProjectTask[];
+    const excelService = new ExcelExportService();
+    const blob = await excelService.exportTasks(tasks);
+    downloadExcel(blob, `tasks-${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+  };
   return (
     <>
       <div className="space-y-4">
@@ -101,14 +113,14 @@ export default function TaskTable<TData, TValue>({
                 <span>Create Task</span>
               </Button>
             </Link>
-            <CSVLink
-              data={csvData}
-              headers={headers}
-              filename="tasks"
-              className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer">
-              <IoDownloadOutline className="mr-1 w-5 h-5 text-white" />
-              <span>Export CSV</span>
-            </CSVLink>
+            {isMounted && (
+              <Button
+                onClick={handleExportExcel}
+                className="flex items-center gap-1">
+                <IoDownloadOutline className="w-5 h-5" />
+                <span>Export Excel</span>
+              </Button>
+            )}
           </div>
         </div>
         <div className="rounded-md border">

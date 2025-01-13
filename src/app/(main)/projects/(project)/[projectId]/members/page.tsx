@@ -1,5 +1,5 @@
-import MemberTable from "./components/member-table/table";
-import { TableColumns } from "./components/member-table/table-columns";
+import MemberTable from "./components/members-table/table";
+import { TableColumns } from "./components/members-table/table-columns";
 import { FiUserPlus } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -17,20 +17,20 @@ import {
 import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
 import { getProject, getProjectMembers } from "../actions";
+import MembersContent from "./components/members-content";
 
 type Props = {
-  params: {
+  params: Promise<{
     projectId: string;
-  };
+  }>;
 };
-
 export default async function Members({ params }: Props) {
   const session = await auth();
 
   if (!session?.user) {
     redirect("/signin");
   }
-  const { projectId } = params;
+  const { projectId } = await params;
 
   const projectResult = await getProject(projectId, session.user.id);
   const membersResult = await getProjectMembers(projectId, session.user.id);
@@ -79,42 +79,11 @@ export default async function Members({ params }: Props) {
           </Breadcrumb>
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="text-2xl font-bold tracking-tight">
-          {project.name} Members
-        </div>
-        {!members || members.length == 0 ? (
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[calc(100vh-150px)]">
-            <div className="flex flex-col items-center gap-1 text-center">
-              <FiUserPlus className="h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-xl font-semibold">
-                No members in the project
-              </h3>
-              <p className="mb-4 mt-2 text-base text-muted-foreground">
-                There are no members in the project. Add one below from the
-                membership requests.
-              </p>
-              <Link href={`/projects/${projectId}/members/requests`}>
-                <Button className="flex items-center space-x-2 rounded-3xl">
-                  <AiOutlinePlus className="w-4 h-4 text-white" />
-                  <span>Add Member</span>
-                </Button>
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="text-lg text-muted-foreground">
-              Here&apos;s a list of your project members!
-            </div>
-            <MemberTable
-              data={members}
-              projectId={projectId}
-              columns={TableColumns({ projectId })}
-            />
-          </>
-        )}
-      </main>
+      <MembersContent
+        projectId={projectId}
+        project={project}
+        members={members}
+      />
     </>
   );
 }

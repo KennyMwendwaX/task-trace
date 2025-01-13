@@ -19,9 +19,9 @@ import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
 
 type Props = {
-  params: {
+  params: Promise<{
     projectId: string;
-  };
+  }>;
 };
 
 export default async function Analytics({ params }: Props) {
@@ -30,7 +30,7 @@ export default async function Analytics({ params }: Props) {
   if (!session?.user) {
     redirect("/signin");
   }
-  const { projectId } = params;
+  const { projectId } = await params;
 
   const projectResult = await getProject(projectId, session.user.id);
   const tasksResult = await getProjectTasks(projectId, session.user.id);
