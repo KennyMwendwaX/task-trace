@@ -59,17 +59,17 @@ export const getTask = async (
     });
 
     if (!task) {
-      return { data: null, error: "Project not found" };
+      return { data: null, error: "Task not found" };
     }
 
     return {
       data: task,
     };
   } catch (error) {
-    console.error("Error fetching project membership request:", error);
+    console.error("Error fetching task:", error);
     return {
       data: null,
-      error: "Failed to fetch project membership request",
+      error: "Failed to fetch task",
     };
   }
 };
