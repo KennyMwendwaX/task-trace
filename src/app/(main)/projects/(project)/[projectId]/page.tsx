@@ -4,9 +4,9 @@ import { getProjectMembers, getProjectTasks } from "./actions";
 import ProjectContent from "./components/project-content";
 
 type Props = {
-  params: {
+  params: Promise<{
     projectId: string;
-  };
+  }>;
 };
 
 export default async function ProjectPage({ params }: Props) {
@@ -16,7 +16,7 @@ export default async function ProjectPage({ params }: Props) {
     redirect("/signin");
   }
 
-  const { projectId } = params;
+  const { projectId } = await params;
 
   const membersResult = await getProjectMembers(projectId, session.user.id);
   const tasksResult = await getProjectTasks(projectId, session.user.id);

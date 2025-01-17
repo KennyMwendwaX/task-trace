@@ -17,23 +17,13 @@ export default async function Analytics({ params }: Props) {
   }
   const { projectId } = await params;
 
-  const projectResult = await getProject(projectId, session.user.id);
   const tasksResult = await getProjectTasks(projectId, session.user.id);
-
-  if (projectResult.error) {
-    throw new Error(projectResult.error);
-  }
 
   if (tasksResult.error) {
     throw new Error(tasksResult.error);
   }
 
-  const project = projectResult.data;
   const tasks = tasksResult.data ?? [];
-
-  if (!project) {
-    notFound();
-  }
 
   return <AnalyticsContent projectId={projectId} tasks={tasks} />;
 }
