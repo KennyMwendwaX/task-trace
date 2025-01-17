@@ -5,7 +5,7 @@ import {
   useProjectTaskQuery,
 } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "@/hooks/useProjectStore";
-import Loading from "./loading";
+import Loading from "../loading";
 import { useParams, usePathname } from "next/navigation";
 import TaskNotFound from "./task-not-found";
 

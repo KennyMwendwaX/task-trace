@@ -44,7 +44,6 @@ import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
-import { useProjectStore } from "@/hooks/useProjectStore";
 import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -70,6 +69,7 @@ import Link from "next/link";
 import { Member } from "@/lib/schema/MemberSchema";
 import JoinProjectModal from "../../../components/join-project-modal";
 import { toast } from "sonner";
+import { useProjectStore } from "../../../hooks/useProjectStore";
 
 type Props = {
   projectId: string;
