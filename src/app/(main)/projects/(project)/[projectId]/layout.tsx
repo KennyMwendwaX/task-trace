@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getProject } from "./actions";
 import StoreInitializer from "./components/store-initializer";
 
@@ -8,7 +8,9 @@ export default async function ProjectLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { projectId: string };
+  params: Promise<{
+    projectId: string;
+  }>;
 }) {
   const session = await auth();
 
@@ -16,12 +18,16 @@ export default async function ProjectLayout({
     redirect("/signin");
   }
 
-  const { projectId } = params;
+  const { projectId } = await params;
   const projectResult = await getProject(projectId, session.user.id);
+  if (projectResult.error) {
+    throw new Error(projectResult.error);
+  }
+
   const project = projectResult.data;
 
   if (!project) {
-    redirect("/projects");
+    notFound();
   }
 
   return <StoreInitializer project={project}>{children}</StoreInitializer>;
