@@ -1,4 +1,3 @@
-"use client";
 
 import UpdateProjectDetails from "./components/update-project-details";
 import ProjectVisibility from "./components/project-visibilty";
@@ -19,9 +18,9 @@ import { notFound, redirect } from "next/navigation";
 import { getProject, getProjectInvitationCode } from "../actions";
 
 type Props = {
-  params: {
+  params: Promise<{
     projectId: string;
-  };
+  }>;
 };
 
 export default async function Settings({ params }: Props) {
@@ -30,7 +29,7 @@ export default async function Settings({ params }: Props) {
   if (!session?.user) {
     redirect("/signin");
   }
-  const { projectId } = params;
+  const { projectId } = await params;
 
   const projectResult = await getProject(projectId, session.user.id);
   const invitationCodeResult = await getProjectInvitationCode(
