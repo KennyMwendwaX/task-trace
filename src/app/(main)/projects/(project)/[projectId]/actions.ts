@@ -78,7 +78,7 @@ export const getProject = async (
     console.error("Error fetching project:", error);
     return {
       data: null,
-      error: "Failed to fetch project",
+      error: `${error}`,
     };
   }
 };

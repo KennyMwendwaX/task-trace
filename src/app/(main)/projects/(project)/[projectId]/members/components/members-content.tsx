@@ -18,6 +18,7 @@ import { FiUserPlus } from "react-icons/fi";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useProjectStore } from "../../hooks/useProjectStore";
 import { useMembersStore } from "../../hooks/useMembersStore";
+import ProjectNotFound from "../../components/project-not-found";
 
 interface MembersContentProps {
   projectId: string;
@@ -27,7 +28,7 @@ export default function MembersContent({ projectId }: MembersContentProps) {
   const project = useProjectStore((state) => state.project);
   const members = useMembersStore((state) => state.members);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
 
   return (
     <>

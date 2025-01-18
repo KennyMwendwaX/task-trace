@@ -32,6 +32,8 @@ import {
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { useProjectStore } from "../../../hooks/useProjectStore";
 import { useTaskStore } from "../../../hooks/useTaskStore";
+import ProjectNotFound from "../../../components/project-not-found";
+import TaskNotFound from "./task-not-found";
 
 interface StatusConfig {
   bg: string;
@@ -137,11 +139,11 @@ export default function TaskContent({ projectId }: Props) {
   });
 
   if (!project) {
-    return null;
+    return <ProjectNotFound />;
   }
 
   if (!task) {
-    return null;
+    return <TaskNotFound projectId={projectId} />;
   }
 
   const label = labels.find((l) => l.value === task.label);

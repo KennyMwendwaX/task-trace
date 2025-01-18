@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useProjectStore } from "../../hooks/useProjectStore";
 import { useTasksStore } from "../../hooks/useTasksStore";
+import ProjectNotFound from "../../components/project-not-found";
 
 interface TasksContentProps {
   projectId: string;
@@ -28,7 +29,7 @@ export default function TasksContent({ projectId }: TasksContentProps) {
   const project = useProjectStore((state) => state.project);
   const tasks = useTasksStore((state) => state.tasks);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">

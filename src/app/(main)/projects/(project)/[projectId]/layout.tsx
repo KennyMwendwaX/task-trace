@@ -40,7 +40,7 @@ export default async function ProjectLayout({
   const tasks = tasksResult.data ?? [];
 
   if (!project) {
-    notFound();
+    throw new Error("Project not found");
   }
 
   return (

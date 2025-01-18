@@ -18,16 +18,18 @@ import {
 import MemberLeaderboard from "./member-leaderboard";
 import TaskStatusChart from "./task-status-chart";
 import { TbChartBar } from "react-icons/tb";
+import { useTasksStore } from "../../hooks/useTasksStore";
+import ProjectNotFound from "../../components/project-not-found";
 
 type Props = {
   projectId: string;
-  tasks: ProjectTask[];
 };
 
-export default function AnalyticsContent({ projectId, tasks }: Props) {
+export default function AnalyticsContent({ projectId }: Props) {
   const project = useProjectStore((state) => state.project);
+  const tasks = useTasksStore((state) => state.tasks);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
 
   return (
     <>

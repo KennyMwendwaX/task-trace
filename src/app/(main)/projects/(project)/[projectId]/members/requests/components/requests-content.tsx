@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import { useProjectStore } from "../../../hooks/useProjectStore";
 import { ProjectMembershipRequest } from "@/lib/schema/MembershipRequests";
+import ProjectNotFound from "../../../components/project-not-found";
 
 type Props = {
   requests: ProjectMembershipRequest[];
@@ -31,7 +32,7 @@ type Props = {
 export default function RequestsContent({ requests }: Props) {
   const project = useProjectStore((state) => state.project);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
 
   return (
     <>

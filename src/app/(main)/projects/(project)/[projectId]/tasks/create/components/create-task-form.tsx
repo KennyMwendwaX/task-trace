@@ -70,6 +70,7 @@ import { Member } from "@/lib/schema/MemberSchema";
 import JoinProjectModal from "../../../components/join-project-modal";
 import { toast } from "sonner";
 import { useProjectStore } from "../../../hooks/useProjectStore";
+import ProjectNotFound from "../../../components/project-not-found";
 
 type Props = {
   projectId: string;
@@ -89,7 +90,7 @@ export default function CreateTaskForm({ projectId, members }: Props) {
   } = useAddProjectTaskMutation(projectId);
   const project = useProjectStore((state) => state.project);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
 
   const isPrivateProject = !project.isPublic;
   const isNotMember = !project.member;

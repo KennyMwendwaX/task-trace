@@ -16,6 +16,7 @@ import ProjectVisibility from "./project-visibilty";
 import DangerZone from "./danger-zone";
 import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 import ProjectInvite from "./project-invite";
+import ProjectNotFound from "../../components/project-not-found";
 
 type Props = {
   invitationCode: InvitationCode | null;
@@ -24,7 +25,7 @@ type Props = {
 export default function SettingsContent({ invitationCode }: Props) {
   const project = useProjectStore((state) => state.project);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
 
   return (
     <>

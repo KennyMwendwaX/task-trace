@@ -22,6 +22,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import ProjectNotFound from "./project-not-found";
 
 type Props = {
   projectId: string;
@@ -32,7 +33,7 @@ type Props = {
 export default function ProjectContent({ projectId, members, tasks }: Props) {
   const project = useProjectStore((state) => state.project);
 
-  if (!project) return null;
+  if (!project) return <ProjectNotFound />;
 
   return (
     <>
