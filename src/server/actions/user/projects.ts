@@ -11,7 +11,6 @@ import {
 } from "@/lib/schema/ProjectSchema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 type ProjectError =
   | { type: "UNAUTHORIZED"; message: string }
@@ -217,6 +216,7 @@ export const getUserProjects = async (
 };
 
 type CreateProjectResponse = {
+  data: { projectId: string } | null;
   error?: ProjectError;
 };
 
@@ -228,6 +228,7 @@ export const createProject = async (
 
     if (!session?.user) {
       return {
+        data: null,
         error: {
           type: "UNAUTHORIZED",
           message: "No active session found",
@@ -239,6 +240,7 @@ export const createProject = async (
 
     if (!userId) {
       return {
+        data: null,
         error: {
           type: "UNAUTHORIZED",
           message: "User ID is required",
@@ -252,6 +254,7 @@ export const createProject = async (
 
     if (!user) {
       return {
+        data: null,
         error: {
           type: "NOT_FOUND",
           message: "User not found",
@@ -263,6 +266,7 @@ export const createProject = async (
 
     if (!validation.success) {
       return {
+        data: null,
         error: {
           type: "VALIDATION_ERROR",
           message: "Invalid project data",
@@ -282,17 +286,33 @@ export const createProject = async (
       })
       .returning({ id: projects.id });
 
+    if (projectResult.length === 0) {
+      return {
+        data: null,
+        error: {
+          type: "DATABASE_ERROR",
+          message: "Failed to create project",
+        },
+      };
+    }
+
+    const projectId = projectResult[0].id;
+
     await db.insert(members).values({
       role: "OWNER",
       userId: user.id,
-      projectId: projectResult[0].id,
+      projectId: projectId,
     });
 
     revalidatePath("/projects");
-    redirect(`/projects/${projectResult[0].id}`);
+
+    return {
+      data: { projectId },
+    };
   } catch (error) {
     console.error("Error creating project:", error);
     return {
+      data: null,
       error: {
         type: "DATABASE_ERROR",
         message:

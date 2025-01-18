@@ -55,13 +55,33 @@ export default function AddProjectModal() {
 
   const onSubmit = (values: ProjectFormValues) => {
     startTransition(async () => {
-      try {
-        await createProject(values);
+      const result = await createProject(values);
+
+      if (result.error) {
+        switch (result.error.type) {
+          case "UNAUTHORIZED":
+            toast.error("You must be logged in to create a project");
+            break;
+          case "VALIDATION_ERROR":
+            toast.error("Invalid project data. Please check your inputs");
+            break;
+          case "DATABASE_ERROR":
+            toast.error("Failed to create project. Please try again");
+            break;
+          case "NOT_FOUND":
+            toast.error("User account not found");
+            break;
+          default:
+            toast.error("An unexpected error occurred");
+        }
+        return;
+      }
+
+      if (result.data?.projectId) {
+        form.reset();
+        toggleDialog();
         toast.success("Project created successfully!");
-      } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Failed to create project"
-        );
+        router.push(`/projects/${result.data.projectId}`);
       }
     });
   };

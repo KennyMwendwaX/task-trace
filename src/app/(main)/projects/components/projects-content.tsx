@@ -24,7 +24,11 @@ export default async function ProjectsContent({
     throw new Error(result.error.message);
   }
 
-  const projects = result.data ?? [];
+  const projects =
+    result.data?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    ) ?? [];
 
   const params = searchParams ? await searchParams : {};
   const searchQuery = params.search ?? null;
