@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import Logo from "@/app/logo.png";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { signUp } from "./actions";
+import { signUp } from "@/server/actions/auth/signup";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
