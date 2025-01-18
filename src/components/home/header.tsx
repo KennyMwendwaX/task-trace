@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { MdLogout, MdMenu, MdClose } from "react-icons/md";
-import { logout } from "@/actions/auth/logout";
+import { logout } from "@/server/actions/auth/logout";
 import { Session } from "next-auth";
 import Logo from "@/app/logo.png";
 

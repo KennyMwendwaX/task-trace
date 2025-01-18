@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
 import { IoSettingsOutline } from "react-icons/io5";
-import { logout } from "@/actions/auth/logout";
+import { logout } from "@/server/actions/auth/logout";
 import { MdLogout } from "react-icons/md";
 
 export default function NavUser() {

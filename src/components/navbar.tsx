@@ -15,7 +15,7 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
-import { logout } from "@/actions/auth/logout";
+import { logout } from "@/server/actions/auth/logout";
 import { LuMenu } from "react-icons/lu";
 import Logo from "@/app/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
