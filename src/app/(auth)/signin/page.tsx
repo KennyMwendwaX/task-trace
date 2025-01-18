@@ -169,7 +169,7 @@ export default function Signin() {
               </div>
 
               <Button className="w-full" type="submit">
-                Sign In
+                {isPending ? "Signing up..." : "Sign Up"}{" "}
               </Button>
             </form>
           </Form>

@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   ProjectFormValues,
   projectFormSchema,
@@ -34,10 +34,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { LuFolderPlus } from "react-icons/lu";
-import { useAddProjectMutation } from "@/hooks/useProjectQueries";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { createProject } from "@/server/actions/user/projects";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -47,25 +47,42 @@ export default function AddProjectModal() {
   const router = useRouter();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
-
-  const { mutate: addProject, isPending, error } = useAddProjectMutation();
+  const [isPending, startTransition] = useTransition();
 
   const toggleDialog = () => {
     setDialogOpen(!isDialogOpen);
   };
 
-  const onSubmit = async (values: ProjectFormValues) => {
-    addProject(values, {
-      onSuccess: (data) => {
+  const onSubmit = (values: ProjectFormValues) => {
+    startTransition(async () => {
+      const result = await createProject(values);
+
+      if (result.error) {
+        switch (result.error.type) {
+          case "UNAUTHORIZED":
+            toast.error("You must be logged in to create a project");
+            break;
+          case "VALIDATION_ERROR":
+            toast.error("Invalid project data. Please check your inputs");
+            break;
+          case "DATABASE_ERROR":
+            toast.error("Failed to create project. Please try again");
+            break;
+          case "NOT_FOUND":
+            toast.error("User account not found");
+            break;
+          default:
+            toast.error("An unexpected error occurred");
+        }
+        return;
+      }
+
+      if (result.data?.projectId) {
         form.reset();
         toggleDialog();
         toast.success("Project created successfully!");
-        router.push(`/projects/${data.projectId}`);
-      },
-      onError: (error) => {
-        toast.error("Failed to create project!");
-        console.error("Failed to create project:", error);
-      },
+        router.push(`/projects/${result.data.projectId}`);
+      }
     });
   };
 
