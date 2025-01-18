@@ -6,23 +6,37 @@ import { members } from "@/database/schema";
 import { UserTask } from "@/lib/schema/TaskSchema";
 import { eq } from "drizzle-orm";
 
-export const getUserTasks = async (
-  userId?: string
-): Promise<{ data: UserTask[] | null; error?: string }> => {
+type TasksError =
+  | { type: "UNAUTHORIZED"; message: string }
+  | { type: "DATABASE_ERROR"; message: string }
+  | { type: "NOT_FOUND"; message: string };
+
+type TasksResponse = {
+  data: UserTask[] | null;
+  error?: TasksError;
+};
+
+export const getUserTasks = async (userId?: string): Promise<TasksResponse> => {
   try {
     const session = await auth();
 
     if (!session?.user) {
       return {
         data: null,
-        error: "Unauthorized access",
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
       };
     }
 
     if (!userId || userId !== session.user.id) {
       return {
         data: null,
-        error: "Unauthorized access",
+        error: {
+          type: "UNAUTHORIZED",
+          message: "User ID mismatch or missing",
+        },
       };
     }
 
@@ -36,6 +50,10 @@ export const getUserTasks = async (
     if (!userTasks || userTasks.length === 0) {
       return {
         data: [],
+        error: {
+          type: "NOT_FOUND",
+          message: "No tasks found for user",
+        },
       };
     }
 
@@ -48,7 +66,11 @@ export const getUserTasks = async (
     console.error("Error fetching user tasks:", error);
     return {
       data: null,
-      error: "Failed to fetch tasks",
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to fetch tasks",
+      },
     };
   }
 };

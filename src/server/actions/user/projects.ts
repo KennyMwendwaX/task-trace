@@ -6,23 +6,39 @@ import { members } from "@/database/schema";
 import { MemberProject, PublicProject } from "@/lib/schema/ProjectSchema";
 import { eq } from "drizzle-orm";
 
+type ProjectsError =
+  | { type: "UNAUTHORIZED"; message: string }
+  | { type: "DATABASE_ERROR"; message: string }
+  | { type: "NOT_FOUND"; message: string };
+
+type ProjectsResponse = {
+  data: PublicProject[] | null;
+  error?: ProjectsError;
+};
+
 export const getProjects = async (
   userId?: string
-): Promise<{ data: PublicProject[] | null; error?: string }> => {
+): Promise<ProjectsResponse> => {
   try {
     const session = await auth();
 
     if (!session?.user) {
       return {
         data: null,
-        error: "Unauthorized access",
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
       };
     }
 
     if (!userId || userId !== session.user.id) {
       return {
         data: null,
-        error: "Unauthorized access",
+        error: {
+          type: "UNAUTHORIZED",
+          message: "User ID mismatch or missing",
+        },
       };
     }
 
@@ -41,6 +57,10 @@ export const getProjects = async (
     if (!projectsResult || projectsResult.length === 0) {
       return {
         data: [],
+        error: {
+          type: "NOT_FOUND",
+          message: "No projects found for user",
+        },
       };
     }
 
@@ -72,28 +92,43 @@ export const getProjects = async (
     console.error("Error fetching projects:", error);
     return {
       data: null,
-      error: "Failed to fetch projects",
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to fetch projects",
+      },
     };
   }
 };
 
+type UserProjectsResponse = {
+  data: MemberProject[] | null;
+  error?: ProjectsError;
+};
+
 export const getUserProjects = async (
   userId?: string
-): Promise<{ data: MemberProject[] | null; error?: string }> => {
+): Promise<UserProjectsResponse> => {
   try {
     const session = await auth();
 
     if (!session?.user) {
       return {
         data: null,
-        error: "Unauthorized access",
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
       };
     }
 
     if (!userId || userId !== session.user.id) {
       return {
         data: null,
-        error: "Unauthorized access",
+        error: {
+          type: "UNAUTHORIZED",
+          message: "User ID mismatch or missing",
+        },
       };
     }
 
@@ -102,10 +137,21 @@ export const getUserProjects = async (
       with: {
         project: {
           with: {
-            tasks: true,
+            tasks: {
+              columns: {
+                status: true,
+              },
+            },
             members: {
               with: {
-                user: true,
+                user: {
+                  columns: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    image: true,
+                  },
+                },
               },
               limit: 3,
             },
@@ -117,6 +163,10 @@ export const getUserProjects = async (
     if (!userProjects || userProjects.length === 0) {
       return {
         data: [],
+        error: {
+          type: "NOT_FOUND",
+          message: "No projects found for user",
+        },
       };
     }
 
@@ -126,6 +176,7 @@ export const getUserProjects = async (
       const completedTasksCount = tasks.filter(
         (task) => task.status === "DONE"
       ).length;
+
       return {
         ...projectWithoutTasks,
         memberRole: role,
@@ -148,7 +199,11 @@ export const getUserProjects = async (
     console.error("Error fetching user projects:", error);
     return {
       data: null,
-      error: "Failed to fetch projects",
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to fetch projects",
+      },
     };
   }
 };
