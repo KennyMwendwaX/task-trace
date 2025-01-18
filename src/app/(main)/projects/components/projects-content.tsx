@@ -1,4 +1,3 @@
-import { getUserProjects } from "../actions";
 import AddProjectModal from "@/components/add-project-modal";
 import ProjectCard from "./project-card";
 import { LuPin, LuShield, LuUsers } from "react-icons/lu";
@@ -6,6 +5,7 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { MemberProject } from "@/lib/schema/ProjectSchema";
 import ProjectsSearch from "./projects-search";
 import SearchResults from "./search-results";
+import { getUserProjects } from "@/server/actions/user/projects";
 
 interface ProjectsContentProps {
   userId?: string;
@@ -21,7 +21,7 @@ export default async function ProjectsContent({
   const result = await getUserProjects(userId);
 
   if (result.error) {
-    throw new Error(result.error);
+    throw new Error(result.error.message);
   }
 
   const projects = result.data ?? [];

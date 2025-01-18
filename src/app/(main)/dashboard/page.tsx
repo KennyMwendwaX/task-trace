@@ -1,7 +1,7 @@
 import DashboardContent from "./components/dashboard-content";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getUserTasks } from "./actions";
+import { getUserTasks } from "@/server/actions/user/tasks";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -13,7 +13,7 @@ export default async function Dashboard() {
   const result = await getUserTasks(session.user.id);
 
   if (result.error) {
-    throw new Error(result.error);
+    throw new Error(result.error.message);
   }
 
   const tasks = result.data ?? [];

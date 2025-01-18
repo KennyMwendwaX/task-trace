@@ -1,7 +1,7 @@
 import ExploreContent from "./components/explore-content";
 import { auth } from "@/auth";
+import { getProjects } from "@/server/actions/user/projects";
 import { redirect } from "next/navigation";
-import { getProjects } from "./actions";
 
 interface PageProps {
   searchParams?: {
@@ -21,7 +21,7 @@ export default async function ExplorePage({ searchParams }: PageProps) {
   const result = await getProjects(session.user.id);
 
   if (result.error) {
-    throw new Error(result.error);
+    throw new Error(result.error.message);
   }
 
   const projects = result.data ?? [];
