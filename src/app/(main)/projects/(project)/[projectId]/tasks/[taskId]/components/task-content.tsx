@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { useProjectStore } from "../../../hooks/useProjectStore";
+import { useTaskStore } from "../../../hooks/useTaskStore";
 
 interface StatusConfig {
   bg: string;
@@ -108,14 +109,14 @@ const TaskLabelBadge: React.FC<{ label: { value: string; label: string } }> = ({
 
 type Props = {
   projectId: string;
-  task: ProjectTask;
 };
 
-export default function TaskContent({ projectId, task }: Props) {
+export default function TaskContent({ projectId }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const project = useProjectStore((state) => state.project);
+  const task = useTaskStore((state) => state.task);
 
   const { mutate: deleteTask } = useMutation({
     mutationFn: async () => {

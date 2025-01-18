@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef } from "react";
-import { useProjectStore } from "../hooks/useProjectStore";
+import { useTaskStore } from "../../../hooks/useTaskStore";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
 
 export default function StoreInitializer({
@@ -14,7 +14,7 @@ export default function StoreInitializer({
   const initialized = useRef(false);
 
   if (!initialized.current) {
-    useProjectStore.getState().setProject(task);
+    useTaskStore.getState().setTask(task);
     initialized.current = true;
   }
 

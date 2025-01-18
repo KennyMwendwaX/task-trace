@@ -69,24 +69,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { Member } from "@/lib/schema/MemberSchema";
 import { toast } from "sonner";
 import ProjectNotFound from "../../../../components/project-not-found";
 import TaskNotFound from "../../components/task-not-found";
 import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useProjectStore } from "../../../../hooks/useProjectStore";
 import JoinProjectModal from "../../../../components/join-project-modal";
+import { useTaskStore } from "../../../../hooks/useTaskStore";
+import { Label, Priority } from "@/lib/config";
 
 type Props = {
   projectId: string;
-  task: ProjectTask;
-  members: Member[];
+  taskId: string;
 };
 
-export default function EditTaskForm({ projectId, task, members }: Props) {
+export default function EditTaskForm({ projectId, taskId }: Props) {
   const router = useRouter();
 
   const project = useProjectStore((state) => state.project);
+  const task = useTaskStore((state) => state.task);
 
   const {
     mutate: updateTask,
@@ -97,12 +98,12 @@ export default function EditTaskForm({ projectId, task, members }: Props) {
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     values: {
-      name: task.name,
-      label: task.label,
-      priority: task.priority,
-      dueDate: task.dueDate,
-      memberId: task.memberId,
-      description: task.description,
+      name: task?.name || "",
+      label: (task?.label as Label) || "",
+      priority: (task?.priority as Priority) || "",
+      dueDate: task?.dueDate ? new Date(task.dueDate) : new Date(),
+      memberId: task?.memberId || "",
+      description: task?.description || "",
     },
   });
 
@@ -126,7 +127,7 @@ export default function EditTaskForm({ projectId, task, members }: Props) {
       onSuccess: () => {
         form.reset();
         toast.success("Task updated successfully!");
-        router.push(`/projects/${projectId}/tasks/${task.id}`);
+        router.push(`/projects/${projectId}/tasks/${taskId}`);
       },
       onError: (error) => {
         toast.error("Failed to update task!");
