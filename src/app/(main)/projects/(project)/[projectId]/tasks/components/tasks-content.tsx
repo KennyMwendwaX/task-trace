@@ -18,14 +18,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useProjectStore } from "../../hooks/useProjectStore";
+import { useTasksStore } from "../../hooks/useTasksStore";
 
 interface TasksContentProps {
   projectId: string;
-  tasks: ProjectTask[];
 }
 
-export default function TasksContent({ projectId, tasks }: TasksContentProps) {
+export default function TasksContent({ projectId }: TasksContentProps) {
   const project = useProjectStore((state) => state.project);
+  const tasks = useTasksStore((state) => state.tasks);
 
   if (!project) return null;
   return (

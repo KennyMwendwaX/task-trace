@@ -16,19 +16,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlinePlus } from "react-icons/ai";
-import { Member } from "@/lib/schema/MemberSchema";
 import { useProjectStore } from "../../hooks/useProjectStore";
+import { useMembersStore } from "../../hooks/useMembersStore";
 
 interface MembersContentProps {
   projectId: string;
-  members: Member[];
 }
 
-export default function MembersContent({
-  projectId,
-  members,
-}: MembersContentProps) {
+export default function MembersContent({ projectId }: MembersContentProps) {
   const project = useProjectStore((state) => state.project);
+  const members = useMembersStore((state) => state.members);
 
   if (!project) return null;
 

@@ -3,7 +3,7 @@ import { ProjectTask } from "@/lib/schema/TaskSchema";
 
 interface TaskState {
   task: ProjectTask | null;
-  setTask: (project: ProjectTask) => void;
+  setTask: (task: ProjectTask) => void;
   clearTask: () => void;
 }
 

@@ -77,6 +77,7 @@ import { useProjectStore } from "../../../../hooks/useProjectStore";
 import JoinProjectModal from "../../../../components/join-project-modal";
 import { useTaskStore } from "../../../../hooks/useTaskStore";
 import { Label, Priority } from "@/lib/config";
+import { useMembersStore } from "../../../../hooks/useMembersStore";
 
 type Props = {
   projectId: string;
@@ -87,6 +88,7 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
   const router = useRouter();
 
   const project = useProjectStore((state) => state.project);
+  const members = useMembersStore((state) => state.members);
   const task = useTaskStore((state) => state.task);
 
   const {
