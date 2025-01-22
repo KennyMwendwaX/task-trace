@@ -22,7 +22,6 @@ import {
   projectFormSchema,
 } from "@/lib/schema/ProjectSchema";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -33,55 +32,63 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { LuSettings } from "react-icons/lu";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { updateProject } from "@/server/actions/project/project";
+import { toast } from "sonner";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 interface Props {
+  userId: string;
   project: Project;
 }
 
-export default function UpdateProjectDetails({ project }: Props) {
-  const queryClient = useQueryClient();
+export default function UpdateProjectDetails({ userId, project }: Props) {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
-    defaultValues: {
-      name: "Go concurrency model",
-      status: "LIVE",
-      description:
-        "This is a cold world, but that is just a tip of the ice berg.",
-    },
+    defaultValues: project,
   });
 
-  const {
-    mutate: updateProject,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: async (values: ProjectFormValues) => {
-      const options = {
-        method: "PUT",
-        body: JSON.stringify(values),
-      };
-      const response = await fetch("/api/projects", options);
-      if (!response.ok) {
-        throw new Error("Something went wrong");
+  const toggleDialog = () => {
+    setDialogOpen(!isDialogOpen);
+  };
+
+  const onSubmit = (values: ProjectFormValues) => {
+    startTransition(async () => {
+      const result = await updateProject(userId, project.id, values);
+
+      if (result.error) {
+        switch (result.error.type) {
+          case "UNAUTHORIZED":
+            toast.error("You do not have permission to update this project");
+            break;
+          case "DATABASE_ERROR":
+            toast.error("Failed to update project. Please try again");
+            break;
+          case "NOT_FOUND":
+            toast.error("Project not found");
+            break;
+          default:
+            toast.error("An unexpected error occurred");
+        }
+        return;
       }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["project", project.id],
-      });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
 
-  async function onSubmit(values: ProjectFormValues) {
-    updateProject(values);
-  }
+      if (result.success) {
+        form.reset();
+        toggleDialog();
+        toast.success("Project updated successfully!");
+        router.refresh();
+      }
+    });
+  };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
       <DialogTrigger asChild>
         <Button variant="outline" className="flex items-center gap-2">
           <LuSettings className="w-4 h-4" />
@@ -169,8 +176,18 @@ export default function UpdateProjectDetails({ project }: Props) {
                 )}
               />
             </div>
-            <Button size="sm" type="submit">
-              Update Project
+            <Button
+              type="submit"
+              className="w-full sm:w-auto"
+              disabled={isPending}>
+              {isPending ? (
+                <>
+                  <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Project"
+              )}
             </Button>
           </form>
         </Form>

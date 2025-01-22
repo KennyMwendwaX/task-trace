@@ -221,7 +221,7 @@ type CreateProjectResponse = {
 };
 
 export const createProject = async (
-  formData: ProjectFormValues
+  formValues: ProjectFormValues
 ): Promise<CreateProjectResponse> => {
   try {
     const session = await auth();
@@ -262,26 +262,12 @@ export const createProject = async (
       };
     }
 
-    const validation = projectFormSchema.safeParse(formData);
-
-    if (!validation.success) {
-      return {
-        data: null,
-        error: {
-          type: "VALIDATION_ERROR",
-          message: "Invalid project data",
-        },
-      };
-    }
-
-    const { name, status, description } = validation.data;
-
     const projectResult = await db
       .insert(projects)
       .values({
-        name: name,
-        description: description,
-        status: status,
+        name: formValues.name,
+        description: formValues.description,
+        status: formValues.status,
         ownerId: user.id,
       })
       .returning({ id: projects.id });

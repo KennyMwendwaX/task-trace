@@ -19,10 +19,11 @@ import ProjectInvite from "./project-invite";
 import ProjectNotFound from "../../components/project-not-found";
 
 type Props = {
+  userId: string;
   invitationCode: InvitationCode | null;
 };
 
-export default function SettingsContent({ invitationCode }: Props) {
+export default function SettingsContent({ userId, invitationCode }: Props) {
   const project = useProjectStore((state) => state.project);
 
   if (!project) return <ProjectNotFound />;
@@ -61,7 +62,7 @@ export default function SettingsContent({ invitationCode }: Props) {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight break-words max-w-full sm:max-w-[70%]">
             {project.name} Settings
           </h1>
-          <UpdateProjectDetails project={project} />
+          <UpdateProjectDetails userId={userId} project={project} />
         </div>
 
         <div className="flex flex-col md:flex-row md:space-x-6">

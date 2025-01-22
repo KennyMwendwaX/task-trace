@@ -12,7 +12,7 @@ type Props = {
 export default async function Settings({ params }: Props) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/signin");
   }
   const { projectId } = await params;
@@ -28,5 +28,7 @@ export default async function Settings({ params }: Props) {
 
   const invitationCode = invitationCodeResult.data;
 
-  return <SettingsContent invitationCode={invitationCode} />;
+  return (
+    <SettingsContent userId={session.user.id} invitationCode={invitationCode} />
+  );
 }
