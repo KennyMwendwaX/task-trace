@@ -11,11 +11,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import {
-  useDeleteProjectMutation,
-  useLeaveProjectMutation,
-} from "@/hooks/useProjectQueries";
-import { useSession } from "next-auth/react";
+import { deleteProject } from "@/server/actions/project/project";
+import { leaveProject } from "@/server/actions/project/members";
+import { useTransition } from "react";
 
 interface DangerZoneProps {
   projectId: string;
@@ -23,37 +21,33 @@ interface DangerZoneProps {
 
 export default function DangerZone({ projectId }: DangerZoneProps) {
   const router = useRouter();
-
-  const session = useSession();
-  const userId = session.data?.user?.id;
-
-  const { mutate: leaveProject, isPending: isLeavingProject } =
-    useLeaveProjectMutation(projectId, userId);
-
-  const { mutate: deleteProject, isPending: isDeletingProject } =
-    useDeleteProjectMutation(projectId);
+  const [isPending, startTransition] = useTransition();
 
   const handleLeaveProject = () => {
-    leaveProject(undefined, {
-      onSuccess: () => {
-        toast.success("Project has been deleted!");
-        router.push("/dashboard");
-      },
-      onError: () => {
-        toast.error("Failed to leave project");
-      },
+    startTransition(async () => {
+      const result = await leaveProject(projectId);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      toast.success("Successfully left the project");
+      router.push("/projects");
     });
   };
 
   const handleDeleteProject = () => {
-    deleteProject(undefined, {
-      onSuccess: () => {
-        toast.success("Project has been deleted!");
-        router.push("/dashboard");
-      },
-      onError: () => {
-        toast.error("Failed to delete project");
-      },
+    startTransition(async () => {
+      const result = await deleteProject(projectId);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      toast.success("Project deleted successfully");
+      router.push("/projects");
     });
   };
 
@@ -98,8 +92,8 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
                   variant="destructive"
                   size="sm"
                   onClick={handleLeaveProject}
-                  disabled={isLeavingProject}>
-                  {isLeavingProject ? "Leaving..." : "Leave Project"}
+                  disabled={isPending}>
+                  {isPending ? "Leaving..." : "Leave Project"}
                 </Button>
               </div>
             </DialogContent>
@@ -141,8 +135,8 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
                   variant="destructive"
                   size="sm"
                   onClick={handleDeleteProject}
-                  disabled={isDeletingProject}>
-                  {isDeletingProject ? "Deleting..." : "Delete Project"}
+                  disabled={isPending}>
+                  {isPending ? "Deleting..." : "Delete Project"}
                 </Button>
               </div>
             </DialogContent>

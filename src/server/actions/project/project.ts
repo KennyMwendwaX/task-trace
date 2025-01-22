@@ -213,7 +213,66 @@ export const updateProject = async (
   }
 };
 
-export const deleteProject = async () => {};
+type DeleteProjectResponse = {
+  success?: boolean;
+  error?: {
+    type: string;
+    message: string;
+  };
+};
+
+export const deleteProject = async (
+  projectId: string
+): Promise<DeleteProjectResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project) {
+      return {
+        error: {
+          type: "NOT_FOUND",
+          message: "Project not found",
+        },
+      };
+    }
+
+    if (project.ownerId !== session.user.id) {
+      return {
+        error: {
+          type: "FORBIDDEN",
+          message: "Only the project owner can delete the project",
+        },
+      };
+    }
+
+    await db.delete(projects).where(eq(projects.id, projectId));
+
+    revalidatePath("/projects");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    return {
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to delete project",
+      },
+    };
+  }
+};
 
 type ToggleVisibilityResponse = {
   success?: boolean;

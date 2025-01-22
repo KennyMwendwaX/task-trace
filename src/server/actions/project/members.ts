@@ -6,9 +6,11 @@ import { members, membershipRequests, projects } from "@/database/schema";
 import { Member } from "@/lib/schema/MemberSchema";
 import { ProjectMembershipRequest } from "@/lib/schema/MembershipRequests";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 type MemberError =
   | { type: "UNAUTHORIZED"; message: string }
+  | { type: "FORBIDDEN"; message: string }
   | { type: "DATABASE_ERROR"; message: string }
   | { type: "NOT_FOUND"; message: string };
 
@@ -193,6 +195,90 @@ export const getMembershipRequests = async (
           error instanceof Error
             ? error.message
             : "Failed to fetch project membership requests",
+      },
+    };
+  }
+};
+
+type LeaveProjectResponse = {
+  success?: boolean;
+  error?: {
+    type: string;
+    message: string;
+  };
+};
+
+export const leaveProject = async (
+  projectId: string
+): Promise<LeaveProjectResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (!currentUserMember) {
+      return {
+        error: {
+          type: "NOT_FOUND",
+          message: "You are not a member of this project",
+        },
+      };
+    }
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project) {
+      return {
+        error: {
+          type: "NOT_FOUND",
+          message: "Project not found",
+        },
+      };
+    }
+
+    if (project.ownerId === session.user.id) {
+      return {
+        error: {
+          type: "FORBIDDEN",
+          message: "Project owner cannot leave. Transfer ownership first.",
+        },
+      };
+    }
+
+    await db
+      .delete(members)
+      .where(
+        and(
+          eq(members.projectId, projectId),
+          eq(members.userId, session.user.id)
+        )
+      );
+
+    revalidatePath(`/projects/${projectId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error leaving project:", error);
+    return {
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to leave project",
       },
     };
   }
