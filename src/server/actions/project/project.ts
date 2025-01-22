@@ -8,7 +8,8 @@ import {
   Project,
   ProjectFormValues,
 } from "@/lib/schema/ProjectSchema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 type ProjectError =
   | { type: "UNAUTHORIZED"; message: string }
@@ -197,6 +198,7 @@ export const updateProject = async (
       };
     }
 
+    revalidatePath(`/projects/${projectId}`);
     return { success: true };
   } catch (error) {
     console.error("Error updating project:", error);
@@ -206,6 +208,80 @@ export const updateProject = async (
         type: "DATABASE_ERROR",
         message:
           error instanceof Error ? error.message : "Failed to update project",
+      },
+    };
+  }
+};
+
+export const deleteProject = async () => {};
+
+type ToggleVisibilityResponse = {
+  success?: boolean;
+  error?: {
+    type: string;
+    message: string;
+  };
+};
+
+export const toggleProjectVisibility = async (
+  projectId: string,
+  isPublic: boolean
+): Promise<ToggleVisibilityResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const userMembership = await db.query.members.findFirst({
+      where: and(
+        eq(members.userId, session.user.id),
+        eq(members.projectId, projectId),
+        or(eq(members.role, "OWNER"), eq(members.role, "ADMIN"))
+      ),
+    });
+
+    if (!userMembership) {
+      return {
+        error: {
+          type: "FORBIDDEN",
+          message: "Access denied",
+        },
+      };
+    }
+
+    const updatedProject = await db
+      .update(projects)
+      .set({ isPublic })
+      .where(eq(projects.id, projectId))
+      .returning();
+
+    if (updatedProject.length === 0) {
+      return {
+        error: {
+          type: "NOT_FOUND",
+          message: "Project not found",
+        },
+      };
+    }
+
+    revalidatePath(`/projects/${projectId}/settings`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating project visibility:", error);
+    return {
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Server error, try again later",
       },
     };
   }
