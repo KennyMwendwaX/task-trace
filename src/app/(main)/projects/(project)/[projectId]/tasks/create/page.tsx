@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
-import { getProjectMembers } from "../../actions";
 import CreateTaskForm from "./components/create-task-form";
 import { redirect } from "next/navigation";
+import { getProjectMembers } from "@/server/actions/project/members";
 
 type Props = { params: Promise<{ projectId: string }> };
 
@@ -16,7 +16,7 @@ export default async function CreateTaskPage({ params }: Props) {
   const membersResult = await getProjectMembers(projectId, session.user.id);
 
   if (membersResult.error) {
-    throw new Error(membersResult.error);
+    throw new Error(membersResult.error.message);
   }
 
   const members = membersResult.data ?? [];

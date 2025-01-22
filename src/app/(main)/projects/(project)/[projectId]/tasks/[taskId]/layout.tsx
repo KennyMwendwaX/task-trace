@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { notFound, redirect } from "next/navigation";
-import { getTask } from "./actions";
 import StoreInitializer from "./components/store-initializer";
+import { getTask } from "@/server/actions/project/tasks";
 
 export const metadata: Metadata = {
   title: "Task",
@@ -28,7 +28,7 @@ export default async function ProjectLayout({
   const { projectId, taskId } = await params;
   const taskResult = await getTask(projectId, taskId, session.user.id);
   if (taskResult.error) {
-    throw new Error(taskResult.error);
+    throw new Error(taskResult.error.message);
   }
 
   const task = taskResult.data;

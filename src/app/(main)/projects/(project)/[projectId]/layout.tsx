@@ -1,7 +1,9 @@
 import { auth } from "@/auth";
-import { notFound, redirect } from "next/navigation";
-import { getProject, getProjectMembers, getProjectTasks } from "./actions";
+import { redirect } from "next/navigation";
 import StoreInitializer from "./components/store-initializer";
+import { getProject } from "@/server/actions/project/project";
+import { getProjectMembers } from "@/server/actions/project/members";
+import { getProjectTasks } from "@/server/actions/project/tasks";
 
 export default async function ProjectLayout({
   children,
@@ -24,15 +26,15 @@ export default async function ProjectLayout({
   const tasksResult = await getProjectTasks(projectId, session.user.id);
 
   if (projectResult.error) {
-    throw new Error(projectResult.error);
+    throw new Error(projectResult.error.message);
   }
 
   if (membersResult.error) {
-    throw new Error(membersResult.error);
+    throw new Error(membersResult.error.message);
   }
 
   if (tasksResult.error) {
-    throw new Error(tasksResult.error);
+    throw new Error(tasksResult.error.message);
   }
 
   const project = projectResult.data;

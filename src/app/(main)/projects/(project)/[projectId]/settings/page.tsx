@@ -1,21 +1,7 @@
-import UpdateProjectDetails from "./components/update-project-details";
-import ProjectVisibility from "./components/project-visibilty";
-import DangerZone from "./components/danger-zone";
-import ProjectInvite from "./components/project-invite";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { auth } from "@/auth";
-import { notFound, redirect } from "next/navigation";
-import { getProject, getProjectInvitationCode } from "../actions";
+import { redirect } from "next/navigation";
 import SettingsContent from "./components/settings-content";
+import { getProjectInvitationCode } from "@/server/actions/project/invitation-code";
 
 type Props = {
   params: Promise<{
@@ -37,7 +23,7 @@ export default async function Settings({ params }: Props) {
   );
 
   if (invitationCodeResult.error) {
-    throw new Error(invitationCodeResult.error);
+    throw new Error(invitationCodeResult.error.message);
   }
 
   const invitationCode = invitationCodeResult.data;

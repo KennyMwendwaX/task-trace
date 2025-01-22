@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { getMembershipRequests } from "../actions";
 import RequestsContent from "./components/requests-content";
+import { getMembershipRequests } from "@/server/actions/project/members";
 
 type Props = { params: Promise<{ projectId: string }> };
 
@@ -19,7 +19,7 @@ export default async function MembershipRequests({ params }: Props) {
   );
 
   if (requestsResult.error) {
-    throw new Error(requestsResult.error);
+    throw new Error(requestsResult.error.message);
   }
 
   const requests = requestsResult.data ?? [];

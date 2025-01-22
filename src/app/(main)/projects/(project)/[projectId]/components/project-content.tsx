@@ -23,15 +23,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ProjectNotFound from "./project-not-found";
+import { useMembersStore } from "../hooks/useMembersStore";
+import { useTasksStore } from "../hooks/useTasksStore";
 
 type Props = {
   projectId: string;
-  members: Member[];
-  tasks: ProjectTask[];
 };
 
-export default function ProjectContent({ projectId, members, tasks }: Props) {
+export default function ProjectContent({ projectId }: Props) {
   const project = useProjectStore((state) => state.project);
+  const members = useMembersStore((state) => state.members);
+  const tasks = useTasksStore((state) => state.tasks);
 
   if (!project) return <ProjectNotFound />;
 
