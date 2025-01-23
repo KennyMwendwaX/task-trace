@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import db from "@/database/db";
 import { members, projects, tasks } from "@/database/schema";
+import { Label, Priority, Status } from "@/lib/config";
 import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -382,6 +383,276 @@ export const updateTask = async (
         type: "DATABASE_ERROR",
         message:
           error instanceof Error ? error.message : "Failed to update task",
+      },
+    };
+  }
+};
+
+export const updateTaskLabel = async (
+  projectId: string,
+  taskId: string,
+  label: Label
+): Promise<UpdateTaskResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const task = await db.query.tasks.findFirst({
+      where: eq(tasks.id, taskId),
+    });
+
+    if (!task) {
+      return {
+        success: false,
+        error: {
+          type: "NOT_FOUND",
+          message: "Task not found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "Only project owners or admins modify this task",
+        },
+      };
+    }
+
+    const taskResult = await db
+      .update(tasks)
+      .set({
+        label: label,
+      })
+      .where(and(eq(tasks.id, taskId), eq(tasks.projectId, projectId)))
+      .returning();
+
+    if (taskResult.length === 0) {
+      return {
+        success: false,
+        error: {
+          type: "DATABASE_ERROR",
+          message: "Failed to update task label",
+        },
+      };
+    }
+
+    revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating task label:", error);
+    return {
+      success: false,
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to update task label",
+      },
+    };
+  }
+};
+
+export const updateTaskStatus = async (
+  projectId: string,
+  taskId: string,
+  status: Status
+): Promise<UpdateTaskResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const task = await db.query.tasks.findFirst({
+      where: eq(tasks.id, taskId),
+    });
+
+    if (!task) {
+      return {
+        success: false,
+        error: {
+          type: "NOT_FOUND",
+          message: "Task not found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "Only project owners or admins modify this task",
+        },
+      };
+    }
+
+    const taskResult = await db
+      .update(tasks)
+      .set({
+        status: status,
+      })
+      .where(and(eq(tasks.id, taskId), eq(tasks.projectId, projectId)))
+      .returning();
+
+    if (taskResult.length === 0) {
+      return {
+        success: false,
+        error: {
+          type: "DATABASE_ERROR",
+          message: "Failed to update task status",
+        },
+      };
+    }
+
+    revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating task status:", error);
+    return {
+      success: false,
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to update task status",
+      },
+    };
+  }
+};
+
+export const updateTaskPriority = async (
+  projectId: string,
+  taskId: string,
+  priority: Priority
+): Promise<UpdateTaskResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const task = await db.query.tasks.findFirst({
+      where: eq(tasks.id, taskId),
+    });
+
+    if (!task) {
+      return {
+        success: false,
+        error: {
+          type: "NOT_FOUND",
+          message: "Task not found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "Only project owners or admins modify this task",
+        },
+      };
+    }
+
+    const taskResult = await db
+      .update(tasks)
+      .set({
+        priority: priority,
+      })
+      .where(and(eq(tasks.id, taskId), eq(tasks.projectId, projectId)))
+      .returning();
+
+    if (taskResult.length === 0) {
+      return {
+        success: false,
+        error: {
+          type: "DATABASE_ERROR",
+          message: "Failed to update task priority",
+        },
+      };
+    }
+
+    revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating task priority:", error);
+    return {
+      success: false,
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to update task priority",
       },
     };
   }

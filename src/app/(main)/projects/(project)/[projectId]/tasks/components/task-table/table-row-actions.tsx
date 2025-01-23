@@ -24,12 +24,16 @@ import {
   Priority,
 } from "@/lib/config";
 import { taskSchema } from "@/lib/schema/TaskSchema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { deleteTask } from "@/server/actions/project/tasks";
+import {
+  deleteTask,
+  updateTaskLabel,
+  updateTaskPriority,
+  updateTaskStatus,
+} from "@/server/actions/project/tasks";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -41,122 +45,64 @@ export default function TableRowActions<TData>({
   projectId,
 }: TableRowActions<TData>) {
   const [isPending, startTransition] = useTransition();
-  const queryClient = useQueryClient();
   const router = useRouter();
   const task = taskSchema.parse(row.original);
-
-  const {
-    mutate: updateLabel,
-    isPending: labelIsPending,
-    error: labelChangeError,
-  } = useMutation({
-    mutationFn: async (label: string) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ label }),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/label`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task label");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task label updated successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to updated task label");
-      console.log(error);
-    },
-  });
-
-  const {
-    mutate: updateStatus,
-    isPending: statusIsPending,
-    error: statusChangeError,
-  } = useMutation({
-    mutationFn: async (status: string) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/status`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task status");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task status updated successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to updated task status");
-      console.log(error);
-    },
-  });
-
-  const {
-    mutate: updatePriority,
-    isPending: priorityIsPending,
-    error: priorityChangeError,
-  } = useMutation({
-    mutationFn: async (priority: string) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ priority }),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/priority`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task priority");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task priority updated successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to updated task priority");
-      console.log(error);
-    },
-  });
 
   const handleEditTask = () => {
     router.push(`/projects/${projectId}/tasks/${task.id}/edit`);
   };
 
-  const handleLabelChange = async (label: Label) => {
-    updateLabel(label);
-  };
-
-  const handleStatusChange = async (status: Status) => {
-    updateStatus(status);
-  };
-
-  const handlePriorityChange = async (priority: Priority) => {
-    updatePriority(priority);
-  };
-
-  const handleTaskDelete = (projectId: string, taskId: string) => {
+  const handleLabelUpdate = async (label: Label) => {
     startTransition(async () => {
-      const result = await deleteTask(projectId, taskId);
+      const result = await updateTaskLabel(projectId, task.id, label);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      if (result.success) {
+        toast.success("Task label updated successfully!");
+        router.refresh();
+      }
+    });
+  };
+
+  const handleStatusUpdate = async (status: Status) => {
+    startTransition(async () => {
+      const result = await updateTaskStatus(projectId, task.id, status);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      if (result.success) {
+        toast.success("Task status updated successfully!");
+        router.refresh();
+      }
+    });
+  };
+
+  const handlePriorityUpdate = async (priority: Priority) => {
+    startTransition(async () => {
+      const result = await updateTaskPriority(projectId, task.id, priority);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      if (result.success) {
+        toast.success("Task priority updated successfully!");
+        router.refresh();
+      }
+    });
+  };
+
+  const handleTaskDelete = () => {
+    startTransition(async () => {
+      const result = await deleteTask(projectId, task.id);
 
       if (result.error) {
         toast.error(result.error.message);
@@ -192,7 +138,7 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.label}>
                 {labels.map((label) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handleLabelChange(label.value)}
+                    onClick={() => handleLabelUpdate(label.value)}
                     key={label.value}
                     value={label.value}>
                     {label.label}
@@ -207,7 +153,7 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.status}>
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handleStatusChange(status.value)}
+                    onClick={() => handleStatusUpdate(status.value)}
                     key={status.value}
                     value={status.value}>
                     {status.value === "DONE" ? (
@@ -231,7 +177,7 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.priority}>
                 {priorities.map((priority) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handlePriorityChange(priority.value)}
+                    onClick={() => handlePriorityUpdate(priority.value)}
                     key={priority.value}
                     value={priority.value}>
                     {priority.value === "HIGH" ? (
@@ -250,7 +196,7 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center cursor-pointer"
-            onClick={() => handleTaskDelete(projectId, task.id)}>
+            onClick={() => handleTaskDelete()}>
             <TrashIcon className="text-red-500 mr-2 w-5 h-5" />
             Delete
           </DropdownMenuItem>
