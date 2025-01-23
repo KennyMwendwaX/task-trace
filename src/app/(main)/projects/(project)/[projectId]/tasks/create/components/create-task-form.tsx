@@ -106,7 +106,7 @@ export default function CreateTaskForm({ projectId, members }: Props) {
 
       if (result.data?.taskId) {
         form.reset();
-        toast.success("Project created successfully!");
+        toast.success("Task created successfully!");
         router.push(`/projects/${projectId}/tasks/${result.data.taskId}`);
       }
     });
@@ -192,62 +192,8 @@ export default function CreateTaskForm({ projectId, members }: Props) {
                   </FormItem>
                 )}
               />
+
               <div className="grid md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="label"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Task Label</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        required>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select label" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="FEATURE">Feature</SelectItem>
-                          <SelectItem value="DOCUMENTATION">
-                            Documentation
-                          </SelectItem>
-                          <SelectItem value="BUG">Bug</SelectItem>
-                          <SelectItem value="ERROR">Error</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="priority"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Task Priority</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        required>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select priority" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="LOW">Low</SelectItem>
-                          <SelectItem value="MEDIUM">Medium</SelectItem>
-                          <SelectItem value="HIGH">High</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <FormField
                   control={form.control}
                   name="dueDate"
@@ -263,7 +209,9 @@ export default function CreateTaskForm({ projectId, members }: Props) {
                                 "justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground"
                               )}>
-                              {field.value ? (
+                              {field.value && field.value instanceof Date ? (
+                                format(field.value, "PPP")
+                              ) : field.value ? (
                                 format(new Date(field.value), "PPP")
                               ) : (
                                 <span>Pick a date</span>
@@ -275,7 +223,9 @@ export default function CreateTaskForm({ projectId, members }: Props) {
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={new Date(field.value)}
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            }
                             onSelect={field.onChange}
                             initialFocus
                             disabled={(date) => date <= new Date()}
@@ -348,6 +298,93 @@ export default function CreateTaskForm({ projectId, members }: Props) {
                   )}
                 />
               </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                <FormField
+                  control={form.control}
+                  name="label"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Task Label</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        required>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select label" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="FEATURE">Feature</SelectItem>
+                          <SelectItem value="DOCUMENTATION">
+                            Documentation
+                          </SelectItem>
+                          <SelectItem value="BUG">Bug</SelectItem>
+                          <SelectItem value="ERROR">Error</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Task Status</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        required>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="TO_DO">Todo</SelectItem>
+                          <SelectItem value="IN_PROGRESS">
+                            In Progress
+                          </SelectItem>
+                          <SelectItem value="DONE">Done</SelectItem>
+                          <SelectItem value="CANCELED">Canceled</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Task Priority</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        required>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select priority" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="LOW">Low</SelectItem>
+                          <SelectItem value="MEDIUM">Medium</SelectItem>
+                          <SelectItem value="HIGH">High</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="description"

@@ -61,7 +61,6 @@ export const userTaskSchema = taskSchema.omit({
 
 export const taskFormSchema = taskSchema.omit({
   id: true,
-  status: true,
   createdAt: true,
   updatedAt: true,
   projectId: true,

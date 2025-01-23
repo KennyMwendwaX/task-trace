@@ -5,6 +5,7 @@ import db from "@/database/db";
 import { members, projects, tasks } from "@/database/schema";
 import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 type TasksError =
   | { type: "UNAUTHORIZED"; message: string }
@@ -252,10 +253,10 @@ export const createTask = async (
       .values({
         name: formValues.name,
         label: formValues.label,
+        status: formValues.status,
         priority: formValues.priority,
         dueDate: formValues.dueDate,
         description: formValues.description,
-        status: "TO_DO",
         memberId: formValues.memberId,
         projectId: projectId,
       })
@@ -282,6 +283,105 @@ export const createTask = async (
         type: "DATABASE_ERROR",
         message:
           error instanceof Error ? error.message : "Failed to create task",
+      },
+    };
+  }
+};
+
+type UpdateTaskResponse = {
+  success: boolean;
+  error?: TasksError;
+};
+
+export const updateTask = async (
+  projectId: string,
+  taskId: string,
+  formValues: TaskFormValues
+): Promise<UpdateTaskResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const task = await db.query.tasks.findFirst({
+      where: eq(tasks.id, taskId),
+    });
+
+    if (!task) {
+      return {
+        success: false,
+        error: {
+          type: "NOT_FOUND",
+          message: "Task not found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "Only project owners or admins can create tasks",
+        },
+      };
+    }
+
+    const taskResult = await db
+      .update(tasks)
+      .set({
+        name: formValues.name,
+        label: formValues.label,
+        status: formValues.status,
+        priority: formValues.priority,
+        dueDate: formValues.dueDate,
+        memberId: formValues.memberId,
+        description: formValues.description,
+      })
+      .where(eq(tasks.id, taskId))
+      .returning();
+
+    if (taskResult.length === 0) {
+      return {
+        success: false,
+        error: {
+          type: "DATABASE_ERROR",
+          message: "Failed to update task",
+        },
+      };
+    }
+
+    revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return {
+      success: false,
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to update task",
       },
     };
   }
