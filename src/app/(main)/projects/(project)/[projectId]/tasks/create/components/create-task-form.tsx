@@ -44,7 +44,6 @@ import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
-import { useAddProjectTaskMutation } from "@/hooks/useProjectQueries";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Editor from "./editor";
@@ -71,23 +70,20 @@ import JoinProjectModal from "../../../components/join-project-modal";
 import { toast } from "sonner";
 import { useProjectStore } from "../../../hooks/useProjectStore";
 import ProjectNotFound from "../../../components/project-not-found";
+import { useTransition } from "react";
+import { createTask } from "@/server/actions/project/tasks";
 
 type Props = {
   projectId: string;
   members: Member[];
 };
 export default function CreateTaskForm({ projectId, members }: Props) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
 
-  const router = useRouter();
-
-  const {
-    mutate: addTask,
-    isPending,
-    error,
-  } = useAddProjectTaskMutation(projectId);
   const project = useProjectStore((state) => state.project);
 
   if (!project) return <ProjectNotFound />;
@@ -99,19 +95,22 @@ export default function CreateTaskForm({ projectId, members }: Props) {
     return <JoinProjectModal projectId={projectId} />;
   }
 
-  async function onSubmit(values: TaskFormValues) {
-    addTask(values, {
-      onSuccess: () => {
+  const onSubmit = (values: TaskFormValues) => {
+    startTransition(async () => {
+      const result = await createTask(projectId, values);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      if (result.data?.taskId) {
         form.reset();
-        toast.success("Task created successfully!");
-        router.push(`/projects/${projectId}/tasks`);
-      },
-      onError: (error) => {
-        toast.error("Failed to create task!");
-        console.error("Failed to create task:", error);
-      },
+        toast.success("Project created successfully!");
+        router.push(`/projects/${projectId}/tasks/${result.data.taskId}`);
+      }
     });
-  }
+  };
 
   return (
     <>

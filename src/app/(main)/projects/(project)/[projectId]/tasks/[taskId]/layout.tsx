@@ -26,7 +26,7 @@ export default async function ProjectLayout({
   }
 
   const { projectId, taskId } = await params;
-  const taskResult = await getTask(projectId, taskId, session.user.id);
+  const taskResult = await getTask(projectId, taskId);
   if (taskResult.error) {
     throw new Error(taskResult.error.message);
   }
