@@ -28,6 +28,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { deleteTask } from "@/server/actions/project/tasks";
 
 interface TableRowActions<TData> {
   row: Row<TData>;
@@ -38,6 +40,7 @@ export default function TableRowActions<TData>({
   row,
   projectId,
 }: TableRowActions<TData>) {
+  const [isPending, startTransition] = useTransition();
   const queryClient = useQueryClient();
   const router = useRouter();
   const task = taskSchema.parse(row.original);
@@ -135,35 +138,9 @@ export default function TableRowActions<TData>({
     },
   });
 
-  const {
-    mutate: deleteTask,
-    isPending: deleteIsPending,
-    error: deleteTaskError,
-  } = useMutation({
-    mutationFn: async () => {
-      const options = {
-        method: "DELETE",
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error deleting task");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task deleted successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to delete task");
-      console.log(error);
-    },
-  });
+  const handleEditTask = () => {
+    router.push(`/projects/${projectId}/tasks/${task.id}/edit`);
+  };
 
   const handleLabelChange = async (label: Label) => {
     updateLabel(label);
@@ -177,12 +154,20 @@ export default function TableRowActions<TData>({
     updatePriority(priority);
   };
 
-  const taskDelete = async () => {
-    deleteTask();
-  };
+  const handleTaskDelete = (projectId: string, taskId: string) => {
+    startTransition(async () => {
+      const result = await deleteTask(projectId, taskId);
 
-  const handleEditTask = () => {
-    router.push(`/projects/${projectId}/tasks/${task.id}/edit`);
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      if (result.success) {
+        toast.success("Task deleted successfully!");
+        router.refresh();
+      }
+    });
   };
 
   return (
@@ -265,7 +250,7 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center cursor-pointer"
-            onClick={() => taskDelete()}>
+            onClick={() => handleTaskDelete(projectId, task.id)}>
             <TrashIcon className="text-red-500 mr-2 w-5 h-5" />
             Delete
           </DropdownMenuItem>

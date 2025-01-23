@@ -386,3 +386,82 @@ export const updateTask = async (
     };
   }
 };
+
+type DeleteTaskResponse = {
+  success: boolean;
+  error?: {
+    type: string;
+    message: string;
+  };
+};
+
+export const deleteTask = async (
+  projectId: string,
+  taskId: string
+): Promise<DeleteTaskResponse> => {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "No active session found",
+        },
+      };
+    }
+
+    const task = await db.query.tasks.findFirst({
+      where: eq(tasks.id, taskId),
+    });
+
+    if (!task) {
+      return {
+        success: false,
+        error: {
+          type: "NOT_FOUND",
+          message: "Task not found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, session.user.id)
+      ),
+    });
+
+    if (
+      !currentUserMember ||
+      !["OWNER", "ADMIN"].includes(currentUserMember.role)
+    ) {
+      return {
+        success: false,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "Only project owners or admins can delete tasks",
+        },
+      };
+    }
+
+    await db
+      .delete(tasks)
+      .where(and(eq(tasks.id, taskId), eq(tasks.projectId, projectId)));
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return {
+      success: false,
+      error: {
+        type: "DATABASE_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to delete task",
+      },
+    };
+  }
+};

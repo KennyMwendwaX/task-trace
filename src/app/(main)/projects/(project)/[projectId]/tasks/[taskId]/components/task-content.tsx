@@ -34,6 +34,9 @@ import { useProjectStore } from "../../../hooks/useProjectStore";
 import { useTaskStore } from "../../../hooks/useTaskStore";
 import ProjectNotFound from "../../../components/project-not-found";
 import TaskNotFound from "./task-not-found";
+import { useTransition } from "react";
+import { deleteTask } from "@/server/actions/project/tasks";
+import { toast } from "sonner";
 
 interface StatusConfig {
   bg: string;
@@ -114,29 +117,11 @@ type Props = {
 };
 
 export default function TaskContent({ projectId }: Props) {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const project = useProjectStore((state) => state.project);
   const task = useTaskStore((state) => state.task);
-
-  const { mutate: deleteTask } = useMutation({
-    mutationFn: async () => {
-      if (!task) return;
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}`,
-        { method: "DELETE" }
-      );
-      if (!response.ok) throw new Error("Something went wrong");
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["project-tasks", projectId],
-      });
-      router.push(`/projects/${projectId}/tasks`);
-    },
-    onError: (error) => console.log(error),
-  });
 
   if (!project) {
     return <ProjectNotFound />;
@@ -155,6 +140,23 @@ export default function TaskContent({ projectId }: Props) {
     ? format(task.updatedAt, "dd MMM, yyyy • hh:mm a")
     : null;
   const taskDueDate = format(task.dueDate, "dd MMM, yyyy");
+
+  const handleTaskDelete = (projectId: string, taskId: string) => {
+    startTransition(async () => {
+      const result = await deleteTask(projectId, taskId);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      if (result.success) {
+        toast.success("Task deleted successfully!");
+        router.push(`/projects/${projectId}/tasks/`);
+      }
+    });
+  };
+
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -221,7 +223,7 @@ export default function TaskContent({ projectId }: Props) {
             <Button
               variant="destructive"
               className="flex items-center justify-center w-full sm:w-auto"
-              onClick={() => deleteTask()}>
+              onClick={() => handleTaskDelete(projectId, task.id)}>
               <FiTrash className="mr-2" />
               Delete Task
             </Button>
