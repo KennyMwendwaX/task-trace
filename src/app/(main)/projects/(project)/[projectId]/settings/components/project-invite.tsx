@@ -9,12 +9,10 @@ import {
 } from "@/components/ui/card";
 import { LuClipboard, LuRotateCw } from "react-icons/lu";
 import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
-import {
-  useGenerateInvitationCodeMutation,
-  useRegenerateInvitationCodeMutation,
-} from "@/hooks/useProjectQueries";
 import { toast } from "sonner";
 import { differenceInDays } from "date-fns";
+import { useTransition } from "react";
+import { generateInvitationCode } from "@/server/actions/project/invitation-code";
 
 interface ProjectInviteProps {
   projectId: string;
@@ -25,37 +23,18 @@ export default function ProjectInvite({
   projectId,
   invitationCode,
 }: ProjectInviteProps) {
-  const {
-    mutate: generateInvitationCode,
-    isPending: generateIsPending,
-    error: generateError,
-  } = useGenerateInvitationCodeMutation(projectId);
+  const [isPending, startTransition] = useTransition();
 
-  const {
-    mutate: regenerateInvitationCode,
-    isPending: regenerateIsPending,
-    error: regenerateError,
-  } = useRegenerateInvitationCodeMutation(projectId);
+  const handleGenerate = (projectId: string) => {
+    startTransition(async () => {
+      const result = await generateInvitationCode(projectId);
 
-  const handleGenerate = async (projectId: string) => {
-    generateInvitationCode(projectId, {
-      onSuccess: () => {
-        toast.success("Invitation code generated successfully!");
-      },
-      onError: () => {
-        toast.error("Failed to generate invitation code!");
-      },
-    });
-  };
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
 
-  const handleRegenerate = async (projectId: string) => {
-    regenerateInvitationCode(projectId, {
-      onSuccess: () => {
-        toast.success("Invitation code generated successfully!");
-      },
-      onError: () => {
-        toast.error("Failed to regenerate invitation code!");
-      },
+      toast.success("Successfully generated new invitation code");
     });
   };
 
@@ -95,8 +74,8 @@ export default function ProjectInvite({
             variant="default"
             className="flex items-center gap-2"
             onClick={() => handleGenerate(projectId)}
-            disabled={generateIsPending}>
-            {generateIsPending ? (
+            disabled={isPending}>
+            {isPending ? (
               <>
                 <LuRotateCw className="w-4 h-4 animate-spin" />
                 Generating...
@@ -139,9 +118,9 @@ export default function ProjectInvite({
         <Button
           variant="outline"
           className="flex items-center gap-2 text-destructive"
-          onClick={() => handleRegenerate(projectId)}
-          disabled={regenerateIsPending}>
-          {regenerateIsPending ? (
+          onClick={() => handleGenerate(projectId)}
+          disabled={isPending}>
+          {isPending ? (
             <>
               <LuRotateCw className="w-4 h-4 animate-spin" />
               Regenerating...

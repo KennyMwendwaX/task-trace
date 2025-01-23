@@ -22,10 +22,6 @@ export default async function Settings({ params }: Props) {
     session.user.id
   );
 
-  if (invitationCodeResult.error) {
-    throw new Error(invitationCodeResult.error.message);
-  }
-
   const invitationCode = invitationCodeResult.data;
 
   return (

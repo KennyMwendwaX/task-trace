@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import SettingsLayoutWrapper from "./components/layout-wrapper";
 
 export const metadata: Metadata = {
   title: "Project Settings",
@@ -7,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <SettingsLayoutWrapper>{children}</SettingsLayoutWrapper>;
+  return <>{children}</>;
 }
