@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,9 +38,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
 import { useUserUserMembershipRequest } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
-import { HiOutlineClock } from "react-icons/hi";
-import { Clock, AlertCircle, Mail } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Clock, Mail } from "lucide-react";
 
 interface JoinProjectProps {
   projectId: string;

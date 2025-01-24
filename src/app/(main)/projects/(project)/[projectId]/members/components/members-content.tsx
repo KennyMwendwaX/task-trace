@@ -16,20 +16,18 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useProjectStore } from "../../hooks/useProjectStore";
-import { useMembersStore } from "../../hooks/useMembersStore";
-import ProjectNotFound from "../../components/project-not-found";
+import { DetailedProject } from "@/lib/schema/ProjectSchema";
+import { Member } from "@/lib/schema/MemberSchema";
 
 interface MembersContentProps {
-  projectId: string;
+  project: DetailedProject;
+  members: Member[];
 }
 
-export default function MembersContent({ projectId }: MembersContentProps) {
-  const project = useProjectStore((state) => state.project);
-  const members = useMembersStore((state) => state.members);
-
-  if (!project) return <ProjectNotFound />;
-
+export default function MembersContent({
+  project,
+  members,
+}: MembersContentProps) {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -47,7 +45,7 @@ export default function MembersContent({ projectId }: MembersContentProps) {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/projects/${projectId}`}>
+                <BreadcrumbLink href={`/projects/${project.id}`}>
                   {project.name}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -74,7 +72,7 @@ export default function MembersContent({ projectId }: MembersContentProps) {
                 There are no members in the project. Add one below from the
                 membership requests.
               </p>
-              <Link href={`/projects/${projectId}/members/requests`}>
+              <Link href={`/projects/${project.id}/members/requests`}>
                 <Button className="flex items-center space-x-2 rounded-3xl">
                   <AiOutlinePlus className="w-4 h-4 text-white" />
                   <span>Add Member</span>
@@ -89,8 +87,8 @@ export default function MembersContent({ projectId }: MembersContentProps) {
             </div>
             <MemberTable
               data={members}
-              projectId={projectId}
-              columns={TableColumns({ projectId })}
+              projectId={project.id}
+              columns={TableColumns({ projectId: project.id })}
             />
           </>
         )}

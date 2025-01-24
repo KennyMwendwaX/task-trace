@@ -2,7 +2,6 @@
 
 import { Member } from "@/lib/schema/MemberSchema";
 import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { useProjectStore } from "../hooks/useProjectStore";
 import ProjectOverview from "./project-overview";
 import TaskChart from "./task-chart";
 import RecentTasks from "./recent-tasks";
@@ -22,21 +21,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import ProjectNotFound from "./project-not-found";
-import { useMembersStore } from "../hooks/useMembersStore";
-import { useTasksStore } from "../hooks/useTasksStore";
+import { DetailedProject } from "@/lib/schema/ProjectSchema";
 
 type Props = {
-  projectId: string;
+  project: DetailedProject;
+  members: Member[];
+  tasks: ProjectTask[];
 };
 
-export default function ProjectContent({ projectId }: Props) {
-  const project = useProjectStore((state) => state.project);
-  const members = useMembersStore((state) => state.members);
-  const tasks = useTasksStore((state) => state.tasks);
-
-  if (!project) return <ProjectNotFound />;
-
+export default function ProjectContent({ project, members, tasks }: Props) {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -94,7 +87,7 @@ export default function ProjectContent({ projectId }: Props) {
                 There are no members in the project. Add one below from the
                 membership requests.
               </p>
-              <Link href={`/projects/${projectId}/members/requests`}>
+              <Link href={`/projects/${project.id}/members/requests`}>
                 <Button className="flex items-center space-x-2 rounded-3xl">
                   <AiOutlinePlus className="w-4 h-4 text-white" />
                   <span>Add Member</span>
@@ -112,7 +105,7 @@ export default function ProjectContent({ projectId }: Props) {
               <p className="mb-4 mt-2 text-base text-muted-foreground">
                 You have not added any tasks. Add one below.
               </p>
-              <Link href={`/projects/${projectId}/tasks/create`}>
+              <Link href={`/projects/${project.id}/tasks/create`}>
                 <Button className="flex items-center space-x-2 rounded-3xl">
                   <AiOutlinePlus className="w-4 h-4 text-white" />
                   <span>New Task</span>
@@ -129,7 +122,7 @@ export default function ProjectContent({ projectId }: Props) {
             />
             <div className="w-full grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
               <TaskChart tasks={tasks} />
-              <RecentTasks projectId={projectId} tasks={tasks} />
+              <RecentTasks projectId={project.id} tasks={tasks} />
             </div>
           </div>
         )}

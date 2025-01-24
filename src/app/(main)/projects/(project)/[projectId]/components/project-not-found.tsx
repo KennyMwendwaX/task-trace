@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LuChevronLeft } from "react-icons/lu";

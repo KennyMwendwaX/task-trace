@@ -46,20 +46,6 @@ export const getProjectMembers = async (
       };
     }
 
-    const currentUserMember = await db.query.members.findFirst({
-      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
-    });
-
-    if (!currentUserMember) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User is not a member of this project",
-        },
-      };
-    }
-
     const project = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
     });
@@ -70,6 +56,20 @@ export const getProjectMembers = async (
         error: {
           type: "NOT_FOUND",
           message: "Project not found",
+        },
+      };
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
+    });
+
+    if (!currentUserMember) {
+      return {
+        data: null,
+        error: {
+          type: "UNAUTHORIZED",
+          message: "User is not a member of this project",
         },
       };
     }

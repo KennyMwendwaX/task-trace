@@ -3,11 +3,7 @@
 import { auth } from "@/auth";
 import db from "@/database/db";
 import { members, projects } from "@/database/schema";
-import {
-  DetailedProject,
-  Project,
-  ProjectFormValues,
-} from "@/lib/schema/ProjectSchema";
+import { DetailedProject, ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 

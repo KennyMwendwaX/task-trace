@@ -17,19 +17,15 @@ import { TbPlaylistX } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useProjectStore } from "../../hooks/useProjectStore";
-import { useTasksStore } from "../../hooks/useTasksStore";
 import ProjectNotFound from "../../components/project-not-found";
+import { DetailedProject } from "@/lib/schema/ProjectSchema";
 
 interface TasksContentProps {
-  projectId: string;
+  project: DetailedProject;
+  tasks: ProjectTask[];
 }
 
-export default function TasksContent({ projectId }: TasksContentProps) {
-  const project = useProjectStore((state) => state.project);
-  const tasks = useTasksStore((state) => state.tasks);
-
-  if (!project) return <ProjectNotFound />;
+export default function TasksContent({ project, tasks }: TasksContentProps) {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -47,7 +43,7 @@ export default function TasksContent({ projectId }: TasksContentProps) {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href={`/projects/${projectId}`}>
+                <BreadcrumbLink href={`/projects/${project.id}`}>
                   {project.name}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -71,8 +67,8 @@ export default function TasksContent({ projectId }: TasksContentProps) {
             <div className="pt-4">
               <TaskTable
                 data={tasks}
-                columns={TableColumns({ projectId })}
-                projectId={projectId}
+                columns={TableColumns({ projectId: project.id })}
+                projectId={project.id}
               />
             </div>
           </>
@@ -84,7 +80,7 @@ export default function TasksContent({ projectId }: TasksContentProps) {
               <p className="mb-4 mt-2 text-base text-muted-foreground">
                 You have not added any tasks. Add one below.
               </p>
-              <Link href={`/projects/${projectId}/tasks/create`}>
+              <Link href={`/projects/${project.id}/tasks/create`}>
                 <Button className="flex items-center gap-1 rounded-3xl">
                   <AiOutlinePlus className="w-4 h-4 text-white" />
                   <span>Create Task</span>
