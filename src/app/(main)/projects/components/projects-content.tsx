@@ -1,49 +1,33 @@
-import AddProjectModal from "@/components/add-project-modal";
+import AddProjectModal from "@/app/(main)/components/add-project-modal";
 import ProjectCard from "./project-card";
 import { LuPin, LuShield, LuUsers } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
-import { MemberProject } from "@/lib/schema/ProjectSchema";
 import ProjectsSearch from "./projects-search";
 import SearchResults from "./search-results";
-import { getUserProjects } from "@/server/api/user/projects";
+import { MemberProject } from "@/database/schema";
 
-type SearchParams = Promise<{
+type Params = {
   search?: string;
-}>;
+};
 
 interface ProjectsContentProps {
   userId?: string;
-  searchParams?: SearchParams;
+  params?: Params;
+  projects: MemberProject[];
+  ownedProjects: MemberProject[];
+  adminProjects: MemberProject[];
+  memberProjects: MemberProject[];
 }
 
-export default async function ProjectsContent({
+export default function ProjectsContent({
   userId,
-  searchParams,
+  params,
+  projects,
+  ownedProjects,
+  adminProjects,
+  memberProjects,
 }: ProjectsContentProps) {
-  const params = searchParams ? await searchParams : {};
-  const searchQuery = params.search ?? null;
-
-  const result = await getUserProjects(userId);
-
-  if (result.error) {
-    throw new Error(result.error.message);
-  }
-
-  const projects =
-    result.data?.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ) ?? [];
-
-  const ownedProjects = projects.filter(
-    (project) => project.memberRole === "OWNER"
-  );
-  const adminProjects = projects.filter(
-    (project) => project.memberRole === "ADMIN"
-  );
-  const memberProjects = projects.filter(
-    (project) => project.memberRole === "MEMBER"
-  );
+  const searchQuery = params?.search ?? null;
 
   const renderProjectSection = (
     projects: MemberProject[],

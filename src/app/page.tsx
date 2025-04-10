@@ -1,7 +1,7 @@
-import Header from "@/components/home/header";
-import Hero from "@/components/home/hero";
-import Features from "@/components/home/features";
-import Footer from "@/components/home/footer";
+import Header from "@/app/components/home/header";
+import Hero from "@/app/components/home/hero";
+import Features from "@/app/components/home/features";
+import Footer from "@/app/components/home/footer";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 

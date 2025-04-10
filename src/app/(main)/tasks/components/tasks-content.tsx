@@ -1,21 +1,13 @@
 import { TbPlaylistX } from "react-icons/tb";
 import TaskTable from "./task-table/table";
 import { TableColumns } from "./task-table/table-columns";
-import { getUserTasks } from "@/server/api/user/tasks";
+import { Task } from "@/database/schema";
 
 interface TasksContentProps {
-  userId?: string;
+  tasks: Task[];
 }
 
-export default async function TasksContent({ userId }: TasksContentProps) {
-  const result = await getUserTasks(userId);
-
-  if (result.error) {
-    throw new Error(result.error.message);
-  }
-
-  const tasks = result.data ?? [];
-
+export default function TasksContent({ tasks }: TasksContentProps) {
   return (
     <>
       {tasks.length > 0 ? (

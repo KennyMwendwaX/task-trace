@@ -1,4 +1,4 @@
-import AddProjectModal from "@/components/add-project-modal";
+import AddProjectModal from "@/app/(main)/components/add-project-modal";
 import TaskOverview from "./task-overview";
 import RecentTasks from "./recent-tasks";
 import TaskChart from "./task-chart";

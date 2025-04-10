@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import db from "@/database/db";
-import { members, projects } from "@/database/schema";
+import { members, projects, PublicProject } from "@/database/schema";
 import { DetailedProject, ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -108,6 +108,64 @@ export const getProject = async (
     };
   }
 };
+
+export async function getProjects(userId?: string): Promise<PublicProject[]> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      throw new Error("No active session found");
+    }
+
+    if (!userId || userId !== session.user.id) {
+      throw new Error("User ID mismatch or missing");
+    }
+
+    const projectsResult = await db.query.projects.findMany({
+      with: {
+        tasks: true,
+        members: {
+          with: {
+            user: true,
+          },
+          limit: 3,
+        },
+      },
+    });
+
+    if (!projectsResult || projectsResult.length === 0) {
+      return [];
+    }
+
+    const projects = projectsResult.map((project) => {
+      const { tasks, ...projectWithoutTasks } = project;
+      const totalTasksCount = tasks.length;
+      const completedTasksCount = tasks.filter(
+        (task) => task.status === "DONE"
+      ).length;
+
+      return {
+        ...projectWithoutTasks,
+        totalTasksCount,
+        completedTasksCount,
+        memberCount: project.members.length,
+        members: project.members.map(({ user }) => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        })),
+      };
+    });
+
+    return projects;
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    throw new Error("Failed to fetch projects");
+  }
+}
 
 type UpdateProjectResponse = {
   success: boolean;

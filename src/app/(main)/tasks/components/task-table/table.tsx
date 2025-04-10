@@ -26,12 +26,11 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
-import { UserTask } from "@/lib/schema/TaskSchema";
-import { format } from "date-fns/format";
+import { Task } from "@/database/schema";
 
 interface TaskTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  columns: ColumnDef<Task, TValue>[];
+  data: Task[];
 }
 
 export default function TaskTable<TData, TValue>({
@@ -64,22 +63,6 @@ export default function TaskTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
-  const tasks = data as UserTask[];
-
-  const csvData = tasks.map((task) => ({
-    name: task.name,
-    status: task.status,
-    priority: task.priority,
-    dueDate: format(task.dueDate, "dd/MM/yyyy"),
-  }));
-
-  const headers = [
-    { label: "Task", key: "name" },
-    { label: "Status", key: "status" },
-    { label: "Priority", key: "priority" },
-    { label: "Due Date", key: "dueDate" },
-  ];
 
   return (
     <>

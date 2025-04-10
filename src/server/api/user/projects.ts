@@ -3,148 +3,29 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import db from "@/database/db";
-import { members, projects, users } from "@/database/schema";
-import {
-  MemberProject,
-  projectFormSchema,
-  ProjectFormValues,
-  PublicProject,
-} from "@/lib/schema/ProjectSchema";
+import { MemberProject, members, projects, users } from "@/database/schema";
+import { ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-type ProjectError =
-  | { type: "UNAUTHORIZED"; message: string }
-  | { type: "VALIDATION_ERROR"; message: string }
-  | { type: "DATABASE_ERROR"; message: string }
-  | { type: "NOT_FOUND"; message: string };
-
-type ProjectsResponse = {
-  data: PublicProject[] | null;
-  error?: ProjectError;
-};
-
-export const getProjects = async (
+export async function getUserProjects(
   userId?: string
-): Promise<ProjectsResponse> => {
+): Promise<MemberProject[]> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
 
     if (!session?.user) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+      throw new Error("No active session found");
     }
 
     if (!userId || userId !== session.user.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID mismatch or missing",
-        },
-      };
-    }
-
-    const projectsResult = await db.query.projects.findMany({
-      with: {
-        tasks: true,
-        members: {
-          with: {
-            user: true,
-          },
-          limit: 3,
-        },
-      },
-    });
-
-    if (!projectsResult || projectsResult.length === 0) {
-      return {
-        data: [],
-        error: {
-          type: "NOT_FOUND",
-          message: "No projects found for user",
-        },
-      };
-    }
-
-    const projects = projectsResult.map((project) => {
-      const { tasks, ...projectWithoutTasks } = project;
-      const totalTasksCount = tasks.length;
-      const completedTasksCount = tasks.filter(
-        (task) => task.status === "DONE"
-      ).length;
-
-      return {
-        ...projectWithoutTasks,
-        totalTasksCount,
-        completedTasksCount,
-        memberCount: project.members.length,
-        members: project.members.map(({ user }) => ({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        })),
-      };
-    });
-
-    return {
-      data: projects,
-    };
-  } catch (error) {
-    console.error("Error fetching projects:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to fetch projects",
-      },
-    };
-  }
-};
-
-type UserProjectsResponse = {
-  data: MemberProject[] | null;
-  error?: ProjectError;
-};
-
-export const getUserProjects = async (
-  userId?: string
-): Promise<UserProjectsResponse> => {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    if (!session?.user) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
-    }
-
-    if (!userId || userId !== session.user.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID mismatch or missing",
-        },
-      };
+      throw new Error("User ID mismatch or missing");
     }
 
     const userProjects = await db.query.members.findMany({
-      where: eq(members.userId, userId),
+      where: eq(members.userId, parseInt(userId)),
       with: {
         project: {
           with: {
@@ -172,13 +53,7 @@ export const getUserProjects = async (
     });
 
     if (!userProjects || userProjects.length === 0) {
-      return {
-        data: [],
-        error: {
-          type: "NOT_FOUND",
-          message: "No projects found for user",
-        },
-      };
+      return [];
     }
 
     const projects = userProjects.map(({ project, role }) => {
@@ -203,68 +78,37 @@ export const getUserProjects = async (
       };
     });
 
-    return {
-      data: projects,
-    };
+    return projects;
   } catch (error) {
     console.error("Error fetching user projects:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to fetch projects",
-      },
-    };
+    throw new Error("Failed to fetch user projects");
   }
-};
+}
 
-type CreateProjectResponse = {
-  data: { projectId: string } | null;
-  error?: ProjectError;
-};
-
-export const createProject = async (
+export async function createProject(
   formValues: ProjectFormValues
-): Promise<CreateProjectResponse> => {
+): Promise<{ projectId: number }> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+
     if (!session?.user) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+      throw new Error("No active session found");
     }
 
     const userId = session.user.id;
 
     if (!userId) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID is required",
-        },
-      };
+      throw new Error("User ID is required");
     }
 
     const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
+      where: eq(users.id, parseInt(userId)),
     });
 
     if (!user) {
-      return {
-        data: null,
-        error: {
-          type: "NOT_FOUND",
-          message: "User not found",
-        },
-      };
+      throw new Error("User not found");
     }
 
     const projectResult = await db
@@ -278,13 +122,7 @@ export const createProject = async (
       .returning({ id: projects.id });
 
     if (projectResult.length === 0) {
-      return {
-        data: null,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to create project",
-        },
-      };
+      throw new Error("Failed to create project");
     }
 
     const projectId = projectResult[0].id;
@@ -297,18 +135,9 @@ export const createProject = async (
 
     revalidatePath("/projects");
 
-    return {
-      data: { projectId },
-    };
+    return { projectId };
   } catch (error) {
     console.error("Error creating project:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to create project",
-      },
-    };
+    throw new Error("Failed to create project");
   }
-};
+}

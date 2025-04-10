@@ -247,3 +247,26 @@ export type Member = typeof members.$inferSelect;
 export type Task = typeof tasks.$inferSelect;
 export type InvitationCode = typeof invitationCodes.$inferSelect;
 export type MembershipRequest = typeof membershipRequests.$inferSelect;
+export type PublicProject = Project & {
+  totalTasksCount: number;
+  completedTasksCount: number;
+  memberCount: number;
+  members: {
+    id: number;
+    name: string;
+    email: string;
+    image: string | null;
+  }[];
+};
+export type MemberProject = Project & {
+  memberRole: ProjectRole;
+  totalTasksCount: number;
+  completedTasksCount: number;
+  memberCount: number;
+  members: {
+    id: number;
+    name: string;
+    email: string;
+    image: string | null;
+  }[];
+};

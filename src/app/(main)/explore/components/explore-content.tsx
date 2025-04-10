@@ -1,4 +1,4 @@
-import { PublicProject } from "@/lib/schema/ProjectSchema";
+import { PublicProject } from "@/database/schema";
 import ExploreFilters from "./explore-filters";
 import ProjectCard from "./project-card";
 import { LuFolders } from "react-icons/lu";

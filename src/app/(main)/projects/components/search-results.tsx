@@ -1,6 +1,6 @@
-import { MemberProject } from "@/lib/schema/ProjectSchema";
 import { LuFolders } from "react-icons/lu";
 import ProjectCard from "./project-card";
+import { MemberProject } from "@/database/schema";
 
 interface SearchResultsProps {
   projects: MemberProject[];

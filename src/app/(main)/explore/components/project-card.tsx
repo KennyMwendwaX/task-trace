@@ -20,8 +20,8 @@ import {
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PublicProject } from "@/lib/schema/ProjectSchema";
 import { format } from "date-fns";
+import { PublicProject } from "@/database/schema";
 
 type Props = {
   project: PublicProject;

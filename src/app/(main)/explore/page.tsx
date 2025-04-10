@@ -1,8 +1,9 @@
 import ExploreContent from "./components/explore-content";
-import { getProjects } from "@/server/api/user/projects";
+import { getProjects } from "@/server/api/project/project";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { tryCatch } from "@/lib/try-catch";
 
 // Update types to match new Promise-based approach
 type SearchParams = Promise<{
@@ -27,13 +28,13 @@ export default async function ExplorePage(props: PageProps) {
     redirect("/sign-in");
   }
 
-  const result = await getProjects(session.user.id);
+  const { data: projects, error } = await tryCatch(
+    getProjects(session.user.id)
+  );
 
-  if (result.error) {
-    throw new Error(result.error.message);
+  if (error) {
+    throw new Error(error.message);
   }
-
-  const projects = result.data ?? [];
 
   // Server-side filtering and sorting
   const search = searchParams?.search || "";
