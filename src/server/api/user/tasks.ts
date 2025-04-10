@@ -12,7 +12,7 @@ export async function getUserTasks(userId?: string): Promise<Task[]> {
       headers: await headers(),
     });
 
-    if (!session?.user) {
+    if (!session) {
       throw new Error("No active session found");
     }
 

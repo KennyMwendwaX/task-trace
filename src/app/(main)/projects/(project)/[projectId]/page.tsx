@@ -6,6 +6,7 @@ import { getProjectMembers } from "@/server/api/project/members";
 import { getProjectTasks } from "@/server/api/project/tasks";
 import { getProject } from "@/server/api/project/project";
 import ProjectNotFound from "./components/project-not-found";
+import { tryCatch } from "@/lib/try-catch";
 
 type Props = {
   params: Promise<{
@@ -24,17 +25,27 @@ export default async function ProjectPage({ params }: Props) {
 
   const { projectId } = await params;
 
-  const projectResult = await getProject(projectId, session.user.id);
-  const membersResult = await getProjectMembers(projectId, session.user.id);
-  const tasksResult = await getProjectTasks(projectId, session.user.id);
+  const { data: project, error: projectError } = await tryCatch(
+    getProject(projectId, session.user.id)
+  );
+  const { data: members, error: membersError } = await tryCatch(
+    getProjectMembers(projectId, session.user.id)
+  );
+  const { data: tasks, error: tasksError } = await tryCatch(
+    getProjectTasks(projectId, session.user.id)
+  );
 
-  if (projectResult.error || membersResult.error || tasksResult.error) {
-    throw new Error("Failed to fetch project data");
+  if (projectError) {
+    throw new Error("Failed to fetch project");
   }
 
-  const project = projectResult.data;
-  const members = membersResult.data ?? [];
-  const tasks = tasksResult.data ?? [];
+  if (membersError) {
+    throw new Error("Failed to fetch members");
+  }
+
+  if (tasksError) {
+    throw new Error("Failed to fetch task");
+  }
 
   if (!project) {
     return <ProjectNotFound />;

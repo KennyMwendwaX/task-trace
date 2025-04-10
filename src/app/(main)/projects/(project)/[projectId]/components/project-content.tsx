@@ -1,7 +1,5 @@
 "use client";
 
-import { Member } from "@/lib/schema/MemberSchema";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import ProjectOverview from "./project-overview";
 import TaskChart from "./task-chart";
 import RecentTasks from "./recent-tasks";
@@ -21,12 +19,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { DetailedProject } from "@/lib/schema/ProjectSchema";
+import { DetailedProject, Member, Task } from "@/database/schema";
 
 type Props = {
   project: DetailedProject;
   members: Member[];
-  tasks: ProjectTask[];
+  tasks: Task[];
 };
 
 export default function ProjectContent({ project, members, tasks }: Props) {

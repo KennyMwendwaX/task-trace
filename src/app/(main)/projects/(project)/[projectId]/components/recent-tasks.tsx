@@ -1,6 +1,5 @@
 "use client";
 
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { format } from "date-fns/format";
 import Link from "next/link";
 import {
@@ -22,10 +21,11 @@ import { Button } from "@/components/ui/button";
 import { LuArrowUpRight } from "react-icons/lu";
 import { priorities } from "@/lib/config";
 import { TbPlaylistX } from "react-icons/tb";
+import { Task } from "@/database/schema";
 
 type Props = {
-  projectId: string;
-  tasks: ProjectTask[];
+  projectId: number;
+  tasks: Task[];
 };
 
 export default function RecentTasks({ projectId, tasks }: Props) {

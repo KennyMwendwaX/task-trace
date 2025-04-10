@@ -1,6 +1,5 @@
 "use client";
 
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -14,9 +13,10 @@ import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
 import { Status } from "@/lib/config";
 import { useMemo } from "react";
+import { Task } from "@/database/schema";
 
 type Props = {
-  tasks: ProjectTask[];
+  tasks: Task[];
 };
 
 const statusText: Record<Status, string> = {

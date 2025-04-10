@@ -1,7 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { DetailedProject } from "@/lib/schema/ProjectSchema";
-import { Member } from "@/lib/schema/MemberSchema";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { LuUsers, LuCalendar, LuUser2, LuCheckSquare } from "react-icons/lu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -12,10 +9,11 @@ import {
 } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
+import { DetailedProject, Member, Task } from "@/database/schema";
 
 type Props = {
   project: DetailedProject;
-  tasks: ProjectTask[];
+  tasks: Task[];
   members: Member[];
 };
 

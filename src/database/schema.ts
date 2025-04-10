@@ -270,3 +270,11 @@ export type MemberProject = Project & {
     image: string | null;
   }[];
 };
+export type DetailedProject = Project & {
+  member: Member | null;
+  owner: {
+    name: string;
+    email: string;
+    image: string | null;
+  };
+};

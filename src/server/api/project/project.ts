@@ -3,8 +3,13 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import db from "@/database/db";
-import { members, projects, PublicProject } from "@/database/schema";
-import { DetailedProject, ProjectFormValues } from "@/lib/schema/ProjectSchema";
+import {
+  DetailedProject,
+  members,
+  projects,
+  PublicProject,
+} from "@/database/schema";
+import { ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -13,55 +18,36 @@ type ProjectError =
   | { type: "DATABASE_ERROR"; message: string }
   | { type: "NOT_FOUND"; message: string };
 
-type ProjectResponse = {
-  data: DetailedProject | null;
-  error?: ProjectError;
-};
-
 export const getProject = async (
   projectId: string,
   userId?: string
-): Promise<ProjectResponse> => {
+): Promise<DetailedProject> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new Error("No active session found");
     }
 
     if (!userId || userId !== session.user.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID mismatch or missing",
-        },
-      };
+      throw new Error("User ID mismatch or missing");
     }
 
     const currentUserMember = await db.query.members.findFirst({
-      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(userId))
+      ),
     });
 
     if (!currentUserMember) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User is not a member of this project",
-        },
-      };
+      throw new Error("User is not a member of the project");
     }
 
     const projectData = await db.query.projects.findFirst({
-      where: eq(projects.id, projectId),
+      where: eq(projects.id, parseInt(projectId)),
       with: {
         owner: {
           columns: {
@@ -74,13 +60,7 @@ export const getProject = async (
     });
 
     if (!projectData) {
-      return {
-        data: null,
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new Error("Project not found");
     }
 
     const project = {
@@ -89,23 +69,18 @@ export const getProject = async (
         ? {
             id: currentUserMember.id,
             role: currentUserMember.role,
+            createdAt: currentUserMember.createdAt,
+            updatedAt: currentUserMember.updatedAt,
+            userId: currentUserMember.userId,
+            projectId: currentUserMember.projectId,
           }
         : null,
     };
 
-    return {
-      data: project,
-    };
+    return project;
   } catch (error) {
     console.error("Error fetching project:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to fetch project",
-      },
-    };
+    throw new Error("Failed to fetch project");
   }
 };
 
@@ -115,7 +90,7 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
       headers: await headers(),
     });
 
-    if (!session?.user) {
+    if (!session) {
       throw new Error("No active session found");
     }
 
@@ -181,7 +156,7 @@ export const updateProject = async (
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user) {
+    if (!session) {
       return {
         success: false,
         error: {

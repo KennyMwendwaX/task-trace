@@ -16,7 +16,7 @@ export async function getUserProjects(
       headers: await headers(),
     });
 
-    if (!session?.user) {
+    if (!session) {
       throw new Error("No active session found");
     }
 
@@ -93,7 +93,7 @@ export async function createProject(
       headers: await headers(),
     });
 
-    if (!session?.user) {
+    if (!session) {
       throw new Error("No active session found");
     }
 
