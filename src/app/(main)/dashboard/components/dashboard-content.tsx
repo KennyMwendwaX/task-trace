@@ -2,22 +2,23 @@ import AddProjectModal from "@/components/add-project-modal";
 import TaskOverview from "./task-overview";
 import RecentTasks from "./recent-tasks";
 import TaskChart from "./task-chart";
-import { UserTask } from "@/lib/schema/TaskSchema";
+import { Task } from "@/database/schema";
+import { Session } from "@/lib/auth";
 
 interface DashboardContentProps {
-  userName?: string | null;
-  tasks: UserTask[];
+  session: Session;
+  tasks: Task[];
 }
 
 export default async function DashboardContent({
-  userName,
+  session,
   tasks,
 }: DashboardContentProps) {
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div className="text-2xl font-bold tracking-tight mb-4 sm:mb-0">
-          Welcome, {userName}!
+          Welcome, {session.user.name}!
         </div>
         <AddProjectModal />
       </div>

@@ -240,3 +240,10 @@ export const membershipRequestsRelations = relations(
     }),
   })
 );
+
+export type User = typeof users.$inferSelect;
+export type Project = typeof projects.$inferSelect;
+export type Member = typeof members.$inferSelect;
+export type Task = typeof tasks.$inferSelect;
+export type InvitationCode = typeof invitationCodes.$inferSelect;
+export type MembershipRequest = typeof membershipRequests.$inferSelect;

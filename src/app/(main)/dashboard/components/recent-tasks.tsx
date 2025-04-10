@@ -22,9 +22,10 @@ import { Button } from "@/components/ui/button";
 import { LuArrowUpRight } from "react-icons/lu";
 import { priorities } from "@/lib/config";
 import { TbPlaylistX } from "react-icons/tb";
+import { Task } from "@/database/schema";
 
 type Props = {
-  tasks: UserTask[];
+  tasks: Task[];
 };
 
 export default function RecentTasks({ tasks }: Props) {

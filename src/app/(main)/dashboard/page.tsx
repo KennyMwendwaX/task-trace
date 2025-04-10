@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getUserTasks } from "@/server/api/user/tasks";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { tryCatch } from "@/lib/try-catch";
 
 export default async function Dashboard() {
   const session = await auth.api.getSession({
@@ -13,12 +14,11 @@ export default async function Dashboard() {
     redirect("/sign-in");
   }
 
-  const result = await getUserTasks(session.user.id);
+  const { data: tasks, error } = await tryCatch(getUserTasks(session.user.id));
 
-  if (result.error) {
-    throw new Error(result.error.message);
+  if (error) {
+    throw new Error(error.message);
   }
 
-  const tasks = result.data ?? [];
-  return <DashboardContent userName={session.user.name} tasks={tasks} />;
+  return <DashboardContent session={session} tasks={tasks} />;
 }
