@@ -79,7 +79,7 @@ import { useTaskStore } from "../../../../hooks/useTaskStore";
 import { Label, Priority, Status } from "@/lib/config";
 import { useMembersStore } from "../../../../hooks/useMembersStore";
 import { useTransition } from "react";
-import { updateTask } from "@/server/actions/project/tasks";
+import { updateTask } from "@/server/api/project/tasks";
 
 type Props = {
   projectId: string;
@@ -113,13 +113,6 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
 
   if (!task) {
     return <TaskNotFound projectId={projectId} />;
-  }
-
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
   }
 
   const onSubmit = (values: TaskFormValues) => {

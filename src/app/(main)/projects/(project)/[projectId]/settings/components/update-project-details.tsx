@@ -34,7 +34,7 @@ import {
 import { LuSettings } from "react-icons/lu";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { updateProject } from "@/server/actions/project/project";
+import { updateProject } from "@/server/api/project/project";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 

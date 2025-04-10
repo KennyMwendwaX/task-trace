@@ -1,9 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import TanstackProvider from "@/providers/TanstackProvider";
-import SessionProvider from "@/providers/SessionProvider";
-import { auth } from "../auth";
+import TanstackProvider from "@/providers/tanstack-provider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
@@ -16,16 +14,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
   return (
     <html lang="en">
       <body className={GeistSans.className}>
-        <SessionProvider session={session}>
-          <TanstackProvider>
-            {children}
-            <Toaster richColors />
-          </TanstackProvider>
-        </SessionProvider>
+        <TanstackProvider>
+          {children}
+          <Toaster richColors />
+        </TanstackProvider>
       </body>
     </html>
   );

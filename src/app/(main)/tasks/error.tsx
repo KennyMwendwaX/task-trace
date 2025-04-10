@@ -53,7 +53,7 @@ export default function Error({
           )}
 
           <p className="text-sm text-muted-foreground">
-            Don't worry - this has been logged and we'll look into it.
+            Don&apos;t worry - this has been logged and we&apos;ll look into it.
           </p>
         </CardContent>
 

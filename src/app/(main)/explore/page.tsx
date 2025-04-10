@@ -1,21 +1,30 @@
 import ExploreContent from "./components/explore-content";
-import { auth } from "@/auth";
-import { getProjects } from "@/server/actions/user/projects";
+import { getProjects } from "@/server/api/user/projects";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
+// Update types to match new Promise-based approach
+type SearchParams = Promise<{
+  search?: string;
+  filter?: string;
+  sort?: string;
+}>;
 
 interface PageProps {
-  searchParams?: {
-    search?: string;
-    filter?: string;
-    sort?: string;
-  };
+  searchParams: SearchParams;
 }
 
-export default async function ExplorePage({ searchParams }: PageProps) {
-  const session = await auth();
+export default async function ExplorePage(props: PageProps) {
+  // Await the searchParams promise
+  const searchParams = await props.searchParams;
 
-  if (!session?.user) {
-    redirect("/signin");
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/sign-in");
   }
 
   const result = await getProjects(session.user.id);
@@ -27,10 +36,9 @@ export default async function ExplorePage({ searchParams }: PageProps) {
   const projects = result.data ?? [];
 
   // Server-side filtering and sorting
-  const params = searchParams ? await searchParams : {};
-  const search = params?.search || "";
-  const filter = params?.filter || "ALL";
-  const sort = params?.sort || "date_desc";
+  const search = searchParams?.search || "";
+  const filter = searchParams?.filter || "ALL";
+  const sort = searchParams?.sort || "date_desc";
 
   const filteredProjects = projects
     .filter((project) =>

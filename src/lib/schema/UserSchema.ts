@@ -48,15 +48,4 @@ export const signupSchema = userSchema
     path: ["confirm_password"],
   });
 
-export const signinSchema = userSchema.omit({
-  id: true,
-  name: true,
-  emailVerified: true,
-  image: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
 export type User = z.infer<typeof userSchema>;
-export type SignupValues = z.infer<typeof signupSchema>;
-export type SigninValues = z.infer<typeof signinSchema>;

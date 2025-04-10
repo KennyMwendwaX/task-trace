@@ -16,17 +16,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useSession } from "next-auth/react";
 import { IoSettingsOutline } from "react-icons/io5";
-import { logout } from "@/server/actions/auth/logout";
 import { MdLogout } from "react-icons/md";
+import { signOut } from "@/lib/auth-client";
+import { Session } from "@/lib/auth";
 
-export default function NavUser() {
+export default function NavUser({ session }: { session: Session }) {
   const { isMobile } = useSidebar();
-  const session = useSession();
-  const userName = session.data?.user?.name ?? "Guest";
-  const userEmail = session.data?.user?.email ?? "No email provided";
-  const userImage = session.data?.user?.image;
+  const userName = session.user?.name ?? "Guest";
+  const userEmail = session.user?.email ?? "No email provided";
+  const userImage = session.user?.image;
 
   return (
     <SidebarMenu>
@@ -74,7 +73,7 @@ export default function NavUser() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                logout();
+                signOut();
               }}
               className="flex items-center hover:bg-red-100">
               <MdLogout className="mr-2 w-5 h-5" />

@@ -1,6 +1,7 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getProject } from "@/server/actions/project/project";
+import { getProject } from "@/server/api/project/project";
 import ProjectNotFound from "./components/project-not-found";
 import JoinProjectModal from "./components/join-project-modal";
 
@@ -13,12 +14,13 @@ export default async function ProjectLayout({
     projectId: string;
   }>;
 }) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
-
   const { projectId } = await params;
   const projectResult = await getProject(projectId, session.user.id);
 
@@ -36,7 +38,7 @@ export default async function ProjectLayout({
   const isNotMember = !project.member;
 
   if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
+    return <JoinProjectModal session={session} projectId={projectId} />;
   }
 
   return <>{children}</>;

@@ -14,10 +14,16 @@ import Logo from "@/app/logo.png";
 import NavLinks from "./nav-links";
 import Image from "next/image";
 import Link from "next/link";
+import { Session } from "@/lib/auth";
+
+interface ProjectSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  session: Session;
+}
 
 export default function ProjectSidebar({
+  session,
   ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: ProjectSidebarProps) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -40,7 +46,7 @@ export default function ProjectSidebar({
         <NavLinks />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <NavUser session={session} />
       </SidebarFooter>
     </Sidebar>
   );

@@ -1,20 +1,23 @@
 import { redirect } from "next/navigation";
 import ProjectsContent from "./components/projects-content";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-interface SearchParams {
+type SearchParams = Promise<{
   search?: string;
-}
+}>;
 
 export default async function ProjectsPage({
   searchParams,
 }: {
   searchParams?: SearchParams;
 }) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
 
   return (

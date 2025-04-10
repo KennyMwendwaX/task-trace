@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { MdLogout, MdMenu, MdClose } from "react-icons/md";
-import { logout } from "@/server/actions/auth/logout";
-import { Session } from "next-auth";
+import { signOut } from "@/lib/auth-client";
+import { Session } from "@/lib/auth";
 import Logo from "@/app/logo.png";
 
 interface Props {
@@ -64,7 +64,7 @@ export default function Header({ session }: Props) {
                   </li>
                   <li>
                     <Button
-                      onClick={() => logout()}
+                      onClick={() => signOut()}
                       size="lg"
                       className="flex items-center rounded-full">
                       <MdLogout className="mr-1 w-5 h-5" />
@@ -75,7 +75,7 @@ export default function Header({ session }: Props) {
               ) : (
                 <ul className="flex grow justify-end flex-wrap items-center space-x-2">
                   <li>
-                    <Link href="/signin">
+                    <Link href="/sign-sin">
                       <Button
                         size="lg"
                         variant="outline"
@@ -134,7 +134,7 @@ export default function Header({ session }: Props) {
                 </Link>
                 <Button
                   onClick={() => {
-                    logout();
+                    signOut();
                     setMobileMenuOpen(false);
                   }}
                   size="lg"
@@ -145,7 +145,7 @@ export default function Header({ session }: Props) {
               </>
             ) : (
               <>
-                <Link href="/signin" className="mb-4">
+                <Link href="/sign-in" className="mb-4">
                   <Button
                     size="lg"
                     variant="outline"

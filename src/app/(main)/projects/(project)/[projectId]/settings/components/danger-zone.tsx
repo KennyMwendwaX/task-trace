@@ -11,8 +11,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { deleteProject } from "@/server/actions/project/project";
-import { leaveProject } from "@/server/actions/project/members";
+import { deleteProject } from "@/server/api/project/project";
+import { leaveProject } from "@/server/api/project/members";
 import { useTransition } from "react";
 
 interface DangerZoneProps {

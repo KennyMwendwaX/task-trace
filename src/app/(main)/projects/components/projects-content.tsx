@@ -5,19 +5,24 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { MemberProject } from "@/lib/schema/ProjectSchema";
 import ProjectsSearch from "./projects-search";
 import SearchResults from "./search-results";
-import { getUserProjects } from "@/server/actions/user/projects";
+import { getUserProjects } from "@/server/api/user/projects";
+
+type SearchParams = Promise<{
+  search?: string;
+}>;
 
 interface ProjectsContentProps {
   userId?: string;
-  searchParams?: {
-    search?: string;
-  };
+  searchParams?: SearchParams;
 }
 
 export default async function ProjectsContent({
   userId,
   searchParams,
 }: ProjectsContentProps) {
+  const params = searchParams ? await searchParams : {};
+  const searchQuery = params.search ?? null;
+
   const result = await getUserProjects(userId);
 
   if (result.error) {
@@ -29,9 +34,6 @@ export default async function ProjectsContent({
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     ) ?? [];
-
-  const params = searchParams ? await searchParams : {};
-  const searchQuery = params.search ?? null;
 
   const ownedProjects = projects.filter(
     (project) => project.memberRole === "OWNER"

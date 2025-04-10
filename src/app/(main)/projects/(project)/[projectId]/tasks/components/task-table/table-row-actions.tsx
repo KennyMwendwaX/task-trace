@@ -33,7 +33,7 @@ import {
   updateTaskLabel,
   updateTaskPriority,
   updateTaskStatus,
-} from "@/server/actions/project/tasks";
+} from "@/server/api/project/tasks";
 
 interface TableRowActions<TData> {
   row: Row<TData>;

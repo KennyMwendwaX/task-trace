@@ -4,7 +4,7 @@ import {
   useProjectQuery,
   useProjectRequestsQuery,
 } from "@/hooks/useProjectQueries";
-import Loading from "./loading";
+import Loading from "../loading";
 import { useParams, usePathname } from "next/navigation";
 
 interface LayoutWrapperProps {

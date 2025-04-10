@@ -35,7 +35,7 @@ import { useTaskStore } from "../../../hooks/useTaskStore";
 import ProjectNotFound from "../../../components/project-not-found";
 import TaskNotFound from "./task-not-found";
 import { useTransition } from "react";
-import { deleteTask } from "@/server/actions/project/tasks";
+import { deleteTask } from "@/server/api/project/tasks";
 import { toast } from "sonner";
 
 interface StatusConfig {

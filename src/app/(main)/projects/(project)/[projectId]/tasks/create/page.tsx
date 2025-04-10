@@ -1,15 +1,18 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import CreateTaskForm from "./components/create-task-form";
 import { redirect } from "next/navigation";
-import { getProjectMembers } from "@/server/actions/project/members";
+import { getProjectMembers } from "@/server/api/project/members";
 
 type Props = { params: Promise<{ projectId: string }> };
 
 export default async function CreateTaskPage({ params }: Props) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
   const { projectId } = await params;
 

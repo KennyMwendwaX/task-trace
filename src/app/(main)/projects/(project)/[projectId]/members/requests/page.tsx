@@ -1,15 +1,18 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import RequestsContent from "./components/requests-content";
-import { getMembershipRequests } from "@/server/actions/project/members";
+import { getMembershipRequests } from "@/server/api/project/members";
 
 type Props = { params: Promise<{ projectId: string }> };
 
 export default async function MembershipRequests({ params }: Props) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
   const { projectId } = await params;
 

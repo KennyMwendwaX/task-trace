@@ -1,13 +1,16 @@
 import DashboardContent from "./components/dashboard-content";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
-import { getUserTasks } from "@/server/actions/user/tasks";
+import { getUserTasks } from "@/server/api/user/tasks";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export default async function Dashboard() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
 
   const result = await getUserTasks(session.user.id);

@@ -1,38 +1,27 @@
-import {
-  DEFAULT_ROUTE_REDIRECT,
-  apiAuthPrefix,
-  publicRoutes,
-  authRoutes,
-} from "./routes";
-import { auth } from "./auth";
+import { betterFetch } from "@better-fetch/fetch";
+import type { auth } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
 
-export default auth(async function middleware(req) {
-  const { nextUrl } = req;
+type Session = typeof auth.$Infer.Session;
 
-  const isLoggedIn = !!req.auth;
-
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-  // Order of the checking the auth in routes matters
-  if (isApiAuthRoute) return;
-
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_ROUTE_REDIRECT, nextUrl));
+export async function middleware(request: NextRequest) {
+  const { data: session } = await betterFetch<Session>(
+    "/api/auth/get-session",
+    {
+      baseURL: request.nextUrl.origin,
+      headers: {
+        cookie: request.headers.get("cookie") || "", // Forward the cookies from the request
+      },
     }
-    return;
+  );
+
+  if (!session) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/signin", nextUrl));
-  }
+  return NextResponse.next();
+}
 
-  return;
-});
-
-// Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!api|trpc|.+\\.[\\w]+$|_next|sign-in|$).*)"],
 };

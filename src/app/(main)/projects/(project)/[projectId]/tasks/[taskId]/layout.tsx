@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import StoreInitializer from "./components/store-initializer";
-import { getTask } from "@/server/actions/project/tasks";
+import { getTask } from "@/server/api/project/tasks";
 
 export const metadata: Metadata = {
   title: "Task",
@@ -19,10 +20,11 @@ export default async function ProjectLayout({
     taskId: string;
   }>;
 }) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/signin");
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    redirect("/sign-in");
   }
 
   const { projectId, taskId } = await params;

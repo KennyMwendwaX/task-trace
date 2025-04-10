@@ -1,7 +1,8 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import SettingsContent from "./components/settings-content";
-import { getProjectInvitationCode } from "@/server/actions/project/invitation-code";
+import { getProjectInvitationCode } from "@/server/api/project/invitation-code";
 
 type Props = {
   params: Promise<{
@@ -10,10 +11,12 @@ type Props = {
 };
 
 export default async function Settings({ params }: Props) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user?.id) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
   const { projectId } = await params;
 

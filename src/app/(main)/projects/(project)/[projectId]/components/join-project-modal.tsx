@@ -35,13 +35,14 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSession } from "next-auth/react";
 import { useUserUserMembershipRequest } from "@/hooks/useUserQueries";
 import { useUserStore } from "@/hooks/useUserStore";
 import { Clock, Mail } from "lucide-react";
+import { Session } from "@/lib/auth";
 
 interface JoinProjectProps {
   projectId: string;
+  session: Session;
 }
 
 const joinProjectSchema = z.object({
@@ -50,13 +51,15 @@ const joinProjectSchema = z.object({
   }),
 });
 
-export default function JoinProjectModal({ projectId }: JoinProjectProps) {
+export default function JoinProjectModal({
+  projectId,
+  session,
+}: JoinProjectProps) {
   const [isDialogOpen, setDialogOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("code");
   const router = useRouter();
   const queryClient = useQueryClient();
-  const session = useSession();
-  const userId = session.data?.user?.id;
+  const userId = session.user?.id;
 
   const { isLoading: isLoadingRequests } = useUserUserMembershipRequest(userId);
 

@@ -1,7 +1,7 @@
 import { TbPlaylistX } from "react-icons/tb";
 import TaskTable from "./task-table/table";
 import { TableColumns } from "./task-table/table-columns";
-import { getUserTasks } from "@/server/actions/user/tasks";
+import { getUserTasks } from "@/server/api/user/tasks";
 
 interface TasksContentProps {
   userId?: string;

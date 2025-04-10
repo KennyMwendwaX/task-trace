@@ -1,9 +1,10 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import ProjectContent from "./components/project-content";
-import { getProjectMembers } from "@/server/actions/project/members";
-import { getProjectTasks } from "@/server/actions/project/tasks";
-import { getProject } from "@/server/actions/project/project";
+import { getProjectMembers } from "@/server/api/project/members";
+import { getProjectTasks } from "@/server/api/project/tasks";
+import { getProject } from "@/server/api/project/project";
 import ProjectNotFound from "./components/project-not-found";
 
 type Props = {
@@ -13,10 +14,12 @@ type Props = {
 };
 
 export default async function ProjectPage({ params }: Props) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user) {
-    redirect("/signin");
+  if (!session) {
+    redirect("/sign-in");
   }
 
   const { projectId } = await params;

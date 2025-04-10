@@ -71,7 +71,7 @@ import { toast } from "sonner";
 import { useProjectStore } from "../../../hooks/useProjectStore";
 import ProjectNotFound from "../../../components/project-not-found";
 import { useTransition } from "react";
-import { createTask } from "@/server/actions/project/tasks";
+import { createTask } from "@/server/api/project/tasks";
 
 type Props = {
   projectId: string;
@@ -87,13 +87,6 @@ export default function CreateTaskForm({ projectId, members }: Props) {
   const project = useProjectStore((state) => state.project);
 
   if (!project) return <ProjectNotFound />;
-
-  const isPrivateProject = !project.isPublic;
-  const isNotMember = !project.member;
-
-  if (isPrivateProject && isNotMember) {
-    return <JoinProjectModal projectId={projectId} />;
-  }
 
   const onSubmit = (values: TaskFormValues) => {
     startTransition(async () => {
