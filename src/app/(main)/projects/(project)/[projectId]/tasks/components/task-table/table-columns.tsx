@@ -6,14 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "@/lib/config";
-import { ProjectTask, taskSchema } from "@/lib/schema/TaskSchema";
 import TableColumnHeader from "./table-column-header";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns/format";
 import Link from "next/link";
+import { ProjectTask } from "@/database/schema";
 
 interface TableColumnsProps {
-  projectId: string;
+  projectId: number;
 }
 
 export const TableColumns = ({
@@ -44,7 +44,7 @@ export const TableColumns = ({
     accessorKey: "name",
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
-      const task = taskSchema.parse(row.original);
+      const task = row.original;
       const label = labels.find((label) => label.value === row.original.label);
 
       if (!label) {
@@ -142,7 +142,7 @@ export const TableColumns = ({
     accessorKey: "assignedTo",
     header: () => <TableColumnHeader name="Assigned To" />,
     cell: ({ row }) => {
-      const task = taskSchema.parse(row.original);
+      const task = row.original;
       return <div>{task.member?.user.name ?? "Unassigned"}</div>;
     },
   },
@@ -150,7 +150,7 @@ export const TableColumns = ({
     accessorKey: "dueDate",
     header: () => <TableColumnHeader name="Due Date" />,
     cell: ({ row }) => {
-      const task = taskSchema.parse(row.original);
+      const task = row.original;
       const date = format(task.dueDate, "MMM d, yyyy");
       return <div>{date}</div>;
     },

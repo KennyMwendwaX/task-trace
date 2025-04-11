@@ -26,20 +26,18 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
-import { Member } from "@/lib/schema/MemberSchema";
 import { IoDownloadOutline } from "react-icons/io5";
-import { CSVLink } from "react-csv";
-import { Status } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
 import { format } from "date-fns";
+import { ProjectMember } from "@/database/schema";
 
 interface MemberTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  projectId: string;
+  columns: ColumnDef<ProjectMember, TValue>[];
+  data: ProjectMember[];
+  projectId: number;
 }
 
 export default function MemberTable<TData, TValue>({
@@ -75,9 +73,8 @@ export default function MemberTable<TData, TValue>({
   });
 
   const handleExportExcel = async () => {
-    const members = data as Member[];
     const excelService = new ExcelExportService();
-    const blob = await excelService.exportMembers(members);
+    const blob = await excelService.exportMembers(data);
     downloadExcel(blob, `members-${format(new Date(), "yyyy-MM-dd")}.xlsx`);
   };
 

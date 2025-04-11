@@ -1,6 +1,5 @@
 "use client";
 
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -19,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Status } from "@/lib/config";
+import { ProjectTask } from "@/database/schema";
 
 type Props = {
   tasks: ProjectTask[];

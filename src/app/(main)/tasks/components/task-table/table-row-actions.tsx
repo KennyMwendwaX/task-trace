@@ -15,168 +15,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { statuses, priorities, labels } from "@/lib/config";
-import { userTaskSchema } from "@/lib/schema/TaskSchema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IoOpenOutline } from "react-icons/io5";
 import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { Task } from "@/database/schema";
 
 interface TableRowActions<TData> {
-  row: Row<TData>;
-  projectId: string;
+  row: Row<Task>;
+  projectId: number;
 }
 
 export default function TableRowActions<TData>({
   row,
   projectId,
 }: TableRowActions<TData>) {
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const task = userTaskSchema.parse(row.original);
+  const task = row.original;
 
-  const {
-    mutate: updateLabel,
-    isPending: labelIsPending,
-    error: labelChangeError,
-  } = useMutation({
-    mutationFn: async (label: string) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ label }),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/label`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task label");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task label updated successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["user-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to updated task label");
-      console.log(error);
-    },
-  });
+  const handleLabelChange = async (label: string) => {};
 
-  const {
-    mutate: updateStatus,
-    isPending: statusIsPending,
-    error: statusChangeError,
-  } = useMutation({
-    mutationFn: async (status: string) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/status`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task status");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task status updated successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["user-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to updated task status");
-      console.log(error);
-    },
-  });
+  const handleStatusChange = async (status: string) => {};
 
-  const {
-    mutate: updatePriority,
-    isPending: priorityIsPending,
-    error: priorityChangeError,
-  } = useMutation({
-    mutationFn: async (priority: string) => {
-      const options = {
-        method: "PATCH",
-        body: JSON.stringify({ priority }),
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}/priority`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error updating task priority");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task priority updated successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["user-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to updated task priority");
-      console.log(error);
-    },
-  });
+  const handlePriorityChange = async (priority: string) => {};
 
-  const {
-    mutate: deleteTask,
-    isPending: deleteIsPending,
-    error: deleteTaskError,
-  } = useMutation({
-    mutationFn: async () => {
-      const options = {
-        method: "DELETE",
-      };
-      const response = await fetch(
-        `/api/projects/${projectId}/tasks/${task.id}`,
-        options
-      );
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error deleting task");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task deleted successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["user-tasks", projectId],
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to delete task");
-      console.log(error);
-    },
-  });
+  const taskDelete = async () => {};
 
-  const handleLabelChange = async (label: string) => {
-    updateLabel(label);
-  };
-
-  const handleStatusChange = async (status: string) => {
-    updateStatus(status);
-  };
-
-  const handlePriorityChange = async (priority: string) => {
-    updatePriority(priority);
-  };
-
-  const taskDelete = async () => {
-    deleteTask();
-  };
-
-  const handleEditTask = () => {
-    router.push(`/projects/${projectId}/tasks/${task.id}/edit`);
-  };
+  const handleEditTask = () => {};
 
   const handleGoToProject = () => {
     router.push(`/projects/${projectId}`);

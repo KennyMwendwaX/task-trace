@@ -15,15 +15,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { Project, projectSchema } from "@/lib/schema/ProjectSchema";
+import { projectSchema } from "@/lib/schema/ProjectSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { toggleProjectVisibility } from "@/server/api/project/project";
+import { DetailedProject } from "@/database/schema";
 
 interface Props {
-  project: Project;
+  project: DetailedProject;
 }
 
 const switchFormSchema = z.object({

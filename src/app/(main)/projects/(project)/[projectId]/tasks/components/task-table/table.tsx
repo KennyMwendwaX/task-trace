@@ -25,18 +25,18 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { IoDownloadOutline } from "react-icons/io5";
 import { format } from "date-fns/format";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
+import { ProjectTask } from "@/database/schema";
 
 interface TaskTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  projectId: string;
+  columns: ColumnDef<ProjectTask, TValue>[];
+  data: ProjectTask[];
+  projectId: number;
 }
 
 export default function TaskTable<TData, TValue>({

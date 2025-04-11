@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ProjectRole } from "@/lib/config";
 import { LuTrophy, LuMedal } from "react-icons/lu";
+import { ProjectTask } from "@/database/schema";
 
 type Props = {
   tasks: ProjectTask[];

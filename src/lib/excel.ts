@@ -1,7 +1,6 @@
 import * as Excel from "exceljs";
 import { format } from "date-fns";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { Member } from "./schema/MemberSchema";
+import { ProjectMember, ProjectTask } from "@/database/schema";
 
 export interface ExcelColumn {
   header: string;
@@ -199,7 +198,7 @@ export class ExcelExportService {
     });
   }
 
-  async exportMembers(members: Member[]): Promise<Blob> {
+  async exportMembers(members: ProjectMember[]): Promise<Blob> {
     this.worksheet = this.workbook.addWorksheet("Members");
     const columns: ExcelColumn[] = [
       { header: "Name", key: "name", width: 30 },

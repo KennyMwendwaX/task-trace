@@ -66,31 +66,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Member } from "@/lib/schema/MemberSchema";
-import JoinProjectModal from "../../../components/join-project-modal";
 import { toast } from "sonner";
-import { useProjectStore } from "../../../hooks/useProjectStore";
 import ProjectNotFound from "../../../components/project-not-found";
 import { useTransition } from "react";
 import { createTask } from "@/server/api/project/tasks";
+import { DetailedProject, ProjectMember } from "@/database/schema";
 
 type Props = {
-  projectId: string;
-  members: Member[];
+  project: DetailedProject;
+  members: ProjectMember[];
 };
-export default function CreateTaskForm({ projectId, members }: Props) {
+export default function CreateTaskForm({ project, members }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
   });
 
-  const project = useProjectStore((state) => state.project);
-
-  if (!project) return <ProjectNotFound />;
-
   const onSubmit = (values: TaskFormValues) => {
     startTransition(async () => {
-      const result = await createTask(projectId, values);
+      const result = await createTask(project.id, values);
 
       if (result.error) {
         toast.error(result.error.message);
@@ -100,7 +95,7 @@ export default function CreateTaskForm({ projectId, members }: Props) {
       if (result.data?.taskId) {
         form.reset();
         toast.success("Task created successfully!");
-        router.push(`/projects/${projectId}/tasks/${result.data.taskId}`);
+        router.push(`/projects/${project.id}/tasks/${result.data.taskId}`);
       }
     });
   };
@@ -248,7 +243,8 @@ export default function CreateTaskForm({ projectId, members }: Props) {
                               )}>
                               {field.value
                                 ? members.find(
-                                    (member) => member.id === field.value
+                                    (member) =>
+                                      member.id === Number(field.value)
                                   )?.user.name
                                 : "Select member"}
                               <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -267,12 +263,15 @@ export default function CreateTaskForm({ projectId, members }: Props) {
                                       value={member.user.name}
                                       key={member.id}
                                       onSelect={() => {
-                                        form.setValue("memberId", member.id);
+                                        form.setValue(
+                                          "memberId",
+                                          String(member.id)
+                                        );
                                       }}>
                                       <LuCheck
                                         className={cn(
                                           "mr-2 h-4 w-4",
-                                          member.id === field.value
+                                          member.id === Number(field.value)
                                             ? "opacity-100"
                                             : "opacity-0"
                                         )}

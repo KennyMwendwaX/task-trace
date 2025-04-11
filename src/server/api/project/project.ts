@@ -148,8 +148,8 @@ type UpdateProjectResponse = {
 };
 
 export const updateProject = async (
-  userId: string,
-  projectId: string,
+  userId?: string,
+  projectId: number,
   formValues: ProjectFormValues
 ): Promise<UpdateProjectResponse> => {
   try {
@@ -254,7 +254,7 @@ type DeleteProjectResponse = {
 };
 
 export const deleteProject = async (
-  projectId: string
+  projectId: number
 ): Promise<DeleteProjectResponse> => {
   try {
     const session = await auth.api.getSession({
@@ -316,7 +316,7 @@ type ToggleVisibilityResponse = {
 };
 
 export const toggleProjectVisibility = async (
-  projectId: string,
+  projectId: number,
   isPublic: boolean
 ): Promise<ToggleVisibilityResponse> => {
   try {

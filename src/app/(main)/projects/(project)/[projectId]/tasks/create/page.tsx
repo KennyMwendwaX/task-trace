@@ -3,6 +3,9 @@ import { headers } from "next/headers";
 import CreateTaskForm from "./components/create-task-form";
 import { redirect } from "next/navigation";
 import { getProjectMembers } from "@/server/api/project/members";
+import { getProject } from "@/server/api/project/project";
+import { tryCatch } from "@/lib/try-catch";
+import ProjectNotFound from "../../components/project-not-found";
 
 type Props = { params: Promise<{ projectId: string }> };
 
@@ -14,15 +17,27 @@ export default async function CreateTaskPage({ params }: Props) {
   if (!session) {
     redirect("/sign-in");
   }
+
   const { projectId } = await params;
 
-  const membersResult = await getProjectMembers(projectId, session.user.id);
+  const { data: project, error: projectError } = await tryCatch(
+    getProject(projectId, session.user.id)
+  );
+  const { data: members, error: membersError } = await tryCatch(
+    getProjectMembers(projectId, session.user.id)
+  );
 
-  if (membersResult.error) {
-    throw new Error(membersResult.error.message);
+  if (projectError) {
+    throw new Error("Failed to fetch project");
   }
 
-  const members = membersResult.data ?? [];
+  if (membersError) {
+    throw new Error("Failed to fetch members");
+  }
 
-  return <CreateTaskForm projectId={projectId} members={members} />;
+  if (!project) {
+    return <ProjectNotFound />;
+  }
+
+  return <CreateTaskForm project={project} members={members} />;
 }

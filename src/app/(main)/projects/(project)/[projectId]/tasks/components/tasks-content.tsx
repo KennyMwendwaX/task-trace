@@ -10,15 +10,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
 import TaskTable from "./task-table/table";
 import { TableColumns } from "./task-table/table-columns";
 import { TbPlaylistX } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import ProjectNotFound from "../../components/project-not-found";
-import { DetailedProject } from "@/lib/schema/ProjectSchema";
+import { DetailedProject, ProjectTask } from "@/database/schema";
 
 interface TasksContentProps {
   project: DetailedProject;

@@ -11,7 +11,7 @@ import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
 
 interface TableColumnsProps {
-  projectId: string;
+  projectId: number;
 }
 
 export const TableColumns = ({
@@ -43,7 +43,7 @@ export const TableColumns = ({
     header: () => <TableColumnHeader name="Name" />,
     accessorFn: (row) => row.user.name, // Use accessorFn to access nested property
     cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
+      const member = row.original;
       const memberName = member.user.name;
       return (
         <div className="flex items-center space-x-2">
@@ -63,7 +63,7 @@ export const TableColumns = ({
     accessorKey: "email",
     header: () => <TableColumnHeader name="Email" />,
     cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
+      const member = row.original;
       const email = member.user.email;
       return <div>{email}</div>;
     },
@@ -72,7 +72,7 @@ export const TableColumns = ({
     accessorKey: "role",
     header: () => <TableColumnHeader name="Role" />,
     cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
+      const member = row.original;
       const role = member.role;
       return <div>{role}</div>;
     },
@@ -81,7 +81,7 @@ export const TableColumns = ({
     accessorKey: "createdAt",
     header: () => <TableColumnHeader name="Joined At" />,
     cell: ({ row }) => {
-      const member = memberSchema.parse(row.original);
+      const member = row.original;
       const joinedAt = format(member.createdAt, "MMM d, yyyy");
       return <div>{joinedAt}</div>;
     },

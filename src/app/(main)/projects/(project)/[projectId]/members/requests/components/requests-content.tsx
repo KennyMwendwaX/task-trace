@@ -21,17 +21,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useProjectStore } from "../../../hooks/useProjectStore";
-import { ProjectMembershipRequest } from "@/lib/schema/MembershipRequests";
 import ProjectNotFound from "../../../components/project-not-found";
+import { DetailedProject, ProjectMembershipRequest } from "@/database/schema";
 
 type Props = {
+  project: DetailedProject;
   requests: ProjectMembershipRequest[];
 };
 
-export default function RequestsContent({ requests }: Props) {
-  const project = useProjectStore((state) => state.project);
-
+export default function RequestsContent({ project, requests }: Props) {
   if (!project) return <ProjectNotFound />;
 
   return (

@@ -23,7 +23,6 @@ import {
   Status,
   Priority,
 } from "@/lib/config";
-import { taskSchema } from "@/lib/schema/TaskSchema";
 import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
 import { useRouter } from "next/navigation";
@@ -34,10 +33,11 @@ import {
   updateTaskPriority,
   updateTaskStatus,
 } from "@/server/api/project/tasks";
+import { ProjectTask } from "@/database/schema";
 
 interface TableRowActions<TData> {
-  row: Row<TData>;
-  projectId: string;
+  row: Row<ProjectTask>;
+  projectId: number;
 }
 
 export default function TableRowActions<TData>({
@@ -46,7 +46,7 @@ export default function TableRowActions<TData>({
 }: TableRowActions<TData>) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const task = taskSchema.parse(row.original);
+  const task = row.original;
 
   const handleEditTask = () => {
     router.push(`/projects/${projectId}/tasks/${task.id}/edit`);

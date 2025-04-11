@@ -7,9 +7,9 @@ import {
   members,
   membershipRequests,
   projects,
-  Member,
+  ProjectMember,
+  ProjectMembershipRequest,
 } from "@/database/schema";
-import { ProjectMembershipRequest } from "@/lib/schema/MembershipRequests";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -22,7 +22,7 @@ type MemberError =
 export const getProjectMembers = async (
   projectId: string,
   userId?: string
-): Promise<Member[]> => {
+): Promise<ProjectMember[]> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -75,72 +75,49 @@ export const getProjectMembers = async (
   }
 };
 
-type MembershipResponse = {
-  data: ProjectMembershipRequest[] | null;
-  error?: MemberError;
-};
-
 export const getMembershipRequests = async (
   projectId: string,
   userId?: string
-): Promise<MembershipResponse> => {
+): Promise<ProjectMembershipRequest[]> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+
     if (!session) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+      throw new Error("No active session found");
     }
 
     if (!userId || userId !== session.user.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID mismatch or missing",
-        },
-      };
+      throw new Error("User ID mismatch or missing");
     }
+
     const currentUserMember = await db.query.members.findFirst({
-      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(userId))
+      ),
     });
 
     if (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message:
-            "Only project owners or admins can generate invitation codes",
-        },
-      };
+      throw new Error(
+        "Only project owners or admins can generate invitation codes"
+      );
     }
 
     const project = await db.query.projects.findFirst({
-      where: eq(projects.id, projectId),
+      where: eq(projects.id, parseInt(projectId)),
     });
 
     if (!project) {
-      return {
-        data: null,
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new Error("Project not found");
     }
 
     const requests = await db.query.membershipRequests.findMany({
-      where: eq(membershipRequests.projectId, projectId),
+      where: eq(membershipRequests.projectId, parseInt(projectId)),
       with: {
         user: {
           columns: {
@@ -153,21 +130,10 @@ export const getMembershipRequests = async (
       },
     });
 
-    return {
-      data: requests,
-    };
+    return requests;
   } catch (error) {
     console.error("Error fetching project membership request:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to fetch project membership requests",
-      },
-    };
+    throw new Error("Failed to fetch project membership requests");
   }
 };
 
@@ -180,7 +146,7 @@ type LeaveProjectResponse = {
 };
 
 export const leaveProject = async (
-  projectId: string
+  projectId: number
 ): Promise<LeaveProjectResponse> => {
   try {
     const session = await auth.api.getSession({

@@ -4,7 +4,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { labels, priorities, statuses } from "@/lib/config";
-import { userTaskSchema } from "@/lib/schema/TaskSchema";
 import TableColumnHeader from "./table-column-header";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns/format";
@@ -37,7 +36,7 @@ export const TableColumns: ColumnDef<Task>[] = [
     accessorKey: "name",
     header: () => <TableColumnHeader name="Name" />,
     cell: ({ row }) => {
-      const task = userTaskSchema.parse(row.original);
+      const task = row.original;
       const label = labels.find((label) => label.value === row.original.label);
 
       if (!label) {
@@ -135,7 +134,7 @@ export const TableColumns: ColumnDef<Task>[] = [
     accessorKey: "dueDate",
     header: () => <TableColumnHeader name="Due Date" />,
     cell: ({ row }) => {
-      const task = userTaskSchema.parse(row.original);
+      const task = row.original;
       const date = format(task.dueDate, "MMM d, yyyy");
       return <div>{date}</div>;
     },
@@ -143,7 +142,7 @@ export const TableColumns: ColumnDef<Task>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const task = userTaskSchema.parse(row.original);
+      const task = row.original;
       return <TableRowActions projectId={task.projectId} row={row} />;
     },
   },

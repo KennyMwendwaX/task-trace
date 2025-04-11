@@ -16,8 +16,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlinePlus } from "react-icons/ai";
-import { DetailedProject } from "@/lib/schema/ProjectSchema";
-import { Member } from "@/lib/schema/MemberSchema";
+import { DetailedProject, Member } from "@/database/schema";
 
 interface MembersContentProps {
   project: DetailedProject;

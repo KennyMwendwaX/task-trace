@@ -8,14 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LuClipboard, LuRotateCw } from "react-icons/lu";
-import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 import { toast } from "sonner";
 import { differenceInDays } from "date-fns";
 import { useTransition } from "react";
 import { generateInvitationCode } from "@/server/api/project/invitation-code";
+import { InvitationCode } from "@/database/schema";
 
 interface ProjectInviteProps {
-  projectId: string;
+  projectId: number;
   invitationCode: InvitationCode | null;
 }
 
@@ -25,7 +25,7 @@ export default function ProjectInvite({
 }: ProjectInviteProps) {
   const [isPending, startTransition] = useTransition();
 
-  const handleGenerate = (projectId: string) => {
+  const handleGenerate = (projectId: number) => {
     startTransition(async () => {
       const result = await generateInvitationCode(projectId);
 

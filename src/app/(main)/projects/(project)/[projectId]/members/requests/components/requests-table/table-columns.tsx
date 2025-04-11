@@ -4,18 +4,16 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
-import {
-  projectMembershipRequest,
-  ProjectMembershipRequest,
-} from "@/lib/schema/MembershipRequests";
+import { projectMembershipRequest } from "@/lib/schema/MembershipRequests";
 import TableColumnHeader from "./table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
 import { membershipRequestStatuses } from "@/lib/config";
+import { ProjectMembershipRequest } from "@/database/schema";
 
 interface TableColumnsProps {
-  projectId: string;
+  projectId: number;
 }
 
 export const TableColumns = ({
@@ -47,8 +45,7 @@ export const TableColumns = ({
     header: () => <TableColumnHeader name="Name" />,
     accessorFn: (row) => row.user.name, // Use accessorFn to access nested property
     cell: ({ row }) => {
-      const requester = projectMembershipRequest.parse(row.original);
-      const userName = requester.user.name;
+      const requester = row.original;
       return (
         <div className="flex items-center space-x-2">
           <Avatar className="h-9 w-9">
@@ -56,9 +53,9 @@ export const TableColumns = ({
               alt="user-image"
               src={requester.user.image ? requester.user.image : ""}
             />
-            <AvatarFallback>{userName[0]}</AvatarFallback>
+            <AvatarFallback>{requester.user.name[0]}</AvatarFallback>
           </Avatar>
-          <span>{userName}</span>
+          <span>{requester.user.name}</span>
         </div>
       );
     },
@@ -68,7 +65,7 @@ export const TableColumns = ({
     accessorFn: (row) => row.user.email,
     header: () => <TableColumnHeader name="Email" />,
     cell: ({ row }) => {
-      const requester = projectMembershipRequest.parse(row.original);
+      const requester = row.original;
       const email = requester.user.email;
       return <div>{email}</div>;
     },

@@ -4,7 +4,7 @@ import { LuChevronLeft } from "react-icons/lu";
 import { BsListTask } from "react-icons/bs";
 
 interface Props {
-  projectId: string;
+  projectId: number;
 }
 
 export default function TaskNotFound({ projectId }: Props) {

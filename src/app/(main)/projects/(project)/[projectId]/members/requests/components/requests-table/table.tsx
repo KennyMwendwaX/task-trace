@@ -26,11 +26,12 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
+import { ProjectMembershipRequest } from "@/database/schema";
 
 interface RequestTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  projectId: string;
+  columns: ColumnDef<ProjectMembershipRequest, TValue>[];
+  data: ProjectMembershipRequest[];
+  projectId: number;
 }
 
 export default function RequestTable<TData, TValue>({

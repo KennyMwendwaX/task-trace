@@ -14,20 +14,15 @@ import {
 import UpdateProjectDetails from "./update-project-details";
 import ProjectVisibility from "./project-visibilty";
 import DangerZone from "./danger-zone";
-import { InvitationCode } from "@/lib/schema/InvitationCodeSchema";
 import ProjectInvite from "./project-invite";
-import ProjectNotFound from "../../components/project-not-found";
+import { DetailedProject, InvitationCode } from "@/database/schema";
 
 type Props = {
-  userId: string;
+  project: DetailedProject;
   invitationCode: InvitationCode | null;
 };
 
-export default function SettingsContent({ userId, invitationCode }: Props) {
-  const project = useProjectStore((state) => state.project);
-
-  if (!project) return <ProjectNotFound />;
-
+export default function SettingsContent({ project, invitationCode }: Props) {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -62,7 +57,7 @@ export default function SettingsContent({ userId, invitationCode }: Props) {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight break-words max-w-full sm:max-w-[70%]">
             {project.name} Settings
           </h1>
-          <UpdateProjectDetails userId={userId} project={project} />
+          <UpdateProjectDetails project={project} />
         </div>
 
         <div className="flex flex-col md:flex-row md:space-x-6">

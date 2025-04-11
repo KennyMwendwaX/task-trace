@@ -1,7 +1,5 @@
 "use client";
 
-import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { useProjectStore } from "../../hooks/useProjectStore";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
@@ -18,19 +16,14 @@ import {
 import MemberLeaderboard from "./member-leaderboard";
 import TaskStatusChart from "./task-status-chart";
 import { TbChartBar } from "react-icons/tb";
-import { useTasksStore } from "../../hooks/useTasksStore";
-import ProjectNotFound from "../../components/project-not-found";
+import { DetailedProject, ProjectTask } from "@/database/schema";
 
 type Props = {
-  projectId: string;
+  project: DetailedProject;
+  tasks: ProjectTask[];
 };
 
-export default function AnalyticsContent({ projectId }: Props) {
-  const project = useProjectStore((state) => state.project);
-  const tasks = useTasksStore((state) => state.tasks);
-
-  if (!project) return <ProjectNotFound />;
-
+export default function AnalyticsContent({ project, tasks }: Props) {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
@@ -48,7 +41,7 @@ export default function AnalyticsContent({ projectId }: Props) {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/projects/${projectId}`}>
+                <BreadcrumbLink href={`/projects/${project.id}`}>
                   {project.name}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -90,7 +83,7 @@ export default function AnalyticsContent({ projectId }: Props) {
                 <li>Team member performance</li>
                 <li>Project progress over time</li>
               </ul>
-              <Link href={`/projects/${projectId}/tasks/create`}>
+              <Link href={`/projects/${project.id}/tasks/create`}>
                 <Button className="flex items-center gap-1 rounded-3xl">
                   <AiOutlinePlus className="w-4 h-4 text-white" />
                   <span>Create Task</span>

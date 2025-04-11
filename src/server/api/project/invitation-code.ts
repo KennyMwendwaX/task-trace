@@ -3,7 +3,12 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import db from "@/database/db";
-import { invitationCodes, members, projects } from "@/database/schema";
+import {
+  InvitationCode,
+  invitationCodes,
+  members,
+  projects,
+} from "@/database/schema";
 import { add } from "date-fns";
 import { and, eq } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
@@ -14,88 +19,52 @@ type InvitationCodeError =
   | { type: "DATABASE_ERROR"; message: string }
   | { type: "NOT_FOUND"; message: string };
 
-type InvitationCodeResponse = {
-  data: { code: string; expiresAt: Date | null } | null;
-  error?: InvitationCodeError;
-};
-
 export const getProjectInvitationCode = async (
   projectId: string,
   userId?: string
-): Promise<InvitationCodeResponse> => {
+): Promise<InvitationCode | null> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+
     if (!session) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+      throw new Error("No active session found");
     }
 
     if (!userId || userId !== session.user.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID mismatch or missing",
-        },
-      };
+      throw new Error("User ID mismatch or missing");
     }
 
     const currentUserMember = await db.query.members.findFirst({
-      where: and(eq(members.projectId, projectId), eq(members.userId, userId)),
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(userId))
+      ),
     });
 
     if (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins can view invitation codes",
-        },
-      };
+      throw new Error(
+        "Only project owners or admins can generate invitation codes"
+      );
     }
 
     const existingCode = await db.query.invitationCodes.findFirst({
-      where: eq(invitationCodes.projectId, projectId),
+      where: eq(invitationCodes.projectId, parseInt(projectId)),
     });
 
     if (!existingCode) {
-      return {
-        data: null,
-        error: {
-          type: "NOT_FOUND",
-          message: "No invitation code exists for this project",
-        },
-      };
+      return null;
+      // throw new Error("No invitation code exists for this project");
     }
 
-    return {
-      data: {
-        code: existingCode.code,
-        expiresAt: existingCode.expiresAt,
-      },
-    };
+    return existingCode;
   } catch (error) {
     console.error("Error fetching project invitation code:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to fetch project invitation code",
-      },
-    };
+    throw new Error("Failed to fetch project invitation code");
   }
 };
 
@@ -111,7 +80,7 @@ type GenerateInvitationCodeResponse = {
 };
 
 export const generateInvitationCode = async (
-  projectId: string
+  projectId: number
 ): Promise<GenerateInvitationCodeResponse> => {
   try {
     const session = await auth.api.getSession({

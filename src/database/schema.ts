@@ -278,3 +278,28 @@ export type DetailedProject = Project & {
     image: string | null;
   };
 };
+export type ProjectMember = Member & {
+  user: {
+    name: string;
+    email: string;
+    image: string | null;
+  };
+};
+export type ProjectTask = Task & {
+  member: {
+    role: ProjectRole;
+    user: {
+      name: string;
+      email: string;
+      image: string | null;
+    };
+  } | null;
+};
+export type ProjectMembershipRequest = MembershipRequest & {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    image: string | null;
+  };
+};

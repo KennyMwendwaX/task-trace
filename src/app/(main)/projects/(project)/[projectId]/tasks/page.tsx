@@ -5,6 +5,7 @@ import TasksContent from "./components/tasks-content";
 import { getProject } from "@/server/api/project/project";
 import { getProjectTasks } from "@/server/api/project/tasks";
 import ProjectNotFound from "../components/project-not-found";
+import { tryCatch } from "@/lib/try-catch";
 
 type Props = {
   params: Promise<{
@@ -22,15 +23,21 @@ export default async function Tasks({ params }: Props) {
   }
   const { projectId } = await params;
 
-  const projectResult = await getProject(projectId, session.user.id);
-  const tasksResult = await getProjectTasks(projectId, session.user.id);
+  const { data: project, error: projectError } = await tryCatch(
+    getProject(projectId, session.user.id)
+  );
 
-  if (projectResult.error || tasksResult.error) {
-    throw new Error("Failed to fetch project data");
+  const { data: tasks, error: tasksError } = await tryCatch(
+    getProjectTasks(projectId, session.user.id)
+  );
+
+  if (projectError) {
+    throw new Error("Failed to fetch project");
   }
 
-  const project = projectResult.data;
-  const tasks = tasksResult.data ?? [];
+  if (tasksError) {
+    throw new Error("Failed to fetch tasks");
+  }
 
   if (!project) {
     return <ProjectNotFound />;

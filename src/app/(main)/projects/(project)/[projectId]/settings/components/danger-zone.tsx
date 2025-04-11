@@ -16,7 +16,7 @@ import { leaveProject } from "@/server/api/project/members";
 import { useTransition } from "react";
 
 interface DangerZoneProps {
-  projectId: string;
+  projectId: number;
 }
 
 export default function DangerZone({ projectId }: DangerZoneProps) {

@@ -17,7 +17,6 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Project,
   ProjectFormValues,
   projectFormSchema,
 } from "@/lib/schema/ProjectSchema";
@@ -37,16 +36,19 @@ import { useRouter } from "next/navigation";
 import { updateProject } from "@/server/api/project/project";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { DetailedProject } from "@/database/schema";
+import { useSession } from "@/lib/auth-client";
 
 interface Props {
-  userId: string;
-  project: Project;
+  project: DetailedProject;
 }
 
-export default function UpdateProjectDetails({ userId, project }: Props) {
+export default function UpdateProjectDetails({ project }: Props) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const sessionData = useSession();
+  const userId = sessionData?.data?.user.id;
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),

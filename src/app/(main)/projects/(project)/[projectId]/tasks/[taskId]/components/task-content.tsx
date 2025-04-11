@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { LuCalendar, LuTimer, LuUser2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
@@ -29,14 +28,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ProjectTask } from "@/lib/schema/TaskSchema";
-import { useProjectStore } from "../../../hooks/useProjectStore";
-import { useTaskStore } from "../../../hooks/useTaskStore";
-import ProjectNotFound from "../../../components/project-not-found";
-import TaskNotFound from "./task-not-found";
 import { useTransition } from "react";
 import { deleteTask } from "@/server/api/project/tasks";
 import { toast } from "sonner";
+import { DetailedProject, ProjectTask } from "@/database/schema";
 
 interface StatusConfig {
   bg: string;
@@ -113,23 +108,13 @@ const TaskLabelBadge: React.FC<{ label: { value: string; label: string } }> = ({
 };
 
 type Props = {
-  projectId: string;
+  project: DetailedProject;
+  task: ProjectTask;
 };
 
-export default function TaskContent({ projectId }: Props) {
+export default function TaskContent({ project, task }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  const project = useProjectStore((state) => state.project);
-  const task = useTaskStore((state) => state.task);
-
-  if (!project) {
-    return <ProjectNotFound />;
-  }
-
-  if (!task) {
-    return <TaskNotFound projectId={projectId} />;
-  }
 
   const label = labels.find((l) => l.value === task.label);
   const status = statuses.find((s) => s.value === task.status);
@@ -141,7 +126,7 @@ export default function TaskContent({ projectId }: Props) {
     : null;
   const taskDueDate = format(task.dueDate, "dd MMM, yyyy");
 
-  const handleTaskDelete = (projectId: string, taskId: string) => {
+  const handleTaskDelete = (projectId: number, taskId: number) => {
     startTransition(async () => {
       const result = await deleteTask(projectId, taskId);
 
@@ -180,7 +165,7 @@ export default function TaskContent({ projectId }: Props) {
                       <Link href="/projects">Projects</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href={`/projects/${projectId}`}>
+                      <Link href={`/projects/${project.id}`}>
                         {project.name}
                       </Link>
                     </DropdownMenuItem>
@@ -189,7 +174,7 @@ export default function TaskContent({ projectId }: Props) {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href={`/projects/${projectId}/tasks`}>
+                <BreadcrumbLink href={`/projects/${project.id}/tasks`}>
                   Tasks
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -212,7 +197,7 @@ export default function TaskContent({ projectId }: Props) {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <Link href={`/projects/${projectId}/tasks/${task.id}/edit`}>
+            <Link href={`/projects/${project.id}/tasks/${task.id}/edit`}>
               <Button
                 variant="outline"
                 className="flex items-center gap-1 w-full">
@@ -223,7 +208,7 @@ export default function TaskContent({ projectId }: Props) {
             <Button
               variant="destructive"
               className="flex items-center justify-center w-full sm:w-auto"
-              onClick={() => handleTaskDelete(projectId, task.id)}>
+              onClick={() => handleTaskDelete(project.id, task.id)}>
               <FiTrash className="mr-2" />
               Delete Task
             </Button>

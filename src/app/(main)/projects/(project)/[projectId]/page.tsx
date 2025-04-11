@@ -44,7 +44,7 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   if (tasksError) {
-    throw new Error("Failed to fetch task");
+    throw new Error("Failed to fetch tasks");
   }
 
   if (!project) {

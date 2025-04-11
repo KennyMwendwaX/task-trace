@@ -19,12 +19,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { DetailedProject, Member, Task } from "@/database/schema";
+import { DetailedProject, Member, ProjectTask } from "@/database/schema";
 
 type Props = {
   project: DetailedProject;
   members: Member[];
-  tasks: Task[];
+  tasks: ProjectTask[];
 };
 
 export default function ProjectContent({ project, members, tasks }: Props) {

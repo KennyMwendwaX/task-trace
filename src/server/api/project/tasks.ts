@@ -3,9 +3,9 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import db from "@/database/db";
-import { members, projects, Task, tasks } from "@/database/schema";
+import { members, projects, ProjectTask, tasks } from "@/database/schema";
 import { Label, Priority, Status } from "@/lib/config";
-import { ProjectTask, TaskFormValues } from "@/lib/schema/TaskSchema";
+import { TaskFormValues } from "@/lib/schema/TaskSchema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -17,7 +17,7 @@ type TasksError =
 export const getProjectTasks = async (
   projectId: string,
   userId?: string
-): Promise<Task[]> => {
+): Promise<ProjectTask[]> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -61,6 +61,7 @@ export const getProjectTasks = async (
               columns: {
                 name: true,
                 email: true,
+                image: true,
               },
             },
           },
@@ -75,48 +76,32 @@ export const getProjectTasks = async (
   }
 };
 
-type TaskResponse = {
-  data: ProjectTask | null;
-  error?: TasksError;
-};
-
-export const getTask = async (
+export const getProjectTask = async (
   projectId: string,
   taskId: string
-): Promise<TaskResponse> => {
+): Promise<ProjectTask> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new Error("No active session found");
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
-        eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
     if (!currentUserMember) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User is not a member of this project",
-        },
-      };
+      throw new Error("User is not a member of the project");
     }
 
     const task = await db.query.tasks.findFirst({
-      where: eq(tasks.id, taskId),
+      where: eq(tasks.id, parseInt(taskId)),
       with: {
         member: {
           columns: {
@@ -127,6 +112,7 @@ export const getTask = async (
               columns: {
                 name: true,
                 email: true,
+                image: true,
               },
             },
           },
@@ -135,28 +121,13 @@ export const getTask = async (
     });
 
     if (!task) {
-      return {
-        data: null,
-        error: {
-          type: "NOT_FOUND",
-          message: "Task not found",
-        },
-      };
+      throw new Error("Task not found");
     }
 
-    return {
-      data: task,
-    };
+    return task;
   } catch (error) {
     console.error("Error fetching task:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to fetch task",
-      },
-    };
+    throw new Error("Failed to fetch task");
   }
 };
 
@@ -166,7 +137,7 @@ type CreateTaskResponse = {
 };
 
 export const createTask = async (
-  projectId: string,
+  projectId: number,
   formValues: TaskFormValues
 ): Promise<CreateTaskResponse> => {
   try {
@@ -263,8 +234,8 @@ type UpdateTaskResponse = {
 };
 
 export const updateTask = async (
-  projectId: string,
-  taskId: string,
+  projectId: number,
+  taskId: number,
   formValues: TaskFormValues
 ): Promise<UpdateTaskResponse> => {
   try {
@@ -358,8 +329,8 @@ export const updateTask = async (
 };
 
 export const updateTaskLabel = async (
-  projectId: string,
-  taskId: string,
+  projectId: number,
+  taskId: number,
   label: Label
 ): Promise<UpdateTaskResponse> => {
   try {
@@ -449,8 +420,8 @@ export const updateTaskLabel = async (
 };
 
 export const updateTaskStatus = async (
-  projectId: string,
-  taskId: string,
+  projectId: number,
+  taskId: number,
   status: Status
 ): Promise<UpdateTaskResponse> => {
   try {
@@ -540,8 +511,8 @@ export const updateTaskStatus = async (
 };
 
 export const updateTaskPriority = async (
-  projectId: string,
-  taskId: string,
+  projectId: number,
+  taskId: number,
   priority: Priority
 ): Promise<UpdateTaskResponse> => {
   try {
@@ -639,8 +610,8 @@ type DeleteTaskResponse = {
 };
 
 export const deleteTask = async (
-  projectId: string,
-  taskId: string
+  projectId: number,
+  taskId: number
 ): Promise<DeleteTaskResponse> => {
   try {
     const session = await auth.api.getSession({
