@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { createProject } from "@/server/api/user/projects";
+import { tryCatch } from "@/lib/try-catch";
 
 export default function AddProjectModal() {
   const form = useForm<ProjectFormValues>({
@@ -55,33 +56,20 @@ export default function AddProjectModal() {
 
   const onSubmit = (values: ProjectFormValues) => {
     startTransition(async () => {
-      const result = await createProject(values);
+      const { data, error: createProjectError } = await tryCatch(
+        createProject(values)
+      );
 
-      if (result.error) {
-        switch (result.error.type) {
-          case "UNAUTHORIZED":
-            toast.error("You must be logged in to create a project");
-            break;
-          case "VALIDATION_ERROR":
-            toast.error("Invalid project data. Please check your inputs");
-            break;
-          case "DATABASE_ERROR":
-            toast.error("Failed to create project. Please try again");
-            break;
-          case "NOT_FOUND":
-            toast.error("User account not found");
-            break;
-          default:
-            toast.error("An unexpected error occurred");
-        }
+      if (createProjectError) {
+        toast.error(createProjectError.message);
         return;
       }
 
-      if (result.data?.projectId) {
+      if (data.projectId) {
         form.reset();
         toggleDialog();
         toast.success("Project created successfully!");
-        router.push(`/projects/${result.data.projectId}`);
+        router.push(`/projects/${data.projectId}`);
       }
     });
   };
@@ -89,7 +77,7 @@ export default function AddProjectModal() {
   return (
     <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
       <DialogTrigger asChild>
-        <Button size="sm" className="flex items-center gap-1 rounded-3xl">
+        <Button className="flex items-center gap-2 rounded-3xl">
           <LuFolderPlus className="w-5 h-5 text-white" />
           <span>New Project</span>
         </Button>
