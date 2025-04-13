@@ -134,7 +134,7 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
       },
     });
 
-    if (!projectsResult || projectsResult.length === 0) {
+    if (!projectsResult) {
       throw new ProjectActionError(
         "NOT_FOUND",
         "No projects found",
