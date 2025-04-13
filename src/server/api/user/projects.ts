@@ -90,6 +90,9 @@ export async function getUserProjects(
     return projects;
   } catch (error) {
     console.error("Error fetching user projects:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch user projects",
@@ -157,6 +160,9 @@ export async function createProject(
     return { projectId };
   } catch (error) {
     console.error("Error creating project:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update project",

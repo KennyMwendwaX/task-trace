@@ -74,7 +74,16 @@ export const getProjectInvitationCode = async (
     return existingCode;
   } catch (error) {
     console.error("Error fetching project invitation code:", error);
-    throw new Error("Failed to fetch project invitation code");
+    if (error instanceof InvitationCodeActionError) {
+      throw error;
+    }
+    throw new InvitationCodeActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch project invitation code",
+      "getProjectInvitationCode"
+    );
   }
 };
 
@@ -151,6 +160,9 @@ export const generateInvitationCode = async (
     return result[0];
   } catch (error) {
     console.error("Error generating invitation code:", error);
+    if (error instanceof InvitationCodeActionError) {
+      throw error;
+    }
     throw new InvitationCodeActionError(
       "DATABASE_ERROR",
       error instanceof Error

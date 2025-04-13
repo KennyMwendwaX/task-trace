@@ -92,6 +92,9 @@ export const getProject = async (
     return project;
   } catch (error) {
     console.error("Error in getProject:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch project",
@@ -170,6 +173,9 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch projects",
@@ -256,6 +262,9 @@ export const updateProject = async (
     return { success: true };
   } catch (error) {
     console.error("Error updating project:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update project",
@@ -306,6 +315,9 @@ export const deleteProject = async (
     return { success: true };
   } catch (error) {
     console.error("Error deleting project:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to delete project",
@@ -365,6 +377,9 @@ export const toggleProjectVisibility = async (
     return { success: true };
   } catch (error) {
     console.error("Error updating project visibility:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
       error instanceof Error

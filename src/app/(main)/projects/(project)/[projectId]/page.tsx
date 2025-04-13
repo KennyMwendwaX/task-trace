@@ -37,20 +37,9 @@ export default async function ProjectPage({ params }: Props) {
         return <ProjectNotFound />;
       case "UNAUTHORIZED":
         return <JoinProjectModal projectId={projectId} session={session} />;
-      case "DATABASE_ERROR":
       default:
         // Custom error handling instead of throwing
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-xl font-bold text-red-600 mb-2">
-              Database Error
-            </h2>
-            <p className="text-gray-700">
-              There was a problem accessing this project's data.
-            </p>
-            <p className="text-sm text-gray-500 mt-2">{projectError.message}</p>
-          </div>
-        );
+        throw projectError;
     }
   }
 

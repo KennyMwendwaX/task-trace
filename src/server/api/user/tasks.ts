@@ -44,6 +44,9 @@ export async function getUserTasks(userId?: string): Promise<Task[]> {
     return tasks;
   } catch (error) {
     console.error("Error in getUserTasks:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to get user tasks",

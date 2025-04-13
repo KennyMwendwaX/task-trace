@@ -82,6 +82,9 @@ export const getProjectMembers = async (
     return projectMembers;
   } catch (error) {
     console.error("Error fetching project members:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
     throw new MemberActionError(
       "DATABASE_ERROR",
       error instanceof Error
@@ -164,6 +167,9 @@ export const getMembershipRequests = async (
     return requests;
   } catch (error) {
     console.error("Error fetching project membership request:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
     throw new MemberActionError(
       "DATABASE_ERROR",
       error instanceof Error

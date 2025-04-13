@@ -10,11 +10,6 @@ import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { TasksActionError } from "@/lib/errors";
 
-type TasksError =
-  | { type: "UNAUTHORIZED"; message: string }
-  | { type: "DATABASE_ERROR"; message: string }
-  | { type: "NOT_FOUND"; message: string };
-
 export const getProjectTasks = async (
   projectId: string,
   userId?: string
@@ -89,6 +84,9 @@ export const getProjectTasks = async (
     return tasks;
   } catch (error) {
     console.error("Error fetching project tasks:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch tasks",
@@ -160,6 +158,9 @@ export const getProjectTask = async (
     return task;
   } catch (error) {
     console.error("Error fetching task:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch task",
@@ -240,6 +241,9 @@ export const createTask = async (
     return { taskId: taskResult[0].id };
   } catch (error) {
     console.error("Error creating task:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to create task",
@@ -321,6 +325,9 @@ export const updateTask = async (
     };
   } catch (error) {
     console.error("Error updating task:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task",
@@ -400,6 +407,9 @@ export const updateTaskLabel = async (
     };
   } catch (error) {
     console.error("Error updating task label:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task label",
@@ -479,6 +489,9 @@ export const updateTaskStatus = async (
     };
   } catch (error) {
     console.error("Error updating task status:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task status",
@@ -558,6 +571,9 @@ export const updateTaskPriority = async (
     };
   } catch (error) {
     console.error("Error updating task priority:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task priority",
@@ -618,6 +634,9 @@ export const deleteTask = async (
     };
   } catch (error) {
     console.error("Error deleting task:", error);
+    if (error instanceof TasksActionError) {
+      throw error;
+    }
     throw new TasksActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to delete task",
