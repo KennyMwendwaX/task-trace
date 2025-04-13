@@ -18,13 +18,14 @@ import { MdLogout } from "react-icons/md";
 import { LuMenu } from "react-icons/lu";
 import Logo from "@/app/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSession, signOut } from "@/lib/auth-client";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { data: sessionData } = useSession();
+  const router = useRouter();
   const userInfo = sessionData?.user;
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-white px-4 md:px-6 z-50">
@@ -130,7 +131,13 @@ export default function Navbar() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                signOut();
+                signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.replace("/sign-in");
+                    },
+                  },
+                });
               }}
               className="flex items-center hover:bg-red-100">
               <MdLogout className="mr-2 w-5 h-5" />
