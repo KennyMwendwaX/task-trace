@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -42,10 +42,15 @@ import {
 import type { Session } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { tryCatch } from "@/lib/try-catch";
+import { createMembershipRequest } from "@/server/api/project/membership-requests";
+import { toast } from "sonner";
+import { joinWithCode } from "@/server/api/project/join";
 
 interface JoinProjectProps {
   projectId: string;
   session: Session;
+  hasPendingRequest: boolean;
 }
 
 const joinProjectSchema = z.object({
@@ -57,15 +62,12 @@ const joinProjectSchema = z.object({
 export default function JoinProjectModal({
   projectId,
   session,
+  hasPendingRequest,
 }: JoinProjectProps) {
   const [isDialogOpen, setDialogOpen] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState("code");
   const router = useRouter();
-  const userId = session.user?.id;
-
-  // This would come from your API
-  const hasPendingRequest = false;
 
   const form = useForm<z.infer<typeof joinProjectSchema>>({
     resolver: zodResolver(joinProjectSchema),
@@ -73,39 +75,40 @@ export default function JoinProjectModal({
 
   const toggleDialog = () => setDialogOpen(!isDialogOpen);
 
-  const onSubmit = async (data: z.infer<typeof joinProjectSchema>) => {
-    setIsLoading(true);
-    try {
-      // Your submission logic here
-      console.log("Joining with code:", data.code);
+  const onSubmit = async (values: z.infer<typeof joinProjectSchema>) => {
+    startTransition(async () => {
+      const { data, error: joinWithCodeError } = await tryCatch(
+        joinWithCode(values.code)
+      );
 
-      // Mock success
-      setTimeout(() => {
-        setIsLoading(false);
-        router.push(`/projects/${projectId}`);
-      }, 1500);
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error joining project:", error);
-    }
+      if (joinWithCodeError) {
+        toast.error(joinWithCodeError.message);
+        return;
+      }
+
+      if (data.success === true) {
+        toast.success("You've successfully joined the project.");
+        toggleDialog();
+        router.refresh();
+      }
+    });
   };
 
   const handleSendRequest = async () => {
-    setIsLoading(true);
-    try {
-      // Your request logic here
-      console.log("Sending request for project:", projectId);
+    startTransition(async () => {
+      const { data, error: createRequestError } = await tryCatch(
+        createMembershipRequest(projectId)
+      );
 
-      // Mock success
-      setTimeout(() => {
-        setIsLoading(false);
-        // Refresh to show pending request
-        router.refresh();
-      }, 1500);
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error sending request:", error);
-    }
+      if (createRequestError) {
+        toast.error(createRequestError.message);
+        return;
+      }
+
+      if (data.success === true) {
+        toast.success("Membership request sent successfully!");
+      }
+    });
   };
 
   return (
@@ -125,7 +128,7 @@ export default function JoinProjectModal({
           </DialogHeader>
         </div>
 
-        <div className="p-6">
+        <div className="p-4">
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
@@ -198,8 +201,8 @@ export default function JoinProjectModal({
                         type="submit"
                         className="w-full"
                         size="lg"
-                        disabled={isLoading}>
-                        {isLoading ? (
+                        disabled={isPending}>
+                        {isPending ? (
                           <>
                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                             Joining Project...
@@ -215,10 +218,10 @@ export default function JoinProjectModal({
             </TabsContent>
 
             <TabsContent value="request">
-              <ScrollArea className="h-[200px]">
+              <ScrollArea className="h-[250px]">
                 <Card className="border-0 shadow-none">
-                  <CardContent className="pt-6">
-                    {isLoading ? (
+                  <CardContent className="pt-4">
+                    {isPending ? (
                       <div className="flex flex-col items-center justify-center py-8">
                         <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
                         <p className="text-gray-600">
@@ -226,7 +229,7 @@ export default function JoinProjectModal({
                         </p>
                       </div>
                     ) : hasPendingRequest ? (
-                      <div className="bg-primary-50 p-6 rounded-lg border border-primary-100">
+                      <div className="bg-primary-50 p-4 rounded-lg border border-primary-100">
                         <div className="flex items-start gap-4">
                           <div className="bg-primary-100 p-3 rounded-full">
                             <Clock className="h-6 w-6 text-primary-600" />
@@ -306,7 +309,7 @@ export default function JoinProjectModal({
                           onClick={handleSendRequest}
                           className="w-full"
                           size="lg"
-                          disabled={isLoading}>
+                          disabled={isPending}>
                           Send Membership Request
                         </Button>
                       </div>
