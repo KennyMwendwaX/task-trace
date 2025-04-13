@@ -12,12 +12,7 @@ import {
 } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-
-type MemberError =
-  | { type: "UNAUTHORIZED"; message: string }
-  | { type: "FORBIDDEN"; message: string }
-  | { type: "DATABASE_ERROR"; message: string }
-  | { type: "NOT_FOUND"; message: string };
+import { MemberActionError } from "@/lib/errors";
 
 export const getProjectMembers = async (
   projectId: string,
@@ -29,11 +24,19 @@ export const getProjectMembers = async (
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getProjectMembers"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new Error("User ID mismatch or missing");
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "getProjectMembers"
+      );
     }
 
     const project = await db.query.projects.findFirst({
@@ -41,7 +44,11 @@ export const getProjectMembers = async (
     });
 
     if (!project) {
-      throw new Error("Project not found");
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "getProjectMembers"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -52,7 +59,11 @@ export const getProjectMembers = async (
     });
 
     if (!currentUserMember) {
-      throw new Error("User is not a member of the project");
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "You are not a member of this project",
+        "getProjectMembers"
+      );
     }
 
     const projectMembers = await db.query.members.findMany({
@@ -71,7 +82,13 @@ export const getProjectMembers = async (
     return projectMembers;
   } catch (error) {
     console.error("Error fetching project members:", error);
-    throw new Error("Error fetching project members");
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch project members",
+      "getProjectMembers"
+    );
   }
 };
 
@@ -85,11 +102,31 @@ export const getMembershipRequests = async (
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getMembershipRequests"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new Error("User ID mismatch or missing");
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "getMembershipRequests"
+      );
+    }
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, parseInt(projectId)),
+    });
+
+    if (!project) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "getMembershipRequests"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -103,17 +140,11 @@ export const getMembershipRequests = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      throw new Error(
-        "Only project owners or admins can generate invitation codes"
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "Only project owners or admins can view membership requests",
+        "getMembershipRequests"
       );
-    }
-
-    const project = await db.query.projects.findFirst({
-      where: eq(projects.id, parseInt(projectId)),
-    });
-
-    if (!project) {
-      throw new Error("Project not found");
     }
 
     const requests = await db.query.membershipRequests.findMany({
@@ -133,48 +164,30 @@ export const getMembershipRequests = async (
     return requests;
   } catch (error) {
     console.error("Error fetching project membership request:", error);
-    throw new Error("Failed to fetch project membership requests");
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch project membership requests",
+      "getMembershipRequests"
+    );
   }
-};
-
-type LeaveProjectResponse = {
-  success?: boolean;
-  error?: {
-    type: string;
-    message: string;
-  };
 };
 
 export const leaveProject = async (
   projectId: number
-): Promise<LeaveProjectResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
-    }
 
-    const currentUserMember = await db.query.members.findFirst({
-      where: and(
-        eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
-      ),
-    });
-
-    if (!currentUserMember) {
-      return {
-        error: {
-          type: "NOT_FOUND",
-          message: "You are not a member of this project",
-        },
-      };
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "leaveProject"
+      );
     }
 
     const project = await db.query.projects.findFirst({
@@ -182,21 +195,34 @@ export const leaveProject = async (
     });
 
     if (!project) {
-      return {
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "leaveProject"
+      );
     }
 
-    if (project.ownerId === session.user.id) {
-      return {
-        error: {
-          type: "FORBIDDEN",
-          message: "Project owner cannot leave. Transfer ownership first.",
-        },
-      };
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, parseInt(session.user.id))
+      ),
+    });
+
+    if (!currentUserMember) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "You are not a member of this project",
+        "leaveProject"
+      );
+    }
+
+    if (project.ownerId === parseInt(session.user.id)) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "Project owners cannot leave the project",
+        "leaveProject"
+      );
     }
 
     await db
@@ -204,7 +230,7 @@ export const leaveProject = async (
       .where(
         and(
           eq(members.projectId, projectId),
-          eq(members.userId, session.user.id)
+          eq(members.userId, parseInt(session.user.id))
         )
       );
 
@@ -212,12 +238,13 @@ export const leaveProject = async (
     return { success: true };
   } catch (error) {
     console.error("Error leaving project:", error);
-    return {
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to leave project",
-      },
-    };
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to leave project",
+      "leaveProject"
+    );
   }
 };

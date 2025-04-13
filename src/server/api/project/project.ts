@@ -65,7 +65,7 @@ export const getProject = async (
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, parseInt(projectId)),
-        eq(members.userId, parseInt(userId))
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -92,12 +92,9 @@ export const getProject = async (
     return project;
   } catch (error) {
     console.error("Error in getProject:", error);
-    if (error instanceof ProjectActionError) {
-      throw error;
-    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
-      "Failed to fetch project",
+      error instanceof Error ? error.message : "Failed to fetch project",
       "getProject"
     );
   }
@@ -173,12 +170,9 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
-    if (error instanceof ProjectActionError) {
-      throw error;
-    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
-      "Failed to fetch projects",
+      error instanceof Error ? error.message : "Failed to fetch projects",
       "getProjects"
     );
   }
@@ -262,12 +256,9 @@ export const updateProject = async (
     return { success: true };
   } catch (error) {
     console.error("Error updating project:", error);
-    if (error instanceof ProjectActionError) {
-      throw error;
-    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
-      "Failed to update project",
+      error instanceof Error ? error.message : "Failed to update project",
       "updateProject"
     );
   }
@@ -315,12 +306,9 @@ export const deleteProject = async (
     return { success: true };
   } catch (error) {
     console.error("Error deleting project:", error);
-    if (error instanceof ProjectActionError) {
-      throw error;
-    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
-      "Failed to delete project",
+      error instanceof Error ? error.message : "Failed to delete project",
       "deleteProject"
     );
   }
@@ -377,12 +365,11 @@ export const toggleProjectVisibility = async (
     return { success: true };
   } catch (error) {
     console.error("Error updating project visibility:", error);
-    if (error instanceof ProjectActionError) {
-      throw error;
-    }
     throw new ProjectActionError(
       "DATABASE_ERROR",
-      "Failed to update project visibility",
+      error instanceof Error
+        ? error.message
+        : "Failed to update project visibility",
       "toggleProjectVisibility"
     );
   }

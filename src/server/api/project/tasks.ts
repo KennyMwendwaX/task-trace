@@ -8,6 +8,7 @@ import { Label, Priority, Status } from "@/lib/config";
 import { TaskFormValues } from "@/lib/schema/TaskSchema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { TasksActionError } from "@/lib/errors";
 
 type TasksError =
   | { type: "UNAUTHORIZED"; message: string }
@@ -24,11 +25,31 @@ export const getProjectTasks = async (
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getProjectTasks"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new Error("User ID mismatch or missing");
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "getProjectTasks"
+      );
+    }
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, parseInt(projectId)),
+    });
+
+    if (!project) {
+      throw new TasksActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "getProjectTasks"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -39,15 +60,11 @@ export const getProjectTasks = async (
     });
 
     if (!currentUserMember) {
-      throw new Error("User is not a member of the project");
-    }
-
-    const project = await db.query.projects.findFirst({
-      where: eq(projects.id, parseInt(projectId)),
-    });
-
-    if (!project) {
-      throw new Error("Project not found");
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "User is not a member of the project",
+        "getProjectTasks"
+      );
     }
 
     const tasks = await db.query.tasks.findMany({
@@ -72,7 +89,11 @@ export const getProjectTasks = async (
     return tasks;
   } catch (error) {
     console.error("Error fetching project tasks:", error);
-    throw new Error("Error fetching project tasks");
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to fetch tasks",
+      "getProjectTasks"
+    );
   }
 };
 
@@ -86,7 +107,11 @@ export const getProjectTask = async (
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getProjectTask"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -97,7 +122,11 @@ export const getProjectTask = async (
     });
 
     if (!currentUserMember) {
-      throw new Error("User is not a member of the project");
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "User is not a member of the project",
+        "getProjectTask"
+      );
     }
 
     const task = await db.query.tasks.findFirst({
@@ -121,37 +150,39 @@ export const getProjectTask = async (
     });
 
     if (!task) {
-      throw new Error("Task not found");
+      throw new TasksActionError(
+        "NOT_FOUND",
+        "Task not found",
+        "getProjectTask"
+      );
     }
 
     return task;
   } catch (error) {
     console.error("Error fetching task:", error);
-    throw new Error("Failed to fetch task");
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to fetch task",
+      "getProjectTask"
+    );
   }
-};
-
-type CreateTaskResponse = {
-  data: { taskId: string } | null;
-  error?: TasksError;
 };
 
 export const createTask = async (
   projectId: number,
   formValues: TaskFormValues
-): Promise<CreateTaskResponse> => {
+): Promise<{ taskId: number }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "createTask"
+      );
     }
 
     const project = await db.query.projects.findFirst({
@@ -159,19 +190,17 @@ export const createTask = async (
     });
 
     if (!project) {
-      return {
-        data: null,
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new TasksActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "createTask"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -179,13 +208,11 @@ export const createTask = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        data: null,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins can create tasks",
-        },
-      };
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can create tasks",
+        "createTask"
+      );
     }
 
     const taskResult = await db
@@ -197,59 +224,46 @@ export const createTask = async (
         priority: formValues.priority,
         dueDate: formValues.dueDate,
         description: formValues.description,
-        memberId: formValues.memberId,
+        memberId: formValues.memberId ? parseInt(formValues.memberId) : null,
         projectId: projectId,
       })
       .returning({ id: tasks.id });
 
     if (taskResult.length === 0) {
-      return {
-        data: null,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to create task",
-        },
-      };
+      throw new TasksActionError(
+        "DATABASE_ERROR",
+        "Failed to create task",
+        "createTask"
+      );
     }
 
-    return {
-      data: { taskId: taskResult[0].id },
-    };
+    return { taskId: taskResult[0].id };
   } catch (error) {
     console.error("Error creating task:", error);
-    return {
-      data: null,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to create task",
-      },
-    };
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to create task",
+      "createTask"
+    );
   }
-};
-
-type UpdateTaskResponse = {
-  success: boolean;
-  error?: TasksError;
 };
 
 export const updateTask = async (
   projectId: number,
   taskId: number,
   formValues: TaskFormValues
-): Promise<UpdateTaskResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "updateTask"
+      );
     }
 
     const task = await db.query.tasks.findFirst({
@@ -257,19 +271,13 @@ export const updateTask = async (
     });
 
     if (!task) {
-      return {
-        success: false,
-        error: {
-          type: "NOT_FOUND",
-          message: "Task not found",
-        },
-      };
+      throw new TasksActionError("NOT_FOUND", "Task not found", "updateTask");
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -277,13 +285,11 @@ export const updateTask = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins can create tasks",
-        },
-      };
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can modify this task",
+        "updateTask"
+      );
     }
 
     const taskResult = await db
@@ -294,20 +300,18 @@ export const updateTask = async (
         status: formValues.status,
         priority: formValues.priority,
         dueDate: formValues.dueDate,
-        memberId: formValues.memberId,
+        memberId: formValues.memberId ? parseInt(formValues.memberId) : null,
         description: formValues.description,
       })
       .where(eq(tasks.id, taskId))
       .returning();
 
     if (taskResult.length === 0) {
-      return {
-        success: false,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to update task",
-        },
-      };
+      throw new TasksActionError(
+        "DATABASE_ERROR",
+        "Failed to update task",
+        "updateTask"
+      );
     }
 
     revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
@@ -317,14 +321,11 @@ export const updateTask = async (
     };
   } catch (error) {
     console.error("Error updating task:", error);
-    return {
-      success: false,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to update task",
-      },
-    };
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to update task",
+      "updateTask"
+    );
   }
 };
 
@@ -332,19 +333,18 @@ export const updateTaskLabel = async (
   projectId: number,
   taskId: number,
   label: Label
-): Promise<UpdateTaskResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "updateTaskLabel"
+      );
     }
 
     const task = await db.query.tasks.findFirst({
@@ -352,19 +352,17 @@ export const updateTaskLabel = async (
     });
 
     if (!task) {
-      return {
-        success: false,
-        error: {
-          type: "NOT_FOUND",
-          message: "Task not found",
-        },
-      };
+      throw new TasksActionError(
+        "NOT_FOUND",
+        "Task not found",
+        "updateTaskLabel"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -372,13 +370,11 @@ export const updateTaskLabel = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins modify this task",
-        },
-      };
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can modify this task label",
+        "updateTaskLabel"
+      );
     }
 
     const taskResult = await db
@@ -390,13 +386,11 @@ export const updateTaskLabel = async (
       .returning();
 
     if (taskResult.length === 0) {
-      return {
-        success: false,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to update task label",
-        },
-      };
+      throw new TasksActionError(
+        "DATABASE_ERROR",
+        "Failed to update task label",
+        "updateTaskLabel"
+      );
     }
 
     revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
@@ -406,16 +400,11 @@ export const updateTaskLabel = async (
     };
   } catch (error) {
     console.error("Error updating task label:", error);
-    return {
-      success: false,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to update task label",
-      },
-    };
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to update task label",
+      "updateTaskLabel"
+    );
   }
 };
 
@@ -423,19 +412,18 @@ export const updateTaskStatus = async (
   projectId: number,
   taskId: number,
   status: Status
-): Promise<UpdateTaskResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "updateTaskStatus"
+      );
     }
 
     const task = await db.query.tasks.findFirst({
@@ -443,19 +431,17 @@ export const updateTaskStatus = async (
     });
 
     if (!task) {
-      return {
-        success: false,
-        error: {
-          type: "NOT_FOUND",
-          message: "Task not found",
-        },
-      };
+      throw new TasksActionError(
+        "NOT_FOUND",
+        "Task not found",
+        "updateTaskStatus"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -463,13 +449,11 @@ export const updateTaskStatus = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins modify this task",
-        },
-      };
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can modify this task status",
+        "updateTaskStatus"
+      );
     }
 
     const taskResult = await db
@@ -481,13 +465,11 @@ export const updateTaskStatus = async (
       .returning();
 
     if (taskResult.length === 0) {
-      return {
-        success: false,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to update task status",
-        },
-      };
+      throw new TasksActionError(
+        "DATABASE_ERROR",
+        "Failed to update task status",
+        "updateTaskStatus"
+      );
     }
 
     revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
@@ -497,16 +479,11 @@ export const updateTaskStatus = async (
     };
   } catch (error) {
     console.error("Error updating task status:", error);
-    return {
-      success: false,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to update task status",
-      },
-    };
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to update task status",
+      "updateTaskStatus"
+    );
   }
 };
 
@@ -514,19 +491,18 @@ export const updateTaskPriority = async (
   projectId: number,
   taskId: number,
   priority: Priority
-): Promise<UpdateTaskResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "updateTaskPriority"
+      );
     }
 
     const task = await db.query.tasks.findFirst({
@@ -534,19 +510,17 @@ export const updateTaskPriority = async (
     });
 
     if (!task) {
-      return {
-        success: false,
-        error: {
-          type: "NOT_FOUND",
-          message: "Task not found",
-        },
-      };
+      throw new TasksActionError(
+        "NOT_FOUND",
+        "Task not found",
+        "updateTaskPriority"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -554,13 +528,11 @@ export const updateTaskPriority = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins modify this task",
-        },
-      };
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can modify this task priority",
+        "updateTaskPriority"
+      );
     }
 
     const taskResult = await db
@@ -572,13 +544,11 @@ export const updateTaskPriority = async (
       .returning();
 
     if (taskResult.length === 0) {
-      return {
-        success: false,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to update task priority",
-        },
-      };
+      throw new TasksActionError(
+        "DATABASE_ERROR",
+        "Failed to update task priority",
+        "updateTaskPriority"
+      );
     }
 
     revalidatePath(`/projects/${projectId}/tasks/${taskId}`);
@@ -588,43 +558,29 @@ export const updateTaskPriority = async (
     };
   } catch (error) {
     console.error("Error updating task priority:", error);
-    return {
-      success: false,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to update task priority",
-      },
-    };
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to update task priority",
+      "updateTaskPriority"
+    );
   }
-};
-
-type DeleteTaskResponse = {
-  success: boolean;
-  error?: {
-    type: string;
-    message: string;
-  };
 };
 
 export const deleteTask = async (
   projectId: number,
   taskId: number
-): Promise<DeleteTaskResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "deleteTask"
+      );
     }
 
     const task = await db.query.tasks.findFirst({
@@ -632,19 +588,13 @@ export const deleteTask = async (
     });
 
     if (!task) {
-      return {
-        success: false,
-        error: {
-          type: "NOT_FOUND",
-          message: "Task not found",
-        },
-      };
+      throw new TasksActionError("NOT_FOUND", "Task not found", "deleteTask");
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -652,13 +602,11 @@ export const deleteTask = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins can delete tasks",
-        },
-      };
+      throw new TasksActionError(
+        "UNAUTHORIZED",
+        "Only project owners and admins can delete tasks",
+        "deleteTask"
+      );
     }
 
     await db
@@ -670,13 +618,10 @@ export const deleteTask = async (
     };
   } catch (error) {
     console.error("Error deleting task:", error);
-    return {
-      success: false,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to delete task",
-      },
-    };
+    throw new TasksActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to delete task",
+      "deleteTask"
+    );
   }
 };

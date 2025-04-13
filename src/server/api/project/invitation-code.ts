@@ -13,6 +13,7 @@ import { add } from "date-fns";
 import { and, eq } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
 import { revalidatePath } from "next/cache";
+import { InvitationCodeActionError } from "@/lib/errors";
 
 type InvitationCodeError =
   | { type: "UNAUTHORIZED"; message: string }
@@ -29,11 +30,19 @@ export const getProjectInvitationCode = async (
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new InvitationCodeActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getProjectInvitationCode"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new Error("User ID mismatch or missing");
+      throw new InvitationCodeActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "getProjectInvitationCode"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -47,8 +56,10 @@ export const getProjectInvitationCode = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      throw new Error(
-        "Only project owners or admins can generate invitation codes"
+      throw new InvitationCodeActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can generate invitation codes",
+        "getProjectInvitationCode"
       );
     }
 
@@ -58,7 +69,6 @@ export const getProjectInvitationCode = async (
 
     if (!existingCode) {
       return null;
-      // throw new Error("No invitation code exists for this project");
     }
 
     return existingCode;
@@ -68,31 +78,20 @@ export const getProjectInvitationCode = async (
   }
 };
 
-type GenerateInvitationCodeResponse = {
-  success?: {
-    code: string;
-    expiresAt: Date | null;
-  };
-  error?: {
-    type: string;
-    message: string;
-  };
-};
-
 export const generateInvitationCode = async (
   projectId: number
-): Promise<GenerateInvitationCodeResponse> => {
+): Promise<InvitationCode> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new InvitationCodeActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "generateInvitationCode"
+      );
     }
 
     const project = await db.query.projects.findFirst({
@@ -100,18 +99,17 @@ export const generateInvitationCode = async (
     });
 
     if (!project) {
-      return {
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new InvitationCodeActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "generateInvitationCode"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -119,13 +117,11 @@ export const generateInvitationCode = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        error: {
-          type: "FORBIDDEN",
-          message:
-            "You don't have permission to generate the project's invitation code",
-        },
-      };
+      throw new InvitationCodeActionError(
+        "UNAUTHORIZED",
+        "Only project's owner and admins can generate invitation code",
+        "generateInvitationCode"
+      );
     }
 
     const nanoidCustom = customAlphabet("1234567890", 8);
@@ -152,22 +148,15 @@ export const generateInvitationCode = async (
 
     revalidatePath(`/projects/${projectId}`);
 
-    return {
-      success: {
-        code: result[0].code,
-        expiresAt: result[0].expiresAt,
-      },
-    };
+    return result[0];
   } catch (error) {
     console.error("Error generating invitation code:", error);
-    return {
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to generate invitation code",
-      },
-    };
+    throw new InvitationCodeActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to generate invitation code",
+      "generateInvitationCode"
+    );
   }
 };
