@@ -12,6 +12,7 @@ import {
 import { ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { ProjectActionError } from "@/lib/errors";
 
 type ProjectError =
   | { type: "UNAUTHORIZED"; message: string }
@@ -28,24 +29,22 @@ export const getProject = async (
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getProject"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new Error("User ID mismatch or missing");
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "getProject"
+      );
     }
 
-    const currentUserMember = await db.query.members.findFirst({
-      where: and(
-        eq(members.projectId, parseInt(projectId)),
-        eq(members.userId, parseInt(userId))
-      ),
-    });
-
-    if (!currentUserMember) {
-      throw new Error("User is not a member of the project");
-    }
-
+    // Check if project exists FIRST
     const projectData = await db.query.projects.findFirst({
       where: eq(projects.id, parseInt(projectId)),
       with: {
@@ -60,27 +59,52 @@ export const getProject = async (
     });
 
     if (!projectData) {
-      throw new Error("Project not found");
+      throw new ProjectActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "getProject"
+      );
     }
 
-    const project = {
+    // Then check membership
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(userId))
+      ),
+    });
+
+    if (!currentUserMember) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "User is not a member of the project",
+        "getProject"
+      );
+    }
+
+    const project: DetailedProject = {
       ...projectData,
-      member: currentUserMember
-        ? {
-            id: currentUserMember.id,
-            role: currentUserMember.role,
-            createdAt: currentUserMember.createdAt,
-            updatedAt: currentUserMember.updatedAt,
-            userId: currentUserMember.userId,
-            projectId: currentUserMember.projectId,
-          }
-        : null,
+      member: {
+        id: currentUserMember.id,
+        role: currentUserMember.role,
+        createdAt: currentUserMember.createdAt,
+        updatedAt: currentUserMember.updatedAt,
+        userId: currentUserMember.userId,
+        projectId: currentUserMember.projectId,
+      },
     };
 
     return project;
   } catch (error) {
-    console.error("Error fetching project:", error);
-    throw new Error("Failed to fetch project");
+    console.error("Error in getProject:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      "Failed to fetch project",
+      "getProject"
+    );
   }
 };
 
