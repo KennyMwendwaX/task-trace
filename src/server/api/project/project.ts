@@ -14,11 +14,6 @@ import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { ProjectActionError } from "@/lib/errors";
 
-type ProjectError =
-  | { type: "UNAUTHORIZED"; message: string }
-  | { type: "DATABASE_ERROR"; message: string }
-  | { type: "NOT_FOUND"; message: string };
-
 export const getProject = async (
   projectId: string,
   userId?: string
@@ -115,11 +110,19 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
     });
 
     if (!session) {
-      throw new Error("No active session found");
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getProjects"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new Error("User ID mismatch or missing");
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "getProjects"
+      );
     }
 
     const projectsResult = await db.query.projects.findMany({
@@ -135,6 +138,14 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
     });
 
     if (!projectsResult || projectsResult.length === 0) {
+      throw new ProjectActionError(
+        "NOT_FOUND",
+        "No projects found",
+        "getProjects"
+      );
+    }
+
+    if (projectsResult.length === 0) {
       return [];
     }
 
@@ -162,42 +173,41 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
-    throw new Error("Failed to fetch projects");
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      "Failed to fetch projects",
+      "getProjects"
+    );
   }
 }
 
-type UpdateProjectResponse = {
-  success: boolean;
-  error?: ProjectError;
-};
-
 export const updateProject = async (
-  userId?: string,
   projectId: number,
-  formValues: ProjectFormValues
-): Promise<UpdateProjectResponse> => {
+  formValues: ProjectFormValues,
+  userId?: string
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+
     if (!session) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "updateProject"
+      );
     }
 
     if (!userId || userId !== session.user.id) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "User ID mismatch or missing",
-        },
-      };
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "updateProject"
+      );
     }
 
     const project = await db.query.projects.findFirst({
@@ -205,19 +215,17 @@ export const updateProject = async (
     });
 
     if (!project) {
-      return {
-        success: false,
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new ProjectActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "updateProject"
+      );
     }
 
     const currentUserMember = await db.query.members.findFirst({
       where: and(
         eq(members.projectId, projectId),
-        eq(members.userId, session.user.id)
+        eq(members.userId, parseInt(session.user.id))
       ),
     });
 
@@ -225,13 +233,11 @@ export const updateProject = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      return {
-        success: false,
-        error: {
-          type: "UNAUTHORIZED",
-          message: "Only project owners or admins can update project details.",
-        },
-      };
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can update project details.",
+        "updateProject"
+      );
     }
 
     const updatedProject = await db
@@ -245,52 +251,42 @@ export const updateProject = async (
       .returning();
 
     if (updatedProject.length === 0) {
-      return {
-        success: false,
-        error: {
-          type: "DATABASE_ERROR",
-          message: "Failed to update project",
-        },
-      };
+      throw new ProjectActionError(
+        "DATABASE_ERROR",
+        "Failed to update project",
+        "updateProject"
+      );
     }
 
     revalidatePath(`/projects/${projectId}`);
     return { success: true };
   } catch (error) {
     console.error("Error updating project:", error);
-    return {
-      success: false,
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to update project",
-      },
-    };
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      "Failed to update project",
+      "updateProject"
+    );
   }
-};
-
-type DeleteProjectResponse = {
-  success?: boolean;
-  error?: {
-    type: string;
-    message: string;
-  };
 };
 
 export const deleteProject = async (
   projectId: number
-): Promise<DeleteProjectResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "deleteProject"
+      );
     }
 
     const project = await db.query.projects.findFirst({
@@ -298,21 +294,19 @@ export const deleteProject = async (
     });
 
     if (!project) {
-      return {
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new ProjectActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "deleteProject"
+      );
     }
 
-    if (project.ownerId !== session.user.id) {
-      return {
-        error: {
-          type: "FORBIDDEN",
-          message: "Only the project owner can delete the project",
-        },
-      };
+    if (project.ownerId !== parseInt(session.user.id)) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "Only the project owner can delete the project",
+        "deleteProject"
+      );
     }
 
     await db.delete(projects).where(eq(projects.id, projectId));
@@ -321,56 +315,48 @@ export const deleteProject = async (
     return { success: true };
   } catch (error) {
     console.error("Error deleting project:", error);
-    return {
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error ? error.message : "Failed to delete project",
-      },
-    };
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      "Failed to delete project",
+      "deleteProject"
+    );
   }
-};
-
-type ToggleVisibilityResponse = {
-  success?: boolean;
-  error?: {
-    type: string;
-    message: string;
-  };
 };
 
 export const toggleProjectVisibility = async (
   projectId: number,
   isPublic: boolean
-): Promise<ToggleVisibilityResponse> => {
+): Promise<{ success: true }> => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session?.user?.id) {
-      return {
-        error: {
-          type: "UNAUTHORIZED",
-          message: "No active session found",
-        },
-      };
+
+    if (!session) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "toggleProjectVisibility"
+      );
     }
 
     const userMembership = await db.query.members.findFirst({
       where: and(
-        eq(members.userId, session.user.id),
+        eq(members.userId, parseInt(session.user.id)),
         eq(members.projectId, projectId),
         or(eq(members.role, "OWNER"), eq(members.role, "ADMIN"))
       ),
     });
 
     if (!userMembership) {
-      return {
-        error: {
-          type: "FORBIDDEN",
-          message: "Access denied",
-        },
-      };
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "Only project owners or admins can update project visibility.",
+        "toggleProjectVisibility"
+      );
     }
 
     const updatedProject = await db
@@ -380,26 +366,24 @@ export const toggleProjectVisibility = async (
       .returning();
 
     if (updatedProject.length === 0) {
-      return {
-        error: {
-          type: "NOT_FOUND",
-          message: "Project not found",
-        },
-      };
+      throw new ProjectActionError(
+        "DATABASE_ERROR",
+        "Failed to update project visibility",
+        "toggleProjectVisibility"
+      );
     }
 
     revalidatePath(`/projects/${projectId}/settings`);
     return { success: true };
   } catch (error) {
     console.error("Error updating project visibility:", error);
-    return {
-      error: {
-        type: "DATABASE_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Server error, try again later",
-      },
-    };
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      "Failed to update project visibility",
+      "toggleProjectVisibility"
+    );
   }
 };
