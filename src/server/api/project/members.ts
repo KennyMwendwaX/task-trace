@@ -13,6 +13,7 @@ import {
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { MemberActionError } from "@/lib/errors";
+import { MembershipRequestStatus, ProjectRole } from "@/lib/config";
 
 export const getProjectMembers = async (
   projectId: string,
@@ -91,6 +92,106 @@ export const getProjectMembers = async (
         ? error.message
         : "Failed to fetch project members",
       "getProjectMembers"
+    );
+  }
+};
+
+export const createMembershipRequest = async (
+  projectId: string | number
+): Promise<{ success: true }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "createMembershipRequest"
+      );
+    }
+
+    const numericProjectId =
+      typeof projectId === "string" ? parseInt(projectId) : projectId;
+
+    // Check if project exists
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, numericProjectId),
+    });
+
+    if (!project) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "createMembershipRequest"
+      );
+    }
+
+    // Check if user is already a member of the project
+    const existingMembership = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, numericProjectId),
+        eq(members.userId, parseInt(session.user.id))
+      ),
+    });
+
+    if (existingMembership) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You are already a member of this project",
+        "createMembershipRequest"
+      );
+    }
+
+    // Check if user already has a pending request
+    const existingRequest = await db.query.membershipRequests.findFirst({
+      where: and(
+        eq(membershipRequests.projectId, numericProjectId),
+        eq(membershipRequests.requesterId, parseInt(session.user.id))
+      ),
+    });
+
+    if (existingRequest) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You already have a pending request for this project",
+        "createMembershipRequest"
+      );
+    }
+
+    // Create new membership request
+    const result = await db
+      .insert(membershipRequests)
+      .values({
+        projectId: numericProjectId,
+        requesterId: parseInt(session.user.id),
+        status: "PENDING",
+      })
+      .returning({ id: membershipRequests.id });
+
+    if (result.length === 0) {
+      throw new MemberActionError(
+        "DATABASE_ERROR",
+        "Failed to create membership request",
+        "createMembershipRequest"
+      );
+    }
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error creating membership request:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to create membership request",
+      "createMembershipRequest"
     );
   }
 };
@@ -176,6 +277,193 @@ export const getMembershipRequests = async (
         ? error.message
         : "Failed to fetch project membership requests",
       "getMembershipRequests"
+    );
+  }
+};
+
+export const acceptMembershipRequest = async (
+  requestId: string | number
+): Promise<{ success: true }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "acceptMembershipRequest"
+      );
+    }
+
+    const numericRequestId =
+      typeof requestId === "string" ? parseInt(requestId) : requestId;
+
+    // Fetch the membership request
+    const request = await db.query.membershipRequests.findFirst({
+      where: eq(membershipRequests.id, numericRequestId),
+      with: {
+        project: true,
+      },
+    });
+
+    if (!request) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Membership request not found",
+        "acceptMembershipRequest"
+      );
+    }
+
+    // Check if the user is the project owner or has admin rights
+    const userMembership = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, request.projectId),
+        eq(members.userId, parseInt(session.user.id))
+      ),
+    });
+
+    if (
+      !userMembership ||
+      (userMembership.role !== "OWNER" && userMembership.role !== "ADMIN")
+    ) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You don't have permission to accept membership requests",
+        "acceptMembershipRequest"
+      );
+    }
+
+    // Check if request is pending
+    if (request.status !== "PENDING") {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "This request has already been processed",
+        "acceptMembershipRequest"
+      );
+    }
+
+    // Update request status to APPROVED
+    await db
+      .update(membershipRequests)
+      .set({
+        status: "APPROVED" as MembershipRequestStatus,
+        updatedAt: new Date(),
+      })
+      .where(eq(membershipRequests.id, numericRequestId));
+
+    // Add user as a member to the project
+    await db.insert(members).values({
+      userId: request.requesterId,
+      projectId: request.projectId,
+      role: "MEMBER" as ProjectRole,
+    });
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error accepting membership request:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to accept membership request",
+      "acceptMembershipRequest"
+    );
+  }
+};
+
+export const rejectMembershipRequest = async (
+  requestId: string | number
+): Promise<{ success: true }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "rejectMembershipRequest"
+      );
+    }
+
+    const numericRequestId =
+      typeof requestId === "string" ? parseInt(requestId) : requestId;
+
+    // Fetch the membership request
+    const request = await db.query.membershipRequests.findFirst({
+      where: eq(membershipRequests.id, numericRequestId),
+      with: {
+        project: true,
+      },
+    });
+
+    if (!request) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Membership request not found",
+        "rejectMembershipRequest"
+      );
+    }
+
+    // Check if the user is the project owner or has admin rights
+    const userMembership = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, request.projectId),
+        eq(members.userId, parseInt(session.user.id))
+      ),
+    });
+
+    if (
+      !userMembership ||
+      (userMembership.role !== "OWNER" && userMembership.role !== "ADMIN")
+    ) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You don't have permission to reject membership requests",
+        "rejectMembershipRequest"
+      );
+    }
+
+    // Check if request is pending
+    if (request.status !== "PENDING") {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "This request has already been processed",
+        "rejectMembershipRequest"
+      );
+    }
+
+    // Update request status to REJECTED
+    await db
+      .update(membershipRequests)
+      .set({
+        status: "REJECTED" as MembershipRequestStatus,
+        updatedAt: new Date(),
+      })
+      .where(eq(membershipRequests.id, numericRequestId));
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error rejecting membership request:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error
+        ? error.message
+        : "Failed to reject membership request",
+      "rejectMembershipRequest"
     );
   }
 };

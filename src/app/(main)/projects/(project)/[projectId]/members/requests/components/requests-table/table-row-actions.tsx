@@ -24,7 +24,7 @@ export default function TableRowActions<TData>({
 }: TableRowActions<TData>) {
   const request = row.original;
 
-  const handleAddMember = async (userId: number) => {};
+  const handleAcceptRequest = async (userId: number) => {};
 
   const handleRejectRequest = async (status: MembershipRequestStatus) => {};
 
@@ -40,7 +40,8 @@ export default function TableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[180px]">
-          <DropdownMenuItem onClick={() => handleAddMember(request.user.id)}>
+          <DropdownMenuItem
+            onClick={() => handleAcceptRequest(request.user.id)}>
             <AiOutlinePlus className="mr-2 w-4 h-4 text-blue-500 " />
             Accept Request
           </DropdownMenuItem>

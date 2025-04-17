@@ -21,7 +21,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import ProjectNotFound from "../../../components/project-not-found";
 import { DetailedProject, ProjectMembershipRequest } from "@/database/schema";
 
 type Props = {
@@ -30,8 +29,6 @@ type Props = {
 };
 
 export default function RequestsContent({ project, requests }: Props) {
-  if (!project) return <ProjectNotFound />;
-
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">
