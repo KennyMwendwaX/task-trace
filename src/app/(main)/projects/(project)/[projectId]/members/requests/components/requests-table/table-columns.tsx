@@ -12,13 +12,7 @@ import { format } from "date-fns";
 import { membershipRequestStatuses } from "@/lib/config";
 import { ProjectMembershipRequest } from "@/database/schema";
 
-interface TableColumnsProps {
-  projectId: number;
-}
-
-export const TableColumns = ({
-  projectId,
-}: TableColumnsProps): ColumnDef<ProjectMembershipRequest>[] => [
+export const TableColumns = (): ColumnDef<ProjectMembershipRequest>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -109,6 +103,6 @@ export const TableColumns = ({
   },
   {
     id: "actions",
-    cell: ({ row }) => <TableRowActions projectId={projectId} row={row} />,
+    cell: ({ row }) => <TableRowActions row={row} />,
   },
 ];

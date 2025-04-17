@@ -97,7 +97,7 @@ export default function RequestsContent({ project, requests }: Props) {
             <RequestTable
               data={requests}
               projectId={project.id}
-              columns={TableColumns({ projectId: project.id })}
+              columns={TableColumns()}
             />
           </>
         )}

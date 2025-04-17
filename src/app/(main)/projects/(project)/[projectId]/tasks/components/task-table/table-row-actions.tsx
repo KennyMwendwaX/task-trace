@@ -34,6 +34,7 @@ import {
   updateTaskStatus,
 } from "@/server/api/project/tasks";
 import { ProjectTask } from "@/database/schema";
+import { tryCatch } from "@/lib/try-catch";
 
 interface TableRowActions<TData> {
   row: Row<ProjectTask>;
@@ -54,14 +55,16 @@ export default function TableRowActions<TData>({
 
   const handleLabelUpdate = async (label: Label) => {
     startTransition(async () => {
-      const result = await updateTaskLabel(projectId, task.id, label);
+      const { data, error } = await tryCatch(
+        updateTaskLabel(projectId, task.id, label)
+      );
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data?.success) {
         toast.success("Task label updated successfully!");
         router.refresh();
       }
@@ -70,14 +73,16 @@ export default function TableRowActions<TData>({
 
   const handleStatusUpdate = async (status: Status) => {
     startTransition(async () => {
-      const result = await updateTaskStatus(projectId, task.id, status);
+      const { data, error } = await tryCatch(
+        updateTaskStatus(projectId, task.id, status)
+      );
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data?.success) {
         toast.success("Task status updated successfully!");
         router.refresh();
       }
@@ -86,14 +91,16 @@ export default function TableRowActions<TData>({
 
   const handlePriorityUpdate = async (priority: Priority) => {
     startTransition(async () => {
-      const result = await updateTaskPriority(projectId, task.id, priority);
+      const { data, error } = await tryCatch(
+        updateTaskPriority(projectId, task.id, priority)
+      );
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data?.success) {
         toast.success("Task priority updated successfully!");
         router.refresh();
       }
@@ -102,14 +109,14 @@ export default function TableRowActions<TData>({
 
   const handleTaskDelete = () => {
     startTransition(async () => {
-      const result = await deleteTask(projectId, task.id);
+      const { data, error } = await tryCatch(deleteTask(projectId, task.id));
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data?.success) {
         toast.success("Task deleted successfully!");
         router.refresh();
       }
@@ -140,7 +147,8 @@ export default function TableRowActions<TData>({
                   <DropdownMenuRadioItem
                     onClick={() => handleLabelUpdate(label.value)}
                     key={label.value}
-                    value={label.value}>
+                    value={label.value}
+                    disabled={isPending}>
                     {label.label}
                   </DropdownMenuRadioItem>
                 ))}
@@ -155,7 +163,8 @@ export default function TableRowActions<TData>({
                   <DropdownMenuRadioItem
                     onClick={() => handleStatusUpdate(status.value)}
                     key={status.value}
-                    value={status.value}>
+                    value={status.value}
+                    disabled={isPending}>
                     {status.value === "DONE" ? (
                       <status.icon className="mr-2 h-5 w-5 text-green-600" />
                     ) : status.value === "TO_DO" ? (
@@ -179,7 +188,8 @@ export default function TableRowActions<TData>({
                   <DropdownMenuRadioItem
                     onClick={() => handlePriorityUpdate(priority.value)}
                     key={priority.value}
-                    value={priority.value}>
+                    value={priority.value}
+                    disabled={isPending}>
                     {priority.value === "HIGH" ? (
                       <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
                     ) : priority.value === "MEDIUM" ? (
@@ -196,7 +206,8 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center cursor-pointer"
-            onClick={() => handleTaskDelete()}>
+            onClick={() => handleTaskDelete()}
+            disabled={isPending}>
             <TrashIcon className="text-red-500 mr-2 w-5 h-5" />
             Delete
           </DropdownMenuItem>
