@@ -22,6 +22,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { toggleProjectVisibility } from "@/server/api/project/project";
 import { DetailedProject } from "@/database/schema";
+import { tryCatch } from "@/lib/try-catch";
+import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { FiGlobe, FiLock, FiInfo } from "react-icons/fi";
 
 interface Props {
   project: DetailedProject;
@@ -32,6 +36,7 @@ const switchFormSchema = z.object({
 });
 
 export default function ProjectVisibility({ project }: Props) {
+  const router = useRouter();
   const switchForm = useForm<z.infer<typeof switchFormSchema>>({
     resolver: zodResolver(switchFormSchema),
     defaultValues: {
@@ -41,72 +46,97 @@ export default function ProjectVisibility({ project }: Props) {
 
   const [isPending, startTransition] = useTransition();
 
-  const handleSwitchChange = useCallback(
-    (checked: boolean) => {
-      startTransition(async () => {
-        const result = await toggleProjectVisibility(project.id, checked);
+  const handleSwitchChange = (checked: boolean) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(
+        toggleProjectVisibility(project.id, checked)
+      );
 
-        if (result.error) {
-          switch (result.error.type) {
-            case "UNAUTHORIZED":
-              toast.error("You must be logged in to update project visibility");
-              break;
-            case "FORBIDDEN":
-              toast.error("You don't have permission to update this project");
-              break;
-            case "NOT_FOUND":
-              toast.error("Project not found");
-              break;
-            case "DATABASE_ERROR":
-              toast.error("Failed to update project visibility");
-              break;
-            default:
-              toast.error("An unexpected error occurred");
-          }
-          return;
-        }
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
 
+      if (data.success === true) {
         toast.success(
           checked ? "Project is now public" : "Project is now private"
         );
-      });
-    },
-    [project.id]
-  );
+        router.refresh();
+      }
+    });
+  };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="text-xl">Project Visibility</CardTitle>
-        <CardDescription>Control who can see your project.</CardDescription>
+    <Card className="w-full shadow-sm border-2 hover:shadow-md transition-all duration-300">
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xl font-semibold">
+            Project Visibility
+          </CardTitle>
+          <Badge
+            variant={project.isPublic ? "secondary" : "outline"}
+            className="flex items-center gap-1 px-3 py-1 ml-2">
+            {project.isPublic ? (
+              <>
+                <FiGlobe className="w-3 h-3" />
+                <span className="font-medium">Public</span>
+              </>
+            ) : (
+              <>
+                <FiLock className="w-3 h-3" />
+                <span className="font-medium">Private</span>
+              </>
+            )}
+          </Badge>
+        </div>
+        <CardDescription className="mt-1 text-sm">
+          Control who can see your project.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-4">
         <div className="flex items-center justify-between">
           <Form {...switchForm}>
-            <form className="w-full space-y-6">
+            <form className="w-full">
               <FormField
                 control={switchForm.control}
                 name="isPublic"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">
-                        {field.value
-                          ? "Toggle to make project private"
-                          : "Toggle to make project public"}
-                      </FormLabel>
-                      <FormDescription>
-                        {field.value
-                          ? "Anyone with the invitation code will be able to access the project"
-                          : "Anyone will be able to access the project"}
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 bg-card transition-colors hover:bg-accent/5">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        {field.value ? (
+                          <FiGlobe className="w-4 h-4 text-blue-500" />
+                        ) : (
+                          <FiLock className="w-4 h-4 text-gray-500" />
+                        )}
+                        <FormLabel className="text-base font-medium">
+                          {field.value
+                            ? "Toggle to make project private"
+                            : "Toggle to make project public"}
+                        </FormLabel>
+                      </div>
+                      <FormDescription className="flex items-start gap-1">
+                        <FiInfo className="w-3 h-3 mt-1 flex-shrink-0 opacity-70" />
+                        <span className="text-sm">
+                          {field.value
+                            ? "Anyone with the invitation code will be able to access the project"
+                            : "Anyone will be able to access the project"}
+                        </span>
                       </FormDescription>
                     </div>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={handleSwitchChange}
-                        disabled={isPending}
-                      />
+                      <div className="flex flex-col items-end gap-1">
+                        <Switch
+                          checked={project.isPublic}
+                          onCheckedChange={handleSwitchChange}
+                          disabled={isPending}
+                        />
+                        {isPending && (
+                          <span className="text-xs text-muted-foreground animate-pulse">
+                            Updating...
+                          </span>
+                        )}
+                      </div>
                     </FormControl>
                   </FormItem>
                 )}

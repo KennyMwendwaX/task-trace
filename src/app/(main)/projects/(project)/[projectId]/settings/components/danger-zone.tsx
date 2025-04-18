@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { deleteProject } from "@/server/api/project/project";
 import { leaveProject } from "@/server/api/project/members";
 import { useTransition } from "react";
+import { tryCatch } from "@/lib/try-catch";
 
 interface DangerZoneProps {
   projectId: number;
@@ -25,29 +26,33 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
 
   const handleLeaveProject = () => {
     startTransition(async () => {
-      const result = await leaveProject(projectId);
+      const { data, error } = await tryCatch(leaveProject(projectId));
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      toast.success("Successfully left the project");
-      router.push("/projects");
+      if (data.success === true) {
+        toast.success("Successfully left the project");
+        router.push("/projects");
+      }
     });
   };
 
   const handleDeleteProject = () => {
     startTransition(async () => {
-      const result = await deleteProject(projectId);
+      const { data, error } = await tryCatch(deleteProject(projectId));
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      toast.success("Project deleted successfully");
-      router.push("/projects");
+      if (data.success === true) {
+        toast.success("Project deleted successfully");
+        router.push("/projects");
+      }
     });
   };
 

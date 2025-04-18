@@ -8,8 +8,9 @@ import { getProject } from "@/server/api/project/project";
 import ProjectNotFound from "./components/project-not-found";
 import { tryCatch } from "@/lib/try-catch";
 import JoinProjectModal from "./components/join-project-modal";
-import { ProjectActionError, MemberActionError } from "@/lib/errors";
+import { ProjectActionError } from "@/lib/errors";
 import { getUserMembershipRequests } from "@/server/api/user/membership-requests";
+import { ServerError } from "./components/server-error";
 
 type Props = {
   params: Promise<{
@@ -42,21 +43,14 @@ export default async function ProjectPage({ params }: Props) {
         const { data: membershipRequests, error: requestsError } =
           await tryCatch(getUserMembershipRequests(session.user.id));
 
-        // Find any request for this specific project
-
         if (requestsError) {
           return (
-            <div className="p-8 text-center">
-              <h2 className="text-xl font-bold text-red-600 mb-2">
-                Membership Request Error
-              </h2>
-              <p className="text-gray-700">
-                Unable to check your membership requests.
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                {requestsError.message}
-              </p>
-            </div>
+            <ServerError
+              title="Membership Request Error"
+              message="Unable to check your membership requests."
+              details={requestsError.message}
+              returnPath="/dashboard"
+            />
           );
         }
 
@@ -74,19 +68,20 @@ export default async function ProjectPage({ params }: Props) {
           />
         );
       default:
-        // Custom error handling instead of throwing
+        // Use ServerError component for database errors
         return (
-          <div className="p-8 text-center">
-            <h2 className="text-xl font-bold text-red-600 mb-2">
-              Database Error
-            </h2>
-            <p className="text-gray-700">
-              There was a problem accessing this project's data.
-            </p>
-            <p className="text-sm text-gray-500 mt-2">{projectError.message}</p>
-          </div>
+          <ServerError
+            title="Database Error"
+            message="There was a problem accessing this project's data."
+            details={projectError.message}
+            returnPath="/dashboard"
+          />
         );
     }
+  }
+
+  if (!project) {
+    return <ProjectNotFound />;
   }
 
   // Only fetch additional data if we have a valid project
@@ -98,25 +93,22 @@ export default async function ProjectPage({ params }: Props) {
   const { data: members, error: membersError } = membersResult;
   const { data: tasks, error: tasksError } = tasksResult;
 
-  if (!project) {
-    return <ProjectNotFound />;
-  }
-
-  // Handle other potential errors
+  // Handle other potential errors with ServerError component
   if (membersError || tasksError) {
+    const errorMessage = [
+      membersError ? "Unable to load team members." : "",
+      tasksError ? "Unable to load project tasks." : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     return (
-      <div className="p-8 text-center">
-        <h2 className="text-xl font-bold text-red-600 mb-2">
-          Data Loading Error
-        </h2>
-        <p className="text-gray-700">
-          {membersError ? "Unable to load team members. " : ""}
-          {tasksError ? "Unable to load project tasks. " : ""}
-        </p>
-        <p className="text-sm text-gray-500 mt-2">
-          {membersError?.message || tasksError?.message}
-        </p>
-      </div>
+      <ServerError
+        title="Data Loading Error"
+        message={errorMessage}
+        details={membersError?.message || tasksError?.message}
+        returnPath="/dashboard"
+      />
     );
   }
 

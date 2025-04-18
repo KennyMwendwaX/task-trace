@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { DetailedProject } from "@/database/schema";
 import { useSession } from "@/lib/auth-client";
+import { tryCatch } from "@/lib/try-catch";
 
 interface Props {
   project: DetailedProject;
@@ -61,26 +62,16 @@ export default function UpdateProjectDetails({ project }: Props) {
 
   const onSubmit = (values: ProjectFormValues) => {
     startTransition(async () => {
-      const result = await updateProject(userId, project.id, values);
+      const { data, error } = await tryCatch(
+        updateProject(project.id, values, userId)
+      );
 
-      if (result.error) {
-        switch (result.error.type) {
-          case "UNAUTHORIZED":
-            toast.error("You do not have permission to update this project");
-            break;
-          case "DATABASE_ERROR":
-            toast.error("Failed to update project. Please try again");
-            break;
-          case "NOT_FOUND":
-            toast.error("Project not found");
-            break;
-          default:
-            toast.error("An unexpected error occurred");
-        }
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data.success) {
         form.reset();
         toggleDialog();
         toast.success("Project updated successfully!");

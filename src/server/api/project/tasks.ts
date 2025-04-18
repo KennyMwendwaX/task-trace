@@ -8,7 +8,7 @@ import { Label, Priority, Status } from "@/lib/config";
 import { TaskFormValues } from "@/lib/schema/TaskSchema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { TasksActionError } from "@/lib/errors";
+import { TaskActionError } from "@/lib/errors";
 
 export const getProjectTasks = async (
   projectId: string,
@@ -20,7 +20,7 @@ export const getProjectTasks = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "getProjectTasks"
@@ -28,7 +28,7 @@ export const getProjectTasks = async (
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "User ID mismatch or missing",
         "getProjectTasks"
@@ -40,7 +40,7 @@ export const getProjectTasks = async (
     });
 
     if (!project) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "NOT_FOUND",
         "Project not found",
         "getProjectTasks"
@@ -55,7 +55,7 @@ export const getProjectTasks = async (
     });
 
     if (!currentUserMember) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "User is not a member of the project",
         "getProjectTasks"
@@ -84,10 +84,10 @@ export const getProjectTasks = async (
     return tasks;
   } catch (error) {
     console.error("Error fetching project tasks:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch tasks",
       "getProjectTasks"
@@ -105,7 +105,7 @@ export const getProjectTask = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "getProjectTask"
@@ -120,7 +120,7 @@ export const getProjectTask = async (
     });
 
     if (!currentUserMember) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "User is not a member of the project",
         "getProjectTask"
@@ -148,7 +148,7 @@ export const getProjectTask = async (
     });
 
     if (!task) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "NOT_FOUND",
         "Task not found",
         "getProjectTask"
@@ -158,10 +158,10 @@ export const getProjectTask = async (
     return task;
   } catch (error) {
     console.error("Error fetching task:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to fetch task",
       "getProjectTask"
@@ -179,7 +179,7 @@ export const createTask = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "createTask"
@@ -191,11 +191,7 @@ export const createTask = async (
     });
 
     if (!project) {
-      throw new TasksActionError(
-        "NOT_FOUND",
-        "Project not found",
-        "createTask"
-      );
+      throw new TaskActionError("NOT_FOUND", "Project not found", "createTask");
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -209,7 +205,7 @@ export const createTask = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "Only project owners or admins can create tasks",
         "createTask"
@@ -231,7 +227,7 @@ export const createTask = async (
       .returning({ id: tasks.id });
 
     if (taskResult.length === 0) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "DATABASE_ERROR",
         "Failed to create task",
         "createTask"
@@ -241,10 +237,10 @@ export const createTask = async (
     return { taskId: taskResult[0].id };
   } catch (error) {
     console.error("Error creating task:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to create task",
       "createTask"
@@ -263,7 +259,7 @@ export const updateTask = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "updateTask"
@@ -275,7 +271,7 @@ export const updateTask = async (
     });
 
     if (!task) {
-      throw new TasksActionError("NOT_FOUND", "Task not found", "updateTask");
+      throw new TaskActionError("NOT_FOUND", "Task not found", "updateTask");
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -289,7 +285,7 @@ export const updateTask = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "Only project owners or admins can modify this task",
         "updateTask"
@@ -311,7 +307,7 @@ export const updateTask = async (
       .returning();
 
     if (taskResult.length === 0) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "DATABASE_ERROR",
         "Failed to update task",
         "updateTask"
@@ -325,10 +321,10 @@ export const updateTask = async (
     };
   } catch (error) {
     console.error("Error updating task:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task",
       "updateTask"
@@ -347,7 +343,7 @@ export const updateTaskLabel = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "updateTaskLabel"
@@ -359,27 +355,9 @@ export const updateTaskLabel = async (
     });
 
     if (!task) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "NOT_FOUND",
         "Task not found",
-        "updateTaskLabel"
-      );
-    }
-
-    const currentUserMember = await db.query.members.findFirst({
-      where: and(
-        eq(members.projectId, projectId),
-        eq(members.userId, parseInt(session.user.id))
-      ),
-    });
-
-    if (
-      !currentUserMember ||
-      !["OWNER", "ADMIN"].includes(currentUserMember.role)
-    ) {
-      throw new TasksActionError(
-        "UNAUTHORIZED",
-        "Only project owners or admins can modify this task label",
         "updateTaskLabel"
       );
     }
@@ -393,7 +371,7 @@ export const updateTaskLabel = async (
       .returning();
 
     if (taskResult.length === 0) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "DATABASE_ERROR",
         "Failed to update task label",
         "updateTaskLabel"
@@ -407,10 +385,10 @@ export const updateTaskLabel = async (
     };
   } catch (error) {
     console.error("Error updating task label:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task label",
       "updateTaskLabel"
@@ -429,7 +407,7 @@ export const updateTaskStatus = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "updateTaskStatus"
@@ -441,7 +419,7 @@ export const updateTaskStatus = async (
     });
 
     if (!task) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "NOT_FOUND",
         "Task not found",
         "updateTaskStatus"
@@ -455,17 +433,6 @@ export const updateTaskStatus = async (
       ),
     });
 
-    if (
-      !currentUserMember ||
-      !["OWNER", "ADMIN"].includes(currentUserMember.role)
-    ) {
-      throw new TasksActionError(
-        "UNAUTHORIZED",
-        "Only project owners or admins can modify this task status",
-        "updateTaskStatus"
-      );
-    }
-
     const taskResult = await db
       .update(tasks)
       .set({
@@ -475,7 +442,7 @@ export const updateTaskStatus = async (
       .returning();
 
     if (taskResult.length === 0) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "DATABASE_ERROR",
         "Failed to update task status",
         "updateTaskStatus"
@@ -489,10 +456,10 @@ export const updateTaskStatus = async (
     };
   } catch (error) {
     console.error("Error updating task status:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task status",
       "updateTaskStatus"
@@ -511,7 +478,7 @@ export const updateTaskPriority = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "updateTaskPriority"
@@ -523,27 +490,9 @@ export const updateTaskPriority = async (
     });
 
     if (!task) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "NOT_FOUND",
         "Task not found",
-        "updateTaskPriority"
-      );
-    }
-
-    const currentUserMember = await db.query.members.findFirst({
-      where: and(
-        eq(members.projectId, projectId),
-        eq(members.userId, parseInt(session.user.id))
-      ),
-    });
-
-    if (
-      !currentUserMember ||
-      !["OWNER", "ADMIN"].includes(currentUserMember.role)
-    ) {
-      throw new TasksActionError(
-        "UNAUTHORIZED",
-        "Only project owners or admins can modify this task priority",
         "updateTaskPriority"
       );
     }
@@ -557,7 +506,7 @@ export const updateTaskPriority = async (
       .returning();
 
     if (taskResult.length === 0) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "DATABASE_ERROR",
         "Failed to update task priority",
         "updateTaskPriority"
@@ -571,10 +520,10 @@ export const updateTaskPriority = async (
     };
   } catch (error) {
     console.error("Error updating task priority:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to update task priority",
       "updateTaskPriority"
@@ -592,7 +541,7 @@ export const deleteTask = async (
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "deleteTask"
@@ -604,7 +553,7 @@ export const deleteTask = async (
     });
 
     if (!task) {
-      throw new TasksActionError("NOT_FOUND", "Task not found", "deleteTask");
+      throw new TaskActionError("NOT_FOUND", "Task not found", "deleteTask");
     }
 
     const currentUserMember = await db.query.members.findFirst({
@@ -618,7 +567,7 @@ export const deleteTask = async (
       !currentUserMember ||
       !["OWNER", "ADMIN"].includes(currentUserMember.role)
     ) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "Only project owners and admins can delete tasks",
         "deleteTask"
@@ -634,10 +583,10 @@ export const deleteTask = async (
     };
   } catch (error) {
     console.error("Error deleting task:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to delete task",
       "deleteTask"

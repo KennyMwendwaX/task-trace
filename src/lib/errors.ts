@@ -9,7 +9,7 @@ type MemberError =
   | { type: "DATABASE_ERROR"; message: string }
   | { type: "NOT_FOUND"; message: string };
 
-type TasksError =
+type TaskError =
   | { type: "UNAUTHORIZED"; message: string }
   | { type: "DATABASE_ERROR"; message: string }
   | { type: "NOT_FOUND"; message: string };
@@ -41,10 +41,10 @@ export class MemberActionError extends Error {
   }
 }
 
-export class TasksActionError extends Error {
+export class TaskActionError extends Error {
   constructor(
-    public type: TasksError["type"],
-    message: TasksError["message"],
+    public type: TaskError["type"],
+    message: TaskError["message"],
     public action?: string
   ) {
     super(message);

@@ -7,10 +7,16 @@ import { getProjectTask } from "@/server/api/project/tasks";
 import { tryCatch } from "@/lib/try-catch";
 import ProjectNotFound from "../../components/project-not-found";
 import TaskNotFound from "./components/task-not-found";
+import { ProjectActionError, TaskActionError } from "@/lib/errors";
+import { ServerError } from "../../components/server-error";
 
-type Params = { params: Promise<{ projectId: string }> };
-
-export default async function Task({ params }: Params) {
+type Props = {
+  params: Promise<{
+    projectId: string;
+    taskId: string;
+  }>;
+};
+export default async function Task({ params }: Props) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -18,22 +24,48 @@ export default async function Task({ params }: Params) {
   if (!session) {
     redirect("/sign-in");
   }
-  const { projectId } = await params;
+
+  const { projectId, taskId } = await params;
 
   const { data: project, error: projectError } = await tryCatch(
     getProject(projectId, session.user.id)
   );
 
   const { data: task, error: taskError } = await tryCatch(
-    getProjectTask(projectId, session.user.id)
+    getProjectTask(projectId, taskId)
   );
 
-  if (projectError) {
-    throw new Error("Failed to fetch project");
+  if (projectError instanceof ProjectActionError) {
+    switch (projectError.type) {
+      case "NOT_FOUND":
+        return <ProjectNotFound />;
+      default:
+        return (
+          <ServerError
+            title="Project Access Error"
+            message="There was a problem accessing this project's data."
+            details={projectError.message}
+            returnPath="/dashboard"
+          />
+        );
+    }
   }
 
-  if (taskError) {
-    throw new Error("Failed to fetch task");
+  if (taskError instanceof TaskActionError) {
+    switch (taskError.type) {
+      case "NOT_FOUND":
+        return <TaskNotFound projectId={projectId} />;
+      default:
+        return (
+          <ServerError
+            title="Task Access Error"
+            message="There was a problem accessing this task's data."
+            details={taskError.message}
+            returnPath={`/projects/${projectId}`}
+            returnLabel="Return to Project"
+          />
+        );
+    }
   }
 
   if (!project) {
@@ -41,7 +73,7 @@ export default async function Task({ params }: Params) {
   }
 
   if (!task) {
-    return <TaskNotFound projectId={project.id} />;
+    return <TaskNotFound projectId={projectId} />;
   }
 
   return <TaskContent project={project} task={task} />;

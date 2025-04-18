@@ -40,11 +40,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  ProjectTask,
-  TaskFormValues,
-  taskFormSchema,
-} from "@/lib/schema/TaskSchema";
+import { TaskFormValues, taskFormSchema } from "@/lib/schema/TaskSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
@@ -70,64 +66,49 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { toast } from "sonner";
-import ProjectNotFound from "../../../../components/project-not-found";
-import TaskNotFound from "../../components/task-not-found";
-import { useUpdateProjectTaskMutation } from "@/hooks/useProjectQueries";
-import { useProjectStore } from "../../../../hooks/useProjectStore";
-import JoinProjectModal from "../../../../components/join-project-modal";
-import { useTaskStore } from "../../../../hooks/useTaskStore";
-import { Label, Priority, Status } from "@/lib/config";
-import { useMembersStore } from "../../../../hooks/useMembersStore";
-import { useTransition } from "react";
 import { updateTask } from "@/server/api/project/tasks";
+import { DetailedProject, ProjectMember, ProjectTask } from "@/database/schema";
+import { useTransition } from "react";
+import { tryCatch } from "@/lib/try-catch";
 
 type Props = {
-  projectId: string;
-  taskId: string;
+  project: DetailedProject;
+  task: ProjectTask;
+  members: ProjectMember[];
 };
 
-export default function EditTaskForm({ projectId, taskId }: Props) {
+export default function EditTaskForm({ project, task, members }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  const project = useProjectStore((state) => state.project);
-  const members = useMembersStore((state) => state.members);
-  const task = useTaskStore((state) => state.task);
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     values: {
-      name: task?.name || "",
-      label: (task?.label as Label) || "",
-      status: (task?.status as Status) || "",
-      priority: (task?.priority as Priority) || "",
-      dueDate: task?.dueDate ? new Date(task.dueDate) : new Date(),
-      memberId: task?.memberId || "",
-      description: task?.description || "",
+      name: task.name,
+      label: task.label,
+      status: task.status,
+      priority: task.priority,
+      dueDate: task.dueDate,
+      memberId: task.memberId?.toString() ?? null,
+      description: task.description,
     },
   });
 
-  if (!project) {
-    return <ProjectNotFound />;
-  }
-
-  if (!task) {
-    return <TaskNotFound projectId={projectId} />;
-  }
-
   const onSubmit = (values: TaskFormValues) => {
     startTransition(async () => {
-      const result = await updateTask(projectId, taskId, values);
+      const { data, error } = await tryCatch(
+        updateTask(project.id, task.id, values)
+      );
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data.success === true) {
         form.reset();
         toast.success("Task updated successfully!");
-        router.push(`/projects/${projectId}/tasks/${taskId}`);
+        router.push(`/projects/${project.id}/tasks/${task.id}`);
       }
     });
   };
@@ -155,17 +136,17 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
                       <Link href="/projects">Projects</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href={`/projects/${projectId}`}>
+                      <Link href={`/projects/${project.id}`}>
                         {project.name}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href={`/projects/${projectId}`}>
+                      <Link href={`/projects/${project.id}`}>
                         {project.name}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href={`/projects/${projectId}/tasks`}>Tasks</Link>
+                      <Link href={`/projects/${project.id}/tasks`}>Tasks</Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -173,7 +154,7 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink
-                  href={`/projects/${projectId}/tasks/${task.id}`}>
+                  href={`/projects/${project.id}/tasks/${task.id}`}>
                   {task.name}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -193,7 +174,7 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
             variant="outline"
             className="flex items-center gap-1"
             onClick={() =>
-              router.push(`/projects/${projectId}/tasks/${task.id}`)
+              router.push(`/projects/${project.id}/tasks/${task.id}`)
             }>
             <LuChevronLeft className="w-4 h-4" />
             <span>Go back</span>
@@ -285,7 +266,8 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
                               )}>
                               {field.value
                                 ? members.find(
-                                    (member) => member.id === field.value
+                                    (member) =>
+                                      member.id.toString() === field.value
                                   )?.user.name
                                 : "Select member"}
                               <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -304,12 +286,15 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
                                       value={member.user.name}
                                       key={member.id}
                                       onSelect={() => {
-                                        form.setValue("memberId", member.id);
+                                        form.setValue(
+                                          "memberId",
+                                          member.id.toString()
+                                        );
                                       }}>
                                       <LuCheck
                                         className={cn(
                                           "mr-2 h-4 w-4",
-                                          member.id === field.value
+                                          member.id.toString() === field.value
                                             ? "opacity-100"
                                             : "opacity-0"
                                         )}
@@ -436,7 +421,7 @@ export default function EditTaskForm({ projectId, taskId }: Props) {
                   type="button"
                   variant="outline"
                   onClick={() =>
-                    router.push(`/projects/${projectId}/tasks/${task.id}`)
+                    router.push(`/projects/${project.id}/tasks/${task.id}`)
                   }>
                   Cancel
                 </Button>

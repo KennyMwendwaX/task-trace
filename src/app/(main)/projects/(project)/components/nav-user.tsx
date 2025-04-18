@@ -20,8 +20,10 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { signOut } from "@/lib/auth-client";
 import { Session } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 export default function NavUser({ session }: { session: Session }) {
+  const router = useRouter();
   const { isMobile } = useSidebar();
   const userName = session.user?.name ?? "Guest";
   const userEmail = session.user?.email ?? "No email provided";
@@ -73,7 +75,13 @@ export default function NavUser({ session }: { session: Session }) {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                signOut();
+                signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.replace("/sign-in");
+                    },
+                  },
+                });
               }}
               className="flex items-center hover:bg-red-100">
               <MdLogout className="mr-2 w-5 h-5" />

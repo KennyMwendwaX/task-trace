@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import db from "@/database/db";
 import { members, Task } from "@/database/schema";
 import { eq } from "drizzle-orm";
-import { TasksActionError } from "@/lib/errors";
+import { TaskActionError } from "@/lib/errors";
 
 export async function getUserTasks(userId?: string): Promise<Task[]> {
   try {
@@ -14,7 +14,7 @@ export async function getUserTasks(userId?: string): Promise<Task[]> {
     });
 
     if (!session) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "No active session found",
         "getUserTasks"
@@ -22,7 +22,7 @@ export async function getUserTasks(userId?: string): Promise<Task[]> {
     }
 
     if (!userId || userId !== session.user.id) {
-      throw new TasksActionError(
+      throw new TaskActionError(
         "UNAUTHORIZED",
         "User ID mismatch or missing",
         "getUserTasks"
@@ -44,10 +44,10 @@ export async function getUserTasks(userId?: string): Promise<Task[]> {
     return tasks;
   } catch (error) {
     console.error("Error in getUserTasks:", error);
-    if (error instanceof TasksActionError) {
+    if (error instanceof TaskActionError) {
       throw error;
     }
-    throw new TasksActionError(
+    throw new TaskActionError(
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to get user tasks",
       "getUserTasks"

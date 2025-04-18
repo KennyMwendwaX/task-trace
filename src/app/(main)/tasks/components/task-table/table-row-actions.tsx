@@ -20,6 +20,15 @@ import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { Task } from "@/database/schema";
+import { useTransition } from "react";
+import {
+  deleteTask,
+  updateTaskLabel,
+  updateTaskPriority,
+  updateTaskStatus,
+} from "@/server/api/project/tasks";
+import { Label, Status, Priority } from "@/lib/config";
+import { tryCatch } from "@/lib/try-catch";
 
 interface TableRowActions<TData> {
   row: Row<Task>;
@@ -30,16 +39,79 @@ export default function TableRowActions<TData>({
   row,
   projectId,
 }: TableRowActions<TData>) {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const task = row.original;
 
-  const handleLabelChange = async (label: string) => {};
+  const handleLabelUpdate = async (label: Label) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(
+        updateTaskLabel(projectId, task.id, label)
+      );
 
-  const handleStatusChange = async (status: string) => {};
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
 
-  const handlePriorityChange = async (priority: string) => {};
+      if (data?.success) {
+        toast.success("Task label updated successfully!");
+        router.refresh();
+      }
+    });
+  };
 
-  const taskDelete = async () => {};
+  const handleStatusUpdate = async (status: Status) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(
+        updateTaskStatus(projectId, task.id, status)
+      );
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      if (data?.success) {
+        toast.success("Task status updated successfully!");
+        router.refresh();
+      }
+    });
+  };
+
+  const handlePriorityUpdate = async (priority: Priority) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(
+        updateTaskPriority(projectId, task.id, priority)
+      );
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      if (data?.success) {
+        toast.success("Task priority updated successfully!");
+        router.refresh();
+      }
+    });
+  };
+
+  const handleTaskDelete = () => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(deleteTask(projectId, task.id));
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      if (data?.success) {
+        toast.success("Task deleted successfully!");
+        router.refresh();
+      }
+    });
+  };
 
   const handleEditTask = () => {};
 
@@ -72,9 +144,10 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.label}>
                 {labels.map((label) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handleLabelChange(label.value)}
+                    onClick={() => handleLabelUpdate(label.value)}
                     key={label.value}
-                    value={label.value}>
+                    value={label.value}
+                    disabled={isPending}>
                     {label.label}
                   </DropdownMenuRadioItem>
                 ))}
@@ -87,9 +160,10 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.status}>
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handleStatusChange(status.value)}
+                    onClick={() => handleStatusUpdate(status.value)}
                     key={status.value}
-                    value={status.value}>
+                    value={status.value}
+                    disabled={isPending}>
                     {status.value === "DONE" ? (
                       <status.icon className="mr-2 h-5 w-5 text-green-600" />
                     ) : status.value === "TO_DO" ? (
@@ -111,9 +185,10 @@ export default function TableRowActions<TData>({
               <DropdownMenuRadioGroup value={task.priority}>
                 {priorities.map((priority) => (
                   <DropdownMenuRadioItem
-                    onClick={() => handlePriorityChange(priority.value)}
+                    onClick={() => handlePriorityUpdate(priority.value)}
                     key={priority.value}
-                    value={priority.value}>
+                    value={priority.value}
+                    disabled={isPending}>
                     {priority.value === "HIGH" ? (
                       <priority.icon className="mr-2 h-5 w-5 text-muted-foreground text-red-600" />
                     ) : priority.value === "MEDIUM" ? (
@@ -130,7 +205,8 @@ export default function TableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center cursor-pointer"
-            onClick={() => taskDelete()}>
+            onClick={() => handleTaskDelete()}
+            disabled={isPending}>
             <TrashIcon className="text-red-500 mr-2 w-5 h-5" />
             Delete
           </DropdownMenuItem>

@@ -71,6 +71,7 @@ import ProjectNotFound from "../../../components/project-not-found";
 import { useTransition } from "react";
 import { createTask } from "@/server/api/project/tasks";
 import { DetailedProject, ProjectMember } from "@/database/schema";
+import { tryCatch } from "@/lib/try-catch";
 
 type Props = {
   project: DetailedProject;
@@ -85,17 +86,17 @@ export default function CreateTaskForm({ project, members }: Props) {
 
   const onSubmit = (values: TaskFormValues) => {
     startTransition(async () => {
-      const result = await createTask(project.id, values);
+      const { data, error } = await tryCatch(createTask(project.id, values));
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.data?.taskId) {
+      if (data.taskId) {
         form.reset();
         toast.success("Task created successfully!");
-        router.push(`/projects/${project.id}/tasks/${result.data.taskId}`);
+        router.push(`/projects/${project.id}/tasks/${data.taskId}`);
       }
     });
   };
