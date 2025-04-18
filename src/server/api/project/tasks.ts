@@ -62,7 +62,8 @@ export const getProjectTasks = async (
       );
     }
 
-    const tasks = await db.query.tasks.findMany({
+    const projectTasks = await db.query.tasks.findMany({
+      where: eq(tasks.projectId, parseInt(projectId)),
       with: {
         member: {
           columns: {
@@ -81,7 +82,7 @@ export const getProjectTasks = async (
       },
     });
 
-    return tasks;
+    return projectTasks;
   } catch (error) {
     console.error("Error fetching project tasks:", error);
     if (error instanceof TaskActionError) {

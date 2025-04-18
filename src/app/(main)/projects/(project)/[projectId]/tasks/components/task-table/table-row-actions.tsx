@@ -64,7 +64,7 @@ export default function TableRowActions<TData>({
         return;
       }
 
-      if (data?.success) {
+      if (data.success) {
         toast.success("Task label updated successfully!");
         router.refresh();
       }
@@ -82,7 +82,7 @@ export default function TableRowActions<TData>({
         return;
       }
 
-      if (data?.success) {
+      if (data.success) {
         toast.success("Task status updated successfully!");
         router.refresh();
       }
@@ -100,7 +100,7 @@ export default function TableRowActions<TData>({
         return;
       }
 
-      if (data?.success) {
+      if (data.success) {
         toast.success("Task priority updated successfully!");
         router.refresh();
       }
@@ -116,7 +116,7 @@ export default function TableRowActions<TData>({
         return;
       }
 
-      if (data?.success) {
+      if (data.success) {
         toast.success("Task deleted successfully!");
         router.refresh();
       }
