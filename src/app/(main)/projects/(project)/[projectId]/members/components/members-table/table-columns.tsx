@@ -4,11 +4,11 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { Member, memberSchema } from "@/lib/schema/MemberSchema";
 import TableColumnHeader from "./table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
+import { ProjectMember } from "@/database/schema";
 
 interface TableColumnsProps {
   projectId: number;
@@ -16,7 +16,7 @@ interface TableColumnsProps {
 
 export const TableColumns = ({
   projectId,
-}: TableColumnsProps): ColumnDef<Member>[] => [
+}: TableColumnsProps): ColumnDef<ProjectMember>[] => [
   {
     id: "select",
     header: ({ table }) => (

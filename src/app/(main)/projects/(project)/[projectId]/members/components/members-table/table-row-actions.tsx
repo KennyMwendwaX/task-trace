@@ -8,18 +8,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Member } from "@/database/schema";
+import { ProjectMember } from "@/database/schema";
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 
 interface TableRowActions<TData> {
-  row: Row<Member>;
+  row: Row<ProjectMember>;
   projectId: number;
 }
 
 export default function TableRowActions<TData>({
   row,
-  projectId,
 }: TableRowActions<TData>) {
   const member = row.original;
   const handleRemoveUser = (id: number) => {};
