@@ -11,12 +11,14 @@ import {
   LuClock,
   LuArrowUpRight,
   LuBookmark,
-  LuStar,
   LuGlobe,
   LuLayers,
   LuLightbulb,
   LuUserPlus,
   LuTrendingUp,
+  LuLock,
+  LuShield,
+  LuShieldCheck,
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -80,9 +82,44 @@ export default function ExploreProjectCard({ project }: Props) {
     }
   };
 
+  const getAccessConfig = (isPublic: boolean) => {
+    return isPublic
+      ? {
+          icon: LuGlobe,
+          label: "Public",
+          bgColor: "bg-blue-50",
+          darkBgColor: "dark:bg-blue-950/20",
+          textColor: "text-blue-700",
+          darkTextColor: "dark:text-blue-400",
+          iconColor: "text-blue-500",
+          badgeColor: "bg-gradient-to-r from-blue-400 to-blue-600",
+        }
+      : {
+          icon: LuLock,
+          label: "Private",
+          bgColor: "bg-amber-50",
+          darkBgColor: "dark:bg-amber-950/20",
+          textColor: "text-amber-700",
+          darkTextColor: "dark:text-amber-400",
+          iconColor: "text-amber-500",
+          badgeColor: "bg-gradient-to-r from-amber-400 to-amber-600",
+        };
+  };
+
   const statusConfig = getStatusConfig(project.status);
+  const accessConfig = getAccessConfig(project.isPublic);
+
   const StatusIcon = statusConfig.icon;
+  const AccessIcon = accessConfig.icon;
   const createdAt = format(project.createdAt, "MMM d, yyyy");
+
+  // Calculate progress
+  const progressPercentage =
+    project.totalTasksCount > 0
+      ? Math.round(
+          (project.completedTasksCount / project.totalTasksCount) * 100
+        )
+      : 0;
 
   return (
     <Card
@@ -131,14 +168,31 @@ export default function ExploreProjectCard({ project }: Props) {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-                <Badge
-                  className={cn(
-                    "rounded-full py-0.5 px-2 text-xs font-medium text-white",
-                    "bg-gradient-to-r",
-                    statusConfig.color
-                  )}>
-                  {statusConfig.label}
-                </Badge>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge
+                    className={cn(
+                      "rounded-full py-0.5 px-2 text-xs font-medium text-white",
+                      "bg-gradient-to-r",
+                      statusConfig.color
+                    )}>
+                    {statusConfig.label}
+                  </Badge>
+
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "rounded-full py-0.5 px-2 text-xs font-medium",
+                      "flex items-center gap-1",
+                      accessConfig.bgColor,
+                      accessConfig.darkBgColor,
+                      accessConfig.textColor,
+                      accessConfig.darkTextColor,
+                      "border-transparent"
+                    )}>
+                    <AccessIcon className="h-3 w-3" />
+                    {accessConfig.label}
+                  </Badge>
+                </div>
               </div>
             </div>
 
@@ -189,11 +243,20 @@ export default function ExploreProjectCard({ project }: Props) {
                   statusConfig.bgColor,
                   statusConfig.darkBgColor
                 )}>
-                <LuClock
+                <LuShieldCheck
                   className={cn("h-3.5 w-3.5", statusConfig.iconColor)}
                 />
               </div>
-              <span>{createdAt}</span>
+              <span>
+                {project.totalTasksCount > 0 ? (
+                  <>
+                    {project.completedTasksCount}/{project.totalTasksCount}{" "}
+                    tasks
+                  </>
+                ) : (
+                  <>No tasks</>
+                )}
+              </span>
             </div>
             <div className="w-px h-4 bg-gray-200 dark:bg-gray-700"></div>
             <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
@@ -203,11 +266,11 @@ export default function ExploreProjectCard({ project }: Props) {
                   statusConfig.bgColor,
                   statusConfig.darkBgColor
                 )}>
-                <LuTrendingUp
+                <LuClock
                   className={cn("h-3.5 w-3.5", statusConfig.iconColor)}
                 />
               </div>
-              <span>Active</span>
+              <span>{createdAt}</span>
             </div>
           </div>
 
@@ -245,13 +308,15 @@ export default function ExploreProjectCard({ project }: Props) {
                 "rounded-full shadow-sm",
                 "bg-gradient-to-r hover:shadow text-white",
                 "transition-all duration-300 group/btn",
-                statusConfig.color
+                project.isPublic
+                  ? "from-blue-500 to-blue-600"
+                  : statusConfig.color
               )}>
               <Link
                 href={`/projects/${project.id}`}
                 className="flex items-center gap-1.5 py-2">
                 <LuUserPlus className="h-4 w-4" />
-                <span>Join Project</span>
+                <span>{project.isPublic ? "Join Now" : "Request Access"}</span>
                 <LuArrowUpRight className="h-4 w-4 ml-0.5 transform transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
               </Link>
             </Button>
