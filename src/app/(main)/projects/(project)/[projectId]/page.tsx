@@ -7,9 +7,7 @@ import { getProjectTasks } from "@/server/api/project/tasks";
 import { getProject } from "@/server/api/project/project";
 import ProjectNotFound from "./components/project-not-found";
 import { tryCatch } from "@/lib/try-catch";
-import JoinProjectModal from "./components/join-project-modal";
 import { ProjectActionError } from "@/lib/errors";
-import { getUserMembershipRequests } from "@/server/api/user/membership-requests";
 import { ServerError } from "./components/server-error";
 
 type Props = {
@@ -38,40 +36,10 @@ export default async function ProjectPage({ params }: Props) {
     switch (projectError.type) {
       case "NOT_FOUND":
         return <ProjectNotFound />;
-      case "UNAUTHORIZED":
-        // If user is not authorized, check if they have a pending membership request
-        const { data: membershipRequests, error: requestsError } =
-          await tryCatch(getUserMembershipRequests(session.user.id));
-
-        if (requestsError) {
-          return (
-            <ServerError
-              title="Membership Request Error"
-              message="Unable to check your membership requests."
-              details={requestsError.message}
-              returnPath="/dashboard"
-            />
-          );
-        }
-
-        const hasPendingRequest = membershipRequests.some(
-          (request) =>
-            request.projectId === parseInt(projectId) &&
-            request.status === "PENDING"
-        );
-
-        return (
-          <JoinProjectModal
-            projectId={projectId}
-            session={session}
-            hasPendingRequest={hasPendingRequest}
-          />
-        );
       default:
-        // Use ServerError component for database errors
         return (
           <ServerError
-            title="Database Error"
+            title="Project Access Error"
             message="There was a problem accessing this project's data."
             details={projectError.message}
             returnPath="/dashboard"

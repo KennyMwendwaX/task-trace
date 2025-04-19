@@ -6,6 +6,7 @@ import db from "@/database/db";
 import {
   DetailedProject,
   members,
+  membershipRequests,
   projects,
   PublicProject,
 } from "@/database/schema";
@@ -322,6 +323,157 @@ export const deleteProject = async (
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to delete project",
       "deleteProject"
+    );
+  }
+};
+
+type ProjectAccessInfo = {
+  isMember: boolean;
+  isPublic: boolean;
+  hasPendingRequest: boolean;
+  projectName: string;
+};
+
+export const checkProjectAccess = async (
+  projectId: string,
+  userId: string
+): Promise<ProjectAccessInfo> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "checkProjectAccess"
+      );
+    }
+
+    if (!userId || userId !== session.user.id) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "User ID mismatch or missing",
+        "checkProjectAccess"
+      );
+    }
+
+    // Check if project exists
+    const projectData = await db.query.projects.findFirst({
+      where: eq(projects.id, parseInt(projectId)),
+    });
+
+    if (!projectData) {
+      throw new ProjectActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "checkProjectAccess"
+      );
+    }
+
+    // Check membership
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(session.user.id))
+      ),
+    });
+
+    // Check pending membership request
+    const pendingRequest = await db.query.membershipRequests.findFirst({
+      where: and(
+        eq(membershipRequests.projectId, parseInt(projectId)),
+        eq(membershipRequests.requesterId, parseInt(session.user.id)),
+        eq(membershipRequests.status, "PENDING")
+      ),
+    });
+
+    return {
+      isMember: !!currentUserMember,
+      isPublic: projectData.isPublic,
+      hasPendingRequest: !!pendingRequest,
+      projectName: projectData.name,
+    };
+  } catch (error) {
+    console.error("Error in checkProjectAccess:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to check project access",
+      "checkProjectAccess"
+    );
+  }
+};
+
+export const joinPublicProject = async (
+  projectId: string
+): Promise<{ success: boolean }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "joinPublicProject"
+      );
+    }
+
+    // Check if project exists and is public
+    const projectData = await db.query.projects.findFirst({
+      where: eq(projects.id, parseInt(projectId)),
+    });
+
+    if (!projectData) {
+      throw new ProjectActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "joinPublicProject"
+      );
+    }
+
+    if (!projectData.isPublic) {
+      throw new ProjectActionError(
+        "UNAUTHORIZED",
+        "This project is not public",
+        "joinPublicProject"
+      );
+    }
+
+    // Check if user is already a member
+    const existingMembership = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(session.user.id))
+      ),
+    });
+
+    if (existingMembership) {
+      return { success: true };
+    }
+
+    // Add user as a member
+    await db.insert(members).values({
+      projectId: parseInt(projectId),
+      userId: parseInt(session.user.id),
+      role: "MEMBER",
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error in joinPublicProject:", error);
+    if (error instanceof ProjectActionError) {
+      throw error;
+    }
+    throw new ProjectActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to join public project",
+      "joinPublicProject"
     );
   }
 };

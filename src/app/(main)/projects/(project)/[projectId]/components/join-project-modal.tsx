@@ -43,9 +43,9 @@ import type { Session } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { tryCatch } from "@/lib/try-catch";
-import { createMembershipRequest } from "@/server/api/project/membership-requests";
 import { toast } from "sonner";
 import { joinWithCode } from "@/server/api/project/join";
+import { createMembershipRequest } from "@/server/api/project/members";
 
 interface JoinProjectProps {
   projectId: string;
