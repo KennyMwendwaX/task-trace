@@ -59,6 +59,7 @@ export async function getUserProjects(
           },
         },
       },
+      orderBy: (members, { desc }) => [desc(members.createdAt)],
     });
 
     if (!userProjects || userProjects.length === 0) {

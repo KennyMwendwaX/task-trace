@@ -136,6 +136,7 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
           limit: 3,
         },
       },
+      orderBy: (projects, { desc }) => [desc(projects.createdAt)],
     });
 
     if (!projectsResult) {

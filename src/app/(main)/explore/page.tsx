@@ -5,21 +5,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { tryCatch } from "@/lib/try-catch";
 
-// Update types to match new Promise-based approach
-type SearchParams = Promise<{
-  search?: string;
-  filter?: string;
-  sort?: string;
-}>;
-
-interface PageProps {
-  searchParams: SearchParams;
-}
-
-export default async function ExplorePage(props: PageProps) {
-  // Await the searchParams promise
-  const searchParams = await props.searchParams;
-
+export default async function ExplorePage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -36,43 +22,5 @@ export default async function ExplorePage(props: PageProps) {
     throw new Error(error.message);
   }
 
-  // Server-side filtering and sorting
-  const search = searchParams?.search || "";
-  const filter = searchParams?.filter || "ALL";
-  const sort = searchParams?.sort || "date_desc";
-
-  const filteredProjects = projects
-    .filter((project) =>
-      project.name.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter((project) => filter === "ALL" || project.status === filter)
-    .sort((a, b) => {
-      switch (sort) {
-        case "date_desc":
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-        case "date_asc":
-          return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-        case "name_asc":
-          return a.name.localeCompare(b.name);
-        case "name_desc":
-          return b.name.localeCompare(a.name);
-        default:
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-      }
-    });
-
-  return (
-    <ExploreContent
-      projects={filteredProjects}
-      initialSearch={search}
-      initialFilter={filter}
-      initialSort={sort}
-    />
-  );
+  return <ExploreContent projects={projects} />;
 }

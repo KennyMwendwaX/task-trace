@@ -109,7 +109,7 @@ export default function ProjectCard({ project }: Props) {
     <Card
       className={cn(
         "overflow-hidden rounded-2xl transition-all duration-300 group",
-        "border-0 shadow-lg hover:shadow-xl",
+        "border-0",
         statusConfig.bgColor,
         statusConfig.darkBgColor
       )}>

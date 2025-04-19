@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LuChevronDown, LuSlidersHorizontal } from "react-icons/lu";
 
-interface FilterDropdownProps {
+interface StatusFilterDropdownProps {
   currentFilter: string;
   onFilterChange: (value: string) => void;
 }
 
-export default function FilterDropdown({
+export default function StatusFilterDropdown({
   currentFilter,
   onFilterChange,
-}: FilterDropdownProps) {
+}: StatusFilterDropdownProps) {
   const getFilterIcon = (filterValue: string) => {
     switch (filterValue) {
       case "BUILDING":

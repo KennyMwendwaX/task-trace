@@ -5,15 +5,7 @@ import { headers } from "next/headers";
 import { getUserProjects } from "@/server/api/user/projects";
 import { tryCatch } from "@/lib/try-catch";
 
-type SearchParams = Promise<{
-  search?: string;
-}>;
-
-export default async function ProjectsPage({
-  searchParams,
-}: {
-  searchParams?: SearchParams;
-}) {
+export default async function ProjectsPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -21,8 +13,6 @@ export default async function ProjectsPage({
   if (!session) {
     redirect("/sign-in");
   }
-
-  const params = searchParams ? await searchParams : {};
 
   const { data: projects, error } = await tryCatch(
     getUserProjects(session.user.id)
@@ -32,26 +22,20 @@ export default async function ProjectsPage({
     throw new Error(error.message);
   }
 
-  const sortedProjects = projects.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
-
   // Organize projects by role
-  const ownedProjects = sortedProjects.filter(
+  const ownedProjects = projects.filter(
     (project) => project.memberRole === "OWNER"
   );
-  const adminProjects = sortedProjects.filter(
+  const adminProjects = projects.filter(
     (project) => project.memberRole === "ADMIN"
   );
-  const memberProjects = sortedProjects.filter(
+  const memberProjects = projects.filter(
     (project) => project.memberRole === "MEMBER"
   );
 
   return (
     <ProjectsContent
-      userId={session.user.id}
-      params={params}
-      projects={sortedProjects}
+      projects={projects}
       ownedProjects={ownedProjects}
       adminProjects={adminProjects}
       memberProjects={memberProjects}
