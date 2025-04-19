@@ -61,13 +61,12 @@ export default function ProjectVisibility({ project }: Props) {
         toast.success(
           checked ? "Project is now public" : "Project is now private"
         );
-        router.refresh();
       }
     });
   };
 
   return (
-    <Card className="w-full shadow-sm border-2 hover:shadow-md transition-all duration-300">
+    <Card className="w-full">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-semibold">
@@ -100,17 +99,17 @@ export default function ProjectVisibility({ project }: Props) {
               <FormField
                 control={switchForm.control}
                 name="isPublic"
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 bg-card transition-colors hover:bg-accent/5">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        {field.value ? (
+                        {project.isPublic ? (
                           <FiGlobe className="w-4 h-4 text-blue-500" />
                         ) : (
                           <FiLock className="w-4 h-4 text-gray-500" />
                         )}
                         <FormLabel className="text-base font-medium">
-                          {field.value
+                          {project.isPublic
                             ? "Toggle to make project private"
                             : "Toggle to make project public"}
                         </FormLabel>
@@ -118,7 +117,7 @@ export default function ProjectVisibility({ project }: Props) {
                       <FormDescription className="flex items-start gap-1">
                         <FiInfo className="w-3 h-3 mt-1 flex-shrink-0 opacity-70" />
                         <span className="text-sm">
-                          {field.value
+                          {project.isPublic
                             ? "Anyone with the invitation code will be able to access the project"
                             : "Anyone will be able to access the project"}
                         </span>

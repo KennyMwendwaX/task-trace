@@ -66,7 +66,6 @@ export default function TableRowActions<TData>({
 
       if (data.success) {
         toast.success("Task label updated successfully!");
-        router.refresh();
       }
     });
   };
@@ -84,7 +83,6 @@ export default function TableRowActions<TData>({
 
       if (data.success) {
         toast.success("Task status updated successfully!");
-        router.refresh();
       }
     });
   };
@@ -102,7 +100,6 @@ export default function TableRowActions<TData>({
 
       if (data.success) {
         toast.success("Task priority updated successfully!");
-        router.refresh();
       }
     });
   };

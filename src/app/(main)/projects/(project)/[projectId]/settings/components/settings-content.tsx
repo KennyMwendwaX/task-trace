@@ -1,6 +1,5 @@
 "use client";
 
-import { useProjectStore } from "../../hooks/useProjectStore";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {

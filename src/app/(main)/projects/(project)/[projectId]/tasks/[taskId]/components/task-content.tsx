@@ -32,6 +32,7 @@ import { useTransition } from "react";
 import { deleteTask } from "@/server/api/project/tasks";
 import { toast } from "sonner";
 import { DetailedProject, ProjectTask } from "@/database/schema";
+import { tryCatch } from "@/lib/try-catch";
 
 interface StatusConfig {
   bg: string;
@@ -128,14 +129,14 @@ export default function TaskContent({ project, task }: Props) {
 
   const handleTaskDelete = (projectId: number, taskId: number) => {
     startTransition(async () => {
-      const result = await deleteTask(projectId, taskId);
+      const { data, error } = await tryCatch(deleteTask(projectId, taskId));
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      if (result.success) {
+      if (data.success) {
         toast.success("Task deleted successfully!");
         router.push(`/projects/${projectId}/tasks/`);
       }

@@ -255,7 +255,8 @@ export default function JoinProjectModal({
 
                             <div className="mt-4 pt-4 border-t border-primary-100 flex items-center text-sm text-gray-600">
                               <Mail className="h-4 w-4 mr-2 text-primary-500" />
-                              You'll be notified when your request is approved
+                              You&apos;ll be notified when your request is
+                              approved
                             </div>
                           </div>
                         </div>
@@ -264,8 +265,8 @@ export default function JoinProjectModal({
                       <div className="space-y-4">
                         <div className="bg-amber-50 border border-amber-100 rounded-lg p-4">
                           <p className="text-amber-800 text-sm">
-                            Don't have an invitation code? Request to join this
-                            project and the project owner will review your
+                            Don&apos;t have an invitation code? Request to join
+                            this project and the project owner will review your
                             application.
                           </p>
                         </div>
@@ -289,8 +290,8 @@ export default function JoinProjectModal({
                                 2
                               </div>
                               <p className="text-gray-600 text-sm">
-                                You'll receive a notification when your request
-                                is approved
+                                You&apos;ll receive a notification when your
+                                request is approved
                               </p>
                             </div>
                             <div className="flex items-start gap-3">
@@ -298,8 +299,8 @@ export default function JoinProjectModal({
                                 3
                               </div>
                               <p className="text-gray-600 text-sm">
-                                Once approved, you'll gain access to the project
-                                workspace
+                                Once approved, you&apos;ll gain access to the
+                                project workspace
                               </p>
                             </div>
                           </div>

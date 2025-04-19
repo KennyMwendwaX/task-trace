@@ -13,6 +13,7 @@ import { differenceInDays } from "date-fns";
 import { useTransition } from "react";
 import { generateInvitationCode } from "@/server/api/project/invitation-code";
 import { InvitationCode } from "@/database/schema";
+import { tryCatch } from "@/lib/try-catch";
 
 interface ProjectInviteProps {
   projectId: number;
@@ -27,10 +28,12 @@ export default function ProjectInvite({
 
   const handleGenerate = (projectId: number) => {
     startTransition(async () => {
-      const result = await generateInvitationCode(projectId);
+      const { data: invitationCode, error } = await tryCatch(
+        generateInvitationCode(projectId)
+      );
 
-      if (result.error) {
-        toast.error(result.error.message);
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
