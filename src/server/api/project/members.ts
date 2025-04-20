@@ -161,6 +161,123 @@ export const getCurrentUserRole = async (
   }
 };
 
+export const changeMemberRole = async (
+  projectId: number,
+  memberId: number,
+  newRole: ProjectRole
+): Promise<{ success: true }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "changeMemberRole"
+      );
+    }
+
+    const userId = session.user.id;
+
+    // Check if the project exists
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "changeMemberRole"
+      );
+    }
+
+    // Check if the current user is a member of the project
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, parseInt(userId))
+      ),
+    });
+
+    if (!currentUserMember) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "You are not a member of this project",
+        "changeMemberRole"
+      );
+    }
+
+    // Check if the current user has permission to change roles
+    if (
+      currentUserMember.role !== "OWNER" &&
+      !(currentUserMember.role === "ADMIN" && newRole !== "OWNER")
+    ) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You don't have permission to change member roles",
+        "changeMemberRole"
+      );
+    }
+
+    // Check if the member exists
+    const memberToUpdate = await db.query.members.findFirst({
+      where: and(eq(members.id, memberId), eq(members.projectId, projectId)),
+      with: {
+        user: {
+          columns: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    if (!memberToUpdate) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Member not found in this project",
+        "changeMemberRole"
+      );
+    }
+
+    // Admin cannot change Owner's role
+    if (currentUserMember.role === "ADMIN" && memberToUpdate.role === "OWNER") {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "Admins cannot change the Owner's role",
+        "changeMemberRole"
+      );
+    }
+
+    // Update the member's role
+    await db
+      .update(members)
+      .set({
+        role: newRole,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(members.id, memberId), eq(members.projectId, projectId)));
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error changing member role:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to change member role",
+      "changeMemberRole"
+    );
+  }
+};
+
 export const createMembershipRequest = async (
   projectId: string | number
 ): Promise<{ success: true }> => {

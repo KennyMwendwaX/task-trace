@@ -3,7 +3,10 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import MembersContent from "./components/members-content";
 import { getProject } from "@/server/api/project/project";
-import { getProjectMembers } from "@/server/api/project/members";
+import {
+  getCurrentUserRole,
+  getProjectMembers,
+} from "@/server/api/project/members";
 import ProjectNotFound from "../components/project-not-found";
 import { tryCatch } from "@/lib/try-catch";
 import { ProjectActionError } from "@/lib/errors";
@@ -53,6 +56,10 @@ export default async function Members({ params }: Props) {
     getProjectMembers(projectId, session.user.id)
   );
 
+  const { data: currentUserRole, error: currentUserRoleError } = await tryCatch(
+    getCurrentUserRole(projectId)
+  );
+
   if (membersError) {
     return (
       <ServerError
@@ -65,5 +72,23 @@ export default async function Members({ params }: Props) {
     );
   }
 
-  return <MembersContent project={project} members={members} />;
+  if (currentUserRoleError) {
+    return (
+      <ServerError
+        title="Data Loading Error"
+        message="Unable to load current user member role."
+        details={currentUserRoleError.message}
+        returnPath={`/projects/${projectId}`}
+        returnLabel="Return to Project"
+      />
+    );
+  }
+
+  return (
+    <MembersContent
+      project={project}
+      members={members}
+      currentUserRole={currentUserRole}
+    />
+  );
 }

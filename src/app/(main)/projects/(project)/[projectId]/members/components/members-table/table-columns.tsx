@@ -9,13 +9,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
 import { ProjectMember } from "@/database/schema";
+import { ProjectRole } from "@/lib/config";
 
 interface TableColumnsProps {
   projectId: number;
+  currentUserRole: ProjectRole;
 }
 
 export const TableColumns = ({
   projectId,
+  currentUserRole,
 }: TableColumnsProps): ColumnDef<ProjectMember>[] => [
   {
     id: "select",
@@ -88,6 +91,12 @@ export const TableColumns = ({
   },
   {
     id: "actions",
-    cell: ({ row }) => <TableRowActions projectId={projectId} row={row} />,
+    cell: ({ row }) => (
+      <TableRowActions
+        projectId={projectId}
+        row={row}
+        currentUserRole={currentUserRole}
+      />
+    ),
   },
 ];

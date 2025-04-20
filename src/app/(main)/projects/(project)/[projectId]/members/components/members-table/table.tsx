@@ -33,6 +33,7 @@ import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
 import { format } from "date-fns";
 import { ProjectMember } from "@/database/schema";
+import { ProjectRole } from "@/lib/config";
 
 interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<ProjectMember, TValue>[];

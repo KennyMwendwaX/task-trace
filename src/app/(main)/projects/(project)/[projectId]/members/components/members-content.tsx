@@ -17,15 +17,18 @@ import { Button } from "@/components/ui/button";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlinePlus } from "react-icons/ai";
 import { DetailedProject, ProjectMember } from "@/database/schema";
+import { ProjectRole } from "@/lib/config";
 
 interface MembersContentProps {
   project: DetailedProject;
   members: ProjectMember[];
+  currentUserRole: ProjectRole;
 }
 
 export default function MembersContent({
   project,
   members,
+  currentUserRole,
 }: MembersContentProps) {
   return (
     <>
@@ -87,7 +90,10 @@ export default function MembersContent({
             <MemberTable
               data={members}
               projectId={project.id}
-              columns={TableColumns({ projectId: project.id })}
+              columns={TableColumns({
+                projectId: project.id,
+                currentUserRole: currentUserRole,
+              })}
             />
           </>
         )}
