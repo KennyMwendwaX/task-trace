@@ -33,7 +33,7 @@ import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
 import { format } from "date-fns";
 import { ProjectMember } from "@/database/schema";
-import { ProjectRole } from "@/lib/config";
+import { UserRoundPlus } from "lucide-react";
 
 interface MemberTableProps<TData, TValue> {
   columns: ColumnDef<ProjectMember, TValue>[];
@@ -86,9 +86,9 @@ export default function MemberTable<TData, TValue>({
           <TableToolbar table={table} />
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
             <Link href={`/projects/${projectId}/members/requests`}>
-              <Button className="flex items-center space-x-2 rounded-3xl">
-                <AiOutlinePlus className="w-4 h-4 text-white" />
-                <span>Add Member</span>
+              <Button className="flex items-center gap-1 rounded-3xl">
+                <UserRoundPlus className="w-5 h-5 text-white" />
+                <span>Manage Requests</span>
               </Button>
             </Link>
             <Button
