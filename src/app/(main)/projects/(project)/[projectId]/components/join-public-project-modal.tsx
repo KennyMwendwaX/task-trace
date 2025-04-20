@@ -76,7 +76,7 @@ export default function JoinPublicProjectModal({
                 Join the collaboration
               </h3>
               <p className="text-gray-600">
-                By joining this project, you'll be able to:
+                By joining this project, you&apos;ll be able to:
               </p>
               <ul className="mt-3 space-y-2">
                 <li className="flex items-center gap-2 text-gray-700">
