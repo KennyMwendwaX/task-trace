@@ -74,7 +74,7 @@ export default function ExploreFilters({
         <Input
           type="search"
           placeholder="Search projects..."
-          className="w-full pl-8 pr-10 rounded-lg bg-background sm:w-[200px] md:w-[400px]"
+          className="w-full pl-8 pr-10 rounded-lg bg-background"
           value={initialSearch}
           onChange={(e) => handleSearchChange(e.target.value)}
         />
