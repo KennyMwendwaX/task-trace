@@ -161,7 +161,7 @@ export const getCurrentUserRole = async (
   }
 };
 
-export const changeMemberRole = async (
+export const updateProjectMemberRole = async (
   projectId: number,
   memberId: number,
   newRole: ProjectRole
@@ -274,6 +274,125 @@ export const changeMemberRole = async (
       "DATABASE_ERROR",
       error instanceof Error ? error.message : "Failed to change member role",
       "changeMemberRole"
+    );
+  }
+};
+
+export const removeMember = async (
+  projectId: number,
+  memberId: number
+): Promise<{ success: true }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "removeMember"
+      );
+    }
+
+    const userId = session.user.id;
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, projectId),
+    });
+
+    if (!project) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "removeMember"
+      );
+    }
+
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, projectId),
+        eq(members.userId, parseInt(userId))
+      ),
+    });
+
+    if (!currentUserMember) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "You are not a member of this project",
+        "removeMember"
+      );
+    }
+
+    const memberToRemove = await db.query.members.findFirst({
+      where: and(eq(members.id, memberId), eq(members.projectId, projectId)),
+      with: {
+        user: {
+          columns: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!memberToRemove) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Member not found in this project",
+        "removeMember"
+      );
+    }
+
+    // Check if the current user has permission to remove members
+    // OWNER can remove anyone, ADMIN can remove MEMBER but not another ADMIN or OWNER
+    const hasPermission =
+      currentUserMember.role === "OWNER" ||
+      (currentUserMember.role === "ADMIN" && memberToRemove.role === "MEMBER");
+
+    if (!hasPermission) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You don't have permission to remove this member",
+        "removeMember"
+      );
+    }
+
+    // Cannot remove project owner
+    if (memberToRemove.role === "OWNER") {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "The project owner cannot be removed",
+        "removeMember"
+      );
+    }
+
+    // Cannot remove yourself (use leave project instead)
+    if (memberToRemove.userId === parseInt(userId)) {
+      throw new MemberActionError(
+        "FORBIDDEN",
+        "You cannot remove yourself from the project. Use leave project instead.",
+        "removeMember"
+      );
+    }
+
+    // Remove the member
+    await db
+      .delete(members)
+      .where(and(eq(members.id, memberId), eq(members.projectId, projectId)));
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error removing member:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to remove member",
+      "removeMember"
     );
   }
 };

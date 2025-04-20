@@ -91,12 +91,20 @@ export const TableColumns = ({
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <TableRowActions
-        projectId={projectId}
-        row={row}
-        currentUserRole={currentUserRole}
-      />
-    ),
+    cell: ({ row }) => {
+      const member = row.original;
+
+      if (member.role === "OWNER") {
+        return null;
+      }
+
+      return (
+        <TableRowActions
+          projectId={projectId}
+          row={row}
+          currentUserRole={currentUserRole}
+        />
+      );
+    },
   },
 ];

@@ -26,50 +26,68 @@ import { Row } from "@tanstack/react-table";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { tryCatch } from "@/lib/try-catch";
+import {
+  removeMember,
+  updateProjectMemberRole,
+} from "@/server/api/project/members";
+import { useRouter } from "next/navigation";
 
 interface TableRowActions<TData> {
   row: Row<ProjectMember>;
   projectId: number;
-  onRoleChange?: (memberId: number, newRole: ProjectRole) => void;
-  onRemove?: (memberId: number) => void;
   currentUserRole: ProjectRole;
 }
 
 export default function TableRowActions<TData>({
   row,
   projectId,
-  onRoleChange,
-  onRemove,
+
   currentUserRole,
 }: TableRowActions<TData>) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const member = row.original;
 
-  const handleRoleChange = (newRole: ProjectRole) => {
-    if (onRoleChange) {
-      startTransition(() => {
-        onRoleChange(member.id, newRole);
+  const handleRoleChange = async (newRole: ProjectRole) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(
+        updateProjectMemberRole(projectId, member.id, newRole)
+      );
+
+      if (error) {
+        toast.error(`Failed to update ${member.user.name}'s role`);
+        return;
+      }
+
+      if (data.success === true) {
         toast.success(
           `${member.user.name}'s role has been updated to ${newRole}`
         );
-      });
-    }
+        router.refresh();
+      }
+    });
   };
 
-  const handleRemoveUser = (id: number) => {
-    if (onRemove) {
-      startTransition(() => {
-        onRemove(id);
+  const handleRemoveUser = async (id: number) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(
+        removeMember(projectId, member.id)
+      );
+
+      if (error) {
+        toast.error(`Failed to remove ${member.user.name} from the project`);
+        return;
+      }
+
+      if (data.success === true) {
         toast.success(`${member.user.name} has been removed from the project`);
-      });
-    }
-  };
-
-  const handleSendInvite = () => {
-    toast.success(`A reminder has been sent to ${member.user.email}`);
+        router.refresh();
+      }
+    });
   };
 
   const handleViewProfile = () => {
+    router.push(`/projects/${projectId}/members/${member.id}`);
     toast.success(`Viewing ${member.user.name}'s profile`);
   };
 
@@ -130,29 +148,19 @@ export default function TableRowActions<TData>({
             View Profile
           </DropdownMenuItem>
 
-          {/* Send invite/reminder */}
-          <DropdownMenuItem onSelect={handleSendInvite}>
-            <EnvelopeClosedIcon className="mr-2 h-4 w-4" />
-            Send Invite Reminder
-          </DropdownMenuItem>
-
-          {/* Direct message */}
-          <DropdownMenuItem>
-            <PaperPlaneIcon className="mr-2 h-4 w-4" />
-            Message
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
           {/* Remove member */}
           {canManageMember && (
-            <DropdownMenuItem
-              className="text-red-500 focus:text-red-500"
-              onSelect={() => handleRemoveUser(member.id)}
-              disabled={isPending}>
-              <TrashIcon className="mr-2 h-4 w-4" />
-              Remove Member
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                className="text-red-500 focus:text-red-500"
+                onSelect={() => handleRemoveUser(member.id)}
+                disabled={isPending}>
+                <TrashIcon className="mr-2 h-4 w-4" />
+                Remove Member
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
