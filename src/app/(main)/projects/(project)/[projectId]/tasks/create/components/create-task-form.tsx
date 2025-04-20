@@ -65,9 +65,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { Member } from "@/lib/schema/MemberSchema";
 import { toast } from "sonner";
-import ProjectNotFound from "../../../components/project-not-found";
 import { useTransition } from "react";
 import { createTask } from "@/server/api/project/tasks";
 import { DetailedProject, ProjectMember } from "@/database/schema";

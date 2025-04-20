@@ -10,6 +10,7 @@ interface EditorProps {
 
 export default function Editor({ onChange }: EditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: {

@@ -96,6 +96,71 @@ export const getProjectMembers = async (
   }
 };
 
+export const getCurrentUserRole = async (
+  projectId: string
+): Promise<ProjectRole> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      throw new MemberActionError(
+        "UNAUTHORIZED",
+        "No active session found",
+        "getCurrentUserRole"
+      );
+    }
+
+    const userId = session.user.id;
+
+    const project = await db.query.projects.findFirst({
+      where: eq(projects.id, parseInt(projectId)),
+    });
+
+    if (!project) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "Project not found",
+        "getCurrentUserRole"
+      );
+    }
+
+    // Check if the user is the project owner for quick role determination
+    if (project.ownerId === parseInt(userId)) {
+      return "OWNER";
+    }
+
+    // Otherwise, query the members table to get the user's role
+    const currentUserMember = await db.query.members.findFirst({
+      where: and(
+        eq(members.projectId, parseInt(projectId)),
+        eq(members.userId, parseInt(userId))
+      ),
+    });
+
+    if (!currentUserMember) {
+      throw new MemberActionError(
+        "NOT_FOUND",
+        "You are not a member of this project",
+        "getCurrentUserRole"
+      );
+    }
+
+    return currentUserMember.role;
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+    if (error instanceof MemberActionError) {
+      throw error;
+    }
+    throw new MemberActionError(
+      "DATABASE_ERROR",
+      error instanceof Error ? error.message : "Failed to fetch user role",
+      "getCurrentUserRole"
+    );
+  }
+};
+
 export const createMembershipRequest = async (
   projectId: string | number
 ): Promise<{ success: true }> => {
