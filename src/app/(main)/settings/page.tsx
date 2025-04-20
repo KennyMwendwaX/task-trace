@@ -1,17 +1,28 @@
-import { Separator } from "@/components/ui/separator";
-import { ProfileForm } from "./profile-form";
+import { auth } from "@/lib/auth";
+import SettingsForm from "./components/settings-form";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function page() {
+export default async function SettingsPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Profile</h3>
-        <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
+    <div className="container max-w-4xl py-6 lg:py-10">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+        <p className="text-muted-foreground">
+          Manage your account settings and preferences.
         </p>
       </div>
-      <Separator />
-      <ProfileForm />
+      <div className="grid gap-10 pt-6">
+        <SettingsForm session={session} />
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,22 +12,46 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { PersonIcon } from "@radix-ui/react-icons";
 import { MdLogout } from "react-icons/md";
 import { LuMenu } from "react-icons/lu";
-import Logo from "@/app/logo.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useSession, signOut } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
+import ThemeToggle from "./theme-toggle";
+import Image from "next/image";
+import Logo from "@/app/logo.png";
+
+const links = [
+  {
+    href: "/dashboard",
+    title: "Dashboard",
+  },
+  {
+    href: "/projects",
+    title: "Projects",
+  },
+  {
+    href: "/explore",
+    title: "Explore",
+  },
+  {
+    href: "/tasks",
+    title: "Tasks",
+  },
+  {
+    href: "/settings",
+    title: "Settings",
+  },
+];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { data: sessionData } = useSession();
+  const session = useSession();
   const router = useRouter();
-  const userInfo = sessionData?.user;
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-white px-4 md:px-6 z-50">
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50 dark:border-slate-700">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden">
@@ -37,20 +60,18 @@ export default function Navbar() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
-          <nav className="flex flex-col gap-4">
-            <Link className="flex items-center gap-1" href="/dashboard">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <Image src={Logo} width={32} height={28} alt="" />
-              </div>
-              <div className="flex-1 text-left text-base leading-tight">
-                <span className="truncate font-semibold">TaskTrace</span>
-              </div>
-            </Link>
-            <SmSidebar />
-          </nav>
+          <Link className="flex items-center gap-1" href="/">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <Image src={Logo} width={32} height={28} alt="" />
+            </div>
+            <div className="flex-1 text-left text-base leading-tight">
+              <span className="truncate font-semibold">TaskTrace</span>
+            </div>
+          </Link>
+          <SmSidebar />
         </SheetContent>
       </Sheet>
-      <Link className="flex items-center gap-1" href="/dashboard">
+      <Link className="flex items-center gap-1" href="/">
         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <Image src={Logo} width={32} height={28} alt="" />
         </div>
@@ -59,58 +80,30 @@ export default function Navbar() {
         </div>
       </Link>
       <nav className="hidden flex-1 justify-center flex-col gap-6 text-base font-medium lg:flex lg:flex-row lg:items-center lg:gap-6">
-        <Link
-          href="/dashboard"
-          className={`${
-            pathname === "/dashboard"
-              ? "text-foreground"
-              : "text-muted-foreground"
-          } transition-colors hover:text-foreground`}>
-          Dashboard
-        </Link>
-        <Link
-          href="/projects"
-          className={`${
-            pathname === "/projects"
-              ? "text-foreground"
-              : "text-muted-foreground"
-          } transition-colors hover:text-foreground`}>
-          Projects
-        </Link>
-        <Link
-          href="/explore"
-          className={`${
-            pathname === "/explore"
-              ? "text-foreground"
-              : "text-muted-foreground"
-          } transition-colors hover:text-foreground`}>
-          Explore
-        </Link>
-        <Link
-          href="/tasks"
-          className={`${
-            pathname === "/tasks" ? "text-foreground" : "text-muted-foreground"
-          } transition-colors hover:text-foreground`}>
-          Tasks
-        </Link>
-        <Link
-          href="/settings"
-          className={`${
-            pathname === "/settings"
-              ? "text-foreground"
-              : "text-muted-foreground"
-          } transition-colors hover:text-foreground`}>
-          Settings
-        </Link>
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              pathname === link.href
+                ? "text-foreground"
+                : "text-muted-foreground",
+              "transition-colors hover:text-foreground"
+            )}>
+            {link.title}
+          </Link>
+        ))}
       </nav>
 
-      <div className="items-center ml-auto">
+      <div className="flex items-center space-x-4 ml-auto">
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="h-8 w-8 border border-gray-600 cursor-pointer">
-              <AvatarImage src={userInfo?.image || ""} alt="profile-image" />
-              <AvatarFallback className="bg-white">
-                <User className="h-5 w-5 text-gray-600" />
+            <Avatar className="h-8 w-8 border border-gray-300 dark:border-gray-600 cursor-pointer">
+              <AvatarImage src={""} alt="profile-image" />
+              <AvatarFallback className="bg-muted">
+                <PersonIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
@@ -118,15 +111,17 @@ export default function Navbar() {
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
                 <p className="text-base font-medium leading-none">
-                  {userInfo?.name}
+                  {session.data?.user.name}
                 </p>
-                <p className="text-xs leading-none text-gray-500">
-                  {userInfo?.email}
+                <p className="text-xs leading-none text-muted-foreground">
+                  {session.data?.user.email}
                 </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center">
+            <DropdownMenuItem
+              onClick={() => router.push("/settings")}
+              className="flex items-center">
               <IoSettingsOutline className="mr-2 w-5 h-5" /> Settings
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -139,7 +134,7 @@ export default function Navbar() {
                   },
                 });
               }}
-              className="flex items-center hover:bg-red-100">
+              className="flex items-center hover:bg-red-100 dark:hover:bg-red-900">
               <MdLogout className="mr-2 w-5 h-5" />
               Logout
             </DropdownMenuItem>
@@ -157,7 +152,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   }[];
 }
 
-export function SideNav({ className, links, ...props }: SidebarNavProps) {
+export function SideNav({ links, ...props }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
@@ -181,28 +176,5 @@ export function SideNav({ className, links, ...props }: SidebarNavProps) {
 }
 
 export function SmSidebar() {
-  const links = [
-    {
-      href: "/dashboard",
-      title: "Dashboard",
-    },
-    {
-      href: "/projects",
-      title: "Projects",
-    },
-    {
-      href: "/explore",
-      title: "Explore",
-    },
-    {
-      href: "/tasks",
-      title: "Tasks",
-    },
-    {
-      href: "/settings",
-      title: "Settings",
-    },
-  ];
-
   return <SideNav links={links} />;
 }
