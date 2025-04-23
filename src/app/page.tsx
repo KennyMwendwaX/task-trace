@@ -11,11 +11,13 @@ export default async function Home() {
   });
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header session={session} />
-      <Hero />
-      {/* <Features /> */}
+      <main className="flex-grow">
+        <Hero />
+        <Features />
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
