@@ -111,7 +111,6 @@ export default function UpdateProjectDetails({ project }: Props) {
                         <Input
                           type="text"
                           id="name"
-                          className="focus:border-2 focus:border-blue-600"
                           placeholder="Project name"
                           {...field}
                           value={field.value || ""}
@@ -158,7 +157,6 @@ export default function UpdateProjectDetails({ project }: Props) {
                     <FormControl>
                       <Textarea
                         id="description"
-                        className="focus:border-2 focus:border-blue-600"
                         placeholder="Project description"
                         {...field}
                         value={field.value || ""}

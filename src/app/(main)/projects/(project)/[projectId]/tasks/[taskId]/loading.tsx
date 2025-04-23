@@ -19,7 +19,7 @@ export default function Loading() {
       <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
         <div>
           <Skeleton className="h-8 w-96 mb-2" />
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
             <Skeleton className="rounded-full px-3 py-1.5 w-20 h-6" />
             <Skeleton className="rounded-full px-3 py-1.5 w-20 h-6" />
             <Skeleton className="rounded-full px-3 py-1.5 w-20 h-6" />
@@ -38,7 +38,7 @@ export default function Loading() {
         </div>
       </div>
       <Card className="mt-4 p-4 sm:p-6">
-        <Skeleton className="bg-gray-50 p-4 rounded-md h-[350px]" />
+        <Skeleton className="p-4 rounded-md h-[350px]" />
       </Card>
     </main>
   );

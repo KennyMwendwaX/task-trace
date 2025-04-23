@@ -102,7 +102,7 @@ export default function MemberLeaderboard({ tasks }: Props) {
                     variant="default"
                     className={`${
                       roleColors[stat.role]
-                    } text-white px-2 py-0.5 rounded-full text-xs font-medium`}>
+                    } px-2 py-0.5 rounded-full text-xs font-medium`}>
                     {stat.role}
                   </Badge>
                 </div>

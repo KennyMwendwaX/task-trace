@@ -41,7 +41,7 @@ export default function Loading() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[...Array(4)].map((_, index) => (
-              <Card key={index} className="bg-gray-100 border-none shadow-sm">
+              <Card key={index} className="shadow-none">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <Skeleton className="h-4 w-16" />

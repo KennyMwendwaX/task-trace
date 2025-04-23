@@ -57,14 +57,14 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
   };
 
   return (
-    <Card className="border-red-300 shadow-sm">
+    <Card className="border-destructive">
       <CardHeader>
         <CardTitle className="text-xl text-destructive">Danger Zone</CardTitle>
       </CardHeader>
 
       <CardContent>
         {/* Leave Project */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t">
           <div className="mb-2 sm:mb-0 text-left">
             <h3 className="text-sm font-medium">Leave Project</h3>
             <p className="text-sm text-gray-500">
@@ -73,7 +73,7 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="sm" variant="outline" className="text-red-500">
+              <Button size="sm" variant="outline" className="text-destructive">
                 Leave Project
               </Button>
             </DialogTrigger>
@@ -106,7 +106,7 @@ export default function DangerZone({ projectId }: DangerZoneProps) {
         </div>
 
         {/* Delete Project */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t">
           <div className="mb-2 sm:mb-0 text-left">
             <h3 className="text-sm font-medium">Delete project</h3>
             <p className="text-sm text-gray-500">

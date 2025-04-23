@@ -26,7 +26,7 @@ export default function Loading() {
       <Skeleton className="h-8 w-3/4 max-w-[300px]" />
       <Skeleton className="h-6 w-1/2 max-w-[400px] mt-2" />
 
-      <div className="bg-white rounded-md border mt-4">
+      <div className="rounded-md border mt-4">
         <Table>
           <TableHeader>
             <TableRow>

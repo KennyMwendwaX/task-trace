@@ -138,18 +138,18 @@ export default function GeneralSettings() {
                   className={`items-center rounded-md border-2 ${
                     theme === "dark" ? "border-primary" : "border-muted"
                   } bg-popover p-1 hover:bg-accent hover:text-accent-foreground`}>
-                  <div className="space-y-2 rounded-sm bg-slate-950 p-2">
-                    <div className="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                      <div className="h-2 w-4/5 max-w-[80px] rounded-lg bg-slate-400" />
-                      <div className="h-2 w-full max-w-[100px] rounded-lg bg-slate-400" />
+                  <div className="space-y-2 rounded-sm bg-black p-2">
+                    <div className="space-y-2 rounded-md bg-slate-950 p-2 shadow-sm">
+                      <div className="h-2 w-4/5 max-w-[80px] rounded-lg bg-slate-500" />
+                      <div className="h-2 w-full max-w-[100px] rounded-lg bg-slate-500" />
                     </div>
-                    <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                      <div className="h-4 w-4 rounded-full bg-slate-400" />
-                      <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+                    <div className="flex items-center space-x-2 rounded-md bg-slate-950 p-2 shadow-sm">
+                      <div className="h-4 w-4 rounded-full bg-slate-500" />
+                      <div className="h-2 w-[100px] rounded-lg bg-slate-500" />
                     </div>
-                    <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                      <div className="h-4 w-4 rounded-full bg-slate-400" />
-                      <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
+                    <div className="flex items-center space-x-2 rounded-md bg-slate-950 p-2 shadow-sm">
+                      <div className="h-4 w-4 rounded-full bg-slate-500" />
+                      <div className="h-2 w-[100px] rounded-lg bg-slate-500" />
                     </div>
                   </div>
                 </div>
@@ -175,50 +175,50 @@ export default function GeneralSettings() {
                   } p-1 hover:border-accent`}>
                   <div
                     className={`space-y-2 rounded-sm ${
-                      isSystemThemeDark ? "bg-slate-950" : "bg-[#ecedef]"
+                      isSystemThemeDark ? "bg-black" : "bg-[#ecedef]"
                     } p-2`}>
                     <div
                       className={`space-y-2 rounded-md ${
-                        isSystemThemeDark ? "bg-slate-800" : "bg-white"
+                        isSystemThemeDark ? "bg-slate-950" : "bg-white"
                       } p-2 shadow-sm`}>
                       <div
                         className={`h-2 w-4/5 max-w-[80px] rounded-lg ${
-                          isSystemThemeDark ? "bg-slate-400" : "bg-[#ecedef]"
+                          isSystemThemeDark ? "bg-slate-500" : "bg-[#ecedef]"
                         }`}
                       />
                       <div
                         className={`h-2 w-full max-w-[100px] rounded-lg ${
-                          isSystemThemeDark ? "bg-slate-400" : "bg-[#ecedef]"
+                          isSystemThemeDark ? "bg-slate-500" : "bg-[#ecedef]"
                         }`}
                       />
                     </div>
                     <div
                       className={`flex items-center space-x-2 rounded-md ${
-                        isSystemThemeDark ? "bg-slate-800" : "bg-white"
+                        isSystemThemeDark ? "bg-slate-950" : "bg-white"
                       } p-2 shadow-sm`}>
                       <div
                         className={`h-4 w-4 rounded-full ${
-                          isSystemThemeDark ? "bg-slate-400" : "bg-[#ecedef]"
+                          isSystemThemeDark ? "bg-slate-500" : "bg-[#ecedef]"
                         }`}
                       />
                       <div
                         className={`h-2 w-[100px] rounded-lg ${
-                          isSystemThemeDark ? "bg-slate-400" : "bg-[#ecedef]"
+                          isSystemThemeDark ? "bg-slate-500" : "bg-[#ecedef]"
                         }`}
                       />
                     </div>
                     <div
                       className={`flex items-center space-x-2 rounded-md ${
-                        isSystemThemeDark ? "bg-slate-800" : "bg-white"
+                        isSystemThemeDark ? "bg-slate-950" : "bg-white"
                       } p-2 shadow-sm`}>
                       <div
                         className={`h-4 w-4 rounded-full ${
-                          isSystemThemeDark ? "bg-slate-400" : "bg-[#ecedef]"
+                          isSystemThemeDark ? "bg-slate-500" : "bg-[#ecedef]"
                         }`}
                       />
                       <div
                         className={`h-2 w-[100px] rounded-lg ${
-                          isSystemThemeDark ? "bg-slate-400" : "bg-[#ecedef]"
+                          isSystemThemeDark ? "bg-slate-500" : "bg-[#ecedef]"
                         }`}
                       />
                     </div>
@@ -230,44 +230,6 @@ export default function GeneralSettings() {
                 </div>
               </div>
             </RadioGroup>
-          </div>
-
-          {/* Rest of the component remains the same */}
-          <Separator />
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col space-y-1">
-                <h3 className="font-medium">Difficulty Preference</h3>
-                <p className="text-sm text-muted-foreground">
-                  Set your default quiz difficulty.
-                </p>
-              </div>
-              <Select defaultValue="BEGINNER">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select difficulty" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="BEGINNER">Beginner</SelectItem>
-                  <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
-                  <SelectItem value="ADVANCED">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col space-y-1">
-                <h3 className="font-medium">Time Limit</h3>
-                <p className="text-sm text-muted-foreground">
-                  Enable time limits for quizzes by default.
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
           </div>
         </CardContent>
       </Card>

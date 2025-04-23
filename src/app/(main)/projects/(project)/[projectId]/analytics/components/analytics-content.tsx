@@ -65,7 +65,7 @@ export default function AnalyticsContent({ project, tasks }: Props) {
         ) : (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[calc(100vh-150px)]">
             <div className="flex flex-col items-center gap-1 text-center max-w-md">
-              <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
+              <div className="rounded-full p-4 inline-block mb-4">
                 <TbChartBar className="h-12 w-12 text-muted-foreground" />
               </div>
               <h3 className="mt-4 text-2xl font-semibold">
@@ -85,7 +85,7 @@ export default function AnalyticsContent({ project, tasks }: Props) {
               </ul>
               <Link href={`/projects/${project.id}/tasks/create`}>
                 <Button className="flex items-center gap-1 rounded-3xl">
-                  <AiOutlinePlus className="w-4 h-4 text-white" />
+                  <AiOutlinePlus className="w-4 h-4" />
                   <span>Create Task</span>
                 </Button>
               </Link>

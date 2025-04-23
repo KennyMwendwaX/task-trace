@@ -32,6 +32,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
 import { ProjectTask } from "@/database/schema";
+import { PlusIcon } from "lucide-react";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<ProjectTask, TValue>[];
@@ -85,7 +86,7 @@ export default function TaskTable<TData, TValue>({
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
             <Link href={`/projects/${projectId}/tasks/create`}>
               <Button className="flex items-center gap-1 rounded-3xl w-full sm:w-auto">
-                <AiOutlinePlus className="w-4 h-4 text-white" />
+                <PlusIcon className="w-5 h-5" />
                 <span>Create Task</span>
               </Button>
             </Link>

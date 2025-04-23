@@ -24,7 +24,7 @@ export default function TableToolbar<TData>({
         <Input
           type="search"
           placeholder="Search tasks..."
-          className="h-8 pl-8 w-full md:w-[250px] bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          className="h-8 pl-8 w-full md:w-[250px]"
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)

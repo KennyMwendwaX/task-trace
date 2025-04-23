@@ -15,11 +15,11 @@ export default function TaskNotFound({ projectId }: Props) {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 pt-0 items-center justify-center">
       <div className="flex flex-col items-center gap-1 text-center">
-        <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
-          <BsListTask className="h-12 w-12 text-gray-400" />
+        <div className="rounded-full p-4 inline-block mb-4">
+          <BsListTask className="h-12 w-12" />
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">No Task Found</h2>
-        <p className="text-gray-600 mb-4">
+        <h2 className="text-3xl font-bold mb-3">No Task Found</h2>
+        <p className="mb-4">
           The task you&apos;re looking for doesn&apos;t exist or has been
           removed.
         </p>

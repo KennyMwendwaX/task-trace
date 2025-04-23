@@ -19,8 +19,10 @@ import {
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { signOut } from "@/lib/auth-client";
-import { Session } from "@/lib/auth";
+import type { Session } from "@/lib/auth";
 import { useRouter } from "next/navigation";
+import { Sun } from "lucide-react";
+import ThemeToggle from "@/app/(main)/components/theme-toggle";
 
 export default function NavUser({ session }: { session: Session }) {
   const router = useRouter();
@@ -73,6 +75,14 @@ export default function NavUser({ session }: { session: Session }) {
             <DropdownMenuItem className="flex items-center">
               <IoSettingsOutline className="mr-2 w-5 h-5" /> Settings
             </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Sun className="mr-2 h-4 w-4" />
+                Theme
+              </div>
+              <ThemeToggle />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
                 signOut({
@@ -83,7 +93,7 @@ export default function NavUser({ session }: { session: Session }) {
                   },
                 });
               }}
-              className="flex items-center hover:bg-red-100">
+              className="flex items-center hover:text-bg-red-100">
               <MdLogout className="mr-2 w-5 h-5" />
               Logout
             </DropdownMenuItem>

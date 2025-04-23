@@ -28,11 +28,9 @@ export function ServerError({
         <div className="bg-red-50 rounded-full p-4 inline-block mb-4">
           <MdOutlineErrorOutline className="h-12 w-12 text-red-500" />
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">{title}</h2>
-        <p className="text-gray-600 mb-2">{message}</p>
-        {details && (
-          <p className="text-sm text-gray-500 mb-4 max-w-md">{details}</p>
-        )}
+        <h2 className="text-3xl font-bold mb-3">{title}</h2>
+        <p className="mb-2">{message}</p>
+        {details && <p className="text-sm mb-4 max-w-md">{details}</p>}
         <div className="flex justify-center">
           <Button
             size="lg"

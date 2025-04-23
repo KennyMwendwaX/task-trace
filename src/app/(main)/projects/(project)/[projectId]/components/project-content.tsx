@@ -75,7 +75,7 @@ export default function ProjectContent({ project, members, tasks }: Props) {
         {!members || members.length == 0 ? (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[calc(100vh-150px)]">
             <div className="flex flex-col items-center gap-1 text-center">
-              <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
+              <div className="rounded-full p-4 inline-block mb-4">
                 <FiUserPlus className="h-12 w-12 text-muted-foreground" />
               </div>
               <h3 className="mt-4 text-xl font-semibold">
@@ -87,7 +87,7 @@ export default function ProjectContent({ project, members, tasks }: Props) {
               </p>
               <Link href={`/projects/${project.id}/members/requests`}>
                 <Button className="flex items-center space-x-2 rounded-3xl">
-                  <AiOutlinePlus className="w-4 h-4 text-white" />
+                  <AiOutlinePlus className="w-4 h-4" />
                   <span>Add Member</span>
                 </Button>
               </Link>
@@ -96,7 +96,7 @@ export default function ProjectContent({ project, members, tasks }: Props) {
         ) : !tasks || tasks.length == 0 ? (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[calc(100vh-150px)]">
             <div className="flex flex-col items-center gap-1 text-center">
-              <div className="bg-gray-100 rounded-full p-4 inline-block mb-4">
+              <div className="rounded-full p-4 inline-block mb-4">
                 <TbPlaylistX className="h-12 w-12 text-muted-foreground" />
               </div>
               <h3 className="mt-4 text-xl font-semibold">No tasks added</h3>
@@ -105,7 +105,7 @@ export default function ProjectContent({ project, members, tasks }: Props) {
               </p>
               <Link href={`/projects/${project.id}/tasks/create`}>
                 <Button className="flex items-center space-x-2 rounded-3xl">
-                  <AiOutlinePlus className="w-4 h-4 text-white" />
+                  <AiOutlinePlus className="w-4 h-4" />
                   <span>New Task</span>
                 </Button>
               </Link>

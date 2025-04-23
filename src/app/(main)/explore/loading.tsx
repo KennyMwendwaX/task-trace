@@ -31,9 +31,7 @@ export default function Loading() {
       {/* Projects grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
         {[...Array(6)].map((_, index) => (
-          <Card
-            key={index}
-            className="overflow-hidden rounded-2xl border bg-white dark:bg-gray-800">
+          <Card key={index} className="overflow-hidden rounded-2xl border">
             <div className="p-6">
               {/* Header with project name and icon */}
               <div className="flex items-start justify-between">
@@ -62,12 +60,12 @@ export default function Loading() {
                   <Skeleton className="h-6 w-6 rounded-full" />
                   <Skeleton className="h-4 w-6" />
                 </div>
-                <div className="w-px h-4 bg-gray-200 dark:bg-gray-700"></div>
+                <div className="w-px h-4"></div>
                 <div className="flex items-center gap-1.5">
                   <Skeleton className="h-6 w-6 rounded-full" />
                   <Skeleton className="h-4 w-20" />
                 </div>
-                <div className="w-px h-4 bg-gray-200 dark:bg-gray-700"></div>
+                <div className="w-px h-4"></div>
                 <div className="flex items-center gap-1.5">
                   <Skeleton className="h-6 w-6 rounded-full" />
                   <Skeleton className="h-4 w-24" />
@@ -75,7 +73,7 @@ export default function Loading() {
               </div>
 
               {/* Divider */}
-              <div className="border-t border-gray-100 dark:border-gray-700 my-4"></div>
+              <div className="border-t my-4"></div>
 
               {/* Footer with Team & Action */}
               <div className="flex items-center justify-between">
@@ -83,7 +81,7 @@ export default function Loading() {
                   {[...Array(3)].map((_, i) => (
                     <Skeleton
                       key={i}
-                      className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800"
+                      className="w-8 h-8 rounded-full border-2"
                     />
                   ))}
                 </div>

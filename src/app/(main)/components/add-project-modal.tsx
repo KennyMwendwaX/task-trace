@@ -78,7 +78,7 @@ export default function AddProjectModal() {
     <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2 rounded-3xl">
-          <LuFolderPlus className="w-5 h-5 text-white" />
+          <LuFolderPlus className="w-5 h-5" />
           <span>New Project</span>
         </Button>
       </DialogTrigger>
@@ -99,7 +99,6 @@ export default function AddProjectModal() {
                       <Input
                         type="text"
                         id="name"
-                        className="w-full focus:border-2 focus:border-blue-600"
                         placeholder="Project name"
                         {...field}
                         required
@@ -143,7 +142,6 @@ export default function AddProjectModal() {
                   <FormControl>
                     <Textarea
                       id="description"
-                      className="w-full focus:border-2 focus:border-blue-600"
                       placeholder="Project description"
                       {...field}
                       required

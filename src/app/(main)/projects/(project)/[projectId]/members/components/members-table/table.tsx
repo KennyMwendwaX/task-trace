@@ -87,7 +87,7 @@ export default function MemberTable<TData, TValue>({
           <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
             <Link href={`/projects/${projectId}/members/requests`}>
               <Button className="flex items-center gap-1 rounded-3xl">
-                <UserRoundPlus className="w-5 h-5 text-white" />
+                <UserRoundPlus className="w-5 h-5" />
                 <span>Manage Requests</span>
               </Button>
             </Link>

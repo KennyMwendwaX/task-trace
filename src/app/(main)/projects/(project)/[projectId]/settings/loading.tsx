@@ -49,7 +49,7 @@ export default function Loading() {
               {[...Array(2)].map((_, index) => (
                 <div
                   key={index}
-                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t border-gray-200">
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-3 border-t">
                   <div className="mb-2 sm:mb-0 text-left">
                     <Skeleton className="h-5 w-32 mb-1" />
                     <Skeleton className="h-4 w-48" />

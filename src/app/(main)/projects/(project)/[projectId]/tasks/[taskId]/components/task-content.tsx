@@ -191,7 +191,7 @@ export default function TaskContent({ project, task }: Props) {
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
           <div>
             <h1 className="text-xl sm:text-3xl font-bold mb-2">{task.name}</h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+            <div className="flex flex-wrap items-center gap-2 text-sm">
               {label && <TaskLabelBadge label={label} />}
               {status && <TaskStatusBadge status={status} />}
               {priority && <TaskPriorityBadge priority={priority} />}
@@ -217,37 +217,35 @@ export default function TaskContent({ project, task }: Props) {
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-3 lg:flex-wrap-reverse">
-            <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-              <MdAccessTime className="w-4 h-4 text-gray-600 mr-2" />
-              <span className="text-sm font-semibold text-gray-800">
+            <div className="flex items-center rounded-full px-3 py-1.5">
+              <MdAccessTime className="w-4 h-4 mr-2" />
+              <span className="text-sm font-semibold">
                 Created: {taskCreatedAt}
               </span>
             </div>
             {taskUpdatedAt && (
-              <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-                <LuCalendar className="w-4 h-4 text-gray-600 mr-2" />
-                <span className="text-sm font-semibold text-gray-800">
+              <div className="flex items-center rounded-full px-3 py-1.5">
+                <LuCalendar className="w-4 h-4 mr-2" />
+                <span className="text-sm font-semibold">
                   Updated: {taskUpdatedAt}
                 </span>
               </div>
             )}
-            <div className="flex items-center bg-gray-100 rounded-full px-3 py-1.5">
-              <LuTimer className="w-4 h-4 text-gray-600 mr-2" />
-              <span className="text-sm font-semibold text-gray-800">
-                Due: {taskDueDate}
-              </span>
+            <div className="flex items-center rounded-full px-3 py-1.5">
+              <LuTimer className="w-4 h-4 mr-2" />
+              <span className="text-sm font-semibold">Due: {taskDueDate}</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
-            <Avatar className="w-10 h-10 bg-white">
+          <div className="flex items-center gap-3 rounded-full px-4 py-2">
+            <Avatar className="w-10 h-10 ">
               <AvatarImage src={""} />
-              <AvatarFallback className="bg-white">
-                <LuUser2 className="w-5 h-5 text-gray-600" />
+              <AvatarFallback>
+                <LuUser2 className="w-5 h-5" />
               </AvatarFallback>
             </Avatar>
             <div>
               <p className="text-xs text-gray-500">Assigned to</p>
-              <p className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+              <p className="text-sm font-semibold whitespace-nowrap">
                 {task.member?.user.name ?? "Unassigned"}
               </p>
             </div>
