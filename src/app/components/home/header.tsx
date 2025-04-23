@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button"; // Assuming this is shadcn/ui B
 import { MdLogout, MdMenu, MdClose } from "react-icons/md";
 import { signOut } from "@/lib/auth-client";
 import { Session } from "@/lib/auth";
-import Logo from "@/app/logo.png"; // Adjust path if necessary
 import { useRouter } from "next/navigation";
+import ThemeLogo from "@/app/(main)/components/theme-logo";
 
 interface Props {
   session: Session | null;
@@ -46,7 +46,7 @@ export default function Header({ session }: Props) {
               href="/"
               className="inline-flex items-center gap-1 font-semibold whitespace-nowrap p-2"
               onClick={closeMobileMenu}>
-              <Image src={Logo} width={34} height={30} alt="TaskTrace Logo" />
+              <ThemeLogo />
               <span className="text-2xl tracking-tighter">TaskTrace</span>
             </Link>
           </div>
@@ -130,13 +130,10 @@ export default function Header({ session }: Props) {
                   href="/"
                   className="inline-flex items-center gap-1 font-semibold whitespace-nowrap"
                   onClick={closeMobileMenu}>
-                  <Image
-                    src={Logo}
-                    width={34}
-                    height={30}
-                    alt="TaskTrace Logo"
-                  />
-                  <span className="text-xl tracking-tighter">TaskTrace</span>{" "}
+                  <ThemeLogo />
+                  <span className="text-xl tracking-tighter">
+                    TaskTrace
+                  </span>{" "}
                 </Link>
                 <Button
                   onClick={closeMobileMenu}

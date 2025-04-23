@@ -22,6 +22,7 @@ import { signOut, useSession } from "@/lib/auth-client";
 import ThemeToggle from "./theme-toggle";
 import Image from "next/image";
 import Logo from "@/app/logo.png";
+import ThemeLogo from "./theme-logo";
 
 const links = [
   {
@@ -61,9 +62,7 @@ export default function Navbar() {
         </SheetTrigger>
         <SheetContent side="left">
           <Link className="flex items-center gap-1" href="/">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-              <Image src={Logo} width={32} height={28} alt="" />
-            </div>
+            <ThemeLogo />
             <div className="flex-1 text-left text-base leading-tight">
               <span className="truncate font-semibold">TaskTrace</span>
             </div>
@@ -72,13 +71,14 @@ export default function Navbar() {
         </SheetContent>
       </Sheet>
       <Link className="flex items-center gap-1" href="/">
-        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-          <Image src={Logo} width={32} height={28} alt="" />
-        </div>
+        <ThemeLogo />
         <div className="flex-1 text-left text-base leading-tight">
-          <span className="truncate font-semibold">TaskTrace</span>
+          <span className="truncate font-semibold text-gray-900 dark:text-white">
+            TaskTrace
+          </span>
         </div>
       </Link>
+
       <nav className="hidden flex-1 justify-center flex-col gap-6 text-base font-medium lg:flex lg:flex-row lg:items-center lg:gap-6">
         {links.map((link) => (
           <Link
@@ -95,7 +95,6 @@ export default function Navbar() {
           </Link>
         ))}
       </nav>
-
       <div className="flex items-center space-x-4 ml-auto">
         <ThemeToggle />
         <DropdownMenu>
