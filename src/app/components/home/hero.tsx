@@ -125,7 +125,7 @@ export default function Hero() {
                   <Button
                     size="lg"
                     className="rounded-full bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 dark:from-blue-500 dark:to-teal-400 w-full sm:w-auto">
-                    Get Started Free
+                    Get Started
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
@@ -134,7 +134,7 @@ export default function Hero() {
                     size="lg"
                     variant="outline"
                     className="rounded-full w-full sm:w-auto">
-                    View Demo
+                    View Projects
                   </Button>
                 </Link>
               </div>

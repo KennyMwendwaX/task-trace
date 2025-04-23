@@ -18,7 +18,7 @@ export default function Footer() {
                 <span className="text-xl font-semibold">TaskTrace</span>
               </Link>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm mb-4">
               Streamline task management and boost productivity with our
               collaborative project tracking platform.
             </p>
@@ -26,33 +26,25 @@ export default function Footer() {
 
           {/* 2nd block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-gray-800 font-medium mb-2">Product</h6>
+            <h6 className="font-medium mb-2">Product</h6>
             <ul className="text-sm">
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Features
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Pricing
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Integrations
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Changelog
                 </Link>
               </li>
@@ -61,33 +53,25 @@ export default function Footer() {
 
           {/* 3rd block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-gray-800 font-medium mb-2">Company</h6>
+            <h6 className="font-medium mb-2">Company</h6>
             <ul className="text-sm">
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   About
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Blog
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Careers
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Contact
                 </Link>
               </li>
@@ -96,33 +80,25 @@ export default function Footer() {
 
           {/* 4th block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-gray-800 font-medium mb-2">Resources</h6>
+            <h6 className="font-medium mb-2">Resources</h6>
             <ul className="text-sm">
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Documentation
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Tutorials
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Support
                 </Link>
               </li>
               <li className="mb-2">
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">
+                <Link href="#" className="transition duration-150 ease-in-out">
                   Privacy Policy
                 </Link>
               </li>
@@ -131,8 +107,8 @@ export default function Footer() {
 
           {/* 5th block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-3">
-            <h6 className="text-gray-800 font-medium mb-2">Subscribe</h6>
-            <p className="text-sm text-gray-600 mb-4">
+            <h6 className="font-medium mb-2">Subscribe</h6>
+            <p className="text-sm mb-4">
               Get the latest news and updates delivered to your inbox.
             </p>
             <form className="mb-4 flex space-x-2">
@@ -149,13 +125,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom area */}
-        <div className="md:flex md:items-center md:justify-between py-4 md:py-8 border-t border-gray-200">
+        <div className="md:flex md:items-center md:justify-between py-4 md:py-8 border-t">
           {/* Social links */}
           <ul className="flex mb-4 md:order-1 md:ml-4 md:mb-0">
             <li>
               <Link
                 href="#"
-                className="flex justify-center items-center text-gray-600 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out p-2">
+                className="flex justify-center items-center rounded-full shadow transition duration-150 ease-in-out p-2">
                 <span className="sr-only">Twitter</span>
                 <Twitter className="w-4 h-4" />
               </Link>
@@ -163,7 +139,7 @@ export default function Footer() {
             <li className="ml-4">
               <Link
                 href="#"
-                className="flex justify-center items-center text-gray-600 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out p-2">
+                className="flex justify-center items-center rounded-full shadow transition duration-150 ease-in-out p-2">
                 <span className="sr-only">Github</span>
                 <Github className="w-4 h-4" />
               </Link>
@@ -171,7 +147,7 @@ export default function Footer() {
             <li className="ml-4">
               <Link
                 href="#"
-                className="flex justify-center items-center text-gray-600 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out p-2">
+                className="flex justify-center items-center rounded-full shadow transition duration-150 ease-in-out p-2">
                 <span className="sr-only">LinkedIn</span>
                 <Linkedin className="w-4 h-4" />
               </Link>
@@ -179,7 +155,7 @@ export default function Footer() {
           </ul>
 
           {/* Copyrights note */}
-          <div className="text-sm text-gray-600 mr-4">
+          <div className="text-sm mr-4">
             &copy; {new Date().getFullYear()} TaskTrace. All rights reserved.
           </div>
         </div>
