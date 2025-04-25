@@ -3,12 +3,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import { CheckCircle, Circle, Clock, XCircle, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Hero() {
-  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Prevent hydration mismatch
@@ -312,24 +310,6 @@ export default function Hero() {
                   </div>
                 </motion.div>
               </div>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-wrap justify-center gap-8 md:gap-16 mt-16 text-center">
-              {[
-                { label: "Active Users", value: "10,000+" },
-                { label: "Tasks Completed", value: "1.2M+" },
-                { label: "Team Productivity", value: "+35%" },
-              ].map((stat, index) => (
-                <div key={index}>
-                  <div className="text-3xl md:text-4xl font-bold mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
             </motion.div>
           </motion.div>
         )}
