@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Users } from "lucide-react";
 import { toast } from "sonner";
 import { tryCatch } from "@/lib/try-catch";
-import type { Session } from "@/lib/auth";
 import { joinPublicProject } from "@/server/api/project/project";
+import { cn } from "@/lib/utils";
 
 interface JoinPublicProjectProps {
   projectId: string;
@@ -55,44 +55,44 @@ export default function JoinPublicProjectModal({
       <DialogContent
         className="w-[95vw] max-w-md lg:max-w-xl p-0 overflow-hidden rounded-xl shadow-lg"
         onInteractOutside={(e) => e.preventDefault()}>
-        <div className="bg-primary p-6 text-white">
+        <div className="bg-primary p-6 text-primary-foreground">
           <DialogHeader className="space-y-2">
             <DialogTitle className="text-2xl font-bold tracking-tight">
               Join {projectName}
             </DialogTitle>
-            <DialogDescription className="text-primary-100">
+            <DialogDescription className="text-primary-foreground/80">
               This is a public project that anyone can join and contribute to
             </DialogDescription>
           </DialogHeader>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 bg-background">
           <div className="flex items-start gap-4">
-            <div className="bg-primary-100 p-3 rounded-full">
-              <Users className="h-6 w-6 text-primary-600" />
+            <div className="bg-primary/10 p-3 rounded-full">
+              <Users className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-medium text-lg mb-2">
+              <h3 className="font-medium text-lg mb-2 text-foreground">
                 Join the collaboration
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 By joining this project, you&apos;ll be able to:
               </p>
               <ul className="mt-3 space-y-2">
-                <li className="flex items-center gap-2 text-gray-700">
-                  <div className="bg-gray-100 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+                <li className="flex items-center gap-2 text-foreground">
+                  <div className="bg-muted rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
                     ✓
                   </div>
                   <span>View all project details and tasks</span>
                 </li>
-                <li className="flex items-center gap-2 text-gray-700">
-                  <div className="bg-gray-100 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+                <li className="flex items-center gap-2 text-foreground">
+                  <div className="bg-muted rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
                     ✓
                   </div>
                   <span>Collaborate with other team members</span>
                 </li>
-                <li className="flex items-center gap-2 text-gray-700">
-                  <div className="bg-gray-100 rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+                <li className="flex items-center gap-2 text-foreground">
+                  <div className="bg-muted rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
                     ✓
                   </div>
                   <span>Contribute to tasks and track progress</span>
@@ -119,14 +119,14 @@ export default function JoinPublicProjectModal({
           </div>
         </div>
 
-        <DialogFooter className="px-6 pb-6">
-          <Link href="/projects" className="w-full">
+        <DialogFooter className="px-6 pb-6 bg-background">
+          <Link href="/explore" className="w-full">
             <Button
               variant="outline"
-              className="w-full flex items-center justify-center gap-2 border-gray-200 hover:bg-gray-50"
+              className="w-full flex items-center justify-center gap-2"
               size="lg">
               <ArrowLeft className="h-4 w-4" />
-              Back to Projects
+              Back to Explore
             </Button>
           </Link>
         </DialogFooter>

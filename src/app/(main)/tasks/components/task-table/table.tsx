@@ -70,7 +70,7 @@ export default function TaskTable<TData, TValue>({
         <div className="flex flex-col">
           <TableToolbar table={table} />
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border bg-background">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

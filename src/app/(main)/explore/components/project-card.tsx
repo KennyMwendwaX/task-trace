@@ -124,7 +124,7 @@ export default function ExploreProjectCard({ project }: Props) {
   return (
     <Card
       className={cn(
-        "group overflow-hidden rounded-2xl transition-all duration-300",
+        "group overflow-hidden rounded-2xl transition-all duration-300 h-full",
         "border",
         "bg-white dark:bg-gray-800",
         statusConfig.cardBorder

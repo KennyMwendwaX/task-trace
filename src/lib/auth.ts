@@ -14,6 +14,7 @@ export const auth = betterAuth({
   advanced: {
     generateId: false,
   },
+  trustedOrigins: ["http://192.168.2.102:3000"],
   plugins: [nextCookies()],
 });
 

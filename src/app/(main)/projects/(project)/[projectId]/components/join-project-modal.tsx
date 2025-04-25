@@ -46,6 +46,7 @@ import { tryCatch } from "@/lib/try-catch";
 import { toast } from "sonner";
 import { joinWithCode } from "@/server/api/project/join";
 import { createMembershipRequest } from "@/server/api/project/members";
+import { cn } from "@/lib/utils";
 
 interface JoinProjectProps {
   projectId: string;
@@ -116,19 +117,19 @@ export default function JoinProjectModal({
       <DialogContent
         className="w-[95vw] max-w-md lg:max-w-xl p-0 overflow-hidden rounded-xl shadow-lg"
         onInteractOutside={(e) => e.preventDefault()}>
-        <div className="bg-primary p-6 text-white">
+        <div className="bg-primary p-6 text-primary-foreground">
           <DialogHeader className="space-y-2">
             <DialogTitle className="text-2xl font-bold tracking-tight">
               Join Project
             </DialogTitle>
-            <DialogDescription className="text-primary-100">
+            <DialogDescription className="text-primary-foreground/80">
               Enter an invitation code or request access to join this
               collaborative space
             </DialogDescription>
           </DialogHeader>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 bg-background">
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
@@ -154,7 +155,7 @@ export default function JoinProjectModal({
                       <div>
                         <Badge
                           variant="outline"
-                          className="mb-4 bg-primary-50 text-primary-700 border-primary-200">
+                          className="mb-4 bg-primary/10 text-primary border-primary/20">
                           Enter your 8-digit invitation code
                         </Badge>
 
@@ -164,30 +165,34 @@ export default function JoinProjectModal({
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
-                                <div className="flex justify-center">
+                                {/* Change to a 4x4 grid layout on small screens */}
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
                                   <InputOTP
                                     maxLength={8}
                                     pattern={REGEXP_ONLY_DIGITS}
-                                    {...field}>
-                                    <InputOTPGroup>
+                                    {...field}
+                                    className="gap-1 sm:gap-2">
+                                    {/* First group of 4 digits */}
+                                    <div className="flex flex-wrap justify-center gap-1 sm:flex-nowrap">
                                       {[0, 1, 2, 3].map((index) => (
                                         <InputOTPSlot
                                           key={index}
-                                          className="w-12 h-14 text-2xl border-primary-200 focus:border-primary-500"
+                                          className="w-6 h-10 sm:w-10 md:w-12 sm:h-12 md:h-14 text-base sm:text-xl md:text-2xl"
                                           index={index}
                                         />
                                       ))}
-                                    </InputOTPGroup>
+                                    </div>
                                     <InputOTPSeparator />
-                                    <InputOTPGroup>
+                                    {/* Second group of 4 digits */}
+                                    <div className="flex flex-wrap justify-center gap-1 sm:flex-nowrap">
                                       {[4, 5, 6, 7].map((index) => (
                                         <InputOTPSlot
                                           key={index}
-                                          className="w-12 h-14 text-2xl border-primary-200 focus:border-primary-500"
+                                          className="w-6 h-10 sm:w-10 md:w-12 sm:h-12 md:h-14 text-base sm:text-xl md:text-2xl"
                                           index={index}
                                         />
                                       ))}
-                                    </InputOTPGroup>
+                                    </div>
                                   </InputOTP>
                                 </div>
                               </FormControl>
@@ -224,37 +229,37 @@ export default function JoinProjectModal({
                     {isPending ? (
                       <div className="flex flex-col items-center justify-center py-8">
                         <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                           Processing your request...
                         </p>
                       </div>
                     ) : hasPendingRequest ? (
-                      <div className="bg-primary-50 p-4 rounded-lg border border-primary-100">
+                      <div className="bg-primary/10 p-4 rounded-lg border border-primary/20">
                         <div className="flex items-start gap-4">
-                          <div className="bg-primary-100 p-3 rounded-full">
-                            <Clock className="h-6 w-6 text-primary-600" />
+                          <div className="bg-primary/20 p-3 rounded-full">
+                            <Clock className="h-6 w-6 text-primary" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 text-lg mb-2">
+                            <h3 className="font-semibold text-foreground text-lg mb-2">
                               Request Pending
                             </h3>
-                            <p className="text-gray-600 mb-4">
+                            <p className="text-muted-foreground mb-4">
                               Your request to join this project is currently
                               under review by the project administrators.
                             </p>
 
-                            <div className="flex items-center gap-2 text-sm bg-white p-3 rounded-md border border-gray-100">
+                            <div className="flex items-center gap-2 text-sm bg-background p-3 rounded-md border">
                               <span className="relative flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary-500"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
                               </span>
-                              <span className="font-medium text-gray-700">
+                              <span className="font-medium text-foreground">
                                 Awaiting Response
                               </span>
                             </div>
 
-                            <div className="mt-4 pt-4 border-t border-primary-100 flex items-center text-sm text-gray-600">
-                              <Mail className="h-4 w-4 mr-2 text-primary-500" />
+                            <div className="mt-4 pt-4 border-t border-primary/20 flex items-center text-sm text-muted-foreground">
+                              <Mail className="h-4 w-4 mr-2 text-primary" />
                               You&apos;ll be notified when your request is
                               approved
                             </div>
@@ -263,8 +268,8 @@ export default function JoinProjectModal({
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <div className="bg-amber-50 border border-amber-100 rounded-lg p-4">
-                          <p className="text-amber-800 text-sm">
+                        <div className="bg-warning/10 border border-warning/20 rounded-lg p-4">
+                          <p className="text-warning-foreground text-sm">
                             Don&apos;t have an invitation code? Request to join
                             this project and the project owner will review your
                             application.
@@ -272,33 +277,33 @@ export default function JoinProjectModal({
                         </div>
 
                         <div className="space-y-4">
-                          <h4 className="font-medium text-gray-900">
+                          <h4 className="font-medium text-foreground">
                             What happens next?
                           </h4>
                           <div className="grid gap-3">
                             <div className="flex items-start gap-3">
-                              <div className="bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mt-0.5">
+                              <div className="bg-muted rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mt-0.5">
                                 1
                               </div>
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-muted-foreground text-sm">
                                 Your request will be sent to the project
                                 administrators
                               </p>
                             </div>
                             <div className="flex items-start gap-3">
-                              <div className="bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mt-0.5">
+                              <div className="bg-muted rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mt-0.5">
                                 2
                               </div>
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-muted-foreground text-sm">
                                 You&apos;ll receive a notification when your
                                 request is approved
                               </p>
                             </div>
                             <div className="flex items-start gap-3">
-                              <div className="bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mt-0.5">
+                              <div className="bg-muted rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mt-0.5">
                                 3
                               </div>
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-muted-foreground text-sm">
                                 Once approved, you&apos;ll gain access to the
                                 project workspace
                               </p>
@@ -322,14 +327,14 @@ export default function JoinProjectModal({
           </Tabs>
         </div>
 
-        <DialogFooter className="px-6 pb-6">
-          <Link href="/projects" className="w-full">
+        <DialogFooter className="px-6 pb-6 bg-background">
+          <Link href="/explore" className="w-full">
             <Button
               variant="outline"
-              className="w-full flex items-center justify-center gap-2 border-gray-200 hover:bg-gray-50"
+              className="w-full flex items-center justify-center gap-2"
               size="lg">
               <ArrowLeft className="h-4 w-4" />
-              Back to Projects
+              Back to Explore
             </Button>
           </Link>
         </DialogFooter>
