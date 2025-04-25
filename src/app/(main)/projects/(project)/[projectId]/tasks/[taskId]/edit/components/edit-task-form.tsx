@@ -207,6 +207,11 @@ export default function EditTaskForm({ project, task, members }: Props) {
                     <DropdownMenuItem>
                       <Link href={`/projects/${project.id}/tasks`}>Tasks</Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem className="sm:hidden">
+                      <Link href={`/projects/${project.id}/tasks/${task.name}`}>
+                        {task.name}
+                      </Link>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </BreadcrumbItem>

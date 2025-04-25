@@ -7,12 +7,19 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import MemberLeaderboard from "./member-leaderboard";
 import TaskStatusChart from "./task-status-chart";
 import { TbChartBar } from "react-icons/tb";
@@ -26,7 +33,7 @@ type Props = {
 export default function AnalyticsContent({ project, tasks }: Props) {
   return (
     <>
-      <header className="flex h-16 shrink-0 items-center gap-2">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b">
         <div className="flex items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
@@ -36,11 +43,32 @@ export default function AnalyticsContent({ project, tasks }: Props) {
                 <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem className="md:hidden">
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex items-center gap-1">
+                    <BreadcrumbEllipsis className="h-4 w-4" />
+                    <span className="sr-only">Toggle menu</span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem>
+                      <Link href="/dashboard">Dashboard</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/projects">Projects</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href={`/projects/${project.id}`}>
+                        {project.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </BreadcrumbItem>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
+              <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href={`/projects/${project.id}`}>
                   {project.name}
                 </BreadcrumbLink>
@@ -53,7 +81,7 @@ export default function AnalyticsContent({ project, tasks }: Props) {
           </Breadcrumb>
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+      <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
         {tasks.length > 0 ? (
           <>
             <div className="text-2xl font-bold tracking-tight">Analytics</div>

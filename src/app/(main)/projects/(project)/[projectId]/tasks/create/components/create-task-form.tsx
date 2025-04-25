@@ -191,6 +191,9 @@ export default function CreateTaskForm({ project, members }: Props) {
                         {project.name}
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem className="sm:hidden">
+                      <Link href={`/projects/${project.id}/tasks`}>Tasks</Link>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </BreadcrumbItem>

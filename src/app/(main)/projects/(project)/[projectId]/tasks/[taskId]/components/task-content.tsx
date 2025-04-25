@@ -2,15 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { LuCalendar, LuTimer, LuUser2 } from "react-icons/lu";
-import { MdAccessTime } from "react-icons/md";
-import { FiEdit, FiTrash } from "react-icons/fi";
-import { Card } from "@/components/ui/card";
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { labels, priorities, statuses } from "@/lib/config";
-import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -31,82 +28,39 @@ import {
 import { useTransition } from "react";
 import { deleteTask } from "@/server/api/project/tasks";
 import { toast } from "sonner";
-import { DetailedProject, ProjectTask } from "@/database/schema";
+import type { DetailedProject, ProjectTask } from "@/database/schema";
 import { tryCatch } from "@/lib/try-catch";
-
-interface StatusConfig {
-  bg: string;
-  text: string;
-}
-
-interface PriorityConfig {
-  bg: string;
-  text: string;
-}
-
-interface LabelConfig {
-  border: string;
-  text: string;
-}
-
-const TaskStatusBadge: React.FC<{
-  status: { value: string; label: string };
-}> = ({ status }) => {
-  const statusConfig: Record<string, StatusConfig> = {
-    DONE: { bg: "bg-green-100", text: "text-green-700" },
-    TO_DO: { bg: "bg-blue-100", text: "text-blue-700" },
-    IN_PROGRESS: { bg: "bg-amber-100", text: "text-amber-700" },
-    CANCELED: { bg: "bg-red-100", text: "text-red-700" },
-  };
-
-  const { bg, text } = statusConfig[status.value] || {};
-
-  return (
-    <span
-      className={`${bg} ${text} text-sm font-medium me-2 px-2.5 py-0.5 rounded-md`}>
-      {status.label}
-    </span>
-  );
-};
-
-const TaskPriorityBadge: React.FC<{
-  priority: { value: string; label: string; icon: React.ElementType };
-}> = ({ priority }) => {
-  const priorityConfig: Record<string, PriorityConfig> = {
-    HIGH: { bg: "bg-red-100", text: "text-red-700" },
-    MEDIUM: { bg: "bg-amber-100", text: "text-amber-700" },
-    LOW: { bg: "bg-gray-100", text: "text-gray-700" },
-  };
-
-  const { bg, text } = priorityConfig[priority.value] || {};
-
-  return (
-    <span
-      className={`flex items-center space-x-1 ${bg} ${text} text-sm font-medium me-2 px-2.5 py-0.5 rounded-md`}>
-      <priority.icon />
-      {priority.label}
-    </span>
-  );
-};
-
-const TaskLabelBadge: React.FC<{ label: { value: string; label: string } }> = ({
-  label,
-}) => {
-  const labelConfig: Record<string, LabelConfig> = {
-    FEATURE: { border: "border-blue-600", text: "text-blue-600" },
-    DOCUMENTATION: { border: "border-purple-600", text: "text-purple-600" },
-    BUG: { border: "border-amber-600", text: "text-amber-600" },
-    ERROR: { border: "border-red-600", text: "text-red-600" },
-  };
-
-  const { border, text } = labelConfig[label.value] || {};
-
-  return (
-    <Badge className={`${border} ${text}`} variant="outline">
-      {label.label}
-    </Badge>
-  );
-};
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  CalendarIcon,
+  ClockIcon,
+  EditIcon,
+  FlagIcon,
+  TagIcon,
+  TimerIcon,
+  TrashIcon,
+  UserIcon,
+  CheckCircleIcon,
+  AlertCircleIcon,
+  ClipboardListIcon,
+  ArrowLeftIcon,
+} from "lucide-react";
 
 type Props = {
   project: DetailedProject;
@@ -143,9 +97,68 @@ export default function TaskContent({ project, task }: Props) {
     });
   };
 
+  // Helper functions for styling
+  const getStatusColor = (statusValue: string) => {
+    switch (statusValue) {
+      case "DONE":
+        return "bg-green-100 text-green-800 border-green-300";
+      case "TO_DO":
+        return "bg-slate-100 text-slate-800 border-slate-300";
+      case "IN_PROGRESS":
+        return "bg-blue-100 text-blue-800 border-blue-300";
+      case "CANCELED":
+        return "bg-gray-100 text-gray-800 border-gray-300";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300";
+    }
+  };
+
+  const getPriorityColor = (priorityValue: string) => {
+    switch (priorityValue) {
+      case "HIGH":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "MEDIUM":
+        return "bg-amber-100 text-amber-800 border-amber-300";
+      case "LOW":
+        return "bg-green-100 text-green-800 border-green-300";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300";
+    }
+  };
+
+  const getLabelColor = (labelValue: string) => {
+    switch (labelValue) {
+      case "FEATURE":
+        return "bg-emerald-100 text-emerald-800 border-emerald-300";
+      case "DOCUMENTATION":
+        return "bg-blue-100 text-blue-800 border-blue-300";
+      case "BUG":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "ERROR":
+        return "bg-amber-100 text-amber-800 border-amber-300";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300";
+    }
+  };
+
+  const getStatusIcon = (statusValue: string) => {
+    switch (statusValue) {
+      case "DONE":
+        return <CheckCircleIcon className="h-4 w-4 mr-1" />;
+      case "TO_DO":
+        return <ClipboardListIcon className="h-4 w-4 mr-1" />;
+      case "IN_PROGRESS":
+        return <ClockIcon className="h-4 w-4 mr-1" />;
+      case "CANCELED":
+        return <AlertCircleIcon className="h-4 w-4 mr-1" />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <>
-      <header className="flex h-16 shrink-0 items-center gap-2">
+    <TooltipProvider>
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b">
         <div className="flex items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
@@ -170,6 +183,9 @@ export default function TaskContent({ project, task }: Props) {
                         {project.name}
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem className="sm:hidden">
+                      <Link href={`/projects/${project.id}/tasks`}>Tasks</Link>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </BreadcrumbItem>
@@ -187,74 +203,198 @@ export default function TaskContent({ project, task }: Props) {
           </Breadcrumb>
         </div>
       </header>
-      <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-          <div>
-            <h1 className="text-xl sm:text-3xl font-bold mb-2">{task.name}</h1>
-            <div className="flex flex-wrap items-center gap-2 text-sm">
-              {label && <TaskLabelBadge label={label} />}
-              {status && <TaskStatusBadge status={status} />}
-              {priority && <TaskPriorityBadge priority={priority} />}
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <Link href={`/projects/${project.id}/tasks/${task.id}/edit`}>
-              <Button
-                variant="outline"
-                className="flex items-center gap-1 w-full">
-                <FiEdit />
-                Edit Task
-              </Button>
-            </Link>
-            <Button
-              variant="destructive"
-              className="flex items-center justify-center w-full sm:w-auto"
-              onClick={() => handleTaskDelete(project.id, task.id)}>
-              <FiTrash className="mr-2" />
-              Delete Task
-            </Button>
-          </div>
-        </div>
+      <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap gap-3 lg:flex-wrap-reverse">
-            <div className="flex items-center rounded-full px-3 py-1.5">
-              <MdAccessTime className="w-4 h-4 mr-2" />
-              <span className="text-sm font-semibold">
-                Created: {taskCreatedAt}
-              </span>
-            </div>
-            {taskUpdatedAt && (
-              <div className="flex items-center rounded-full px-3 py-1.5">
-                <LuCalendar className="w-4 h-4 mr-2" />
-                <span className="text-sm font-semibold">
-                  Updated: {taskUpdatedAt}
-                </span>
-              </div>
-            )}
-            <div className="flex items-center rounded-full px-3 py-1.5">
-              <LuTimer className="w-4 h-4 mr-2" />
-              <span className="text-sm font-semibold">Due: {taskDueDate}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-full px-4 py-2">
-            <Avatar className="w-10 h-10 ">
-              <AvatarImage src={""} />
-              <AvatarFallback>
-                <LuUser2 className="w-5 h-5" />
-              </AvatarFallback>
-            </Avatar>
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div>
-              <p className="text-xs text-gray-500">Assigned to</p>
-              <p className="text-sm font-semibold whitespace-nowrap">
-                {task.member?.user.name ?? "Unassigned"}
+              <div className="flex items-center gap-2 mb-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => router.push(`/projects/${project.id}/tasks`)}>
+                  <ArrowLeftIcon className="h-4 w-4" />
+                  <span className="hidden sm:inline">Back to Tasks</span>
+                </Button>
+                <Badge variant="outline" className={getLabelColor(task.label)}>
+                  <TagIcon className="h-3.5 w-3.5 mr-1" />
+                  {label?.label}
+                </Badge>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                {task.name}
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Task in project:{" "}
+                <Link
+                  href={`/projects/${project.id}`}
+                  className="hover:underline font-medium">
+                  {project.name}
+                </Link>
               </p>
             </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/projects/${project.id}/tasks/${task.id}/edit`}>
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2 w-full">
+                      <EditIcon className="h-4 w-4" />
+                      Edit Task
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Edit this task</TooltipContent>
+              </Tooltip>
+
+              <AlertDialog>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        className="flex items-center gap-2 w-full sm:w-auto">
+                        <TrashIcon className="h-4 w-4" />
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>Delete this task</TooltipContent>
+                </Tooltip>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to delete this task?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      the task and remove it from the project.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleTaskDelete(project.id, task.id)}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      {isPending ? "Deleting..." : "Delete Task"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="md:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ClipboardListIcon className="h-5 w-5 text-muted-foreground" />
+                  Task Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className="prose prose-sm max-w-none dark:prose-invert"
+                  dangerouslySetInnerHTML={{ __html: task.description }}
+                />
+              </CardContent>
+            </Card>
+
+            <div className="space-y-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Status</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center">
+                    <Badge
+                      className={`${getStatusColor(
+                        task.status
+                      )} flex items-center`}>
+                      {getStatusIcon(task.status)}
+                      {status?.label}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Priority</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center">
+                    <Badge
+                      className={`${getPriorityColor(
+                        task.priority
+                      )} flex items-center`}>
+                      <FlagIcon className="h-3.5 w-3.5 mr-1" />
+                      {priority?.label}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Assignment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage
+                        src={task.member?.user.image || ""}
+                        alt={task.member?.user.name || "Unassigned"}
+                      />
+                      <AvatarFallback>
+                        <UserIcon className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">
+                        {task.member?.user.name || "Unassigned"}
+                      </p>
+                      {task.member?.user.email && (
+                        <p className="text-xs text-muted-foreground">
+                          {task.member.user.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Dates</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="font-medium mr-1">Created:</span>
+                    <span>{taskCreatedAt}</span>
+                  </div>
+
+                  {taskUpdatedAt && (
+                    <div className="flex items-center text-sm">
+                      <ClockIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="font-medium mr-1">Updated:</span>
+                      <span>{taskUpdatedAt}</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center text-sm">
+                    <TimerIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="font-medium mr-1">Due:</span>
+                    <span>{taskDueDate}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
-        <Card className="mt-4 p-4 sm:p-6">
-          <div dangerouslySetInnerHTML={{ __html: task.description }} />
-        </Card>
       </main>
-    </>
+    </TooltipProvider>
   );
 }
