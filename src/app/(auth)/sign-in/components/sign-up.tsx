@@ -69,7 +69,7 @@ export default function SignUp() {
           toast.success("Account created successfully");
         },
         onComplete: () => {
-          router.push("/sign-in");
+          router.push("/dashboard");
           setIsLoading(false);
         },
       },
