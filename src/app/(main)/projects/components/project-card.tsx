@@ -108,16 +108,13 @@ export default function ProjectCard({ project }: Props) {
   return (
     <Card
       className={cn(
-        "overflow-hidden rounded-2xl transition-all duration-300 group",
+        "overflow-hidden rounded-2xl transition-all duration-300 group flex flex-col",
         "border-0",
         statusConfig.bgColor,
         statusConfig.darkBgColor
       )}>
-      {/* Glass-morphism header */}
       <div className="relative p-6 pb-4">
-        {/* Abstract background pattern */}
         <div className="absolute top-0 right-0 w-32 h-32 opacity-10 rounded-bl-full bg-gradient-to-br from-current to-transparent" />
-
         <div className="flex justify-between items-start relative">
           <div className="flex items-center gap-3">
             <div
@@ -188,13 +185,11 @@ export default function ProjectCard({ project }: Props) {
         </div>
       </div>
 
-      {/* Card body */}
-      <div className="px-6 pt-0 pb-6 bg-white dark:bg-gray-800 rounded-t-3xl -mt-2">
+      <div className="px-6 pt-4 pb-6 bg-white dark:bg-gray-800 rounded-t-3xl -mt-2 flex-1 flex flex-col">
         <p className="text-sm text-gray-600 dark:text-gray-300 mb-5 line-clamp-2">
           {project.description}
         </p>
 
-        {/* Progress section */}
         <div className="mb-6">
           <div className="flex justify-between items-center text-sm mb-2">
             <div className="flex items-center gap-2">
@@ -252,49 +247,48 @@ export default function ProjectCard({ project }: Props) {
           )}
         </div>
 
-        {/* Team members */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-2">
-              {project.members.slice(0, 3).map((member, index) => (
-                <Avatar
-                  key={index}
-                  className="border-2 border-white dark:border-gray-800 w-8 h-8 rounded-xl overflow-hidden shadow-sm">
-                  <AvatarImage
-                    src={member.image ? member.image : ""}
-                    alt={member.name}
-                  />
-                  <AvatarFallback className="bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-200">
-                    {member.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-              ))}
-              {project.members.length > 3 && (
-                <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-gray-300 border-2 border-white dark:border-gray-800 shadow-sm">
-                  +{project.members.length - 3}
-                </div>
-              )}
+        <div className="mt-auto">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2">
+                {project.members.slice(0, 3).map((member, index) => (
+                  <Avatar
+                    key={index}
+                    className="border-2 border-white dark:border-gray-800 w-8 h-8 rounded-xl overflow-hidden shadow-sm">
+                    <AvatarImage
+                      src={member.image ? member.image : ""}
+                      alt={member.name}
+                    />
+                    <AvatarFallback className="bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-200">
+                      {member.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+                {project.members.length > 3 && (
+                  <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-gray-300 border-2 border-white dark:border-gray-800 shadow-sm">
+                    +{project.members.length - 3}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              <LuClock className="inline h-4 w-4 mr-1" />
+              {createdAt}
             </div>
           </div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            <LuClock className="inline h-4 w-4 mr-1" />
-            {createdAt}
-          </div>
+          <Link
+            href={`/projects/${project.id}`}
+            className={cn(
+              "mt-5 flex items-center justify-center py-2.5 px-4 w-full",
+              "text-sm font-medium text-white rounded-xl shadow-sm",
+              "transition-all duration-300 group/btn",
+              "bg-gradient-to-r hover:shadow-lg hover:translate-y-px",
+              statusConfig.color
+            )}>
+            View Project Details
+            <LuArrowUpRight className="ml-1.5 h-4 w-4 transform transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+          </Link>
         </div>
-
-        {/* Action button */}
-        <Link
-          href={`/projects/${project.id}`}
-          className={cn(
-            "mt-5 flex items-center justify-center py-2.5 px-4 w-full",
-            "text-sm font-medium text-white rounded-xl shadow-sm",
-            "transition-all duration-300 group/btn",
-            "bg-gradient-to-r hover:shadow-lg hover:translate-y-px",
-            statusConfig.color
-          )}>
-          View Project Details
-          <LuArrowUpRight className="ml-1.5 h-4 w-4 transform transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-        </Link>
       </div>
     </Card>
   );
