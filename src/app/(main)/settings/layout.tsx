@@ -11,5 +11,9 @@ interface SettingsLayoutProps {
 }
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
-  return <div className="container mx-auto">{children}</div>;
+  return (
+    <main className="container mx-auto px-4 py-4 min-h-screen md:px-10 lg:max-w-4xl">
+      {children}
+    </main>
+  );
 }
