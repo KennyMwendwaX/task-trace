@@ -14,7 +14,7 @@ import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { TbChartBarOff } from "react-icons/tb";
 import { Status } from "@/lib/config";
 import { useMemo } from "react";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 
 type Props = {
   tasks: Task[];

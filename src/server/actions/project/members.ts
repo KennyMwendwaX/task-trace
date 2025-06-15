@@ -2,14 +2,14 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
+import db from "@/server/database";
 import {
   members,
   membershipRequests,
   projects,
   ProjectMember,
   ProjectMembershipRequest,
-} from "@/database/schema";
+} from "@/server/database/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { MemberActionError } from "@/lib/errors";

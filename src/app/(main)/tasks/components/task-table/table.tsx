@@ -26,7 +26,7 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 
 interface TaskTableProps<TData, TValue> {
   columns: ColumnDef<Task, TValue>[];

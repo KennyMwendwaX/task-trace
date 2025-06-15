@@ -21,7 +21,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { DetailedProject, ProjectMembershipRequest } from "@/database/schema";
+import {
+  DetailedProject,
+  ProjectMembershipRequest,
+} from "@/server/database/schema";
 
 type Props = {
   project: DetailedProject;

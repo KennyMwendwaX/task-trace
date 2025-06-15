@@ -8,7 +8,7 @@ import TableColumnHeader from "./table-column-header";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns/format";
 import Link from "next/link";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 
 export const TableColumns: ColumnDef<Task>[] = [
   {

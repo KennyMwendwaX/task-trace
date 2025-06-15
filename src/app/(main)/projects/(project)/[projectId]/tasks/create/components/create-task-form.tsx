@@ -59,8 +59,8 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { useTransition } from "react";
-import { createTask } from "@/server/api/project/tasks";
-import { DetailedProject, ProjectMember } from "@/database/schema";
+import { createTask } from "@/server/actions/project/tasks";
+import { DetailedProject, ProjectMember } from "@/server/database/schema";
 import { tryCatch } from "@/lib/try-catch";
 import {
   Tooltip,

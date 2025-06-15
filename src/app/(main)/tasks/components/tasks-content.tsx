@@ -1,7 +1,7 @@
 import { TbPlaylistX } from "react-icons/tb";
 import TaskTable from "./task-table/table";
 import { TableColumns } from "./task-table/table-columns";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 
 interface TasksContentProps {
   tasks: Task[];

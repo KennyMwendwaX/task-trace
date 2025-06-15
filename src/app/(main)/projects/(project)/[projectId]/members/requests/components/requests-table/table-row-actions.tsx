@@ -7,12 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ProjectMembershipRequest } from "@/database/schema";
+import { ProjectMembershipRequest } from "@/server/database/schema";
 import { tryCatch } from "@/lib/try-catch";
 import {
   acceptMembershipRequest,
   rejectMembershipRequest,
-} from "@/server/api/project/members";
+} from "@/server/actions/project/members";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";

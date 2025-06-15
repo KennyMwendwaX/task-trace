@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Status } from "@/lib/config";
-import { ProjectTask } from "@/database/schema";
+import { ProjectTask } from "@/server/database/schema";
 
 type Props = {
   tasks: ProjectTask[];

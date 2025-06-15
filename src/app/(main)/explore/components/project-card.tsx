@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
-import { PublicProject } from "@/database/schema";
+import { PublicProject } from "@/server/database/schema";
 import { ProjectStatus } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

@@ -21,7 +21,7 @@ import UpdateProjectDetails from "./update-project-details";
 import ProjectVisibility from "./project-visibilty";
 import DangerZone from "./danger-zone";
 import ProjectInvite from "./project-invite";
-import { DetailedProject, InvitationCode } from "@/database/schema";
+import { DetailedProject, InvitationCode } from "@/server/database/schema";
 import Link from "next/link";
 
 type Props = {

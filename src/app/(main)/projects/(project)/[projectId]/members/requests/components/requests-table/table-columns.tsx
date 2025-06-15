@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
 import { membershipRequestStatuses } from "@/lib/config";
-import { ProjectMembershipRequest } from "@/database/schema";
+import { ProjectMembershipRequest } from "@/server/database/schema";
 
 export const TableColumns = (): ColumnDef<ProjectMembershipRequest>[] => [
   {

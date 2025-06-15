@@ -8,7 +8,7 @@ import TableColumnHeader from "./table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableRowActions from "./table-row-actions";
 import { format } from "date-fns";
-import { ProjectMember } from "@/database/schema";
+import { ProjectMember } from "@/server/database/schema";
 import { ProjectRole } from "@/lib/config";
 
 interface TableColumnsProps {

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import ProjectsContent from "./components/projects-content";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { getUserProjects } from "@/server/api/user/projects";
+import { getUserProjects } from "@/server/actions/user/projects";
 import { tryCatch } from "@/lib/try-catch";
 
 export default async function ProjectsPage() {

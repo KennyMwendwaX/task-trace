@@ -8,7 +8,7 @@ import { LuPin, LuShield, LuUsers, LuSearch, LuX } from "react-icons/lu";
 import { MdOutlineFolderOff } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MemberProject } from "@/database/schema";
+import { MemberProject } from "@/server/database/schema";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "motion/react";
 

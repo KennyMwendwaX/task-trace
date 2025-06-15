@@ -1,6 +1,6 @@
 import DashboardContent from "./components/dashboard-content";
 import { redirect } from "next/navigation";
-import { getUserTasks } from "@/server/api/user/tasks";
+import { getUserTasks } from "@/server/actions/user/tasks";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { tryCatch } from "@/lib/try-catch";

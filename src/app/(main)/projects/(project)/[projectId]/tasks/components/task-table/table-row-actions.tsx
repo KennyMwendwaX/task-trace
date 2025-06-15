@@ -32,8 +32,8 @@ import {
   updateTaskLabel,
   updateTaskPriority,
   updateTaskStatus,
-} from "@/server/api/project/tasks";
-import { ProjectTask } from "@/database/schema";
+} from "@/server/actions/project/tasks";
+import { ProjectTask } from "@/server/database/schema";
 import { tryCatch } from "@/lib/try-catch";
 
 interface TableRowActions<TData> {

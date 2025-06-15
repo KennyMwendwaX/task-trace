@@ -33,10 +33,10 @@ import {
 import { LuSettings } from "react-icons/lu";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { updateProject } from "@/server/api/project/project";
+import { updateProject } from "@/server/actions/project/project";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { DetailedProject } from "@/database/schema";
+import { DetailedProject } from "@/server/database/schema";
 import { useSession } from "@/lib/auth-client";
 import { tryCatch } from "@/lib/try-catch";
 

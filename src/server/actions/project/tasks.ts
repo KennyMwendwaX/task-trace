@@ -2,8 +2,13 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
-import { members, projects, ProjectTask, tasks } from "@/database/schema";
+import db from "@/server/database";
+import {
+  members,
+  projects,
+  ProjectTask,
+  tasks,
+} from "@/server/database/schema";
 import { Label, Priority, Status } from "@/lib/config";
 import { TaskFormValues } from "@/lib/schema/TaskSchema";
 import { and, eq } from "drizzle-orm";

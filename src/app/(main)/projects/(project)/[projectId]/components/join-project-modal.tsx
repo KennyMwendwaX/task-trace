@@ -44,8 +44,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { tryCatch } from "@/lib/try-catch";
 import { toast } from "sonner";
-import { joinWithCode } from "@/server/api/project/join";
-import { createMembershipRequest } from "@/server/api/project/members";
+import { joinWithCode } from "@/server/actions/project/join";
+import { createMembershipRequest } from "@/server/actions/project/members";
 import { cn } from "@/lib/utils";
 
 interface JoinProjectProps {

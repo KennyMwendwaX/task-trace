@@ -2,7 +2,7 @@ import AddProjectModal from "@/app/(main)/components/add-project-modal";
 import TaskOverview from "./task-overview";
 import RecentTasks from "./recent-tasks";
 import TaskChart from "./task-chart";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 import { Session } from "@/lib/auth";
 
 interface DashboardContentProps {

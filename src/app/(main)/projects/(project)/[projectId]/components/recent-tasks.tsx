@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { LuArrowUpRight } from "react-icons/lu";
 import { priorities } from "@/lib/config";
 import { TbPlaylistX } from "react-icons/tb";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 
 type Props = {
   projectId: number;

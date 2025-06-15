@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { ProjectActionError } from "@/lib/errors";
 import { tryCatch } from "@/lib/try-catch";
-import { checkProjectAccess } from "@/server/api/project/project";
+import { checkProjectAccess } from "@/server/actions/project/project";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";

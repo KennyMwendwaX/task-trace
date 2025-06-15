@@ -2,11 +2,11 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import MembersContent from "./components/members-content";
-import { getProject } from "@/server/api/project/project";
+import { getProject } from "@/server/actions/project/project";
 import {
   getCurrentUserRole,
   getProjectMembers,
-} from "@/server/api/project/members";
+} from "@/server/actions/project/members";
 import ProjectNotFound from "../components/project-not-found";
 import { tryCatch } from "@/lib/try-catch";
 import { ProjectActionError } from "@/lib/errors";

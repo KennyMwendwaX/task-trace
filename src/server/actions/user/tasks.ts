@@ -2,8 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
-import { members, Task } from "@/database/schema";
+import db from "@/server/database";
+import { members, Task } from "@/server/database/schema";
 import { eq } from "drizzle-orm";
 import { TaskActionError } from "@/lib/errors";
 

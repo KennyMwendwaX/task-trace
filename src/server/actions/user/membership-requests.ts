@@ -2,8 +2,11 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
-import { MembershipRequest, membershipRequests } from "@/database/schema";
+import db from "@/server/database";
+import {
+  MembershipRequest,
+  membershipRequests,
+} from "@/server/database/schema";
 import { eq } from "drizzle-orm";
 import { MemberActionError } from "@/lib/errors";
 

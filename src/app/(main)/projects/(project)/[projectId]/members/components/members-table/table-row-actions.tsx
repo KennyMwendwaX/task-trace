@@ -13,7 +13,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
-import { ProjectMember } from "@/database/schema";
+import { ProjectMember } from "@/server/database/schema";
 import { ProjectRole } from "@/lib/config";
 import {
   DotsHorizontalIcon,
@@ -29,7 +29,7 @@ import { tryCatch } from "@/lib/try-catch";
 import {
   removeMember,
   updateProjectMemberRole,
-} from "@/server/api/project/members";
+} from "@/server/actions/project/members";
 import { useRouter } from "next/navigation";
 
 interface TableRowActions<TData> {

@@ -58,12 +58,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { toast } from "sonner";
-import { updateTask } from "@/server/api/project/tasks";
+import { updateTask } from "@/server/actions/project/tasks";
 import type {
   DetailedProject,
   ProjectMember,
   ProjectTask,
-} from "@/database/schema";
+} from "@/server/database/schema";
 import { useTransition } from "react";
 import { tryCatch } from "@/lib/try-catch";
 import {

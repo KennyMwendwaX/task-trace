@@ -1,5 +1,5 @@
 import ExploreContent from "./components/explore-content";
-import { getProjects } from "@/server/api/project/project";
+import { getProjects } from "@/server/actions/project/project";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";

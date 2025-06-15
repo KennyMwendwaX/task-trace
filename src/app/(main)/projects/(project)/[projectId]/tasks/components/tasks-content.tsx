@@ -23,7 +23,7 @@ import { TbPlaylistX } from "react-icons/tb";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { DetailedProject, ProjectTask } from "@/database/schema";
+import { DetailedProject, ProjectTask } from "@/server/database/schema";
 
 interface TasksContentProps {
   project: DetailedProject;

@@ -26,7 +26,7 @@ import {
 import { useState } from "react";
 import TableToolbar from "./table-toolbar";
 import TablePagination from "./table-pagination";
-import { ProjectMembershipRequest } from "@/database/schema";
+import { ProjectMembershipRequest } from "@/server/database/schema";
 
 interface RequestTableProps<TData, TValue> {
   columns: ColumnDef<ProjectMembershipRequest, TValue>[];

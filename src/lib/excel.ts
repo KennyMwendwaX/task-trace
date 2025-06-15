@@ -1,6 +1,6 @@
 import * as Excel from "exceljs";
 import { format } from "date-fns";
-import { ProjectMember, ProjectTask } from "@/database/schema";
+import { ProjectMember, ProjectTask } from "@/server/database/schema";
 
 export interface ExcelColumn {
   header: string;

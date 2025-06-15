@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 import {
   CheckCircledIcon,
   CircleIcon,

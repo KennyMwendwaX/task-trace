@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
-import { DetailedProject, Member, Task } from "@/database/schema";
+import { DetailedProject, Member, Task } from "@/server/database/schema";
 
 type Props = {
   project: DetailedProject;

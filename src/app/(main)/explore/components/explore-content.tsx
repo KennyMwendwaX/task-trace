@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { PublicProject } from "@/database/schema";
+import { PublicProject } from "@/server/database/schema";
 import ExploreFilters from "./explore-filters";
 import ProjectCard from "./project-card";
 import { LuFolders, LuSearch } from "react-icons/lu";

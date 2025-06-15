@@ -3,13 +3,13 @@ import { headers } from "next/headers";
 import EditTaskForm from "./components/edit-task-form";
 import { redirect } from "next/navigation";
 import { tryCatch } from "@/lib/try-catch";
-import { getProject } from "@/server/api/project/project";
-import { getProjectTask } from "@/server/api/project/tasks";
+import { getProject } from "@/server/actions/project/project";
+import { getProjectTask } from "@/server/actions/project/tasks";
 import { ProjectActionError, TaskActionError } from "@/lib/errors";
 import ProjectNotFound from "../../../components/project-not-found";
 import { ServerError } from "../../../components/server-error";
 import TaskNotFound from "../components/task-not-found";
-import { getProjectMembers } from "@/server/api/project/members";
+import { getProjectMembers } from "@/server/actions/project/members";
 
 type Props = { params: Promise<{ projectId: string; taskId: string }> };
 

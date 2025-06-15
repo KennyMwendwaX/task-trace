@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import TasksContent from "./components/tasks-content";
-import { getUserTasks } from "@/server/api/user/tasks";
+import { getUserTasks } from "@/server/actions/user/tasks";
 import { tryCatch } from "@/lib/try-catch";
 
 export default async function UserTasks() {

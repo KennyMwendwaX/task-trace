@@ -11,8 +11,8 @@ import { LuClipboard, LuRotateCw } from "react-icons/lu";
 import { toast } from "sonner";
 import { differenceInDays } from "date-fns";
 import { useTransition } from "react";
-import { generateInvitationCode } from "@/server/api/project/invitation-code";
-import { InvitationCode } from "@/database/schema";
+import { generateInvitationCode } from "@/server/actions/project/invitation-code";
+import { InvitationCode } from "@/server/database/schema";
 import { tryCatch } from "@/lib/try-catch";
 
 interface ProjectInviteProps {

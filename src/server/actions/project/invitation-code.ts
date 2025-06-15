@@ -2,13 +2,13 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
+import db from "@/server/database";
 import {
   InvitationCode,
   invitationCodes,
   members,
   projects,
-} from "@/database/schema";
+} from "@/server/database/schema";
 import { add } from "date-fns";
 import { and, eq } from "drizzle-orm";
 import { customAlphabet } from "nanoid";

@@ -26,9 +26,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTransition } from "react";
-import { deleteTask } from "@/server/api/project/tasks";
+import { deleteTask } from "@/server/actions/project/tasks";
 import { toast } from "sonner";
-import type { DetailedProject, ProjectTask } from "@/database/schema";
+import type { DetailedProject, ProjectTask } from "@/server/database/schema";
 import { tryCatch } from "@/lib/try-catch";
 import {
   AlertDialog,

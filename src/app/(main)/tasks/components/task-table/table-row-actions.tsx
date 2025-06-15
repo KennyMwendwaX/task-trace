@@ -19,14 +19,14 @@ import { IoOpenOutline } from "react-icons/io5";
 import { toast } from "sonner";
 import { FiEdit } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { Task } from "@/database/schema";
+import { Task } from "@/server/database/schema";
 import { useTransition } from "react";
 import {
   deleteTask,
   updateTaskLabel,
   updateTaskPriority,
   updateTaskStatus,
-} from "@/server/api/project/tasks";
+} from "@/server/actions/project/tasks";
 import { Label, Status, Priority } from "@/lib/config";
 import { tryCatch } from "@/lib/try-catch";
 

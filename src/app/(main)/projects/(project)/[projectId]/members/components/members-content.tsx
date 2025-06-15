@@ -23,7 +23,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlinePlus } from "react-icons/ai";
-import { DetailedProject, ProjectMember } from "@/database/schema";
+import { DetailedProject, ProjectMember } from "@/server/database/schema";
 import { ProjectRole } from "@/lib/config";
 
 interface MembersContentProps {

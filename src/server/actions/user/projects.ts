@@ -2,8 +2,13 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
-import { MemberProject, members, projects, users } from "@/database/schema";
+import db from "@/server/database";
+import {
+  MemberProject,
+  members,
+  projects,
+  users,
+} from "@/server/database/schema";
 import { ProjectFormValues } from "@/lib/schema/ProjectSchema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";

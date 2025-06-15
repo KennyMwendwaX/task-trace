@@ -23,7 +23,7 @@ import {
 import MemberLeaderboard from "./member-leaderboard";
 import TaskStatusChart from "./task-status-chart";
 import { TbChartBar } from "react-icons/tb";
-import { DetailedProject, ProjectTask } from "@/database/schema";
+import { DetailedProject, ProjectTask } from "@/server/database/schema";
 
 type Props = {
   project: DetailedProject;

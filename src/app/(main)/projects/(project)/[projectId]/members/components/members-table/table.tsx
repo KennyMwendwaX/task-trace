@@ -32,7 +32,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
 import { format } from "date-fns";
-import { ProjectMember } from "@/database/schema";
+import { ProjectMember } from "@/server/database/schema";
 import { UserRoundPlus } from "lucide-react";
 
 interface MemberTableProps<TData, TValue> {

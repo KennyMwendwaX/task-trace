@@ -37,7 +37,7 @@ import { LuFolderPlus } from "react-icons/lu";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { createProject } from "@/server/api/user/projects";
+import { createProject } from "@/server/actions/user/projects";
 import { tryCatch } from "@/lib/try-catch";
 
 export default function AddProjectModal() {

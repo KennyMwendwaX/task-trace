@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Users } from "lucide-react";
 import { toast } from "sonner";
 import { tryCatch } from "@/lib/try-catch";
-import { joinPublicProject } from "@/server/api/project/project";
+import { joinPublicProject } from "@/server/actions/project/project";
 import { cn } from "@/lib/utils";
 
 interface JoinPublicProjectProps {

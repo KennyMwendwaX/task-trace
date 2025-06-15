@@ -19,7 +19,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { DetailedProject, Member, ProjectTask } from "@/database/schema";
+import { DetailedProject, Member, ProjectTask } from "@/server/database/schema";
 
 type Props = {
   project: DetailedProject;

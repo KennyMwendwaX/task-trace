@@ -33,7 +33,7 @@ import {
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
-import { MemberProject } from "@/database/schema";
+import { MemberProject } from "@/server/database/schema";
 import { ProjectStatus } from "@/lib/config";
 import { cn } from "@/lib/utils";
 

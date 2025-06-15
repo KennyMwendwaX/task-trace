@@ -31,7 +31,7 @@ import { Button } from "@/components/ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
 import { downloadExcel, ExcelExportService } from "@/lib/excel";
-import { ProjectTask } from "@/database/schema";
+import { ProjectTask } from "@/server/database/schema";
 import { PlusIcon } from "lucide-react";
 
 interface TaskTableProps<TData, TValue> {

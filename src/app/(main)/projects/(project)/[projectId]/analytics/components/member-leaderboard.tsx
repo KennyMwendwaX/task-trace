@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ProjectRole } from "@/lib/config";
 import { LuTrophy, LuMedal } from "react-icons/lu";
-import { ProjectTask } from "@/database/schema";
+import { ProjectTask } from "@/server/database/schema";
 
 type Props = {
   tasks: ProjectTask[];

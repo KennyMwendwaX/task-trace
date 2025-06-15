@@ -2,8 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import db from "@/database/db";
-import { invitationCodes, members } from "@/database/schema";
+import db from "@/server/database";
+import { invitationCodes, members } from "@/server/database/schema";
 import { eq, and } from "drizzle-orm";
 import { MemberActionError } from "@/lib/errors";
 import { z } from "zod";
