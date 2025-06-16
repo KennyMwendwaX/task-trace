@@ -1,7 +1,13 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LuPin, LuShield, LuUsers } from "react-icons/lu";
+import { Separator } from "@/components/ui/separator";
 
 export default function Loading() {
   return (
@@ -80,62 +86,81 @@ export default function Loading() {
 
 function ProjectCardSkeleton() {
   return (
-    <Card className="overflow-hidden rounded-2xl border-0 bg-gray-50 dark:bg-gray-800/50">
-      {/* Glass-morphism header */}
-      <div className="relative p-6 pb-4">
-        <div className="flex justify-between items-start relative">
-          <div className="flex items-center gap-3">
-            <Skeleton className="w-12 h-12 rounded-xl" />
-            <div className="min-w-0 flex-1">
-              <Skeleton className="h-7 w-40 mb-1" />
-              <div className="flex items-center mt-1">
-                <Skeleton className="h-5 w-16 rounded-full" />
-                <Skeleton className="h-4 w-24 ml-3" />
-              </div>
-            </div>
+    <Card className="group h-full flex flex-col transition-all duration-300 overflow-hidden bg-gradient-to-br from-card to-card/80">
+      <CardHeader className="pb-4 space-y-3">
+        {/* Top row with status badges and menu */}
+        <div className="flex justify-between items-start gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Skeleton className="h-7 w-20 rounded-full" />
+            <Skeleton className="h-7 w-16 rounded-full" />
           </div>
           <Skeleton className="h-8 w-8 rounded-full" />
         </div>
-      </div>
 
-      {/* Card body */}
-      <div className="px-6 pt-0 pb-6 bg-white dark:bg-gray-800 rounded-t-3xl -mt-2">
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-5/6 mb-5" />
+        {/* Title and description */}
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-3/4" />
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+        </div>
 
         {/* Progress section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center text-sm mb-2">
-            <Skeleton className="h-5 w-24" />
-            <Skeleton className="h-5 w-16" />
-          </div>
-
-          <div className="space-y-2">
-            <Skeleton className="h-2.5 w-full rounded-full" />
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-4 w-32" />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-4 w-4 rounded" />
               <Skeleton className="h-4 w-24" />
             </div>
+            <Skeleton className="h-4 w-8" />
           </div>
+          <Skeleton className="h-2 w-full rounded-full" />
+        </div>
+      </CardHeader>
+
+      <CardContent className="pb-4 pt-0 space-y-4 flex-grow">
+        <Separator className="opacity-30" />
+
+        {/* Project stats - 3 column grid */}
+        <div className="grid grid-cols-3 gap-2">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="rounded-lg p-3 border bg-gradient-to-br from-muted/50 to-muted/30">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted/50">
+                  <Skeleton className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <Skeleton className="h-4 w-8 mb-1" />
+                  <Skeleton className="h-3 w-12" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Team members */}
         <div className="flex items-center justify-between">
-          <div className="flex -space-x-2">
-            {[...Array(3)].map((_, index) => (
-              <Skeleton
-                key={index}
-                className="w-8 h-8 rounded-xl border-2 border-white dark:border-gray-800"
-              />
-            ))}
-            <Skeleton className="w-8 h-8 rounded-xl border-2 border-white dark:border-gray-800" />
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-4 w-10" />
+            <div className="flex -space-x-2">
+              {[...Array(3)].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="w-7 h-7 rounded-full border-2 border-white dark:border-gray-800"
+                />
+              ))}
+              <Skeleton className="w-7 h-7 rounded-full border-2 border-white dark:border-gray-800" />
+            </div>
           </div>
-          <Skeleton className="h-5 w-24" />
         </div>
+      </CardContent>
 
-        {/* Action button */}
-        <Skeleton className="mt-5 h-10 w-full rounded-xl" />
-      </div>
+      <CardFooter className="pt-0 pb-4">
+        <Skeleton className="w-full h-10 rounded-lg" />
+      </CardFooter>
     </Card>
   );
 }

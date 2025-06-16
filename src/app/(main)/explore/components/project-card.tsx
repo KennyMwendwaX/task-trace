@@ -1,5 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
@@ -9,16 +15,15 @@ import {
 import {
   LuUsers,
   LuClock,
-  LuArrowUpRight,
+  LuArrowRight,
   LuBookmark,
   LuGlobe,
   LuLayers,
   LuLightbulb,
-  LuUserPlus,
-  LuTrendingUp,
+  LuPlay,
   LuLock,
-  LuShield,
-  LuShieldCheck,
+  LuCheckCircle2,
+  LuCalendar,
 } from "react-icons/lu";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,57 +32,55 @@ import { PublicProject } from "@/server/database/schema";
 import { ProjectStatus } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useState, useTransition } from "react";
 
 type Props = {
   project: PublicProject;
 };
 
 export default function ExploreProjectCard({ project }: Props) {
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [isBookmarked, setIsBookmarked] = useState(false); // This would come from props or state
+  const [isPending, startTransition] = useTransition();
+
   // Enhanced status configuration with more visual properties
   const getStatusConfig = (status: ProjectStatus) => {
     switch (status) {
       case "LIVE":
         return {
-          color: "from-emerald-500 to-teal-500",
-          bgColor: "bg-emerald-50",
-          darkBgColor: "dark:bg-emerald-950/20",
+          color: "text-emerald-600 bg-emerald-50 border-emerald-200",
+          darkColor:
+            "dark:text-emerald-400 dark:bg-emerald-950/20 dark:border-emerald-900",
+          gradientFrom: "from-emerald-500",
+          gradientTo: "to-teal-500",
           iconColor: "text-emerald-500",
-          borderColor: "border-emerald-200",
-          darkBorderColor: "dark:border-emerald-900",
-          textColor: "text-emerald-700",
-          darkTextColor: "dark:text-emerald-400",
-          badgeColor: "bg-gradient-to-r from-emerald-500 to-teal-500",
           label: "Live",
-          icon: LuGlobe,
+          icon: "🌍",
+          iconComponent: LuGlobe,
         };
       case "BUILDING":
         return {
-          color: "from-blue-500 to-indigo-500",
-          bgColor: "bg-blue-50",
-          darkBgColor: "dark:bg-blue-950/20",
+          color: "text-blue-600 bg-blue-50 border-blue-200",
+          darkColor:
+            "dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-900",
+          gradientFrom: "from-blue-500",
+          gradientTo: "to-indigo-500",
           iconColor: "text-blue-500",
-          borderColor: "border-blue-200",
-          darkBorderColor: "dark:border-blue-900",
-          textColor: "text-blue-700",
-          darkTextColor: "dark:text-blue-400",
-          badgeColor: "bg-gradient-to-r from-blue-500 to-indigo-500",
           label: "Building",
-          icon: LuLayers,
+          icon: "🏗️",
+          iconComponent: LuLayers,
         };
       default:
         return {
-          color: "from-gray-500 to-slate-500",
-          bgColor: "bg-gray-50",
-          darkBgColor: "dark:bg-gray-800/50",
+          color: "text-gray-600 bg-gray-50 border-gray-200",
+          darkColor:
+            "dark:text-gray-400 dark:bg-gray-800/50 dark:border-gray-700",
+          gradientFrom: "from-gray-500",
+          gradientTo: "to-slate-500",
           iconColor: "text-gray-500",
-          borderColor: "border-gray-200",
-          darkBorderColor: "dark:border-gray-700",
-          textColor: "text-gray-700",
-          darkTextColor: "dark:text-gray-400",
-          badgeColor: "bg-gradient-to-r from-gray-500 to-slate-500",
-          cardBorder: "border-gray-100 dark:border-gray-800",
           label: "Planning",
-          icon: LuLightbulb,
+          icon: "💡",
+          iconComponent: LuLightbulb,
         };
     }
   };
@@ -85,33 +88,27 @@ export default function ExploreProjectCard({ project }: Props) {
   const getAccessConfig = (isPublic: boolean) => {
     return isPublic
       ? {
-          icon: LuGlobe,
+          icon: "🌐",
+          iconComponent: LuGlobe,
           label: "Public",
-          bgColor: "bg-blue-50",
-          darkBgColor: "dark:bg-blue-950/20",
-          textColor: "text-blue-700",
-          darkTextColor: "dark:text-blue-400",
-          iconColor: "text-blue-500",
-          badgeColor: "bg-gradient-to-r from-blue-400 to-blue-600",
+          color: "text-blue-600 bg-blue-50 border-blue-200",
+          darkColor:
+            "dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-900",
         }
       : {
-          icon: LuLock,
+          icon: "🔒",
+          iconComponent: LuLock,
           label: "Private",
-          bgColor: "bg-amber-50",
-          darkBgColor: "dark:bg-amber-950/20",
-          textColor: "text-amber-700",
-          darkTextColor: "dark:text-amber-400",
-          iconColor: "text-amber-500",
-          badgeColor: "bg-gradient-to-r from-amber-400 to-amber-600",
+          color: "text-amber-600 bg-amber-50 border-amber-200",
+          darkColor:
+            "dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-900",
         };
   };
 
   const statusConfig = getStatusConfig(project.status);
   const accessConfig = getAccessConfig(project.isPublic);
-
-  const StatusIcon = statusConfig.icon;
-  const AccessIcon = accessConfig.icon;
   const createdAt = format(project.createdAt, "MMM d, yyyy");
+  const isHovered = hoveredCard === project.id.toString();
 
   // Calculate progress
   const progressPercentage =
@@ -121,208 +118,227 @@ export default function ExploreProjectCard({ project }: Props) {
         )
       : 0;
 
+  const toggleBookmark = () => {
+    // Add bookmark logic here
+    console.log("Toggle bookmark for project:", project.id);
+  };
+
   return (
     <Card
-      className={cn(
-        "group overflow-hidden rounded-2xl transition-all duration-300 h-full",
-        "border",
-        "bg-white dark:bg-gray-800",
-        statusConfig.cardBorder
-      )}>
-      <div className="relative">
-        {/* Visual flourish - translucent colored arc in top-right */}
-        <div
-          className={cn(
-            "absolute top-0 right-0 w-32 h-32 rounded-bl-full opacity-10",
-            "bg-gradient-to-br",
-            statusConfig.color
-          )}
-        />
-
-        <div className="p-6">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div
-                className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-xl shadow",
-                  "bg-gradient-to-br",
-                  statusConfig.color
-                )}>
-                <StatusIcon className="h-5 w-5 text-white" />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={`/projects/${project.id}`}
-                        className="block group-hover:scale-[1.01] transition-transform">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate max-w-[180px]">
-                          {project.name}
-                        </h3>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-xs">
-                      {project.name}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge
-                    className={cn(
-                      "rounded-full py-0.5 px-2 text-xs font-medium text-white",
-                      "bg-gradient-to-r",
-                      statusConfig.color
-                    )}>
-                    {statusConfig.label}
-                  </Badge>
-
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      "rounded-full py-0.5 px-2 text-xs font-medium",
-                      "flex items-center gap-1",
-                      accessConfig.bgColor,
-                      accessConfig.darkBgColor,
-                      accessConfig.textColor,
-                      accessConfig.darkTextColor,
-                      "border-transparent"
-                    )}>
-                    <AccessIcon className="h-3 w-3" />
-                    {accessConfig.label}
-                  </Badge>
-                </div>
-              </div>
-            </div>
-
-            <Button
-              size="sm"
+      className="group h-full flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30 overflow-hidden bg-gradient-to-br from-card to-card/80"
+      onMouseEnter={() => setHoveredCard(project.id.toString())}
+      onMouseLeave={() => setHoveredCard(null)}>
+      <CardHeader className="pb-4 space-y-3">
+        {/* Top row with status, access, and bookmark */}
+        <div className="flex justify-between items-start gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge
+              className={cn(
+                "px-3 py-1.5 text-xs font-medium border-0 shadow-sm rounded-full",
+                "bg-gradient-to-r text-white",
+                statusConfig.gradientFrom,
+                statusConfig.gradientTo
+              )}>
+              <statusConfig.iconComponent className="w-3 h-3 mr-1.5" />
+              {statusConfig.label}
+            </Badge>
+            <Badge
               variant="outline"
               className={cn(
-                "rounded-full h-8 w-8 p-0 flex-shrink-0 ml-2",
-                statusConfig.bgColor,
-                statusConfig.darkBgColor,
-                "border",
-                statusConfig.borderColor,
-                statusConfig.darkBorderColor,
-                statusConfig.textColor,
-                statusConfig.darkTextColor,
-                "hover:bg-white dark:hover:bg-gray-800"
+                "px-3 py-1.5 text-xs font-medium rounded-full border",
+                "bg-background/80 backdrop-blur-sm",
+                accessConfig.color,
+                accessConfig.darkColor
               )}>
-              <LuBookmark className="h-4 w-4" />
-              <span className="sr-only">Save</span>
-            </Button>
+              <accessConfig.iconComponent className="w-3 h-3 mr-1.5" />
+              {accessConfig.label}
+            </Badge>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn(
+              "h-8 w-8 p-0 rounded-full transition-all duration-200",
+              isBookmarked
+                ? "bg-primary/10 hover:bg-primary/20"
+                : "hover:bg-muted",
+              isPending && "opacity-50 cursor-not-allowed"
+            )}
+            onClick={toggleBookmark}
+            title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+            disabled={isPending}>
+            <LuBookmark
+              className={cn(
+                "h-4 w-4 transition-all duration-200",
+                isBookmarked
+                  ? "fill-primary text-primary scale-110"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            />
+            <span className="sr-only">
+              {isBookmarked ? "Remove bookmark" : "Add bookmark"}
+            </span>
+          </Button>
+        </div>
 
-          {/* Description */}
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-4 mb-4 line-clamp-2">
+        {/* Title and description */}
+        <div className="space-y-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href={`/projects/${project.id}`} className="block">
+                  <h3 className="text-lg leading-tight line-clamp-2 font-bold text-foreground group-hover:text-primary transition-colors">
+                    {project.name}
+                  </h3>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-xs">
+                {project.name}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed">
             {project.description}
           </p>
+        </div>
 
-          {/* Stats bar */}
-          <div className="flex items-center gap-4 py-2">
-            <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-              <div
-                className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-full",
-                  statusConfig.bgColor,
-                  statusConfig.darkBgColor
-                )}>
-                <LuUsers
-                  className={cn("h-3.5 w-3.5", statusConfig.iconColor)}
-                />
-              </div>
-              <span>{project.memberCount}</span>
-            </div>
-            <div className="w-px h-4 bg-gray-200 dark:bg-gray-700"></div>
-            <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-              <div
-                className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-full",
-                  statusConfig.bgColor,
-                  statusConfig.darkBgColor
-                )}>
-                <LuShieldCheck
-                  className={cn("h-3.5 w-3.5", statusConfig.iconColor)}
-                />
-              </div>
-              <span>
-                {project.totalTasksCount > 0 ? (
-                  <>
-                    {project.completedTasksCount}/{project.totalTasksCount}{" "}
-                    tasks
-                  </>
-                ) : (
-                  <>No tasks</>
-                )}
+        {/* Progress bar */}
+        {project.totalTasksCount > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">Progress</span>
+              <span className="text-xs font-medium text-foreground">
+                {progressPercentage}%
               </span>
             </div>
-            <div className="w-px h-4 bg-gray-200 dark:bg-gray-700"></div>
-            <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+            <div className="w-full bg-muted rounded-full h-2">
               <div
                 className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-full",
-                  statusConfig.bgColor,
-                  statusConfig.darkBgColor
-                )}>
-                <LuClock
-                  className={cn("h-3.5 w-3.5", statusConfig.iconColor)}
-                />
+                  "h-2 rounded-full transition-all duration-300 bg-gradient-to-r",
+                  statusConfig.gradientFrom,
+                  statusConfig.gradientTo
+                )}
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+          </div>
+        )}
+      </CardHeader>
+
+      <CardContent className="pb-4 pt-0 space-y-4 flex-grow">
+        <Separator className="opacity-30" />
+
+        {/* Project stats */}
+        <div className="grid grid-cols-3 gap-2">
+          {/* Members */}
+          <div className="group/stat relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 p-3 border border-blue-100 dark:border-blue-900/30 hover:shadow-sm transition-all duration-200">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 dark:bg-blue-400/10">
+                <LuUsers className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               </div>
-              <span>{createdAt}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-blue-900 dark:text-blue-100 truncate">
+                  {project.memberCount}
+                </p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">
+                  Member{project.memberCount !== 1 ? "s" : ""}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="border-t border-gray-100 dark:border-gray-700 my-4"></div>
-
-          {/* Footer with Team & Action */}
-          <div className="flex items-center justify-between">
+          {/* Tasks */}
+          <div className="group/stat relative overflow-hidden rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/30 dark:to-emerald-900/20 p-3 border border-emerald-100 dark:border-emerald-900/30 hover:shadow-sm transition-all duration-200">
             <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {project.members.slice(0, 3).map((member, index) => (
-                  <Avatar
-                    key={index}
-                    className="border-2 border-white dark:border-gray-800 w-8 h-8 rounded-full shadow-sm">
-                    <AvatarImage
-                      src={member.image ? member.image : ""}
-                      alt={member.name}
-                    />
-                    <AvatarFallback className="bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-200">
-                      {member.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                ))}
-                {project.members.length > 3 && (
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 text-xs font-medium text-gray-700 dark:text-gray-300 border-2 border-white dark:border-gray-800 shadow-sm">
-                    +{project.members.length - 3}
-                  </div>
-                )}
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10">
+                <LuCheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100 truncate">
+                  {project.totalTasksCount > 0 ? (
+                    <>
+                      {project.completedTasksCount}/{project.totalTasksCount}
+                    </>
+                  ) : (
+                    "No tasks"
+                  )}
+                </p>
+                <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                  Tasks
+                </p>
               </div>
             </div>
+          </div>
 
-            <Button
-              asChild
-              className={cn(
-                "rounded-full shadow-sm",
-                "bg-gradient-to-r hover:shadow text-white",
-                "transition-all duration-300 group/btn",
-                project.isPublic
-                  ? "from-blue-500 to-blue-600"
-                  : statusConfig.color
-              )}>
-              <Link
-                href={`/projects/${project.id}`}
-                className="flex items-center gap-1.5 py-2">
-                <LuUserPlus className="h-4 w-4" />
-                <span>{project.isPublic ? "Join Now" : "Request Access"}</span>
-                <LuArrowUpRight className="h-4 w-4 ml-0.5 transform transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-              </Link>
-            </Button>
+          {/* Created */}
+          <div className="group/stat relative overflow-hidden rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 p-3 border border-purple-100 dark:border-purple-900/30 hover:shadow-sm transition-all duration-200">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 dark:bg-purple-400/10">
+                <LuCalendar className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-purple-900 dark:text-purple-100 truncate">
+                  {format(project.createdAt, "MMM d")}
+                </p>
+                <p className="text-xs text-purple-600 dark:text-purple-400">
+                  Created
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* Team members */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Team:</span>
+            <div className="flex -space-x-2">
+              {project.members.slice(0, 3).map((member, index) => (
+                <Avatar
+                  key={index}
+                  className="border-2 border-white dark:border-gray-800 w-7 h-7 rounded-full shadow-sm">
+                  <AvatarImage
+                    src={member.image ? member.image : ""}
+                    alt={member.name}
+                  />
+                  <AvatarFallback className="bg-muted text-muted-foreground text-xs">
+                    {member.name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+              ))}
+              {project.members.length > 3 && (
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-muted text-xs font-medium text-muted-foreground border-2 border-white dark:border-gray-800 shadow-sm">
+                  +{project.members.length - 3}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+
+      <CardFooter className="pt-0 pb-4">
+        <Button
+          className={cn(
+            "w-full h-10 text-sm font-semibold transition-all duration-300 shadow-sm",
+            isHovered
+              ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          )}
+          asChild>
+          <Link
+            href={`/projects/${project.id}`}
+            className="flex items-center justify-center gap-2">
+            <LuPlay className="h-4 w-4" />
+            {project.isPublic ? "Join Project" : "Request Access"}
+            <LuArrowRight
+              className={cn(
+                "h-4 w-4 transition-all duration-300",
+                isHovered && "translate-x-1"
+              )}
+            />
+          </Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
