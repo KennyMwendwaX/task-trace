@@ -31,7 +31,7 @@ export const users = pgTable("users", {
   ),
 });
 
-export const accounts = pgTable("account", {
+export const accounts = pgTable("accounts", {
   id: serial("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
@@ -49,7 +49,7 @@ export const accounts = pgTable("account", {
   updatedAt: timestamp("updated_at").notNull(),
 });
 
-export const sessions = pgTable("session", {
+export const sessions = pgTable("sessions", {
   id: serial("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
@@ -135,7 +135,7 @@ export const tasks = pgTable("tasks", {
 });
 
 export const projectBookmarks = pgTable(
-  "project_bookmark",
+  "project_bookmarks",
   {
     id: serial("id").primaryKey(),
     projectId: integer("project_id")
