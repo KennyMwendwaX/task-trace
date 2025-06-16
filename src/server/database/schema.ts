@@ -5,6 +5,7 @@ import {
   integer,
   boolean,
   serial,
+  unique,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import {
@@ -30,13 +31,13 @@ export const users = pgTable("users", {
   ),
 });
 
-export const accounts = pgTable("accounts", {
+export const accounts = pgTable("account", {
   id: serial("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
   userId: integer("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
@@ -48,7 +49,7 @@ export const accounts = pgTable("accounts", {
   updatedAt: timestamp("updated_at").notNull(),
 });
 
-export const sessions = pgTable("sessions", {
+export const sessions = pgTable("session", {
   id: serial("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
@@ -58,7 +59,7 @@ export const sessions = pgTable("sessions", {
   userAgent: text("user_agent"),
   userId: integer("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
 export const verifications = pgTable("verifications", {
@@ -132,6 +133,31 @@ export const tasks = pgTable("tasks", {
       onUpdate: "cascade",
     }),
 });
+
+export const projectBookmarks = pgTable(
+  "project_bookmark",
+  {
+    id: serial("id").primaryKey(),
+    projectId: integer("project_id")
+      .notNull()
+      .references(() => projects.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    createdAt: timestamp("created_at", { mode: "date", precision: 3 })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date", precision: 3 })
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => ({
+    pk: unique().on(table.userId, table.projectId),
+  })
+);
 
 export const invitationCodes = pgTable("invitation_codes", {
   id: serial("id").primaryKey(),
@@ -216,6 +242,20 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
     references: [projects.id],
   }),
 }));
+
+export const projectBookmarksRelations = relations(
+  projectBookmarks,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [projectBookmarks.userId],
+      references: [users.id],
+    }),
+    project: one(projects, {
+      fields: [projectBookmarks.projectId],
+      references: [projects.id],
+    }),
+  })
+);
 
 export const invitationCodesRelations = relations(
   invitationCodes,
