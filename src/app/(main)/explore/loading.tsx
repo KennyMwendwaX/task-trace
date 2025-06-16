@@ -37,7 +37,9 @@ export default function Loading() {
       {/* Projects grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 mt-4">
         {[...Array(6)].map((_, index) => (
-          <Card className="group h-full flex flex-col transition-all duration-300 overflow-hidden bg-gradient-to-br from-card to-card/80">
+          <Card
+            key={index}
+            className="group h-full flex flex-col transition-all duration-300 overflow-hidden bg-gradient-to-br from-card to-card/80">
             <CardHeader className="pb-4 space-y-3">
               {/* Top row with status badges and bookmark */}
               <div className="flex justify-between items-start gap-2">
