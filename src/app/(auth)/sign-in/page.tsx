@@ -12,7 +12,6 @@ import {
 import SignIn from "./components/sign-in";
 import SignUp from "./components/sign-up";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useState } from "react";
@@ -58,24 +57,14 @@ export default function SignInPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-            <Button variant="outline" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <AiOutlineLoading3Quarters className="mr-1 h-3 w-3 animate-spin" />
-              ) : (
-                <FcGoogle className="mr-1 h-4 w-4" />
-              )}
-              Google
-            </Button>
-            <Button variant="outline" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <AiOutlineLoading3Quarters className="mr-1 h-3 w-3 animate-spin" />
-              ) : (
-                <FaGithub className="mr-1 h-4 w-4" />
-              )}
-              Github
-            </Button>
-          </div>
+          <Button variant="outline" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <AiOutlineLoading3Quarters className="mr-1 h-3 w-3 animate-spin" />
+            ) : (
+              <FcGoogle className="mr-1 h-4 w-4" />
+            )}
+            Google
+          </Button>
         </CardFooter>
       </Card>
     </div>

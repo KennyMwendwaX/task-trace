@@ -107,8 +107,8 @@ export default function TasksContent({ project, tasks }: TasksContentProps) {
                 You have not added any tasks. Add one below.
               </p>
               <Link href={`/projects/${project.id}/tasks/create`}>
-                <Button className="flex items-center gap-1 rounded-3xl">
-                  <AiOutlinePlus className="w-4 h-4 text-white" />
+                <Button className="flex items-center gap-2 rounded-3xl">
+                  <AiOutlinePlus className="w-4 h-4" />
                   <span>Create Task</span>
                 </Button>
               </Link>

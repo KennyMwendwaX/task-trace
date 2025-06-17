@@ -15,11 +15,6 @@ import { customAlphabet } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { InvitationCodeActionError } from "@/lib/errors";
 
-type InvitationCodeError =
-  | { type: "UNAUTHORIZED"; message: string }
-  | { type: "DATABASE_ERROR"; message: string }
-  | { type: "NOT_FOUND"; message: string };
-
 export const getProjectInvitationCode = async (
   projectId: string,
   userId?: string
