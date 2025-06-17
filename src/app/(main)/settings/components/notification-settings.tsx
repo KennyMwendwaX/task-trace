@@ -36,9 +36,9 @@ export default function NotificationSettings() {
 
           <div className="flex items-center justify-between">
             <div className="flex flex-col space-y-1">
-              <h3 className="font-medium">Quiz Reminders</h3>
+              <h3 className="font-medium">Task Reminders</h3>
               <p className="text-sm text-muted-foreground">
-                Get reminders to maintain your streak.
+                Get reminders on upcoming task deadlines.
               </p>
             </div>
             <Switch defaultChecked />
@@ -48,9 +48,9 @@ export default function NotificationSettings() {
 
           <div className="flex items-center justify-between">
             <div className="flex flex-col space-y-1">
-              <h3 className="font-medium">Achievement Notifications</h3>
+              <h3 className="font-medium">Project Notifications</h3>
               <p className="text-sm text-muted-foreground">
-                Get notified when you earn new achievements.
+                Get your member project notifications.
               </p>
             </div>
             <Switch defaultChecked />

@@ -232,44 +232,6 @@ export default function GeneralSettings({ session }: { session: Session }) {
               </div>
             </RadioGroup>
           </div>
-
-          {/* Rest of the component remains the same */}
-          <Separator />
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col space-y-1">
-                <h3 className="font-medium">Difficulty Preference</h3>
-                <p className="text-sm text-muted-foreground">
-                  Set your default quiz difficulty.
-                </p>
-              </div>
-              <Select defaultValue="BEGINNER">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select difficulty" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="BEGINNER">Beginner</SelectItem>
-                  <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
-                  <SelectItem value="ADVANCED">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col space-y-1">
-                <h3 className="font-medium">Time Limit</h3>
-                <p className="text-sm text-muted-foreground">
-                  Enable time limits for quizzes by default.
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-          </div>
         </CardContent>
       </Card>
       <Card>
