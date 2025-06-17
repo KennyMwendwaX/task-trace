@@ -11,17 +11,38 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useTransition } from "react";
+import { deleteUserAccount } from "@/server/actions/user/delete";
+import { Session } from "@/lib/auth";
+import { tryCatch } from "@/lib/try-catch";
+import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/auth-client";
 
-export default function DeleteAccountModal() {
-  const [isPending, setIsPending] = useState(false);
+export default function DeleteAccountModal({ session }: { session: Session }) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleDeleteAccount = async () => {
-    setIsPending(true);
-    toast.success("Account deleted successfully", {
-      duration: 2000,
+    startTransition(async () => {
+      const { data: result, error: deleteAccountError } = await tryCatch(
+        deleteUserAccount(session.user.id)
+      );
+
+      if (deleteAccountError) {
+        toast.error(deleteAccountError.message);
+      }
+
+      if (result?.success) {
+        signOut({
+          fetchOptions: {
+            onSuccess: () => {
+              router.replace("/sign-in");
+            },
+          },
+        });
+        toast.success("Account deleted successfully");
+      }
     });
-    setIsPending(false);
   };
 
   return (

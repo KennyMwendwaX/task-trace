@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, ChangeEvent } from "react";
+import { useRef, useState, ChangeEvent, useTransition } from "react";
 import {
   Card,
   CardHeader,
@@ -20,21 +20,31 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
-  User,
-  Camera,
-  Instagram,
-  Mail,
   UserCircle,
-  Link as LinkIcon,
+  Mail,
   Loader2,
+  Camera,
+  User as UserIcon,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { RiTwitterXLine } from "react-icons/ri";
+import { useRouter } from "next/navigation";
+import { tryCatch } from "@/lib/try-catch";
+import { updateUserProfile } from "@/server/actions/user/profile";
+import { toast } from "sonner";
 import { Session } from "@/lib/auth";
 
 const profileFormSchema = z.object({
@@ -50,24 +60,22 @@ const profileFormSchema = z.object({
     .string()
     .min(1, { message: "This field is required" })
     .email("This is not a valid email"),
-  urls: z
-    .object({
-      x: z.string().url({ message: "Please enter a valid URL." }).optional(),
-      instagram: z
-        .string()
-        .url({ message: "Please enter a valid URL." })
-        .optional(),
-    })
-    .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-export default function ProfileSettings({ session }: { session: Session }) {
-  const [isLoading, setIsLoading] = useState(false);
+interface ProfileSettingsProps {
+  session: Session;
+}
+
+export default function ProfileSettings({ session }: ProfileSettingsProps) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const [profileImage, setProfileImage] = useState<string>(
-    "/api/placeholder/200/200"
+    session.user.image || "/api/placeholder/200/200"
   );
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = (): void => {
@@ -99,32 +107,38 @@ export default function ProfileSettings({ session }: { session: Session }) {
       email: session.user.email,
       name: session.user.name,
     },
-    mode: "onChange",
   });
 
   function onSubmit(data: ProfileFormValues) {
-    setIsLoading(true);
+    startTransition(async () => {
+      const { data: updatedUser, error: userError } = await tryCatch(
+        updateUserProfile(session.user.id, data)
+      );
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log(data);
-      setIsLoading(false);
-    }, 1000);
+      if (userError) {
+        toast.error(userError.message);
+        return;
+      }
+
+      if (updatedUser) {
+        form.reset();
+        toast.success("Profile updated successfully!");
+        router.refresh();
+      }
+    });
   }
-
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex flex-col md:flex-row gap-6 items-start">
-        {/* Profile card - now with align-self-start to prevent stretching */}
-        <div className="w-full md:w-1/3 lg:w-1/4 self-start">
-          <Card>
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="w-full md:w-1/3 space-y-4">
+          <Card className="w-full max-w-sm">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center space-y-4">
                 <div className="relative">
                   <Avatar className="h-24 w-24 border-4 border-background shadow">
                     <AvatarImage src={profileImage} alt="Profile picture" />
                     <AvatarFallback className="bg-primary-foreground">
-                      <User className="h-12 w-12 text-primary" />
+                      <UserIcon className="h-12 w-12 text-primary" />
                     </AvatarFallback>
                   </Avatar>
                   <Button
@@ -143,12 +157,14 @@ export default function ProfileSettings({ session }: { session: Session }) {
                     aria-label="Upload profile picture"
                   />
                 </div>
+
                 <div className="text-center space-y-1">
                   <h3 className="font-semibold text-lg">{session.user.name}</h3>
                   <p className="text-sm text-muted-foreground">
                     {session.user.email}
                   </p>
                 </div>
+
                 <Badge variant="outline" className="px-3 py-1">
                   Premium Member
                 </Badge>
@@ -157,9 +173,8 @@ export default function ProfileSettings({ session }: { session: Session }) {
           </Card>
         </div>
 
-        {/* Form card */}
-        <div className="w-full md:w-2/3 lg:w-3/4">
-          <Card>
+        <div className="w-full md:w-2/3">
+          <Card className="flex flex-col h-full">
             <CardHeader className="pb-3">
               <CardTitle>Edit Profile</CardTitle>
               <CardDescription>
@@ -216,58 +231,12 @@ export default function ProfileSettings({ session }: { session: Session }) {
                   </div>
                 </div>
 
-                <div className="pt-2">
-                  <div className="flex items-center space-x-2">
-                    <LinkIcon className="h-5 w-5 text-primary" />
-                    <h3 className="text-sm font-medium">Social Links</h3>
-                  </div>
-                  <Separator className="my-3" />
-                  <div className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="urls.x"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            <RiTwitterXLine className="h-4 w-4" /> X (Twitter)
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="https://x.com/username"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="urls.instagram"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            <Instagram className="h-4 w-4" /> Instagram
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="https://instagram.com/username"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
                 <CardFooter className="border-t px-0 py-4 flex justify-between">
                   <Button variant="outline" type="button">
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? (
+                  <Button type="submit" disabled={isPending}>
+                    {isPending ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Saving...

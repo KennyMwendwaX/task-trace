@@ -1,3 +1,8 @@
+type UserError =
+  | { type: "UNAUTHORIZED"; message: string }
+  | { type: "DATABASE_ERROR"; message: string }
+  | { type: "NOT_FOUND"; message: string };
+
 type ProjectError =
   | { type: "UNAUTHORIZED"; message: string }
   | { type: "DATABASE_ERROR"; message: string }
@@ -23,6 +28,17 @@ type InvitationCodeError =
   | { type: "UNAUTHORIZED"; message: string }
   | { type: "DATABASE_ERROR"; message: string }
   | { type: "NOT_FOUND"; message: string };
+
+export class UserActionError extends Error {
+  constructor(
+    public type: UserError["type"],
+    message: UserError["message"],
+    public action: string
+  ) {
+    super(message);
+    this.name = "UserActionError";
+  }
+}
 
 export class ProjectActionError extends Error {
   constructor(
