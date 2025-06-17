@@ -7,11 +7,12 @@ import {
   DetailedProject,
   members,
   membershipRequests,
+  projectBookmarks,
   projects,
   PublicProject,
 } from "@/server/database/schema";
 import { ProjectFormValues } from "@/lib/schema/ProjectSchema";
-import { and, eq, or } from "drizzle-orm";
+import { and, eq, inArray, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { ProjectActionError } from "@/lib/errors";
 
@@ -126,6 +127,7 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
       );
     }
 
+    // Get projects with tasks and members
     const projectsResult = await db.query.projects.findMany({
       with: {
         tasks: true,
@@ -151,6 +153,23 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
       return [];
     }
 
+    // Get bookmarked project IDs for the current user
+    const projectIds = projectsResult.map((p) => p.id);
+    const bookmarkedProjects = await db.query.projectBookmarks.findMany({
+      where: and(
+        eq(projectBookmarks.userId, parseInt(userId)),
+        inArray(projectBookmarks.projectId, projectIds)
+      ),
+      columns: {
+        projectId: true,
+      },
+    });
+
+    // Create a Set for O(1) lookup
+    const bookmarkedProjectIds = new Set(
+      bookmarkedProjects.map((bookmark) => bookmark.projectId)
+    );
+
     const projects = projectsResult.map((project) => {
       const { tasks, ...projectWithoutTasks } = project;
       const totalTasksCount = tasks.length;
@@ -169,6 +188,7 @@ export async function getProjects(userId?: string): Promise<PublicProject[]> {
           email: user.email,
           image: user.image,
         })),
+        isBookmarked: bookmarkedProjectIds.has(project.id),
       };
     });
 

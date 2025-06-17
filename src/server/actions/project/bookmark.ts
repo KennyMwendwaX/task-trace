@@ -129,6 +129,7 @@ export async function getUserBookmarkedProjects(
         completedTasksCount: project.completedTasksCount,
         memberCount: project.memberCount,
         members: membersByProject.get(project.id) || [],
+        isBookmarked: true,
       })
     );
 

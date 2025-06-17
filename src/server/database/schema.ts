@@ -297,6 +297,7 @@ export type PublicProject = Project & {
     email: string;
     image: string | null;
   }[];
+  isBookmarked: boolean;
 };
 export type MemberProject = Project & {
   memberRole: ProjectRole;
