@@ -170,7 +170,7 @@ export default function ExploreFilters({
           <span className="text-xs text-muted-foreground">Active filters:</span>
           {initialSearch && (
             <Badge variant="secondary" className="text-xs">
-              Search: "{initialSearch}"
+              Search: &quot;{initialSearch}&quot;
               <button
                 onClick={handleClearSearch}
                 className="ml-1 hover:text-destructive">
