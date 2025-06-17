@@ -55,22 +55,21 @@ export default function SignUp() {
       password: data.password,
       callbackURL: "/dashboard",
       fetchOptions: {
-        onResponse: () => {
-          setIsLoading(false);
-        },
         onRequest: () => {
           setIsLoading(true);
+        },
+        onResponse: () => {
+          setIsLoading(false);
         },
         onError: (ctx) => {
           console.log(ctx.error);
           toast.error(ctx.error.message);
         },
         onSuccess: async () => {
-          toast.success("Account created successfully");
-        },
-        onComplete: () => {
-          router.push("/dashboard");
           setIsLoading(false);
+          signUpForm.reset();
+          toast.success("Account created successfully");
+          router.push("/dashboard");
         },
       },
     });
