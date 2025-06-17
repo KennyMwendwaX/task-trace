@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { tryCatch } from "@/lib/try-catch";
+import { getUserBookmarkedProjects } from "@/server/actions/project/bookmark";
 
 export default async function ExplorePage() {
   const session = await auth.api.getSession({
@@ -14,13 +15,23 @@ export default async function ExplorePage() {
     redirect("/sign-in");
   }
 
-  const { data: projects, error } = await tryCatch(
+  const { data: projects, error: projectsError } = await tryCatch(
     getProjects(session.user.id)
   );
-
-  if (error) {
-    throw new Error(error.message);
+  if (projectsError) {
+    throw new Error(projectsError.message);
   }
 
-  return <ExploreContent projects={projects} />;
+  const { data: bookmarkedProjects, error: bookmarkedProjectsError } =
+    await tryCatch(getUserBookmarkedProjects(session.user.id));
+  if (bookmarkedProjectsError) {
+    throw new Error(bookmarkedProjectsError.message);
+  }
+
+  return (
+    <ExploreContent
+      projects={projects}
+      bookmarkedProjects={bookmarkedProjects}
+    />
+  );
 }

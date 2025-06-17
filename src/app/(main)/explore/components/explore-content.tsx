@@ -13,9 +13,13 @@ import { motion } from "motion/react";
 
 interface ExploreContentProps {
   projects: PublicProject[];
+  bookmarkedProjects: PublicProject[];
 }
 
-export default function ExploreContent({ projects }: ExploreContentProps) {
+export default function ExploreContent({
+  projects,
+  bookmarkedProjects,
+}: ExploreContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -23,6 +27,7 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "ALL";
   const sort = searchParams.get("sort") || "date_desc";
+  const bookmarkFilter = searchParams.get("bookmarks") || "ALL";
 
   const handleClearFilters = useCallback(() => {
     // Push to URL without any parameters
@@ -40,6 +45,14 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
     if (filter !== "ALL") {
       if (filter === "LIVE" && project.status !== "LIVE") return false;
       if (filter === "BUILDING" && project.status !== "BUILDING") return false;
+    }
+
+    // Apply bookmark filter
+    if (bookmarkFilter !== "ALL") {
+      const bookmarkedIds = bookmarkedProjects.map((bp) => bp.id);
+      const isBookmarked = bookmarkedIds.includes(project.id);
+      if (bookmarkFilter === "BOOKMARKED" && !isBookmarked) return false;
+      if (bookmarkFilter === "NOT_BOOKMARKED" && isBookmarked) return false;
     }
 
     return true;
@@ -65,7 +78,16 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
     }
   });
 
-  const filtersActive = search || filter !== "ALL" || sort !== "date_desc";
+  const filtersActive =
+    search ||
+    filter !== "ALL" ||
+    sort !== "date_desc" ||
+    bookmarkFilter !== "ALL";
+  const activeFilterCount = [
+    search ? 1 : 0,
+    filter !== "ALL" ? 1 : 0,
+    bookmarkFilter !== "ALL" ? 1 : 0,
+  ].reduce((sum, count) => sum + count, 0);
 
   return (
     <main className="container mx-auto px-4 py-4 bg-muted/40 min-h-screen md:px-10 lg:px-14">
@@ -77,6 +99,7 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
           initialSearch={search}
           initialFilter={filter}
           initialSort={sort}
+          initialBookmarkFilter={bookmarkFilter}
         />
 
         <div className="flex items-center justify-between mt-6">
@@ -86,6 +109,12 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
             <Badge variant="outline" className="ml-1 px-2 py-0 h-6 text-xs">
               {sortedProjects.length} of {projects.length}
             </Badge>
+            {filtersActive && activeFilterCount > 0 && (
+              <Badge variant="secondary" className="ml-1 px-2 py-0 h-6 text-xs">
+                {activeFilterCount} filter{activeFilterCount > 1 ? "s" : ""}{" "}
+                active
+              </Badge>
+            )}
           </div>
 
           {filtersActive && (
@@ -93,8 +122,8 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
               variant="ghost"
               size="sm"
               onClick={handleClearFilters}
-              className="text-sm">
-              Clear filters
+              className="text-sm hover:bg-destructive/10 hover:text-destructive">
+              Clear all filters
             </Button>
           )}
         </div>
@@ -129,9 +158,19 @@ export default function ExploreContent({ projects }: ExploreContentProps) {
                   No projects match your current filters. Try adjusting your
                   search or filter criteria.
                 </p>
-                <Button variant="outline" onClick={handleClearFilters}>
-                  Clear filters
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={handleClearFilters}>
+                    Clear all filters
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() =>
+                      router.push("/explore?filter=ALL&bookmarks=ALL")
+                    }
+                    className="text-muted-foreground">
+                    Reset to default
+                  </Button>
+                </div>
               </>
             ) : (
               <>

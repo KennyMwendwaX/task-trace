@@ -140,7 +140,7 @@ export default function ExploreProjectCard({ project }: Props) {
       // Sync with server state (in case of conflicts)
       setIsBookmarked(result.isBookmarked);
       toast.success(
-        result.isBookmarked ? "Quiz bookmarked" : "Bookmark removed"
+        result.isBookmarked ? "Project bookmarked" : "Bookmark removed"
       );
     });
   };

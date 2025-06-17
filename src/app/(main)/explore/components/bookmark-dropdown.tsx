@@ -10,47 +10,47 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LuChevronDown, LuSlidersHorizontal } from "react-icons/lu";
+import { Bookmark, BookmarkX, ChevronDown, Heart } from "lucide-react";
 
-interface StatusFilterDropdownProps {
+interface BookmarkFilterDropdownProps {
   currentFilter: string;
   onFilterChange: (value: string) => void;
 }
 
-export default function StatusFilterDropdown({
+export default function BookmarkFilterDropdown({
   currentFilter,
   onFilterChange,
-}: StatusFilterDropdownProps) {
+}: BookmarkFilterDropdownProps) {
   const getFilterIcon = (filterValue: string) => {
     switch (filterValue) {
-      case "BUILDING":
-        return <span className="w-2 h-2 rounded-full bg-blue-500 mr-2" />;
-      case "LIVE":
-        return <span className="w-2 h-2 rounded-full bg-green-500 mr-2" />;
+      case "BOOKMARKED":
+        return <Bookmark className="mr-2 h-4 w-4 text-yellow-600" />;
+      case "NOT_BOOKMARKED":
+        return <BookmarkX className="mr-2 h-4 w-4 text-muted-foreground" />;
       default:
-        return <LuSlidersHorizontal className="mr-2 h-4 w-4" />;
+        return <Heart className="mr-2 h-4 w-4" />;
     }
   };
 
   const getFilterDisplayText = (filterValue: string) => {
     switch (filterValue) {
       case "ALL":
-        return "All Statuses";
-      case "BUILDING":
-        return "Building";
-      case "LIVE":
-        return "Live";
+        return "All Projects";
+      case "BOOKMARKED":
+        return "Bookmarked";
+      case "NOT_BOOKMARKED":
+        return "Not Bookmarked";
       default:
-        return "Filter by status";
+        return "Filter bookmarks";
     }
   };
 
   const getFilterBadgeColor = (filterValue: string) => {
     switch (filterValue) {
-      case "BUILDING":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "LIVE":
-        return "bg-green-100 text-green-800 border-green-200";
+      case "BOOKMARKED":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "NOT_BOOKMARKED":
+        return "bg-gray-100 text-gray-700 border-gray-200";
       default:
         return "";
     }
@@ -73,25 +73,25 @@ export default function StatusFilterDropdown({
             className={`rounded-l-none px-2 ${
               currentFilter !== "ALL" ? getFilterBadgeColor(currentFilter) : ""
             }`}>
-            <LuChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
       </div>
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
+        <DropdownMenuLabel>Filter by bookmarks</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onSelect={() => onFilterChange("ALL")}>
-            <LuSlidersHorizontal className="mr-2 h-4 w-4" />
-            All Statuses
+            <Heart className="mr-2 h-4 w-4" />
+            All Projects
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => onFilterChange("BUILDING")}>
-            <span className="w-2 h-2 rounded-full bg-blue-500 mr-2" />
-            Building
+          <DropdownMenuItem onSelect={() => onFilterChange("BOOKMARKED")}>
+            <Bookmark className="mr-2 h-4 w-4 text-yellow-600" />
+            Bookmarked Only
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => onFilterChange("LIVE")}>
-            <span className="w-2 h-2 rounded-full bg-green-500 mr-2" />
-            Live
+          <DropdownMenuItem onSelect={() => onFilterChange("NOT_BOOKMARKED")}>
+            <BookmarkX className="mr-2 h-4 w-4 text-muted-foreground" />
+            Not Bookmarked
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
