@@ -147,7 +147,7 @@ export async function getUserBookmarkedProjects(
 }
 
 export const toggleProjectBookmark = async (
-  projectId: string
+  projectId: number
 ): Promise<{ isBookmarked: boolean }> => {
   try {
     const session = await auth.api.getSession({
@@ -163,11 +163,10 @@ export const toggleProjectBookmark = async (
     }
 
     const userId = parseInt(session.user.id);
-    const projectIdNum = parseInt(projectId);
 
     const existingBookmark = await db.query.projectBookmarks.findFirst({
       where: and(
-        eq(projectBookmarks.projectId, projectIdNum),
+        eq(projectBookmarks.projectId, projectId),
         eq(projectBookmarks.userId, userId)
       ),
     });
@@ -178,7 +177,7 @@ export const toggleProjectBookmark = async (
         .delete(projectBookmarks)
         .where(
           and(
-            eq(projectBookmarks.projectId, projectIdNum),
+            eq(projectBookmarks.projectId, projectId),
             eq(projectBookmarks.userId, userId)
           )
         );
@@ -190,7 +189,7 @@ export const toggleProjectBookmark = async (
 
     // If bookmark doesn't exist, create it
     await db.insert(projectBookmarks).values({
-      projectId: projectIdNum,
+      projectId: projectId,
       userId: userId,
       createdAt: new Date(),
       updatedAt: new Date(),

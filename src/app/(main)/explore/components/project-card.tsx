@@ -33,6 +33,9 @@ import { ProjectStatus } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useTransition } from "react";
+import { tryCatch } from "@/lib/try-catch";
+import { toggleProjectBookmark } from "@/server/actions/project/bookmark";
+import { toast } from "sonner";
 
 type Props = {
   project: PublicProject;
@@ -40,7 +43,7 @@ type Props = {
 
 export default function ExploreProjectCard({ project }: Props) {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [isBookmarked, setIsBookmarked] = useState(false); // This would come from props or state
+  const [isBookmarked, setIsBookmarked] = useState(project.isBookmarked);
   const [isPending, startTransition] = useTransition();
 
   // Enhanced status configuration with more visual properties
@@ -119,8 +122,27 @@ export default function ExploreProjectCard({ project }: Props) {
       : 0;
 
   const toggleBookmark = () => {
-    // Add bookmark logic here
-    console.log("Toggle bookmark for project:", project.id);
+    // Optimistic update
+    setIsBookmarked(!isBookmarked);
+
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(
+        toggleProjectBookmark(project.id)
+      );
+
+      if (error) {
+        // Revert optimistic update
+        setIsBookmarked(isBookmarked);
+        toast.error("Failed to toggle bookmark");
+        return;
+      }
+
+      // Sync with server state (in case of conflicts)
+      setIsBookmarked(result.isBookmarked);
+      toast.success(
+        result.isBookmarked ? "Quiz bookmarked" : "Bookmark removed"
+      );
+    });
   };
 
   return (
